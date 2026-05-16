@@ -20,6 +20,8 @@ Implemented scope:
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display.
+- Focused adapter validation tests for missing runtime/model paths and invalid
+  context size.
 
 ## Development Baseline
 

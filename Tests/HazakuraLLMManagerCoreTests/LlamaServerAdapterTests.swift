@@ -91,6 +91,37 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testRejectsMissingRuntimePath() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "  "
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .missingRuntimePath)
+        }
+    }
+
+    func testRejectsMissingModelPath() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "\n\t"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .missingModelPath)
+        }
+    }
+
+    func testRejectsInvalidContextSize() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.contextSize = 0
+
+        XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidContextSize(0))
+        }
+    }
+
     func testRejectsInvalidThreadCount() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"

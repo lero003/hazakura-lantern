@@ -133,6 +133,7 @@ Already done or mostly done:
 - focused tests for invalid numeric options, endpoint URLs, and environment
   snippets
 - focused tests for quoted launch command preview display
+- focused tests for missing runtime/model paths and invalid context size
 
 Finish before leaving v0:
 
