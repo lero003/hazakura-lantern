@@ -60,4 +60,26 @@ final class LlamaServerAdapterTests: XCTestCase {
             XCTAssertEqual(error as? RuntimeAdapterError, .invalidPort(0))
         }
     }
+
+    func testRejectsInvalidThreadCount() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.threads = "0"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidNumericOption(name: "threads", value: "0"))
+        }
+    }
+
+    func testRejectsInvalidGPULayers() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.gpuLayers = "many"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidNumericOption(name: "GPU layers", value: "many"))
+        }
+    }
 }
