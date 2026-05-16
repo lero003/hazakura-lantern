@@ -51,6 +51,13 @@ with `-10822`, while `open -W -n /System/Applications/Calculator.app` works in
 the same environment. The blocker appears specific to the generated Lantern
 bundle rather than a blanket inability to call Launch Services.
 
+Additional 2026-05-17 diagnostics: signing the completed bundle can make
+`codesign --verify --deep --strict` pass, and a top-level
+`open -n /absolute/path/to/Hazakura Lantern.app` launch request can be accepted.
+However, the helper still fails when `open` is invoked from inside the shell
+script after rebuilding the bundle. Treat this as a Launch Services invocation
+or cache-context issue, not proof that the Mach-O executable is actually absent.
+
 ## Known Constraints
 
 - The project is a Git repository tracking `origin/main` at
