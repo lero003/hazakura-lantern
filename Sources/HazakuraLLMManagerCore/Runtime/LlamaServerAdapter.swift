@@ -21,7 +21,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
             arguments.append(contentsOf: ["-t", String(threads)])
         }
 
-        if let gpuLayers = try optionalPositiveInt(config.gpuLayers, optionName: "GPU layers") {
+        if let gpuLayers = try optionalNonNegativeInt(config.gpuLayers, optionName: "GPU layers") {
             arguments.append(contentsOf: ["-ngl", String(gpuLayers)])
         }
 
@@ -71,6 +71,19 @@ public struct LlamaServerAdapter: RuntimeAdapter {
 
         return intValue
     }
+
+    private func optionalNonNegativeInt(_ value: String, optionName: String) throws -> Int? {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty || trimmed.lowercased() == "auto" {
+            return nil
+        }
+
+        guard let intValue = Int(trimmed), intValue >= 0 else {
+            throw RuntimeAdapterError.invalidNonNegativeNumericOption(name: optionName, value: value)
+        }
+
+        return intValue
+    }
 }
 
 public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
@@ -79,6 +92,7 @@ public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
     case invalidPort(Int)
     case invalidContextSize(Int)
     case invalidNumericOption(name: String, value: String)
+    case invalidNonNegativeNumericOption(name: String, value: String)
 
     public var errorDescription: String? {
         switch self {
@@ -92,6 +106,8 @@ public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
             "Context size must be greater than zero. Current value: \(contextSize)."
         case .invalidNumericOption(let name, let value):
             "\(name) must be a positive integer or auto. Current value: \(value)."
+        case .invalidNonNegativeNumericOption(let name, let value):
+            "\(name) must be a non-negative integer or auto. Current value: \(value)."
         }
     }
 }

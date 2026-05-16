@@ -50,6 +50,18 @@ final class LlamaServerAdapterTests: XCTestCase {
         ])
     }
 
+    func testBuildCommandAllowsZeroGPULayers() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.gpuLayers = "0"
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertTrue(command.arguments.contains("-ngl"))
+        XCTAssertEqual(command.arguments.last, "0")
+    }
+
     func testDisplayStringPreservesQuotedAdditionalArgumentsAsSinglePreviewTokens() throws {
         let config = RuntimeConfiguration(
             runtimeExecutablePath: "/usr/local/bin/llama-server",
@@ -137,10 +149,10 @@ final class LlamaServerAdapterTests: XCTestCase {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
         config.modelPath = "/Users/kei/Models/qwen.gguf"
-        config.gpuLayers = "many"
+        config.gpuLayers = "-1"
 
         XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
-            XCTAssertEqual(error as? RuntimeAdapterError, .invalidNumericOption(name: "GPU layers", value: "many"))
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidNonNegativeNumericOption(name: "GPU layers", value: "-1"))
         }
     }
 }
