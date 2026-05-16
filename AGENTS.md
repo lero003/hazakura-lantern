@@ -39,6 +39,9 @@ For automated or recurring development, read:
 Choose at most one coherent slice per run. A verified no-op is better than a
 speculative feature expansion.
 
+For the saved hourly automation, follow `docs/development_loop.md` for when to
+run Habitat and when Nenrin should stay as a no-op.
+
 ## Nenrin Usage
 
 Use Nenrin as a pruning and judgment aid, not as a work generator.
