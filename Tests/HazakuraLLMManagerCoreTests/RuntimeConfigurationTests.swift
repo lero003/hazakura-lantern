@@ -21,4 +21,12 @@ final class RuntimeConfigurationTests: XCTestCase {
             """
         )
     }
+
+    func testAIMobileSmokeCurlCommandUsesConfiguredPort() {
+        var config = RuntimeConfiguration.defaultValue
+        config.port = 9876
+
+        XCTAssertTrue(config.aiMobileSmokeCurlCommand.contains("http://localhost:9876/v1/chat/completions"))
+        XCTAssertTrue(config.aiMobileSmokeCurlCommand.contains(#""stream":false"#))
+    }
 }

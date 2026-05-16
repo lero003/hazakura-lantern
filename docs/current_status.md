@@ -16,10 +16,11 @@ Implemented scope:
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
 - Basic runtime/model path preflight before launching.
 - Local endpoint and environment snippet display.
+- AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - App bundle launch helper at `script/build_and_run.sh`.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
-  quoted command preview display.
+  quoted command preview display, plus the copied client smoke command.
 - Focused adapter validation tests for missing runtime/model paths and invalid
   context size.
 

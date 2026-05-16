@@ -77,6 +77,15 @@ OPENAI_BASE_URL=http://localhost:1234/v1
 OPENAI_API_KEY=local
 ```
 
+AI Mobile / OpenAI-compatible client smoke:
+
+```bash
+curl -sS http://localhost:1234/v1/chat/completions \
+  -H 'Authorization: Bearer local' \
+  -H 'Content-Type: application/json' \
+  -d '{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
+```
+
 ## Security Defaults
 
 - Default host is `127.0.0.1`.

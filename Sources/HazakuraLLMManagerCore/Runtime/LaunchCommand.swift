@@ -11,20 +11,7 @@ public struct LaunchCommand: Equatable, Sendable {
 
     public var displayString: String {
         ([executablePath] + arguments)
-            .map(Self.shellQuoted)
+            .map(ShellQuoter.quote)
             .joined(separator: " ")
-    }
-
-    private static func shellQuoted(_ value: String) -> String {
-        guard !value.isEmpty else {
-            return "''"
-        }
-
-        let safeCharacters = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+-=.,/:")
-        if value.unicodeScalars.allSatisfy({ safeCharacters.contains($0) }) {
-            return value
-        }
-
-        return "'" + value.replacingOccurrences(of: "'", with: "'\\''") + "'"
     }
 }

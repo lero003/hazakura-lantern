@@ -51,4 +51,12 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
         OPENAI_API_KEY=local
         """
     }
+
+    public var aiMobileSmokeRequest: ClientSmokeRequest {
+        ClientSmokeRequest(baseURL: apiBaseURL)
+    }
+
+    public var aiMobileSmokeCurlCommand: String {
+        aiMobileSmokeRequest.curlCommand
+    }
 }

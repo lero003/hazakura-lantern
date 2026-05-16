@@ -35,6 +35,23 @@ struct EndpointView: View {
                         Label("Copy Env", systemImage: "terminal")
                     }
                 }
+
+                Divider()
+
+                HStack(alignment: .top, spacing: 12) {
+                    Text(controller.configuration.aiMobileSmokeCurlCommand)
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+
+                    Spacer()
+
+                    Button {
+                        copy(controller.configuration.aiMobileSmokeCurlCommand)
+                    } label: {
+                        Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
+                    }
+                }
             }
         }
     }
