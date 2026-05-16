@@ -18,7 +18,8 @@ Implemented scope:
 - Local endpoint and environment snippet display.
 - App bundle launch helper at `script/build_and_run.sh`.
 - Unit tests for command tokenization, adapter behavior, and configuration
-  storage, including invalid numeric options and endpoint snippet generation.
+  storage, including invalid numeric options, endpoint snippet generation, and
+  quoted command preview display.
 
 ## Development Baseline
 
@@ -50,7 +51,6 @@ needed. It builds an app bundle under `dist/`, which is a local artifact.
 The most useful next automated slice is a focused correctness or test hardening
 change inside the existing v0 boundary. Good candidates:
 
-- test command preview behavior for quoted additional arguments
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add endpoint health status only if kept local and read-only

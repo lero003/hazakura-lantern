@@ -50,6 +50,26 @@ final class LlamaServerAdapterTests: XCTestCase {
         ])
     }
 
+    func testDisplayStringPreservesQuotedAdditionalArgumentsAsSinglePreviewTokens() throws {
+        let config = RuntimeConfiguration(
+            runtimeExecutablePath: "/usr/local/bin/llama-server",
+            modelPath: "/Users/kei/Models/qwen.gguf",
+            host: "127.0.0.1",
+            port: 1234,
+            contextSize: 32768,
+            threads: "auto",
+            gpuLayers: "auto",
+            additionalArguments: "--alias \"qwen local\" --note \"owner's model\""
+        )
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertEqual(
+            command.displayString,
+            "/usr/local/bin/llama-server -m /Users/kei/Models/qwen.gguf --host 127.0.0.1 --port 1234 -c 32768 --alias 'qwen local' --note 'owner'\\''s model'"
+        )
+    }
+
     func testEndpointURLsUseConfiguredPort() {
         var config = RuntimeConfiguration.defaultValue
         config.port = 9876

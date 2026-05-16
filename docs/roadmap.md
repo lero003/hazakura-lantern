@@ -132,6 +132,7 @@ Already done or mostly done:
 - focused core unit tests
 - focused tests for invalid numeric options, endpoint URLs, and environment
   snippets
+- focused tests for quoted launch command preview display
 
 Finish before leaving v0:
 
