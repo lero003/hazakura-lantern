@@ -77,13 +77,12 @@ is otherwise healthy.
 
 ## Git And Output Hygiene
 
-This directory may be used before Git has been initialized. If it is not a Git
-repository, do not run `git init`, add remotes, or pretend commit/push happened.
-Report the work as local files changed only.
+This project is expected to be a Git repository tracking `origin/main`. If Git
+metadata is unavailable, do not reinitialize the repository or pretend
+commit/push happened. Report the blocker clearly.
 
-If the project later becomes a Git repository, commit only the files changed in
-the current run, and do not push unless a remote already exists and the
-automation prompt explicitly delegates that action.
+Commit only the files changed in the current run, and push only when the
+automation prompt or user request explicitly delegates that action.
 
 Do not commit `.build/`, `dist/`, temporary Habitat reports, app bundles, logs,
 or local machine paths unless a future release process intentionally defines

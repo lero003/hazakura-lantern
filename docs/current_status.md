@@ -34,7 +34,8 @@ needed. It builds an app bundle under `dist/`, which is a local artifact.
 
 ## Known Constraints
 
-- The project directory is not currently a Git repository.
+- The project is a Git repository tracking `origin/main` at
+  `https://github.com/lero003/hazakura-lantern.git`.
 - No real `llama-server` binary or `.gguf` model is bundled.
 - There is no endpoint health polling yet, even though the adapter can provide a
   health check URL.
