@@ -1,129 +1,315 @@
-# Roadmap
+# Hazakura Lantern Roadmap
 
-This roadmap keeps Hazakura Lantern pointed at a small, useful local tool. It
-is not a promise of release dates.
+This roadmap keeps Hazakura Lantern narrow, deep, and useful.
+It is not a promise of release dates.
 
-## Product Direction
+Hazakura Lantern should become a calm Mac-first control surface for local LLM
+runtimes that already exist on the user's machine. It should not become a model
+platform, runtime installer, inference engine, chat app, marketplace, proxy, or
+agent orchestration layer.
 
-Hazakura Lantern should make a local LLM runtime visible and controllable
-without becoming a model platform.
+The guiding idea:
 
-Core promise:
+> Lantern lights the local runtime table. It does not become the engine.
 
-- light up the selected model, runtime command, logs, and endpoint
-- keep local server control understandable at a glance
-- make the endpoint easy for other local clients to reuse
-- avoid hidden shell behavior or surprising background automation
+## Product Thesis
 
-The product should feel like a calm local control surface, not a chat app, model
-marketplace, or orchestration system.
+Hazakura Lantern is a thin, reliable app that assembles existing local runtime
+pieces into one understandable control surface:
 
-## Current Lane: v0 Hardening
+```text
+existing runtime binary or command
++ existing model or server configuration
++ visible launch state
++ logs
++ endpoint
++ reusable client snippets
+= one calm local control panel
+```
 
-The current lane is v0 hardening. Work here until the single-runtime control loop
-is boring, reliable, and covered by focused tests.
+The project wins by making a small number of things boring and trustworthy:
 
-Done or mostly done:
+- the selected runtime command is explicit
+- the selected model or server target is visible
+- start, stop, and restart are predictable
+- logs are bounded and useful
+- the local endpoint is easy to copy and reuse
+- failures are understandable before users reach for a terminal
+- nothing surprising happens in the background
+
+It does not need to predict the winning runtime stack. Runtimes, models,
+quantization formats, and server APIs will keep changing. Lantern should benefit
+from that change by wrapping what exists, not by trying to own the stack.
+
+## Roadmap Rule: Depth Before Breadth
+
+Every roadmap item must strengthen at least one of these:
+
+1. safer launch
+2. clearer runtime state
+3. more predictable process control
+4. better endpoint reuse
+5. more portable profiles
+6. thinner adapter boundaries
+7. more accurate documentation
+
+If an item does not improve one of those, park it.
+
+Do not add runtime breadth while the single-runtime loop still feels surprising.
+A new adapter is allowed only when it can be added without changing the core
+lifecycle model.
+
+## Product Boundary
+
+### Lantern owns
+
+- profile storage
+- command construction and command preview
+- path validation for user-selected files and executables
+- direct process lifecycle control where applicable
+- PID, status, health, and restart state
+- bounded logs and clear log reset behavior
+- local base URL display
+- reusable environment snippets for local clients
+- adapter documentation and focused tests
+- a small Mac UI that makes the above visible
+
+### Lantern does not own
+
+- model search or downloads
+- model conversion
+- bundled inference engines
+- runtime installation or updates
+- cloud runtime orchestration
+- OpenAI-compatible proxy implementation
+- chat UI
+- RAG or tool execution
+- benchmarking as a product feature
+- full environment inventory
+- remote deployment management
+
+### Lantern may pass through
+
+- user-provided runtime flags
+- user-provided server commands
+- runtime-specific endpoints when documented
+- runtime-specific health URLs when adapter-scoped
+- custom command profiles when the risks are visible
+
+Pass-through is not ownership. If a runtime changes, Lantern should fail clearly,
+not silently invent behavior.
+
+## Current Lane: v0 - Make One Runtime Boring
+
+Stay here until the `llama-server` path is quiet, predictable, and documented.
+The goal is not feature breadth. The goal is a single-runtime control loop that
+feels safe to use every day.
+
+Already done or mostly done:
 
 - SwiftPM macOS app skeleton
 - `llama-server` adapter
 - executable and `.gguf` model path fields
 - launch command preview
 - direct `Process` launch without shell interpolation
-- start, stop, restart, pid, status, and in-memory logs
+- start, stop, restart, PID, status, and in-memory logs
 - local endpoint and OpenAI-style environment snippet
 - `UserDefaults` configuration persistence
 - app bundle launch helper
 - focused core unit tests
 
-Still needed before treating v0 as quiet:
+Finish before leaving v0:
 
-- stronger tests for invalid threads and GPU layer values
-- test coverage for endpoint and environment snippet behavior
-- clearer handling for missing runtime/model paths in the UI
-- safer restart behavior if stop/start races are observed
-- small launch smoke documentation that does not require a real model
-- current-status cleanup after each meaningful implementation slice
+- add focused tests for invalid numeric options such as threads and GPU layers
+- add tests for endpoint and environment snippet generation
+- surface missing runtime and missing model paths clearly before launch
+- make restart state explicit enough to avoid stop/start race confusion
+- keep logs bounded and test clear-log behavior
+- document a launch smoke path that does not require a real model
+- keep README, current status, development loop, and roadmap in agreement
 
-## v0 Exit Criteria
+v0 exit criteria:
 
-v0 is ready to call stable enough for local use when:
+- `swift test` passes
+- `swift build --disable-sandbox` passes
+- `./script/build_and_run.sh --verify` launches the app path successfully
+- a user can configure an existing `llama-server` binary and `.gguf` model
+- invalid configuration is surfaced before launch where practical
+- generated command, base URL, and environment snippet match selected settings
+- stop and restart leave the UI in a predictable state
+- logs remain bounded and can be cleared
+- docs match the actual app behavior
 
-- `swift test` passes.
-- `swift build --disable-sandbox` passes.
-- The app can be launched with `./script/build_and_run.sh --verify`.
-- A user can configure an existing `llama-server` binary and `.gguf` model.
-- Invalid configuration is surfaced before launch where practical.
-- Logs remain bounded and can be cleared.
-- Stop and restart leave the UI in a predictable state.
-- The generated command, base URL, and environment snippet match the selected
-  configuration.
-- README, current status, development loop, and this roadmap agree on scope.
+Do not add another runtime adapter before this is true.
 
-## v0.1: Daily-Use Polish
+## v0.1 - Daily-Use Confidence
 
-Only start this lane after v0 hardening is quiet.
+Purpose:
+
+Make the existing one-runtime app pleasant enough for repeated local use.
 
 Candidate work:
 
 - endpoint health indicator using the existing local health URL
-- recent runtime and model path lists
-- clearer launch and termination error states
-- safer restart timing or explicit restart state
-- copy affordances for command, base URL, and environment snippet
+- clearer launch, crash, and termination states
+- recent executable and model path lists
+- copy buttons for command, base URL, and environment snippet
 - small UI polish for repeated local use
+- clearer empty states for missing runtime/model paths
+- a compact troubleshooting section in docs
 
-Keep this lane local-only. Do not add LAN exposure, authentication, or background
-restart policy here.
+Keep this lane local-only. Do not add LAN exposure, authentication, automatic
+background restart policy, or runtime installers here.
 
-## v0.2: Profiles And Portability
+Completion criteria:
 
-Start this only after the app feels dependable for one local runtime.
+- users can tell whether the runtime is stopped, starting, healthy, unhealthy,
+  or terminated
+- common launch failures point to a practical next step
+- repeated start/stop/restart use does not make the UI ambiguous
+- copying endpoint details is obvious
+- docs cover the daily-use loop without becoming a runtime tutorial
+
+## v0.2 - Profile Contract And Portability
+
+Purpose:
+
+Turn one working configuration into portable local profiles without expanding
+runtime scope too early.
 
 Candidate work:
 
 - multiple local profiles
 - profile rename, duplicate, and delete
-- YAML or JSON import/export for profiles
-- portable profile format documentation
-- tests that preserve command construction and persistence compatibility
+- profile-level command preview
+- JSON profile export/import
+- initial profile schema version
+- migration tests for persisted settings
+- tests that preserve command construction compatibility
+- profile documentation with examples
 
-This lane should still manage existing local runtimes. It should not download
-models or install runtime dependencies.
+This lane still manages existing local runtimes. It should not download models,
+install dependencies, or hide where a command comes from.
 
-## v0.3: Runtime Breadth
+Completion criteria:
 
-Only consider this after the profile boundary is clear.
+- profiles can be moved, backed up, and restored
+- exported profile data is understandable without opening the app
+- command construction is stable across persistence changes
+- one broken profile does not make other profiles unusable
+- docs clearly separate profile data from runtime/model files
 
-Candidate adapters:
+## v0.3 - Adapter Boundary, Not Runtime Expansion
 
+Purpose:
+
+Define the adapter contract so future runtimes can be wrapped without turning
+Lantern into a platform.
+
+Candidate work:
+
+- explicit adapter protocol or adapter-shaped boundary
+- adapter-owned command construction
+- adapter-owned health contract
+- adapter-owned endpoint snippet behavior
+- adapter-owned validation and error mapping
+- tests that prove adapters do not require UI rewrites
+- one experimental adapter or custom command profile only if the boundary is
+  already stable
+
+Adapter requirements:
+
+- command construction must be explicit
+- shell interpolation must stay avoided unless a custom command mode makes the
+  risk visible
+- lifecycle semantics must be documented
+- endpoint behavior must be documented
+- health behavior must be documented
+- unsupported runtime behavior must fail clearly
+
+Possible first adapter experiments:
+
+- custom command profile
 - Ollama
 - llama-cpp-python server
-- MLX-based local servers
-- custom command profiles
+- MLX-based local server
 
-Each adapter needs:
+Prefer custom command profile if runtime churn is high. It lets users benefit
+from new runtimes without Lantern pretending to understand them deeply.
 
-- explicit command construction
-- local endpoint contract
-- focused tests
-- docs that describe what is and is not managed
+Completion criteria:
 
-Do not add a new adapter if it forces broad architecture changes before the
-existing adapter is calm.
+- adding an adapter does not force broad architecture changes
+- adapter tests catch command, endpoint, and health regressions
+- UI language remains about local control, not runtime marketplace features
+- docs describe what Lantern manages and what the runtime still owns
 
-## Later
+## v0.4 - Existing Runtime Aggregation
 
-These may be useful, but they are not near-term lanes:
+Purpose:
+
+Support a small set of existing local runtime shapes as thin wrappers.
+
+Candidate work:
+
+- one or two additional well-scoped adapters
+- custom command profiles with visible risk warnings
+- adapter-specific docs
+- adapter-specific fixture tests
+- profile examples for each supported runtime shape
+- compatibility notes for known runtime quirks
+
+This is still not a model platform. Each adapter should be small enough to
+remove if it becomes brittle.
+
+Completion criteria:
+
+- each adapter has a clear local endpoint contract
+- each adapter has focused tests
+- each adapter has docs that explain what is not managed
+- unsupported flags and runtime-specific features are pass-through, not hidden
+  product promises
+- Lantern remains understandable with all adapters disabled except one
+
+## v0.5 - Release And Trust Hygiene
+
+Purpose:
+
+Make the project easier to use and review without broadening scope.
+
+Candidate work:
+
+- signed or clearly documented unsigned local builds
+- release notes
+- changelog
+- checksum guidance if distributing binaries
+- versioned profile schema notes
+- compatibility notes for runtime adapters
+- issue templates that ask for command preview, logs, adapter, and profile data
+- docs cleanup before public or wider use
+
+Completion criteria:
+
+- users understand how to install or build the app locally
+- users understand what data a bug report should include
+- release-to-release changes are understandable
+- profile compatibility expectations are documented
+- docs do not imply that Lantern installs, owns, or updates runtimes
+
+## Later, Separate Design Decisions
+
+These may become useful, but they should not slip into earlier lanes casually:
 
 - launch at login
 - explicit auto-restart policy
-- metrics or benchmark display
-- signed release packaging
 - LAN exposure controls
 - optional local authentication guidance
+- metrics or benchmark display
+- signed release packaging and notarization
+- richer adapter catalog
+- agent-facing integration notes
 
-Treat these as separate design decisions, not incidental additions.
+Treat each as a design decision with its own trade-offs, not incidental polish.
 
 ## Non-Goals
 
@@ -133,21 +319,67 @@ Do not use this project for:
 - model search or downloads
 - model conversion
 - bundled inference engines
+- runtime installer or updater
 - OpenAI-compatible proxy implementation
 - RAG or tool execution
-- remote deployment management
 - cloud runtime orchestration
+- remote deployment management
+- broad machine diagnostics
+- model benchmark dashboard
+- plugin marketplace
 
 ## Automation Guidance
 
-Automated development should choose one small slice from the current lane. Good
-next slices are:
+Automated development should pick one small slice from the current lane.
 
-- add focused tests for invalid numeric options
-- improve validation/error presentation without changing the runtime model
-- document launch smoke expectations
+Good next slices:
+
+- add tests for invalid numeric launch options
+- add tests for endpoint and environment snippet generation
+- improve missing path validation and UI copy
 - harden restart behavior with a testable state transition
-- update docs when implementation changes make this roadmap stale
+- document launch smoke expectations
+- update current status after implementation changes
 
-If none of those is justified by current evidence, a verified no-op is a valid
-result.
+Rules for automated work:
+
+- do not add a new adapter unless the current lane explicitly allows it
+- do not add model download or install flows
+- do not hide command construction
+- do not change runtime ownership assumptions casually
+- update tests and docs with each meaningful behavior change
+- if no change is justified by current evidence, a verified no-op is acceptable
+
+## Issue Triage Checklist
+
+Evaluate new ideas with these questions:
+
+1. Does this make local runtime launch safer or clearer?
+2. Does this make endpoint reuse easier?
+3. Does this reduce surprise around process state, logs, or restart behavior?
+4. Does this preserve the existing-runtime boundary?
+5. Can it be tested without requiring a real model download?
+6. Can it be documented without turning Lantern into a runtime tutorial?
+7. Will it still make sense when runtimes evolve?
+
+If most answers are no, defer the idea even if it is interesting.
+
+## v1 Shape
+
+A narrow successful Lantern v1 looks like this:
+
+- Mac-first local app
+- existing runtimes only
+- explicit command preview
+- predictable process lifecycle
+- clear local endpoint reuse
+- portable profiles
+- bounded logs
+- small, documented adapter set
+- no hidden shell behavior
+- no model marketplace
+- no runtime installation
+- no cloud orchestration
+
+The product should feel like a lantern on the desk: it makes the local runtime
+visible, warm, and usable, while letting the engine underneath keep evolving.
