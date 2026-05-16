@@ -130,11 +130,11 @@ Already done or mostly done:
 - `UserDefaults` configuration persistence
 - app bundle launch helper
 - focused core unit tests
+- focused tests for invalid numeric options, endpoint URLs, and environment
+  snippets
 
 Finish before leaving v0:
 
-- add focused tests for invalid numeric options such as threads and GPU layers
-- add tests for endpoint and environment snippet generation
 - surface missing runtime and missing model paths clearly before launch
 - make restart state explicit enough to avoid stop/start race confusion
 - keep logs bounded and test clear-log behavior

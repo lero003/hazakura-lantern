@@ -50,6 +50,16 @@ final class LlamaServerAdapterTests: XCTestCase {
         ])
     }
 
+    func testEndpointURLsUseConfiguredPort() {
+        var config = RuntimeConfiguration.defaultValue
+        config.port = 9876
+
+        let adapter = LlamaServerAdapter()
+
+        XCTAssertEqual(adapter.apiBaseURL(config: config), URL(string: "http://localhost:9876/v1"))
+        XCTAssertEqual(adapter.healthCheckURL(config: config), URL(string: "http://localhost:9876/v1/models"))
+    }
+
     func testRejectsInvalidPort() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
