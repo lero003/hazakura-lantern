@@ -43,6 +43,14 @@ executable. Treat this as an unresolved launch-smoke blocker; do not count the
 v0 app-launch exit criterion as satisfied until this is fixed or verified
 outside the restricted Codex environment.
 
+2026-05-17 follow-up diagnostics: re-signing the generated bundle with
+`codesign --force --sign -`, adding standard bundle metadata, adding
+`Contents/Resources`, and registering the app with `lsregister -f` did not
+clear the Launch Services failure. `lsregister` still fails to scan the bundle
+with `-10822`, while `open -W -n /System/Applications/Calculator.app` works in
+the same environment. The blocker appears specific to the generated Lantern
+bundle rather than a blanket inability to call Launch Services.
+
 ## Known Constraints
 
 - The project is a Git repository tracking `origin/main` at
@@ -63,7 +71,7 @@ the environment allows it. If not, choose a focused correctness or test
 hardening change inside the existing v0 boundary. Good candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
-  app bundle
+  app bundle, starting beyond ad-hoc signing and minimal Info.plist checks
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add endpoint health status only if kept local and read-only
