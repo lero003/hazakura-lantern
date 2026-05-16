@@ -14,6 +14,7 @@ final class ServerController: ObservableObject {
     private var process: Process?
     private var stdoutPipe: Pipe?
     private var stderrPipe: Pipe?
+    private var isRestartPending = false
     private let maxLogEntries = 2_000
 
     init(
@@ -132,10 +133,9 @@ final class ServerController: ObservableObject {
 
     func restart() {
         if process?.isRunning == true {
+            isRestartPending = true
+            appendLog("Restart requested; waiting for the current process to stop.", stream: .info)
             stop()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
-                self?.start()
-            }
         } else {
             start()
         }
@@ -187,6 +187,11 @@ final class ServerController: ObservableObject {
         } else {
             status = .error
             lastErrorMessage = "Process exited with code \(exitCode)."
+        }
+
+        if isRestartPending {
+            isRestartPending = false
+            start()
         }
     }
 
