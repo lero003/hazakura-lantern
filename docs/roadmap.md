@@ -99,6 +99,19 @@ lifecycle model.
 Pass-through is not ownership. If a runtime changes, Lantern should fail clearly,
 not silently invent behavior.
 
+### Lantern may observe
+
+- selected runtime executable version when it can be checked safely
+- user-declared install source, such as Homebrew, source build, or manual binary
+- latest available version metadata from an official source when network access
+  is explicit and adapter-scoped
+- advisory "update available" status for registered runtimes
+- setup guidance that points users toward official runtime installation docs
+
+Observation is not management. Lantern may tell users that a runtime appears
+old, missing, or installed in an unusual way. It should not run installers,
+upgrade runtimes, mutate package managers, or hide where a runtime came from.
+
 ## Current Lane: v0 - Make One Runtime Boring
 
 Stay here until the `llama-server` path is quiet, predictable, and documented.
@@ -153,13 +166,17 @@ Candidate work:
 - endpoint health indicator using the existing local health URL
 - clearer launch, crash, and termination states
 - recent executable and model path lists
+- selected runtime version display when adapter-safe
+- lightweight runtime setup guidance for users who do not know how to install a
+  server runtime yet
 - copy buttons for command, base URL, and environment snippet
 - small UI polish for repeated local use
 - clearer empty states for missing runtime/model paths
 - a compact troubleshooting section in docs
 
 Keep this lane local-only. Do not add LAN exposure, authentication, automatic
-background restart policy, or runtime installers here.
+background restart policy, runtime installers, or automatic runtime updates
+here.
 
 Completion criteria:
 
@@ -167,6 +184,8 @@ Completion criteria:
   or terminated
 - common launch failures point to a practical next step
 - repeated start/stop/restart use does not make the UI ambiguous
+- users can see what runtime binary they selected and, where safe, what version
+  it reports
 - copying endpoint details is obvious
 - docs cover the daily-use loop without becoming a runtime tutorial
 
@@ -182,6 +201,8 @@ Candidate work:
 - multiple local profiles
 - profile rename, duplicate, and delete
 - profile-level command preview
+- profile-level runtime metadata, such as install source and last observed
+  runtime version
 - JSON profile export/import
 - initial profile schema version
 - migration tests for persisted settings
@@ -285,6 +306,8 @@ Candidate work:
 - checksum guidance if distributing binaries
 - versioned profile schema notes
 - compatibility notes for runtime adapters
+- advisory runtime update-check documentation that explains what is observed and
+  what Lantern will not update
 - issue templates that ask for command preview, logs, adapter, and profile data
 - docs cleanup before public or wider use
 
@@ -294,6 +317,7 @@ Completion criteria:
 - users understand what data a bug report should include
 - release-to-release changes are understandable
 - profile compatibility expectations are documented
+- runtime update information is clearly advisory, not an automatic updater
 - docs do not imply that Lantern installs, owns, or updates runtimes
 
 ## Later, Separate Design Decisions
@@ -306,6 +330,8 @@ These may become useful, but they should not slip into earlier lanes casually:
 - optional local authentication guidance
 - metrics or benchmark display
 - signed release packaging and notarization
+- richer runtime setup assistant that remains documentation-first
+- opt-in runtime update notifications for registered runtimes
 - richer adapter catalog
 - agent-facing integration notes
 
@@ -320,6 +346,7 @@ Do not use this project for:
 - model conversion
 - bundled inference engines
 - runtime installer or updater
+- automatic package-manager or source-build mutation
 - OpenAI-compatible proxy implementation
 - RAG or tool execution
 - cloud runtime orchestration
@@ -337,6 +364,7 @@ Good next slices:
 - add tests for invalid numeric launch options
 - add tests for endpoint and environment snippet generation
 - improve missing path validation and UI copy
+- document runtime setup expectations without adding installer behavior
 - harden restart behavior with a testable state transition
 - document launch smoke expectations
 - update current status after implementation changes
@@ -345,6 +373,7 @@ Rules for automated work:
 
 - do not add a new adapter unless the current lane explicitly allows it
 - do not add model download or install flows
+- do not turn advisory runtime update status into automatic update execution
 - do not hide command construction
 - do not change runtime ownership assumptions casually
 - update tests and docs with each meaningful behavior change
@@ -360,7 +389,9 @@ Evaluate new ideas with these questions:
 4. Does this preserve the existing-runtime boundary?
 5. Can it be tested without requiring a real model download?
 6. Can it be documented without turning Lantern into a runtime tutorial?
-7. Will it still make sense when runtimes evolve?
+7. If it checks runtime versions or update availability, is that advisory and
+   adapter-scoped?
+8. Will it still make sense when runtimes evolve?
 
 If most answers are no, defer the idea even if it is interesting.
 
@@ -376,6 +407,7 @@ A narrow successful Lantern v1 looks like this:
 - portable profiles
 - bounded logs
 - small, documented adapter set
+- advisory runtime version and update awareness
 - no hidden shell behavior
 - no model marketplace
 - no runtime installation

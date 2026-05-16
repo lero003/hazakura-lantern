@@ -39,6 +39,8 @@ needed. It builds an app bundle under `dist/`, which is a local artifact.
 - No real `llama-server` binary or `.gguf` model is bundled.
 - There is no endpoint health polling yet, even though the adapter can provide a
   health check URL.
+- Runtime setup and update awareness should remain advisory. The app should not
+  install, upgrade, or mutate runtimes automatically.
 - The app does not manage multiple profiles, launch-at-login, YAML import/export,
   auto restart, model downloads, chat, RAG, or proxy behavior.
 - LAN exposure and authentication are intentionally outside v0.
@@ -50,6 +52,7 @@ change inside the existing v0 boundary. Good candidates:
 
 - test invalid numeric options for threads and GPU layers
 - test command preview behavior for quoted additional arguments
+- document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add endpoint health status only if kept local and read-only
 
