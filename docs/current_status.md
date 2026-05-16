@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-16
+Last reviewed: 2026-05-17
 
 ## Project State
 
@@ -35,6 +35,13 @@ swift build --disable-sandbox
 Use `./script/build_and_run.sh --verify` only when a macOS launch smoke check is
 needed. It builds an app bundle under `dist/`, which is a local artifact.
 
+Current Codex launch-smoke status: `./script/build_and_run.sh --verify`
+builds the bundle, but Launch Services reports `kLSNoExecutableErr` even though
+`dist/Hazakura Lantern.app/Contents/MacOS/HazakuraLLMManager` exists and is
+executable. Treat this as an unresolved launch-smoke blocker; do not count the
+v0 app-launch exit criterion as satisfied until this is fixed or verified
+outside the restricted Codex environment.
+
 ## Known Constraints
 
 - The project is a Git repository tracking `origin/main` at
@@ -50,9 +57,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact.
 
 ## Next Best Slice
 
-The most useful next automated slice is a focused correctness or test hardening
-change inside the existing v0 boundary. Good candidates:
+The most useful next automated slice is to resolve the launch-smoke blocker if
+the environment allows it. If not, choose a focused correctness or test
+hardening change inside the existing v0 boundary. Good candidates:
 
+- diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
+  app bundle
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add endpoint health status only if kept local and read-only
