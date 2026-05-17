@@ -159,6 +159,8 @@ Already done or mostly done:
 - active runtime profile persistence fallback through the configuration store
 - profile JSON shape and portability boundaries documented with a readable
   schema-version `1` example
+- suggested profile export filename contract using `.lantern-profile.json`,
+  covered by focused tests before file-based UI is added
 
 Finish before leaving v0:
 
@@ -230,6 +232,7 @@ Candidate work:
 - profile-level runtime metadata, such as install source and last observed
   runtime version
 - JSON profile export/import
+- file-based profile export/import UI boundaries
 - migration behavior for future profile schema changes
 - migration tests for persisted settings
 - tests that preserve command construction compatibility

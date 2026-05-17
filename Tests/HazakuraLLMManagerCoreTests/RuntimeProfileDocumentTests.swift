@@ -51,6 +51,27 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         XCTAssertEqual(try RuntimeProfileDocument.importJSONData(data), document)
     }
 
+    func testProfileDocumentSuggestsStableExportFileName() {
+        let document = RuntimeProfileDocument(
+            name: "Desk runtime",
+            configuration: .defaultValue
+        )
+
+        XCTAssertEqual(document.suggestedExportFileName, "Desk-runtime.lantern-profile.json")
+        XCTAssertEqual(
+            RuntimeProfileDocument.suggestedExportFileName(for: " GPU 0 / Desk: Local "),
+            "GPU-0-Desk-Local.lantern-profile.json"
+        )
+        XCTAssertEqual(
+            RuntimeProfileDocument.suggestedExportFileName(for: "Desk-runtime.lantern-profile.json"),
+            "Desk-runtime.lantern-profile.json"
+        )
+        XCTAssertEqual(
+            RuntimeProfileDocument.suggestedExportFileName(for: " \n "),
+            "Runtime-Profile.lantern-profile.json"
+        )
+    }
+
     func testProfileDocumentImportRejectsUnsupportedSchemaVersionWithTypedError() {
         let json = """
         {

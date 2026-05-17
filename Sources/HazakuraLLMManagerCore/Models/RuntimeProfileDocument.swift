@@ -3,6 +3,7 @@ import Foundation
 public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
     public static let currentSchemaVersion = 1
     public static let supportedRuntimeKind = "llama-server"
+    public static let exportFileSuffix = ".lantern-profile.json"
 
     public enum ImportError: Error, Equatable, LocalizedError, Sendable {
         case missingSchemaVersion
@@ -39,6 +40,38 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         self.name = name
         self.runtimeKind = runtimeKind
         self.configuration = configuration
+    }
+
+    public var suggestedExportFileName: String {
+        RuntimeProfileDocument.suggestedExportFileName(for: name)
+    }
+
+    public static func suggestedExportFileName(for profileName: String) -> String {
+        let trimmedName = profileName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let baseName = trimmedName.isEmpty ? "Runtime Profile" : trimmedName
+        let allowedScalars = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "._-"))
+        var sanitizedScalars = String.UnicodeScalarView()
+        var lastWasSeparator = false
+
+        for scalar in baseName.unicodeScalars {
+            if allowedScalars.contains(scalar) {
+                sanitizedScalars.append(scalar)
+                lastWasSeparator = false
+            } else if !lastWasSeparator {
+                sanitizedScalars.append(UnicodeScalar("-"))
+                lastWasSeparator = true
+            }
+        }
+
+        let sanitizedName = String(sanitizedScalars)
+            .trimmingCharacters(in: CharacterSet(charactersIn: ".-"))
+        let safeName = sanitizedName.isEmpty ? "Runtime-Profile" : sanitizedName
+
+        guard !safeName.hasSuffix(exportFileSuffix) else {
+            return safeName
+        }
+
+        return "\(safeName)\(exportFileSuffix)"
     }
 
     public init(from decoder: Decoder) throws {

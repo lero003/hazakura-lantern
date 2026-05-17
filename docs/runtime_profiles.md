@@ -33,6 +33,10 @@ local edits:
 Paths are local machine paths. Moving a profile to another Mac may require
 choosing a different runtime executable or model path before launch.
 
+When the app adds file-based profile export, the suggested filename should use
+the profile name plus `.lantern-profile.json`. The name is sanitized for local
+file systems only; the JSON `name` field remains the user-facing profile name.
+
 ## Import Behavior
 
 Lantern imports profile JSON through the schema-version guard:
