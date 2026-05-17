@@ -17,7 +17,7 @@ final class ServerController: ObservableObject {
     private var stdoutPipe: Pipe?
     private var stderrPipe: Pipe?
     private var isRestartPending = false
-    private let maxLogEntries = 2_000
+    private var logBuffer = LogBuffer(maxEntries: 2_000)
 
     init(
         adapter: LlamaServerAdapter = LlamaServerAdapter(),
@@ -147,7 +147,8 @@ final class ServerController: ObservableObject {
     }
 
     func clearLogs() {
-        logEntries.removeAll()
+        logBuffer.clear()
+        logEntries = logBuffer.entries
     }
 
     func checkEndpointHealth() {
@@ -221,38 +222,13 @@ final class ServerController: ObservableObject {
     }
 
     private func appendLog(_ text: String, stream: LogEntry.Stream) {
-        let lines = text
-            .split(whereSeparator: \.isNewline)
-            .map(String.init)
-
-        if lines.isEmpty {
-            logEntries.append(LogEntry(stream: stream, text: text))
-        } else {
-            logEntries.append(contentsOf: lines.map { LogEntry(stream: stream, text: $0) })
-        }
-
-        if logEntries.count > maxLogEntries {
-            logEntries.removeFirst(logEntries.count - maxLogEntries)
-        }
+        logBuffer.append(text, stream: stream)
+        logEntries = logBuffer.entries
     }
 
     private func clearError() {
         lastErrorMessage = nil
     }
-}
-
-struct LogEntry: Identifiable, Equatable {
-    enum Stream: String {
-        case info = "info"
-        case stdout = "stdout"
-        case stderr = "stderr"
-        case error = "error"
-    }
-
-    let id = UUID()
-    var date = Date()
-    var stream: Stream
-    var text: String
 }
 
 enum ServerControllerError: Error, LocalizedError {

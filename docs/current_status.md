@@ -14,6 +14,8 @@ Implemented scope:
 - Runtime configuration stored in `UserDefaults`.
 - `llama-server` launch command construction without shell interpolation.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
+- Bounded in-memory log buffering with clear-log behavior covered by focused
+  core tests.
 - Basic runtime/model path preflight before launching.
 - Local endpoint and environment snippet display.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
@@ -24,8 +26,8 @@ Implemented scope:
   can close a leftover `HazakuraLLMManager` process.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
-  quoted command preview display, plus the copied client and health smoke
-  commands and manual health checker.
+  quoted command preview display, bounded log buffering, clear-log behavior,
+  plus the copied client and health smoke commands and manual health checker.
 - Focused adapter validation tests for missing runtime/model paths and invalid
   context size, including unsupported model file types before launch command
   construction.

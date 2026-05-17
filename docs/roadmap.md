@@ -131,6 +131,7 @@ Already done or mostly done:
 - manual endpoint health status check
 - `UserDefaults` configuration persistence
 - app bundle launch helper
+- bounded log buffering and clear-log behavior covered by focused tests
 - focused core unit tests
 - focused tests for invalid numeric options, endpoint URLs, and environment
   snippets
@@ -141,7 +142,6 @@ Finish before leaving v0:
 
 - surface missing runtime and missing model paths clearly before launch
 - make restart state explicit enough to avoid stop/start race confusion
-- keep logs bounded and test clear-log behavior
 - document a launch smoke path that does not require a real model
 - keep README, current status, development loop, and roadmap in agreement
 
@@ -365,9 +365,9 @@ Automated development should pick one small slice from the current lane.
 
 Good next slices:
 
-- add tests for invalid numeric launch options
-- add tests for endpoint and environment snippet generation
-- improve missing path validation and UI copy
+- improve common launch failure messages without adding installer behavior
+- improve endpoint health status presentation without adding automatic polling
+- tighten copied client smoke / endpoint reuse flows
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior with a testable state transition
 - document launch smoke expectations

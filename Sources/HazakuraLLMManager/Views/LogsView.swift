@@ -1,4 +1,5 @@
 import SwiftUI
+import HazakuraLLMManagerCore
 
 struct LogsView: View {
     @ObservedObject var controller: ServerController
