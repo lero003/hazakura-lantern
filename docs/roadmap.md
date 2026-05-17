@@ -163,6 +163,9 @@ Already done or mostly done:
   covered by focused tests before file-based UI is added
 - supported profile filename and URL recognition for `.lantern-profile.json`,
   covered by focused tests before file-based import UI is added
+- profile-file import preflight that rejects unsupported file names before
+  decoding JSON contents, covered by focused tests before file-based import UI
+  is added
 - profile local file reference contract for runtime executable and model paths,
   covered by focused tests before portability warnings or file UI are added
 - profile-level launch command preview through the matching adapter, covered by

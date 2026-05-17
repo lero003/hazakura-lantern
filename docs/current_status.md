@@ -56,6 +56,9 @@ Implemented scope:
   names before file-based UI is added.
 - Runtime profile documents recognize `.lantern-profile.json` filenames and
   URLs for future file-based import UI, with focused tests.
+- Runtime profile JSON can be imported through a profile-file helper that
+  validates the `.lantern-profile.json` suffix before decoding contents, with
+  focused tests for supported names and unsupported ordinary JSON files.
 - Runtime profile documents expose their runtime executable and model file
   references for future portability warnings without checking or copying local
   files, with focused tests.
@@ -166,8 +169,9 @@ Good next automated candidates:
   document contract, JSON encoding helpers, typed import-schema/runtime-kind
   failures, active profile persistence fallback, profile JSON shape docs, and
   suggested export filename, supported profile filename, and local file
-  reference and adapter-scoped launch-command preview contracts are covered;
-  prefer profile file UI behavior beyond filename/import validation or
+  reference, profile-file import preflight, and adapter-scoped launch-command
+  preview contracts are covered; prefer profile file UI behavior beyond
+  filename/import preflight or
   migration transform tests once a concrete v2 shape exists
 
 Do not begin adapter expansion, model management, or chat features during this

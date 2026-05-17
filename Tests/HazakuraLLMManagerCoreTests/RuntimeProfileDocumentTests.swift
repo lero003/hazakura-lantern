@@ -100,6 +100,49 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testProfileDocumentImportsFromSupportedProfileFileName() throws {
+        let document = RuntimeProfileDocument(
+            name: "Desk runtime",
+            configuration: .defaultValue
+        )
+        let data = try document.exportJSONData()
+
+        XCTAssertEqual(
+            try RuntimeProfileDocument.importJSONData(
+                data,
+                fromProfileFileNamed: " Desk-runtime.LANTERN-PROFILE.JSON\n"
+            ),
+            document
+        )
+        XCTAssertEqual(
+            try RuntimeProfileDocument.importJSONData(
+                data,
+                fromProfileFileURL: URL(fileURLWithPath: "/tmp/Desk-runtime.lantern-profile.json")
+            ),
+            document
+        )
+    }
+
+    func testProfileDocumentRejectsUnsupportedProfileFileNameBeforeImport() {
+        let data = Data("not profile json".utf8)
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.importJSONData(
+                data,
+                fromProfileFileNamed: "Desk-runtime.json"
+            )
+        ) { error in
+            XCTAssertEqual(
+                error as? RuntimeProfileDocument.ImportError,
+                .unsupportedFileName("Desk-runtime.json", expectedSuffix: ".lantern-profile.json")
+            )
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Runtime profile file \"Desk-runtime.json\" is not supported; expected a .lantern-profile.json file."
+            )
+        }
+    }
+
     func testProfileDocumentListsLocalFileReferencesForPortabilityWarnings() {
         let document = RuntimeProfileDocument(
             name: "Desk runtime",

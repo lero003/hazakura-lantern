@@ -32,6 +32,7 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
     public enum ImportError: Error, Equatable, LocalizedError, Sendable {
         case missingSchemaVersion
         case missingRuntimeKind
+        case unsupportedFileName(String, expectedSuffix: String)
         case unsupportedSchemaVersion(Int, supportedVersion: Int)
         case unsupportedRuntimeKind(String, supportedRuntimeKind: String)
 
@@ -41,6 +42,11 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
                 return "Runtime profile is missing schemaVersion."
             case .missingRuntimeKind:
                 return "Runtime profile is missing runtimeKind."
+            case let .unsupportedFileName(fileName, expectedSuffix):
+                if fileName.isEmpty {
+                    return "Runtime profile file is not supported; expected a \(expectedSuffix) file."
+                }
+                return "Runtime profile file \"\(fileName)\" is not supported; expected a \(expectedSuffix) file."
             case let .unsupportedSchemaVersion(schemaVersion, supportedVersion):
                 return "Runtime profile schema version \(schemaVersion) is not supported by this Lantern build; supported version is \(supportedVersion)."
             case let .unsupportedRuntimeKind(runtimeKind, supportedRuntimeKind):
@@ -194,6 +200,25 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         }
 
         return try JSONDecoder().decode(RuntimeProfileDocument.self, from: data)
+    }
+
+    public static func importJSONData(
+        _ data: Data,
+        fromProfileFileNamed fileName: String
+    ) throws -> RuntimeProfileDocument {
+        let trimmedFileName = fileName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard isSupportedProfileFileName(trimmedFileName) else {
+            throw ImportError.unsupportedFileName(trimmedFileName, expectedSuffix: exportFileSuffix)
+        }
+
+        return try importJSONData(data)
+    }
+
+    public static func importJSONData(
+        _ data: Data,
+        fromProfileFileURL fileURL: URL
+    ) throws -> RuntimeProfileDocument {
+        try importJSONData(data, fromProfileFileNamed: fileURL.lastPathComponent)
     }
 
     private static var exportJSONEncoder: JSONEncoder {

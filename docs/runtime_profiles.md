@@ -48,7 +48,10 @@ When the app adds file-based profile export, the suggested filename should use
 the profile name plus `.lantern-profile.json`. The name is sanitized for local
 file systems only; the JSON `name` field remains the user-facing profile name.
 File-based import UI should recognize files with the same
-`.lantern-profile.json` suffix before reading their JSON contents.
+`.lantern-profile.json` suffix before reading their JSON contents. The core
+import helper also validates that suffix before decoding JSON, so an ordinary
+`.json` file can fail as an unsupported profile file without relying on JSON
+parser errors.
 
 ## Import Behavior
 
