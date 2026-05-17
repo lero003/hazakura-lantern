@@ -4,6 +4,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+## v0.1.0-alpha.1 - 2026-05-17
+
 ### Added
 
 - Added macOS SwiftPM CI for `swift test` and `swift build --disable-sandbox`.
