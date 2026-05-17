@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 import HazakuraLLMManagerCore
 
@@ -11,14 +12,18 @@ struct ConfigurationView: View {
                     title: "Runtime",
                     text: binding(\.runtimeExecutablePath),
                     buttonTitle: "Choose Runtime",
-                    allowedExtensions: nil
+                    allowedExtensions: nil,
+                    recentPaths: controller.recentPaths.runtimeExecutablePaths,
+                    selectPath: controller.selectRuntimeExecutablePath
                 )
 
                 pathRow(
                     title: "Model",
                     text: binding(\.modelPath),
                     buttonTitle: "Choose GGUF",
-                    allowedExtensions: ["gguf"]
+                    allowedExtensions: ["gguf"],
+                    recentPaths: controller.recentPaths.modelPaths,
+                    selectPath: controller.selectModelPath
                 )
 
                 GridRow {
@@ -105,7 +110,9 @@ struct ConfigurationView: View {
         title: String,
         text: Binding<String>,
         buttonTitle: String,
-        allowedExtensions: [String]?
+        allowedExtensions: [String]?,
+        recentPaths: [String],
+        selectPath: @escaping (String) -> Void
     ) -> some View {
         GridRow {
             Text(title)
@@ -118,10 +125,24 @@ struct ConfigurationView: View {
 
                 Button {
                     if let path = FilePanel.chooseFile(allowedExtensions: allowedExtensions) {
-                        text.wrappedValue = path
+                        selectPath(path)
                     }
                 } label: {
                     Label(buttonTitle, systemImage: "folder")
+                }
+
+                if !recentPaths.isEmpty {
+                    Menu {
+                        ForEach(recentPaths, id: \.self) { path in
+                            Button {
+                                selectPath(path)
+                            } label: {
+                                Text(recentPathLabel(path))
+                            }
+                        }
+                    } label: {
+                        Label("Recent", systemImage: "clock")
+                    }
                 }
             }
         }
@@ -136,5 +157,14 @@ struct ConfigurationView: View {
                 }
             }
         )
+    }
+
+    private func recentPathLabel(_ path: String) -> String {
+        let name = URL(fileURLWithPath: path).lastPathComponent
+        guard !name.isEmpty else {
+            return path
+        }
+
+        return "\(name) - \(path)"
     }
 }

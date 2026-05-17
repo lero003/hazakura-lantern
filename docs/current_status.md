@@ -12,6 +12,8 @@ Implemented scope:
 - SwiftPM package with macOS 14 minimum.
 - SwiftUI app target plus a small core library target.
 - Runtime configuration stored in `UserDefaults`.
+- Recent runtime executable and model path lists stored separately from the
+  active runtime configuration.
 - `llama-server` launch command construction without shell interpolation.
 - Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
@@ -24,6 +26,8 @@ Implemented scope:
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Local endpoint health-check URL and copyable curl smoke command display.
 - Manual endpoint health status check using the local health-check URL.
+- Endpoint health status resets when the runtime starts, stops, or terminates
+  so a stale healthy result is not shown as current process state.
 - Endpoint health status presentation has a core icon/tone contract used by the
   SwiftUI endpoint view and covered by focused tests.
 - Endpoint health failures distinguish common connection and timeout cases with
@@ -45,7 +49,8 @@ Implemented scope:
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, copied endpoint host behavior, bounded log
   buffering, clear-log behavior, endpoint health status presentation, plus the
-  copied client and health smoke commands and manual health checker.
+  copied client and health smoke commands, manual health checker, and a
+  real-model-free fake runtime smoke test for launch command execution.
 - Focused adapter validation tests for missing runtime/model paths and invalid
   context size, including unsupported model file types and launch-configuration
   error descriptions before launch command construction.
@@ -123,12 +128,8 @@ Good next automated candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above
-- add a fake-runtime or real-model-free smoke path before treating the runtime
-  launch loop as release-ready
 - improve endpoint health status presentation further only when there is a
   concrete stale-status or ambiguity case, without adding automatic polling
-- add recent executable/model path affordances when daily-use pain justifies the
-  extra persisted UI state
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,

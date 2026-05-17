@@ -131,9 +131,13 @@ Already done or mostly done:
   configured reachable host
 - local endpoint health-check URL and copyable curl smoke command
 - manual endpoint health status check
+- health status reset on start, stop, and termination so stale health does not
+  survive process state changes
 - endpoint health status presentation contract for title, detail, icon, and
   tone covered by focused tests
 - `UserDefaults` configuration persistence
+- recent executable/model path menus stored outside exported runtime
+  configuration
 - app bundle launch helper
 - bounded log buffering and clear-log behavior covered by focused tests
 - focused core unit tests
@@ -145,13 +149,14 @@ Already done or mostly done:
 - focused tests for launch configuration error descriptions
 - focused tests for file-preflight launch failure descriptions
 - focused tests for process-run launch failure descriptions
+- real-model-free fake runtime smoke test for adapter-built launch commands
 - initial v0.2 runtime profile document schema version contract
 
 Finish before leaving v0:
 
 - surface missing runtime and missing model paths clearly before launch
 - make restart state explicit enough to avoid stop/start race confusion
-- document a launch smoke path that does not require a real model
+- fix or externally verify the app-bundle launch smoke path
 - keep README, current status, development loop, and roadmap in agreement
 
 v0 exit criteria:
@@ -178,7 +183,6 @@ Candidate work:
 
 - endpoint health presentation improvements using the existing local health URL
 - clearer launch, crash, and termination states
-- recent executable and model path lists
 - selected runtime version display when adapter-safe
 - lightweight runtime setup guidance for users who do not know how to install a
   server runtime yet

@@ -7,6 +7,7 @@ final class ServerController: ObservableObject {
     @Published private(set) var lastErrorMessage: String?
     @Published private(set) var processIdentifier: Int32?
     @Published private(set) var endpointHealthStatus: EndpointHealthStatus = .unchecked
+    @Published private(set) var recentPaths: RecentRuntimePaths
     @Published var configuration: RuntimeConfiguration
 
     private let adapter: LlamaServerAdapter
@@ -30,6 +31,7 @@ final class ServerController: ObservableObject {
         self.configurationStore = configurationStore
         self.fileManager = fileManager
         self.configuration = configurationStore.load()
+        self.recentPaths = configurationStore.loadRecentPaths()
     }
 
     var canStart: Bool {
@@ -67,11 +69,26 @@ final class ServerController: ObservableObject {
         endpointHealthStatus = .unchecked
     }
 
+    func selectRuntimeExecutablePath(_ path: String) {
+        updateConfiguration { configuration in
+            configuration.runtimeExecutablePath = path
+        }
+        recentPaths = configurationStore.recordRuntimeExecutablePath(path)
+    }
+
+    func selectModelPath(_ path: String) {
+        updateConfiguration { configuration in
+            configuration.modelPath = path
+        }
+        recentPaths = configurationStore.recordModelPath(path)
+    }
+
     func start() {
         guard canStart else {
             return
         }
 
+        endpointHealthStatus = .unchecked
         var processRunCommand: LaunchCommand?
 
         do {
@@ -129,6 +146,7 @@ final class ServerController: ObservableObject {
         guard let process else {
             status = .stopped
             processIdentifier = nil
+            endpointHealthStatus = .unchecked
             return
         }
 
@@ -138,6 +156,7 @@ final class ServerController: ObservableObject {
         }
 
         status = .stopping
+        endpointHealthStatus = .unchecked
         appendLog("Stopping process pid \(process.processIdentifier).", stream: .info)
         process.terminate()
     }
@@ -213,6 +232,7 @@ final class ServerController: ObservableObject {
 
         let exitCode = terminatedProcess.terminationStatus
         appendLog("Process exited with code \(exitCode).", stream: .info)
+        endpointHealthStatus = .unchecked
 
         if status == .stopping || exitCode == 0 {
             status = .stopped
