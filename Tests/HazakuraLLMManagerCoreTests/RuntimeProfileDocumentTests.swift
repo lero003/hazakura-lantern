@@ -110,6 +110,65 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         }
     }
 
+    func testProfileDocumentImportRejectsMissingRuntimeKindWithTypedError() {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "name": "Kind-less runtime",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/llama.cpp/llama-server",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.importJSONData(Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingRuntimeKind)
+            XCTAssertEqual(error.localizedDescription, "Runtime profile is missing runtimeKind.")
+        }
+    }
+
+    func testProfileDocumentImportRejectsUnsupportedRuntimeKindWithTypedError() {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "name": "Other runtime",
+          "runtimeKind": "ollama",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/ollama",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.importJSONData(Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(
+                error as? RuntimeProfileDocument.ImportError,
+                .unsupportedRuntimeKind("ollama", supportedRuntimeKind: "llama-server")
+            )
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Runtime profile runtime kind \"ollama\" is not supported by this Lantern build; supported kind is llama-server."
+            )
+        }
+    }
+
     func testProfileDocumentRejectsUnsupportedSchemaVersion() {
         let json = """
         {
@@ -133,6 +192,35 @@ final class RuntimeProfileDocumentTests: XCTestCase {
             try JSONDecoder().decode(RuntimeProfileDocument.self, from: Data(json.utf8))
         ) { error in
             XCTAssertTrue(String(describing: error).contains("Unsupported runtime profile schema version 2"))
+        }
+    }
+
+    func testProfileDocumentRejectsUnsupportedRuntimeKind() {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "name": "Other runtime",
+          "runtimeKind": "ollama",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/ollama",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try JSONDecoder().decode(RuntimeProfileDocument.self, from: Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(
+                error as? RuntimeProfileDocument.ImportError,
+                .unsupportedRuntimeKind("ollama", supportedRuntimeKind: "llama-server")
+            )
         }
     }
 }

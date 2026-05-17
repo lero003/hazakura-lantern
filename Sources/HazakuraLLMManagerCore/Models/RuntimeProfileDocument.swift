@@ -2,17 +2,24 @@ import Foundation
 
 public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
     public static let currentSchemaVersion = 1
+    public static let supportedRuntimeKind = "llama-server"
 
     public enum ImportError: Error, Equatable, LocalizedError, Sendable {
         case missingSchemaVersion
+        case missingRuntimeKind
         case unsupportedSchemaVersion(Int, supportedVersion: Int)
+        case unsupportedRuntimeKind(String, supportedRuntimeKind: String)
 
         public var errorDescription: String? {
             switch self {
             case .missingSchemaVersion:
                 return "Runtime profile is missing schemaVersion."
+            case .missingRuntimeKind:
+                return "Runtime profile is missing runtimeKind."
             case let .unsupportedSchemaVersion(schemaVersion, supportedVersion):
                 return "Runtime profile schema version \(schemaVersion) is not supported by this Lantern build; supported version is \(supportedVersion)."
+            case let .unsupportedRuntimeKind(runtimeKind, supportedRuntimeKind):
+                return "Runtime profile runtime kind \"\(runtimeKind)\" is not supported by this Lantern build; supported kind is \(supportedRuntimeKind)."
             }
         }
     }
@@ -24,7 +31,7 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
 
     public init(
         name: String,
-        runtimeKind: String = "llama-server",
+        runtimeKind: String = RuntimeProfileDocument.supportedRuntimeKind,
         configuration: RuntimeConfiguration,
         schemaVersion: Int = RuntimeProfileDocument.currentSchemaVersion
     ) {
@@ -48,7 +55,15 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
 
         self.schemaVersion = schemaVersion
         self.name = try container.decode(String.self, forKey: .name)
-        self.runtimeKind = try container.decode(String.self, forKey: .runtimeKind)
+        let runtimeKind = try container.decode(String.self, forKey: .runtimeKind)
+        guard runtimeKind == RuntimeProfileDocument.supportedRuntimeKind else {
+            throw ImportError.unsupportedRuntimeKind(
+                runtimeKind,
+                supportedRuntimeKind: RuntimeProfileDocument.supportedRuntimeKind
+            )
+        }
+
+        self.runtimeKind = runtimeKind
         self.configuration = try container.decode(RuntimeConfiguration.self, forKey: .configuration)
     }
 
@@ -66,6 +81,14 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
             throw ImportError.unsupportedSchemaVersion(schemaVersion, supportedVersion: currentSchemaVersion)
         }
 
+        guard let runtimeKind = envelope.runtimeKind else {
+            throw ImportError.missingRuntimeKind
+        }
+
+        guard runtimeKind == supportedRuntimeKind else {
+            throw ImportError.unsupportedRuntimeKind(runtimeKind, supportedRuntimeKind: supportedRuntimeKind)
+        }
+
         return try JSONDecoder().decode(RuntimeProfileDocument.self, from: data)
     }
 
@@ -81,5 +104,6 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
 
     private struct SchemaEnvelope: Decodable {
         let schemaVersion: Int?
+        let runtimeKind: String?
     }
 }

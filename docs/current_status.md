@@ -48,6 +48,9 @@ Implemented scope:
 - Runtime profile JSON import reports missing or unsupported schema versions
   through typed errors so future migration UI can recover without string
   matching decoder failures.
+- Runtime profile JSON import rejects missing or unsupported runtime kinds
+  through typed errors, keeping profile file handling on the current
+  `llama-server` boundary until adapter work is explicit.
 - Active runtime profile documents can be persisted through the configuration
   store; missing or unsupported future profile data falls back to the current
   single-runtime configuration instead of breaking startup, with focused tests.
@@ -149,10 +152,10 @@ Good next automated candidates:
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,
   keeping v0.2 local and persistence-focused; the initial schema-version
-  document contract, JSON encoding helpers, typed import-schema failures, and
-  active profile persistence fallback are covered; profile JSON shape docs are
-  covered, so prefer profile file UI boundaries or migration transform tests
-  once a concrete v2 shape exists
+  document contract, JSON encoding helpers, typed import-schema/runtime-kind
+  failures, and active profile persistence fallback are covered; profile JSON
+  shape docs are covered, so prefer profile file UI boundaries beyond import
+  validation or migration transform tests once a concrete v2 shape exists
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

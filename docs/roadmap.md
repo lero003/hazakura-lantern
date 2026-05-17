@@ -154,6 +154,8 @@ Already done or mostly done:
 - stable readable JSON export/import helpers for runtime profile documents
 - typed import failures for missing or unsupported runtime profile schema
   versions
+- typed import failures for missing or unsupported runtime profile runtime
+  kinds, keeping imported profiles on the current `llama-server` boundary
 - active runtime profile persistence fallback through the configuration store
 - profile JSON shape and portability boundaries documented with a readable
   schema-version `1` example

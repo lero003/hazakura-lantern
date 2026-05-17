@@ -119,6 +119,52 @@ final class ConfigurationStoreTests: XCTestCase {
         XCTAssertEqual(profile.configuration, config)
     }
 
+    func testUnsupportedRuntimeKindProfileFallsBackToCurrentConfiguration() {
+        let (defaults, suiteName) = makeDefaults()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let store = ConfigurationStore(defaults: defaults)
+        let config = RuntimeConfiguration(
+            runtimeExecutablePath: "/tmp/llama-server",
+            modelPath: "/tmp/model.gguf",
+            host: "127.0.0.1",
+            port: 4567,
+            contextSize: 4096,
+            threads: "4",
+            gpuLayers: "auto",
+            additionalArguments: "--verbose"
+        )
+        let unsupportedRuntimeKindProfileJSON = """
+        {
+          "schemaVersion": 1,
+          "name": "Other runtime",
+          "runtimeKind": "ollama",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/ollama",
+            "modelPath": "/future/model.gguf",
+            "host": "127.0.0.1",
+            "port": 9876,
+            "contextSize": 8192,
+            "threads": "8",
+            "gpuLayers": "0",
+            "additionalArguments": "--future"
+          }
+        }
+        """
+
+        store.save(config)
+        defaults.set(
+            Data(unsupportedRuntimeKindProfileJSON.utf8),
+            forKey: "dev.hazakura.llmmanager.runtimeProfile.v1"
+        )
+
+        let profile = store.loadRuntimeProfile(named: "Recovered runtime")
+
+        XCTAssertEqual(profile.name, "Recovered runtime")
+        XCTAssertEqual(profile.schemaVersion, RuntimeProfileDocument.currentSchemaVersion)
+        XCTAssertEqual(profile.configuration, config)
+    }
+
     func testRecentPathsDeduplicateAndKeepNewestFirst() {
         let (defaults, suiteName) = makeDefaults()
         defer { defaults.removePersistentDomain(forName: suiteName) }

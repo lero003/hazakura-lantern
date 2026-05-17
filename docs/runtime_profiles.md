@@ -39,6 +39,8 @@ Lantern imports profile JSON through the schema-version guard:
 
 - missing `schemaVersion` fails as an invalid runtime profile
 - schema versions newer than this build supports fail closed
+- missing or unsupported `runtimeKind` fails closed; the current supported kind
+  is `llama-server`
 - unsupported profile data does not replace the active single-runtime
   configuration during startup recovery
 
