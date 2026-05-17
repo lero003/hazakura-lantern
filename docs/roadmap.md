@@ -161,6 +161,8 @@ Already done or mostly done:
   schema-version `1` example
 - suggested profile export filename contract using `.lantern-profile.json`,
   covered by focused tests before file-based UI is added
+- profile local file reference contract for runtime executable and model paths,
+  covered by focused tests before portability warnings or file UI are added
 
 Finish before leaving v0:
 

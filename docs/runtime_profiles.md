@@ -33,6 +33,11 @@ local edits:
 Paths are local machine paths. Moving a profile to another Mac may require
 choosing a different runtime executable or model path before launch.
 
+The core profile contract can list the local file references a profile depends
+on: the runtime executable and model file paths, when present. File-based UI can
+use that list for portability warnings without checking the file system,
+installing runtimes, or copying model data into the profile.
+
 When the app adds file-based profile export, the suggested filename should use
 the profile name plus `.lantern-profile.json`. The name is sanitized for local
 file systems only; the JSON `name` field remains the user-facing profile name.

@@ -5,6 +5,30 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
     public static let supportedRuntimeKind = "llama-server"
     public static let exportFileSuffix = ".lantern-profile.json"
 
+    public struct LocalFileReference: Equatable, Sendable {
+        public enum Role: Equatable, Sendable {
+            case runtimeExecutable
+            case modelFile
+
+            public var displayName: String {
+                switch self {
+                case .runtimeExecutable:
+                    return "Runtime executable"
+                case .modelFile:
+                    return "Model file"
+                }
+            }
+        }
+
+        public var role: Role
+        public var path: String
+
+        public init(role: Role, path: String) {
+            self.role = role
+            self.path = path
+        }
+    }
+
     public enum ImportError: Error, Equatable, LocalizedError, Sendable {
         case missingSchemaVersion
         case missingRuntimeKind
@@ -44,6 +68,22 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
 
     public var suggestedExportFileName: String {
         RuntimeProfileDocument.suggestedExportFileName(for: name)
+    }
+
+    public var localFileReferences: [LocalFileReference] {
+        let references: [LocalFileReference] = [
+            .init(role: .runtimeExecutable, path: configuration.runtimeExecutablePath),
+            .init(role: .modelFile, path: configuration.modelPath)
+        ]
+
+        return references.compactMap { reference in
+            let trimmedPath = reference.path.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmedPath.isEmpty else {
+                return nil
+            }
+
+            return LocalFileReference(role: reference.role, path: trimmedPath)
+        }
     }
 
     public static func suggestedExportFileName(for profileName: String) -> String {

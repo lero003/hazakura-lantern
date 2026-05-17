@@ -72,6 +72,52 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testProfileDocumentListsLocalFileReferencesForPortabilityWarnings() {
+        let document = RuntimeProfileDocument(
+            name: "Desk runtime",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: " /opt/llama.cpp/llama-server ",
+                modelPath: "/models/hazakura.gguf\n",
+                host: "127.0.0.1",
+                port: 4321,
+                contextSize: 8192,
+                threads: "6",
+                gpuLayers: "0",
+                additionalArguments: "--verbose"
+            )
+        )
+
+        XCTAssertEqual(
+            document.localFileReferences,
+            [
+                .init(role: .runtimeExecutable, path: "/opt/llama.cpp/llama-server"),
+                .init(role: .modelFile, path: "/models/hazakura.gguf")
+            ]
+        )
+        XCTAssertEqual(
+            document.localFileReferences.map(\.role.displayName),
+            ["Runtime executable", "Model file"]
+        )
+    }
+
+    func testProfileDocumentOmitsEmptyLocalFileReferences() {
+        let document = RuntimeProfileDocument(
+            name: "Incomplete runtime",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: "  ",
+                modelPath: "\n",
+                host: "127.0.0.1",
+                port: 1234,
+                contextSize: 4096,
+                threads: "auto",
+                gpuLayers: "auto",
+                additionalArguments: ""
+            )
+        )
+
+        XCTAssertEqual(document.localFileReferences, [])
+    }
+
     func testProfileDocumentImportRejectsUnsupportedSchemaVersionWithTypedError() {
         let json = """
         {
