@@ -19,19 +19,41 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Lane
 
-The project is in v0 hardening for a local macOS LLM server manager.
+The project is in v0 / v0.1 transition for a local macOS LLM server manager.
 
-Favor work that makes the existing `llama-server` control loop more reliable:
+Favor work that makes the existing `llama-server` control loop more reliable
+and easier to reuse from local clients:
 
 - configuration validation
 - process lifecycle behavior
 - launch command preview correctness
 - local endpoint copy and display
+- local endpoint health and client smoke checks
 - in-memory log handling
 - app launch/build reliability
 
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
+
+The recurring automation may move from v0 to v0.1 and later v0.2 without a new
+human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
+previous lane is sufficiently closed. Do not keep re-running the same launch
+smoke diagnostics after the blocker is already documented. If a blocker appears
+environment-specific and the core SwiftPM tests still pass, carry it as a known
+risk and choose the next safe lane item that does not depend on that blocker.
+
+Lane handoff rules:
+
+- v0 -> v0.1: allowed when command construction, process control, endpoint
+  display, configuration persistence, and SwiftPM verification are stable, even
+  if the documented Launch Services helper blocker remains unresolved.
+- v0.1 -> v0.2: allowed when daily-use confidence is good enough that profiles
+  are the next smallest source of value: clearer runtime state, local health or
+  client smoke evidence, copy flows, and common failure messages are covered by
+  tests or docs.
+- v0.2 work must stay on local profile contract and portability. Do not use the
+  handoff as permission for model download, runtime install/update, chat,
+  proxy, LAN exposure, or adapter breadth.
 
 ## Automation Rules
 
@@ -58,10 +80,12 @@ Hourly posture:
 Preferred order:
 
 1. Fix a failing test or build.
-2. Close a small correctness gap in the v0 runtime/control loop.
-3. Add focused tests for an existing boundary.
-4. Tighten docs when they would otherwise steer the next run incorrectly.
-5. End as a verified no-op when no safe slice is justified.
+2. Close a small correctness gap in the current roadmap lane.
+3. If the current lane is blocked only by a documented environment-specific
+   smoke issue, advance to the next lane's smallest safe item.
+4. Add focused tests for an existing boundary.
+5. Tighten docs when they would otherwise steer the next run incorrectly.
+6. End as a verified no-op when no safe slice is justified.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.

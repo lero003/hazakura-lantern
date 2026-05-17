@@ -71,17 +71,30 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
   auto restart, model downloads, chat, RAG, or proxy behavior.
 - LAN exposure and authentication are intentionally outside v0.
 
+## Automation Lane
+
+The automation should treat the project as v0 / v0.1 transition. The v0
+control loop is mostly in place, while the Launch Services helper smoke remains
+a documented blocker. Do not spend every hourly run retrying the same
+`kLSNoExecutableErr` path unless there is a new hypothesis. It is acceptable to
+carry that blocker as risk and advance into v0.1 daily-use confidence work that
+does not depend on app-bundle launch verification.
+
+The saved automation may continue later into v0.2 when `docs/development_loop.md`
+and `docs/roadmap.md` lane handoff criteria are satisfied. v0.2 should start
+with local profile contract and portability, not runtime breadth.
+
 ## Next Best Slice
 
-The most useful next automated slice is to resolve the launch-smoke blocker if
-the environment allows it. If not, choose a focused correctness or test
-hardening change inside the existing v0 boundary. Good candidates:
+Good next automated candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
-  app bundle, starting beyond ad-hoc signing and minimal Info.plist checks
+  app bundle only if there is a fresh hypothesis beyond the attempts above
+- add endpoint health status using the existing local health URL
+- tighten copied client smoke / endpoint reuse flows
+- improve common launch failure messages without adding installer behavior
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
-- add endpoint health status only if kept local and read-only
 
-Do not begin adapter expansion, model management, or chat features until the v0
-control loop is stable.
+Do not begin adapter expansion, model management, or chat features during this
+handoff.
