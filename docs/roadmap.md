@@ -129,6 +129,8 @@ Already done or mostly done:
 - local endpoint and OpenAI-style environment snippet
 - local endpoint health-check URL and copyable curl smoke command
 - manual endpoint health status check
+- endpoint health status presentation contract for title, detail, icon, and
+  tone covered by focused tests
 - `UserDefaults` configuration persistence
 - app bundle launch helper
 - bounded log buffering and clear-log behavior covered by focused tests

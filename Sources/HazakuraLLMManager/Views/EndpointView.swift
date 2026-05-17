@@ -62,7 +62,7 @@ struct EndpointView: View {
                             }
                         }
                     } icon: {
-                        Image(systemName: healthSystemImage)
+                        Image(systemName: controller.endpointHealthStatus.systemImageName)
                             .foregroundStyle(healthColor)
                     }
 
@@ -101,28 +101,15 @@ struct EndpointView: View {
         NSPasteboard.general.setString(value, forType: .string)
     }
 
-    private var healthSystemImage: String {
-        switch controller.endpointHealthStatus {
-        case .unchecked:
-            "questionmark.circle"
-        case .checking:
-            "clock"
-        case .healthy:
-            "checkmark.circle"
-        case .unhealthy:
-            "exclamationmark.triangle"
-        }
-    }
-
     private var healthColor: Color {
-        switch controller.endpointHealthStatus {
-        case .unchecked:
+        switch controller.endpointHealthStatus.tone {
+        case .neutral:
             .secondary
-        case .checking:
+        case .inProgress:
             .orange
-        case .healthy:
+        case .success:
             .green
-        case .unhealthy:
+        case .failure:
             .red
         }
     }

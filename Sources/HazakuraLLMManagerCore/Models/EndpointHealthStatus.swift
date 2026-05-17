@@ -31,4 +31,37 @@ public enum EndpointHealthStatus: Equatable, Sendable {
             message
         }
     }
+
+    public var systemImageName: String {
+        switch self {
+        case .unchecked:
+            "questionmark.circle"
+        case .checking:
+            "clock"
+        case .healthy:
+            "checkmark.circle"
+        case .unhealthy:
+            "exclamationmark.triangle"
+        }
+    }
+
+    public var tone: EndpointHealthStatusTone {
+        switch self {
+        case .unchecked:
+            .neutral
+        case .checking:
+            .inProgress
+        case .healthy:
+            .success
+        case .unhealthy:
+            .failure
+        }
+    }
+}
+
+public enum EndpointHealthStatusTone: Equatable, Sendable {
+    case neutral
+    case inProgress
+    case success
+    case failure
 }

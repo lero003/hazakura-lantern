@@ -21,6 +21,8 @@ Implemented scope:
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Local endpoint health-check URL and copyable curl smoke command display.
 - Manual endpoint health status check using the local health-check URL.
+- Endpoint health status presentation has a core icon/tone contract used by the
+  SwiftUI endpoint view and covered by focused tests.
 - Endpoint health failures distinguish common connection and timeout cases with
   focused tests.
 - Launch configuration errors point to the next setup action before launch, with
@@ -36,7 +38,8 @@ Implemented scope:
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, bounded log buffering, clear-log behavior,
-  plus the copied client and health smoke commands and manual health checker.
+  endpoint health status presentation, plus the copied client and health smoke
+  commands and manual health checker.
 - Focused adapter validation tests for missing runtime/model paths and invalid
   context size, including unsupported model file types and launch-configuration
   error descriptions before launch command construction.
@@ -110,7 +113,8 @@ Good next automated candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above
-- improve endpoint health status presentation without adding automatic polling
+- improve endpoint health status presentation further only when there is a
+  concrete stale-status or ambiguity case, without adding automatic polling
 - tighten copied client smoke / endpoint reuse flows
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
