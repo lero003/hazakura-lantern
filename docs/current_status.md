@@ -51,6 +51,8 @@ Implemented scope:
 - Active runtime profile documents can be persisted through the configuration
   store; missing or unsupported future profile data falls back to the current
   single-runtime configuration instead of breaking startup, with focused tests.
+- Runtime profile JSON shape, import failure behavior, and portability
+  boundaries are documented with a readable schema-version `1` example.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -148,9 +150,9 @@ Good next automated candidates:
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,
   keeping v0.2 local and persistence-focused; the initial schema-version
   document contract, JSON encoding helpers, typed import-schema failures, and
-  active profile persistence fallback are covered, so prefer profile file UI
-  boundaries, profile documentation, or migration transform tests once a
-  concrete v2 shape exists
+  active profile persistence fallback are covered; profile JSON shape docs are
+  covered, so prefer profile file UI boundaries or migration transform tests
+  once a concrete v2 shape exists
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

@@ -61,6 +61,7 @@ Project planning and automation docs:
 - `docs/development_loop.md`
 - `docs/product_brief.md`
 - `docs/troubleshooting.md`
+- `docs/runtime_profiles.md`
 
 ## Runtime Contract
 
