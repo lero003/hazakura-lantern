@@ -21,6 +21,8 @@ Implemented scope:
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Local endpoint health-check URL and copyable curl smoke command display.
 - Manual endpoint health status check using the local health-check URL.
+- Endpoint health failures distinguish common connection and timeout cases with
+  focused tests.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.

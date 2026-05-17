@@ -25,8 +25,32 @@ final class EndpointHealthCheckerTests: XCTestCase {
         XCTAssertEqual(status, .unhealthy(message: "Health check returned HTTP 503."))
     }
 
-    func testCheckReturnsUnhealthyForRequestFailure() async throws {
+    func testCheckReturnsUnhealthyForConnectionFailure() async throws {
         EndpointHealthURLProtocol.result = .failure(URLError(.cannotConnectToHost))
+        let checker = EndpointHealthChecker(session: makeSession())
+
+        let status = await checker.check(try XCTUnwrap(URL(string: "http://localhost:1234/v1/models")))
+
+        XCTAssertEqual(
+            status,
+            .unhealthy(message: "No server responded at http://localhost:1234/v1/models. Start the runtime or verify the configured port.")
+        )
+    }
+
+    func testCheckReturnsUnhealthyForTimeout() async throws {
+        EndpointHealthURLProtocol.result = .failure(URLError(.timedOut))
+        let checker = EndpointHealthChecker(session: makeSession(), timeoutInterval: 1.5)
+
+        let status = await checker.check(try XCTUnwrap(URL(string: "http://localhost:1234/v1/models")))
+
+        XCTAssertEqual(
+            status,
+            .unhealthy(message: "Health check timed out after 1.5 seconds for http://localhost:1234/v1/models.")
+        )
+    }
+
+    func testCheckReturnsGenericUnhealthyForOtherRequestFailure() async throws {
+        EndpointHealthURLProtocol.result = .failure(URLError(.badServerResponse))
         let checker = EndpointHealthChecker(session: makeSession())
 
         let status = await checker.check(try XCTUnwrap(URL(string: "http://localhost:1234/v1/models")))
@@ -34,7 +58,6 @@ final class EndpointHealthCheckerTests: XCTestCase {
         guard case .unhealthy(let message) = status else {
             return XCTFail("Expected unhealthy status.")
         }
-
         XCTAssertTrue(message.hasPrefix("Health check failed:"))
     }
 
