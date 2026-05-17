@@ -54,6 +54,8 @@ Implemented scope:
 - Runtime profile documents provide a stable suggested export filename using
   `.lantern-profile.json`, with focused tests for sanitizing local profile
   names before file-based UI is added.
+- Runtime profile documents recognize `.lantern-profile.json` filenames and
+  URLs for future file-based import UI, with focused tests.
 - Runtime profile documents expose their runtime executable and model file
   references for future portability warnings without checking or copying local
   files, with focused tests.
@@ -160,9 +162,10 @@ Good next automated candidates:
   keeping v0.2 local and persistence-focused; the initial schema-version
   document contract, JSON encoding helpers, typed import-schema/runtime-kind
   failures, active profile persistence fallback, profile JSON shape docs, and
-  suggested export filename and local file reference contracts are covered;
-  prefer profile file UI behavior beyond filename/import validation or
-  migration transform tests once a concrete v2 shape exists
+  suggested export filename, supported profile filename, and local file
+  reference contracts are covered; prefer profile file UI behavior beyond
+  filename/import validation or migration transform tests once a concrete v2
+  shape exists
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

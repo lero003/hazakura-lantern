@@ -72,6 +72,34 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testProfileDocumentRecognizesSupportedProfileFileNames() {
+        XCTAssertTrue(
+            RuntimeProfileDocument.isSupportedProfileFileName("Desk-runtime.lantern-profile.json")
+        )
+        XCTAssertTrue(
+            RuntimeProfileDocument.isSupportedProfileFileName(" Desk-runtime.LANTERN-PROFILE.JSON\n")
+        )
+        XCTAssertFalse(
+            RuntimeProfileDocument.isSupportedProfileFileName("Desk-runtime.json")
+        )
+        XCTAssertFalse(
+            RuntimeProfileDocument.isSupportedProfileFileName("Desk-runtime.lantern-profile.json.backup")
+        )
+    }
+
+    func testProfileDocumentRecognizesSupportedProfileFileURLs() {
+        XCTAssertTrue(
+            RuntimeProfileDocument.isSupportedProfileFileURL(
+                URL(fileURLWithPath: "/tmp/Desk runtime.lantern-profile.json")
+            )
+        )
+        XCTAssertFalse(
+            RuntimeProfileDocument.isSupportedProfileFileURL(
+                URL(fileURLWithPath: "/tmp/Desk runtime.json")
+            )
+        )
+    }
+
     func testProfileDocumentListsLocalFileReferencesForPortabilityWarnings() {
         let document = RuntimeProfileDocument(
             name: "Desk runtime",

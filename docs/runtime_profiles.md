@@ -41,6 +41,8 @@ installing runtimes, or copying model data into the profile.
 When the app adds file-based profile export, the suggested filename should use
 the profile name plus `.lantern-profile.json`. The name is sanitized for local
 file systems only; the JSON `name` field remains the user-facing profile name.
+File-based import UI should recognize files with the same
+`.lantern-profile.json` suffix before reading their JSON contents.
 
 ## Import Behavior
 

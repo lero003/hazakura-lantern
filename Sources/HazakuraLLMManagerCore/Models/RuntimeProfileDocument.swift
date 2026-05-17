@@ -114,6 +114,15 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         return "\(safeName)\(exportFileSuffix)"
     }
 
+    public static func isSupportedProfileFileName(_ fileName: String) -> Bool {
+        let trimmedFileName = fileName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedFileName.lowercased().hasSuffix(exportFileSuffix)
+    }
+
+    public static func isSupportedProfileFileURL(_ fileURL: URL) -> Bool {
+        isSupportedProfileFileName(fileURL.lastPathComponent)
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let schemaVersion = try container.decode(Int.self, forKey: .schemaVersion)
