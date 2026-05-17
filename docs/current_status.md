@@ -62,6 +62,8 @@ Implemented scope:
 - Runtime profile files can be previewed through a typed envelope helper before
   full import, validating suffix, schema version, profile name, and runtime kind
   without requiring the full runtime configuration to decode.
+- Runtime profile import and preview reject blank profile names as invalid, so
+  future file UI does not present an unusable unnamed profile.
 - Runtime profile documents expose their runtime executable and model file
   references for future portability warnings without checking or copying local
   files, with focused tests.
@@ -173,7 +175,8 @@ Good next automated candidates:
   failures, active profile persistence fallback, profile JSON shape docs, and
   suggested export filename, supported profile filename, and local file
   reference, profile-file import preflight, and adapter-scoped launch-command
-  preview, and profile-file import preview contracts are covered; prefer
+  preview, profile-file import preview, and blank-name rejection contracts are
+  covered; prefer
   profile file UI behavior beyond core import-envelope validation or
   migration transform tests once a concrete v2 shape exists
 

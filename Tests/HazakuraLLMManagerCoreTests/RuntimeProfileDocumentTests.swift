@@ -156,6 +156,23 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testProfileDocumentPreviewRejectsBlankProfileName() {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "name": "   ",
+          "runtimeKind": "llama-server"
+        }
+        """
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.previewJSONData(Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingName)
+            XCTAssertEqual(error.localizedDescription, "Runtime profile is missing name.")
+        }
+    }
+
     func testProfileDocumentRejectsUnsupportedProfileFileNameBeforeImport() {
         let data = Data("not profile json".utf8)
 
@@ -398,6 +415,59 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         ) { error in
             XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingName)
             XCTAssertEqual(error.localizedDescription, "Runtime profile is missing name.")
+        }
+    }
+
+    func testProfileDocumentImportRejectsBlankNameWithTypedError() {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "name": "   ",
+          "runtimeKind": "llama-server",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/llama.cpp/llama-server",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.importJSONData(Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingName)
+            XCTAssertEqual(error.localizedDescription, "Runtime profile is missing name.")
+        }
+    }
+
+    func testProfileDocumentDecodeRejectsBlankName() {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "name": "   ",
+          "runtimeKind": "llama-server",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/llama.cpp/llama-server",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try JSONDecoder().decode(RuntimeProfileDocument.self, from: Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingName)
         }
     }
 

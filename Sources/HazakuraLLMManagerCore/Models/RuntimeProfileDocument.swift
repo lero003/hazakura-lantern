@@ -179,7 +179,12 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         }
 
         self.schemaVersion = schemaVersion
-        self.name = try container.decode(String.self, forKey: .name)
+        let name = try container.decode(String.self, forKey: .name)
+        guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw ImportError.missingName
+        }
+
+        self.name = name
         let runtimeKind = try container.decode(String.self, forKey: .runtimeKind)
         guard runtimeKind == RuntimeProfileDocument.supportedRuntimeKind else {
             throw ImportError.unsupportedRuntimeKind(
@@ -264,7 +269,8 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
             throw ImportError.unsupportedSchemaVersion(schemaVersion, supportedVersion: currentSchemaVersion)
         }
 
-        guard let name = envelope.name else {
+        guard let name = envelope.name,
+              !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw ImportError.missingName
         }
 

@@ -62,7 +62,7 @@ runtime kind, but it does not require decoding the full runtime configuration.
 Lantern imports profile JSON through the schema-version guard:
 
 - missing `schemaVersion` fails as an invalid runtime profile
-- missing `name` fails as an invalid runtime profile
+- missing or blank `name` fails as an invalid runtime profile
 - schema versions newer than this build supports fail closed
 - missing or unsupported `runtimeKind` fails closed; the current supported kind
   is `llama-server`
