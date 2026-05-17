@@ -4,6 +4,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Added compact troubleshooting guidance for setup, endpoint health,
+  app-bundle smoke, and source-only alpha release boundaries.
+
 ## v0.1.0-alpha.1 - 2026-05-17
 
 ### Added

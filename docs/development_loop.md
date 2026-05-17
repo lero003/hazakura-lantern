@@ -12,6 +12,7 @@ Start each substantial run with:
 3. `docs/current_status.md`
 4. `docs/roadmap.md`
 5. `docs/product_brief.md`
+6. `docs/troubleshooting.md`
 
 Run Hazakura Habitat before choosing commands for code, dependencies, Git,
 release, or automation work. Read its `agent_context.md` first, and consult
@@ -35,7 +36,7 @@ and easier to reuse from local clients:
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
 
-The recurring automation may move from v0 to v0.1 and later v0.2 without a new
+The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
 human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
 previous lane is sufficiently closed. Do not keep re-running the same launch
 smoke diagnostics after the blocker is already documented. If a blocker appears
@@ -54,6 +55,10 @@ Lane handoff rules:
 - v0.2 work must stay on local profile contract and portability. Do not use the
   handoff as permission for model download, runtime install/update, chat,
   proxy, LAN exposure, or adapter breadth.
+- v0.2 -> v0.3: allowed when local profile contract, persistence, and
+  import/export helpers are covered well enough that the next risk is adapter
+  boundary clarity. v0.3 work should tighten protocols, tests, and docs before
+  adding another runtime adapter.
 
 ## Automation Rules
 
@@ -112,6 +117,9 @@ git diff --check
 `swift build --disable-sandbox` is the preferred build command in this Codex
 environment because SwiftPM manifest sandboxing can fail even when compilation
 is otherwise healthy.
+
+Use `docs/troubleshooting.md` to classify setup, endpoint health, and
+app-bundle launch-smoke failures before changing runtime scope.
 
 When an automation run launches the app for smoke verification, it must also
 close the app before finishing. Prefer `./script/build_and_run.sh --verify`

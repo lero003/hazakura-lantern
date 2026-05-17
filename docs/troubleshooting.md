@@ -1,0 +1,74 @@
+# Troubleshooting
+
+Hazakura Lantern supervises an existing local runtime. It does not install
+runtimes, download models, or proxy requests. Use this page to sort common setup
+and smoke-check failures before widening scope.
+
+## Runtime Or Model Path
+
+Symptoms:
+
+- Start fails before a process is launched.
+- The error points at the selected `llama-server` binary or `.gguf` model.
+
+Checks:
+
+- The runtime path should point to an executable Mac binary.
+- The model path should point to an existing `.gguf` file.
+- The generated launch command is copyable from the app for terminal
+  inspection.
+
+Do not add installer or model-download behavior to fix these cases. Lantern
+should point to the missing local setup step and remain advisory.
+
+## Endpoint Health
+
+Symptoms:
+
+- The app is running, but the manual health check fails.
+- Copied client smoke commands cannot reach the local endpoint.
+
+Checks:
+
+- Confirm the runtime process is running and has a PID.
+- Confirm the configured port matches the copied endpoint.
+- Use the copyable health-check curl command before adding new app behavior.
+- Health state is intentionally manual; there is no automatic polling yet.
+
+The health check is a local smoke signal from this Mac. LAN exposure,
+authentication, and remote reachability remain outside v0 and v0.1.
+
+## App Bundle Launch Smoke
+
+Symptoms:
+
+- `./script/build_and_run.sh --verify` fails with Launch Services
+  `kLSNoExecutableErr`.
+- SwiftPM build and tests still pass.
+
+Current status:
+
+- Treat this as a packaged-app release blocker.
+- Do not treat it as a blocker for v0.2 profile-contract work.
+- Do not keep retrying the same Codex-environment smoke path without a fresh
+  hypothesis.
+
+Before a user-facing `.app`, zip, dmg, signing, or notarization release, verify
+the app-bundle launch path on a normal macOS environment and update
+`docs/current_status.md`.
+
+## Release Boundary
+
+Allowed before the app-bundle smoke is fixed:
+
+- SwiftPM build/test verification.
+- Source-only alpha checkpoints.
+- Prerelease notes that clearly state no packaged `.app` artifact is attached.
+
+Not allowed yet:
+
+- User-facing packaged `.app` release.
+- zip/dmg artifacts.
+- Signing or notarization work as a release claim.
+- Any workaround that expands Lantern into chat, model download, proxy, LAN
+  exposure, auth, updater, or adapter breadth.

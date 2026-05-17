@@ -60,6 +60,7 @@ Project planning and automation docs:
 - `docs/roadmap.md`
 - `docs/development_loop.md`
 - `docs/product_brief.md`
+- `docs/troubleshooting.md`
 
 ## Runtime Contract
 

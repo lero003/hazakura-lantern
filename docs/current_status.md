@@ -45,6 +45,8 @@ Implemented scope:
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
+- Compact troubleshooting guide for setup, endpoint health, app-bundle smoke,
+  and source-only alpha release boundaries.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, copied endpoint host behavior, bounded log
@@ -118,9 +120,11 @@ The project may proceed with v0.1 daily-use confidence work under this known
 Launch Services risk, but no user-facing v0 app-bundle release should be cut
 until app launch verification succeeds on a normal macOS environment.
 
-The saved automation may continue later into v0.2 when `docs/development_loop.md`
-and `docs/roadmap.md` lane handoff criteria are satisfied. v0.2 should start
-with local profile contract and portability, not runtime breadth.
+The saved automation may continue later into v0.2 and v0.3 when
+`docs/development_loop.md` and `docs/roadmap.md` lane handoff criteria are
+satisfied. v0.2 should start with local profile contract and portability, not
+runtime breadth. v0.3 should clarify adapter boundaries before adding another
+runtime adapter.
 
 ## Next Best Slice
 
