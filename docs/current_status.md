@@ -23,6 +23,8 @@ Implemented scope:
 - Manual endpoint health status check using the local health-check URL.
 - Endpoint health failures distinguish common connection and timeout cases with
   focused tests.
+- Launch configuration errors point to the next setup action before launch, with
+  focused tests for the user-facing descriptions.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -31,8 +33,8 @@ Implemented scope:
   quoted command preview display, bounded log buffering, clear-log behavior,
   plus the copied client and health smoke commands and manual health checker.
 - Focused adapter validation tests for missing runtime/model paths and invalid
-  context size, including unsupported model file types before launch command
-  construction.
+  context size, including unsupported model file types and launch-configuration
+  error descriptions before launch command construction.
 
 ## Development Baseline
 
@@ -105,7 +107,8 @@ Good next automated candidates:
   app bundle only if there is a fresh hypothesis beyond the attempts above
 - improve endpoint health status presentation without adding automatic polling
 - tighten copied client smoke / endpoint reuse flows
-- improve common launch failure messages without adding installer behavior
+- improve process-run and file-preflight launch failure messages without adding
+  installer behavior
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,

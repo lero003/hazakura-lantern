@@ -105,19 +105,19 @@ public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .missingRuntimePath:
-            "Runtime executable path is required."
+            "Choose a llama-server executable before starting."
         case .missingModelPath:
-            "Model path is required."
+            "Choose a .gguf model file before starting."
         case .unsupportedModelType(let path):
-            "Model file must be a .gguf file. Current path: \(path)."
+            "Model file must be a .gguf file before launch. Current path: \(path)."
         case .invalidPort(let port):
-            "Port must be between 1 and 65535. Current value: \(port)."
+            "Port must be between 1 and 65535 before launch. Current value: \(port)."
         case .invalidContextSize(let contextSize):
-            "Context size must be greater than zero. Current value: \(contextSize)."
+            "Context size must be greater than zero before launch. Current value: \(contextSize)."
         case .invalidNumericOption(let name, let value):
-            "\(name) must be a positive integer or auto. Current value: \(value)."
+            "\(name) must be a positive integer or auto before launch. Current value: \(value)."
         case .invalidNonNegativeNumericOption(let name, let value):
-            "\(name) must be a non-negative integer or auto. Current value: \(value)."
+            "\(name) must be a non-negative integer or auto before launch. Current value: \(value)."
         }
     }
 }

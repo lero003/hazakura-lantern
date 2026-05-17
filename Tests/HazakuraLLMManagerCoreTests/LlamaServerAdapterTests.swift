@@ -175,4 +175,35 @@ final class LlamaServerAdapterTests: XCTestCase {
             XCTAssertEqual(error as? RuntimeAdapterError, .invalidNonNegativeNumericOption(name: "GPU layers", value: "-1"))
         }
     }
+
+    func testLaunchConfigurationErrorsDescribeNextSetupStep() {
+        XCTAssertEqual(
+            RuntimeAdapterError.missingRuntimePath.errorDescription,
+            "Choose a llama-server executable before starting."
+        )
+        XCTAssertEqual(
+            RuntimeAdapterError.missingModelPath.errorDescription,
+            "Choose a .gguf model file before starting."
+        )
+        XCTAssertEqual(
+            RuntimeAdapterError.unsupportedModelType("/Users/kei/Models/qwen.bin").errorDescription,
+            "Model file must be a .gguf file before launch. Current path: /Users/kei/Models/qwen.bin."
+        )
+        XCTAssertEqual(
+            RuntimeAdapterError.invalidPort(0).errorDescription,
+            "Port must be between 1 and 65535 before launch. Current value: 0."
+        )
+        XCTAssertEqual(
+            RuntimeAdapterError.invalidContextSize(0).errorDescription,
+            "Context size must be greater than zero before launch. Current value: 0."
+        )
+        XCTAssertEqual(
+            RuntimeAdapterError.invalidNumericOption(name: "threads", value: "0").errorDescription,
+            "threads must be a positive integer or auto before launch. Current value: 0."
+        )
+        XCTAssertEqual(
+            RuntimeAdapterError.invalidNonNegativeNumericOption(name: "GPU layers", value: "-1").errorDescription,
+            "GPU layers must be a non-negative integer or auto before launch. Current value: -1."
+        )
+    }
 }

@@ -137,6 +137,7 @@ Already done or mostly done:
   snippets
 - focused tests for quoted launch command preview display
 - focused tests for missing runtime/model paths and invalid context size
+- focused tests for launch configuration error descriptions
 
 Finish before leaving v0:
 
