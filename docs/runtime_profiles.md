@@ -53,11 +53,16 @@ import helper also validates that suffix before decoding JSON, so an ordinary
 `.json` file can fail as an unsupported profile file without relying on JSON
 parser errors.
 
+File-based import UI can preview the profile envelope before full import. The
+preview validates the file suffix, supported schema version, profile name, and
+runtime kind, but it does not require decoding the full runtime configuration.
+
 ## Import Behavior
 
 Lantern imports profile JSON through the schema-version guard:
 
 - missing `schemaVersion` fails as an invalid runtime profile
+- missing `name` fails as an invalid runtime profile
 - schema versions newer than this build supports fail closed
 - missing or unsupported `runtimeKind` fails closed; the current supported kind
   is `llama-server`

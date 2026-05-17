@@ -123,6 +123,39 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testProfileDocumentPreviewsSupportedProfileFileWithoutFullImport() throws {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "name": "Desk runtime",
+          "runtimeKind": "llama-server"
+        }
+        """
+
+        XCTAssertEqual(
+            try RuntimeProfileDocument.previewJSONData(
+                Data(json.utf8),
+                fromProfileFileNamed: "Desk-runtime.lantern-profile.json"
+            ),
+            RuntimeProfileDocument.ImportPreview(
+                schemaVersion: 1,
+                name: "Desk runtime",
+                runtimeKind: "llama-server"
+            )
+        )
+        XCTAssertEqual(
+            try RuntimeProfileDocument.previewJSONData(
+                Data(json.utf8),
+                fromProfileFileURL: URL(fileURLWithPath: "/tmp/Desk-runtime.lantern-profile.json")
+            ),
+            RuntimeProfileDocument.ImportPreview(
+                schemaVersion: 1,
+                name: "Desk runtime",
+                runtimeKind: "llama-server"
+            )
+        )
+    }
+
     func testProfileDocumentRejectsUnsupportedProfileFileNameBeforeImport() {
         let data = Data("not profile json".utf8)
 
@@ -139,6 +172,22 @@ final class RuntimeProfileDocumentTests: XCTestCase {
             XCTAssertEqual(
                 error.localizedDescription,
                 "Runtime profile file \"Desk-runtime.json\" is not supported; expected a .lantern-profile.json file."
+            )
+        }
+    }
+
+    func testProfileDocumentRejectsUnsupportedProfileFileNameBeforePreview() {
+        let data = Data("not profile json".utf8)
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.previewJSONData(
+                data,
+                fromProfileFileNamed: "Desk-runtime.json"
+            )
+        ) { error in
+            XCTAssertEqual(
+                error as? RuntimeProfileDocument.ImportError,
+                .unsupportedFileName("Desk-runtime.json", expectedSuffix: ".lantern-profile.json")
             )
         }
     }
@@ -323,6 +372,32 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         ) { error in
             XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingRuntimeKind)
             XCTAssertEqual(error.localizedDescription, "Runtime profile is missing runtimeKind.")
+        }
+    }
+
+    func testProfileDocumentImportRejectsMissingNameWithTypedError() {
+        let json = """
+        {
+          "schemaVersion": 1,
+          "runtimeKind": "llama-server",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/llama.cpp/llama-server",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.importJSONData(Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingName)
+            XCTAssertEqual(error.localizedDescription, "Runtime profile is missing name.")
         }
     }
 

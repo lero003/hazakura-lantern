@@ -31,6 +31,7 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
 
     public enum ImportError: Error, Equatable, LocalizedError, Sendable {
         case missingSchemaVersion
+        case missingName
         case missingRuntimeKind
         case unsupportedFileName(String, expectedSuffix: String)
         case unsupportedSchemaVersion(Int, supportedVersion: Int)
@@ -40,6 +41,8 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
             switch self {
             case .missingSchemaVersion:
                 return "Runtime profile is missing schemaVersion."
+            case .missingName:
+                return "Runtime profile is missing name."
             case .missingRuntimeKind:
                 return "Runtime profile is missing runtimeKind."
             case let .unsupportedFileName(fileName, expectedSuffix):
@@ -52,6 +55,18 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
             case let .unsupportedRuntimeKind(runtimeKind, supportedRuntimeKind):
                 return "Runtime profile runtime kind \"\(runtimeKind)\" is not supported by this Lantern build; supported kind is \(supportedRuntimeKind)."
             }
+        }
+    }
+
+    public struct ImportPreview: Equatable, Sendable {
+        public var schemaVersion: Int
+        public var name: String
+        public var runtimeKind: String
+
+        public init(schemaVersion: Int, name: String, runtimeKind: String) {
+            self.schemaVersion = schemaVersion
+            self.name = name
+            self.runtimeKind = runtimeKind
         }
     }
 
@@ -182,24 +197,13 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
     }
 
     public static func importJSONData(_ data: Data) throws -> RuntimeProfileDocument {
-        let envelope = try JSONDecoder().decode(SchemaEnvelope.self, from: data)
-        guard let schemaVersion = envelope.schemaVersion else {
-            throw ImportError.missingSchemaVersion
-        }
-
-        guard schemaVersion == currentSchemaVersion else {
-            throw ImportError.unsupportedSchemaVersion(schemaVersion, supportedVersion: currentSchemaVersion)
-        }
-
-        guard let runtimeKind = envelope.runtimeKind else {
-            throw ImportError.missingRuntimeKind
-        }
-
-        guard runtimeKind == supportedRuntimeKind else {
-            throw ImportError.unsupportedRuntimeKind(runtimeKind, supportedRuntimeKind: supportedRuntimeKind)
-        }
+        _ = try previewJSONData(data)
 
         return try JSONDecoder().decode(RuntimeProfileDocument.self, from: data)
+    }
+
+    public static func previewJSONData(_ data: Data) throws -> ImportPreview {
+        try validatedImportEnvelope(from: data)
     }
 
     public static func importJSONData(
@@ -214,11 +218,30 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         return try importJSONData(data)
     }
 
+    public static func previewJSONData(
+        _ data: Data,
+        fromProfileFileNamed fileName: String
+    ) throws -> ImportPreview {
+        let trimmedFileName = fileName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard isSupportedProfileFileName(trimmedFileName) else {
+            throw ImportError.unsupportedFileName(trimmedFileName, expectedSuffix: exportFileSuffix)
+        }
+
+        return try previewJSONData(data)
+    }
+
     public static func importJSONData(
         _ data: Data,
         fromProfileFileURL fileURL: URL
     ) throws -> RuntimeProfileDocument {
         try importJSONData(data, fromProfileFileNamed: fileURL.lastPathComponent)
+    }
+
+    public static func previewJSONData(
+        _ data: Data,
+        fromProfileFileURL fileURL: URL
+    ) throws -> ImportPreview {
+        try previewJSONData(data, fromProfileFileNamed: fileURL.lastPathComponent)
     }
 
     private static var exportJSONEncoder: JSONEncoder {
@@ -231,8 +254,34 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         return encoder
     }
 
-    private struct SchemaEnvelope: Decodable {
+    private static func validatedImportEnvelope(from data: Data) throws -> ImportPreview {
+        let envelope = try JSONDecoder().decode(ImportEnvelope.self, from: data)
+        guard let schemaVersion = envelope.schemaVersion else {
+            throw ImportError.missingSchemaVersion
+        }
+
+        guard schemaVersion == currentSchemaVersion else {
+            throw ImportError.unsupportedSchemaVersion(schemaVersion, supportedVersion: currentSchemaVersion)
+        }
+
+        guard let name = envelope.name else {
+            throw ImportError.missingName
+        }
+
+        guard let runtimeKind = envelope.runtimeKind else {
+            throw ImportError.missingRuntimeKind
+        }
+
+        guard runtimeKind == supportedRuntimeKind else {
+            throw ImportError.unsupportedRuntimeKind(runtimeKind, supportedRuntimeKind: supportedRuntimeKind)
+        }
+
+        return ImportPreview(schemaVersion: schemaVersion, name: name, runtimeKind: runtimeKind)
+    }
+
+    private struct ImportEnvelope: Decodable {
         let schemaVersion: Int?
+        let name: String?
         let runtimeKind: String?
     }
 }
