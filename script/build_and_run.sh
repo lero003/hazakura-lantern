@@ -19,7 +19,16 @@ INFO_PLIST="$APP_CONTENTS/Info.plist"
 
 SWIFT_BUILD_FLAGS=(--disable-sandbox)
 
-pkill -x "$APP_EXECUTABLE" >/dev/null 2>&1 || true
+stop_app() {
+  pkill -x "$APP_EXECUTABLE" >/dev/null 2>&1 || true
+}
+
+stop_app
+
+if [[ "$MODE" == "--stop" || "$MODE" == "stop" ]]; then
+  echo "$APP_DISPLAY_NAME stop request completed."
+  exit 0
+fi
 
 swift build "${SWIFT_BUILD_FLAGS[@]}"
 BUILD_BINARY="$(swift build "${SWIFT_BUILD_FLAGS[@]}" --show-bin-path)/$APP_EXECUTABLE"
@@ -76,19 +85,22 @@ case "$MODE" in
     lldb -- "$APP_BINARY"
     ;;
   --logs|logs)
+    trap stop_app EXIT
     open_app
     /usr/bin/log stream --info --style compact --predicate "process == \"$APP_EXECUTABLE\""
     ;;
   --telemetry|telemetry)
+    trap stop_app EXIT
     open_app
     /usr/bin/log stream --info --style compact --predicate "subsystem == \"$BUNDLE_ID\""
     ;;
   --verify|verify)
+    trap stop_app EXIT
     open_app
     echo "$APP_DISPLAY_NAME launch request completed."
     ;;
   *)
-    echo "usage: $0 [run|--debug|--logs|--telemetry|--verify]" >&2
+    echo "usage: $0 [run|--debug|--logs|--telemetry|--verify|--stop]" >&2
     exit 2
     ;;
 esac

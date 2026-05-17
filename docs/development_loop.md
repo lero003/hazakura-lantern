@@ -109,6 +109,13 @@ git diff --check
 environment because SwiftPM manifest sandboxing can fail even when compilation
 is otherwise healthy.
 
+When an automation run launches the app for smoke verification, it must also
+close the app before finishing. Prefer `./script/build_and_run.sh --verify`
+because that mode owns launch cleanup. If the app is already open or a smoke
+path is interrupted, run `./script/build_and_run.sh --stop` before final
+reporting. Treat Apple Events / `osascript` as optional only; the reliable local
+cleanup path is the project script stopping the `HazakuraLLMManager` process.
+
 ## Habitat And Nenrin
 
 Use Habitat when the run needs command judgment: substantial code changes,

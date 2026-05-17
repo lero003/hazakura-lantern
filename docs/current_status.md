@@ -20,6 +20,8 @@ Implemented scope:
 - Local endpoint health-check URL and copyable curl smoke command display.
 - Manual endpoint health status check using the local health-check URL.
 - App bundle launch helper at `script/build_and_run.sh`.
+- App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
+  can close a leftover `HazakuraLLMManager` process.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, plus the copied client and health smoke
@@ -37,7 +39,9 @@ swift build --disable-sandbox
 ```
 
 Use `./script/build_and_run.sh --verify` only when a macOS launch smoke check is
-needed. It builds an app bundle under `dist/`, which is a local artifact.
+needed. It builds an app bundle under `dist/`, which is a local artifact, and
+it closes the app before the script exits. If a manual smoke leaves the app
+open, use `./script/build_and_run.sh --stop`.
 
 Current Codex launch-smoke status: `./script/build_and_run.sh --verify`
 builds the bundle, but Launch Services reports `kLSNoExecutableErr` even though
