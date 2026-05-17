@@ -71,11 +71,14 @@ Hourly posture:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.
-- Choose at most one small slice. If no safe slice is justified, report a
-  verified no-op.
+- Choose at most one small slice. Do not stop after inspection only when the
+  tree is clean, verification is available, and `docs/current_status.md` lists
+  a small next slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
   clear and verification passes.
-- Keep hourly runs quiet. Do not create work just because the automation ran.
+- Keep hourly runs quiet, but progress-biased. A verified no-op is valid only
+  after checking current-status candidates and finding no safe implementation,
+  test, or automation-doc slice for this run.
 
 Preferred order:
 
@@ -85,7 +88,8 @@ Preferred order:
    smoke issue, advance to the next lane's smallest safe item.
 4. Add focused tests for an existing boundary.
 5. Tighten docs when they would otherwise steer the next run incorrectly.
-6. End as a verified no-op when no safe slice is justified.
+6. End as a verified no-op only when no safe slice is justified after the
+   checks above.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.

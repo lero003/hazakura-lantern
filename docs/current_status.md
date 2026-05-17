@@ -108,6 +108,8 @@ Good next automated candidates:
 - improve common launch failure messages without adding installer behavior
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
+- add small profile-contract tests or docs when v0.1 confidence work is quiet,
+  keeping v0.2 local and persistence-focused
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.
