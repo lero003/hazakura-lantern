@@ -152,6 +152,8 @@ Already done or mostly done:
 - real-model-free fake runtime smoke test for adapter-built launch commands
 - initial v0.2 runtime profile document schema version contract
 - stable readable JSON export/import helpers for runtime profile documents
+- typed import failures for missing or unsupported runtime profile schema
+  versions
 - active runtime profile persistence fallback through the configuration store
 
 Finish before leaving v0:

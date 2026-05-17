@@ -45,6 +45,9 @@ Implemented scope:
   is added.
 - Runtime profile documents can now be exported as stable, readable JSON data
   and imported through the same schema-version guard, with focused tests.
+- Runtime profile JSON import reports missing or unsupported schema versions
+  through typed errors so future migration UI can recover without string
+  matching decoder failures.
 - Active runtime profile documents can be persisted through the configuration
   store; missing or unsupported future profile data falls back to the current
   single-runtime configuration instead of breaking startup, with focused tests.
@@ -144,9 +147,10 @@ Good next automated candidates:
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,
   keeping v0.2 local and persistence-focused; the initial schema-version
-  document contract, JSON encoding helpers, and active profile persistence
-  fallback are covered, so prefer migration behavior, profile file UI
-  boundaries, or profile documentation next
+  document contract, JSON encoding helpers, typed import-schema failures, and
+  active profile persistence fallback are covered, so prefer profile file UI
+  boundaries, profile documentation, or migration transform tests once a
+  concrete v2 shape exists
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

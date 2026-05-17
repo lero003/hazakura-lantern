@@ -51,7 +51,7 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         XCTAssertEqual(try RuntimeProfileDocument.importJSONData(data), document)
     }
 
-    func testProfileDocumentImportRejectsUnsupportedSchemaVersion() {
+    func testProfileDocumentImportRejectsUnsupportedSchemaVersionWithTypedError() {
         let json = """
         {
           "schemaVersion": 2,
@@ -73,7 +73,40 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         XCTAssertThrowsError(
             try RuntimeProfileDocument.importJSONData(Data(json.utf8))
         ) { error in
-            XCTAssertTrue(String(describing: error).contains("Unsupported runtime profile schema version 2"))
+            XCTAssertEqual(
+                error as? RuntimeProfileDocument.ImportError,
+                .unsupportedSchemaVersion(2, supportedVersion: 1)
+            )
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Runtime profile schema version 2 is not supported by this Lantern build; supported version is 1."
+            )
+        }
+    }
+
+    func testProfileDocumentImportRejectsMissingSchemaVersionWithTypedError() {
+        let json = """
+        {
+          "name": "Schema-less runtime",
+          "runtimeKind": "llama-server",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/llama.cpp/llama-server",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.importJSONData(Data(json.utf8))
+        ) { error in
+            XCTAssertEqual(error as? RuntimeProfileDocument.ImportError, .missingSchemaVersion)
+            XCTAssertEqual(error.localizedDescription, "Runtime profile is missing schemaVersion.")
         }
     }
 
