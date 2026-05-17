@@ -27,6 +27,9 @@ Implemented scope:
   focused tests for the user-facing descriptions.
 - Runtime/model file preflight errors point to the binary permission or missing
   `.gguf` file action before launch, with focused tests for the descriptions.
+- Process-run launch failures now preserve the system error while pointing to
+  the selected `llama-server` binary, permissions, or Mac binary mismatch, with
+  focused tests for the descriptions.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -109,7 +112,6 @@ Good next automated candidates:
   app bundle only if there is a fresh hypothesis beyond the attempts above
 - improve endpoint health status presentation without adding automatic polling
 - tighten copied client smoke / endpoint reuse flows
-- improve process-run launch failure messages without adding installer behavior
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,

@@ -139,6 +139,7 @@ Already done or mostly done:
 - focused tests for missing runtime/model paths and invalid context size
 - focused tests for launch configuration error descriptions
 - focused tests for file-preflight launch failure descriptions
+- focused tests for process-run launch failure descriptions
 
 Finish before leaving v0:
 
@@ -188,7 +189,8 @@ Completion criteria:
 
 - users can tell whether the runtime is stopped, starting, healthy, unhealthy,
   or terminated
-- common launch failures point to a practical next step
+- common launch failures point to a practical next step, including process-run
+  errors surfaced by macOS
 - repeated start/stop/restart use does not make the UI ambiguous
 - users can see what runtime binary they selected and, where safe, what version
   it reports

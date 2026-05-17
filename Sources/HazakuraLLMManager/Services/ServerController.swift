@@ -72,6 +72,8 @@ final class ServerController: ObservableObject {
             return
         }
 
+        var processRunCommand: LaunchCommand?
+
         do {
             let command = try adapter.buildLaunchCommand(config: configuration)
             try validateStartPreconditions(configuration)
@@ -104,6 +106,7 @@ final class ServerController: ObservableObject {
                 }
             }
 
+            processRunCommand = command
             try process.run()
 
             self.process = process
@@ -113,9 +116,12 @@ final class ServerController: ObservableObject {
             self.status = .running
             appendLog("Process started with pid \(process.processIdentifier).", stream: .info)
         } catch {
+            let message = processRunCommand.map {
+                LaunchProcessFailureMessage.describe(error, command: $0)
+            } ?? error.localizedDescription
             status = .error
-            lastErrorMessage = error.localizedDescription
-            appendLog(error.localizedDescription, stream: .error)
+            lastErrorMessage = message
+            appendLog(message, stream: .error)
         }
     }
 
