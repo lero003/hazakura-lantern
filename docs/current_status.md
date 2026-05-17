@@ -18,6 +18,8 @@ Implemented scope:
   core tests.
 - Basic runtime/model path preflight before launching.
 - Local endpoint and environment snippet display.
+- Copied endpoint/client URLs keep local defaults copyable while respecting a
+  configured reachable host, with focused tests.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Local endpoint health-check URL and copyable curl smoke command display.
 - Manual endpoint health status check using the local health-check URL.
@@ -37,9 +39,9 @@ Implemented scope:
   can close a leftover `HazakuraLLMManager` process.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
-  quoted command preview display, bounded log buffering, clear-log behavior,
-  endpoint health status presentation, plus the copied client and health smoke
-  commands and manual health checker.
+  quoted command preview display, copied endpoint host behavior, bounded log
+  buffering, clear-log behavior, endpoint health status presentation, plus the
+  copied client and health smoke commands and manual health checker.
 - Focused adapter validation tests for missing runtime/model paths and invalid
   context size, including unsupported model file types and launch-configuration
   error descriptions before launch command construction.
@@ -115,7 +117,8 @@ Good next automated candidates:
   app bundle only if there is a fresh hypothesis beyond the attempts above
 - improve endpoint health status presentation further only when there is a
   concrete stale-status or ambiguity case, without adding automatic polling
-- tighten copied client smoke / endpoint reuse flows
+- tighten copied client smoke / endpoint reuse flows only when a concrete
+  copy-target ambiguity remains
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,

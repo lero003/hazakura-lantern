@@ -127,6 +127,8 @@ Already done or mostly done:
 - direct `Process` launch without shell interpolation
 - start, stop, restart, PID, status, and in-memory logs
 - local endpoint and OpenAI-style environment snippet
+- copied endpoint/client URLs keep local defaults copyable while reflecting a
+  configured reachable host
 - local endpoint health-check URL and copyable curl smoke command
 - manual endpoint health status check
 - endpoint health status presentation contract for title, detail, icon, and
@@ -137,6 +139,7 @@ Already done or mostly done:
 - focused core unit tests
 - focused tests for invalid numeric options, endpoint URLs, and environment
   snippets
+- focused tests for copied endpoint host behavior
 - focused tests for quoted launch command preview display
 - focused tests for missing runtime/model paths and invalid context size
 - focused tests for launch configuration error descriptions
@@ -373,7 +376,8 @@ Good next slices:
 
 - improve common launch failure messages without adding installer behavior
 - improve endpoint health status presentation without adding automatic polling
-- tighten copied client smoke / endpoint reuse flows
+- tighten copied client smoke / endpoint reuse flows only when a concrete
+  copy-target ambiguity remains
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior with a testable state transition
 - document launch smoke expectations

@@ -41,8 +41,22 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
         additionalArguments: ""
     )
 
+    public var clientHost: String {
+        let trimmedHost = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        switch trimmedHost.lowercased() {
+        case "", "127.0.0.1", "::1", "[::1]", "0.0.0.0", "::":
+            return "localhost"
+        default:
+            if trimmedHost.contains(":") && !trimmedHost.hasPrefix("[") {
+                return "[\(trimmedHost)]"
+            }
+
+            return trimmedHost
+        }
+    }
+
     public var apiBaseURL: String {
-        "http://localhost:\(port)/v1"
+        "http://\(clientHost):\(port)/v1"
     }
 
     public var environmentSnippet: String {
