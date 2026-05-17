@@ -138,6 +138,7 @@ Already done or mostly done:
 - focused tests for quoted launch command preview display
 - focused tests for missing runtime/model paths and invalid context size
 - focused tests for launch configuration error descriptions
+- focused tests for file-preflight launch failure descriptions
 
 Finish before leaving v0:
 

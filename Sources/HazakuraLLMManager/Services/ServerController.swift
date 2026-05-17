@@ -173,11 +173,11 @@ final class ServerController: ObservableObject {
 
     private func validateStartPreconditions(_ configuration: RuntimeConfiguration) throws {
         guard fileManager.isExecutableFile(atPath: configuration.runtimeExecutablePath) else {
-            throw ServerControllerError.runtimeNotExecutable(configuration.runtimeExecutablePath)
+            throw LaunchPreflightError.runtimeNotExecutable(configuration.runtimeExecutablePath)
         }
 
         guard fileManager.fileExists(atPath: configuration.modelPath) else {
-            throw ServerControllerError.modelFileMissing(configuration.modelPath)
+            throw LaunchPreflightError.modelFileMissing(configuration.modelPath)
         }
     }
 
@@ -228,19 +228,5 @@ final class ServerController: ObservableObject {
 
     private func clearError() {
         lastErrorMessage = nil
-    }
-}
-
-enum ServerControllerError: Error, LocalizedError {
-    case runtimeNotExecutable(String)
-    case modelFileMissing(String)
-
-    var errorDescription: String? {
-        switch self {
-        case .runtimeNotExecutable(let path):
-            "Runtime executable is not executable: \(path)"
-        case .modelFileMissing(let path):
-            "Model file does not exist: \(path)"
-        }
     }
 }
