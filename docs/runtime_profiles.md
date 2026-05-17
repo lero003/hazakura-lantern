@@ -38,6 +38,12 @@ on: the runtime executable and model file paths, when present. File-based UI can
 use that list for portability warnings without checking the file system,
 installing runtimes, or copying model data into the profile.
 
+Profile documents can build a launch command through the matching runtime
+adapter. This lets future profile UI show the command preview for a profile
+without applying it as the active runtime configuration first. A profile whose
+runtime kind does not match the adapter fails closed instead of guessing a
+command shape.
+
 When the app adds file-based profile export, the suggested filename should use
 the profile name plus `.lantern-profile.json`. The name is sanitized for local
 file systems only; the JSON `name` field remains the user-facing profile name.

@@ -165,6 +165,8 @@ Already done or mostly done:
   covered by focused tests before file-based import UI is added
 - profile local file reference contract for runtime executable and model paths,
   covered by focused tests before portability warnings or file UI are added
+- profile-level launch command preview through the matching adapter, covered by
+  focused tests before profile UI is added
 
 Finish before leaving v0:
 

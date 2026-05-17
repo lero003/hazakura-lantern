@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-17
+Last reviewed: 2026-05-18
 
 ## Project State
 
@@ -59,6 +59,9 @@ Implemented scope:
 - Runtime profile documents expose their runtime executable and model file
   references for future portability warnings without checking or copying local
   files, with focused tests.
+- Runtime profile documents can build an adapter-scoped launch command preview
+  without applying the profile as active configuration, with focused mismatch
+  tests.
 - Active runtime profile documents can be persisted through the configuration
   store; missing or unsupported future profile data falls back to the current
   single-runtime configuration instead of breaking startup, with focused tests.
@@ -163,9 +166,9 @@ Good next automated candidates:
   document contract, JSON encoding helpers, typed import-schema/runtime-kind
   failures, active profile persistence fallback, profile JSON shape docs, and
   suggested export filename, supported profile filename, and local file
-  reference contracts are covered; prefer profile file UI behavior beyond
-  filename/import validation or migration transform tests once a concrete v2
-  shape exists
+  reference and adapter-scoped launch-command preview contracts are covered;
+  prefer profile file UI behavior beyond filename/import validation or
+  migration transform tests once a concrete v2 shape exists
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

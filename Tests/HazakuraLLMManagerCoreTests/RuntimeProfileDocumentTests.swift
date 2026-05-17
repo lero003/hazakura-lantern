@@ -146,6 +146,58 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         XCTAssertEqual(document.localFileReferences, [])
     }
 
+    func testProfileDocumentBuildsLaunchCommandWithMatchingAdapter() throws {
+        let document = RuntimeProfileDocument(
+            name: "Desk runtime",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: "/opt/llama.cpp/llama-server",
+                modelPath: "/models/hazakura.gguf",
+                host: "127.0.0.1",
+                port: 4321,
+                contextSize: 8192,
+                threads: "6",
+                gpuLayers: "0",
+                additionalArguments: "--alias \"desk runtime\""
+            )
+        )
+
+        let command = try document.launchCommand(using: LlamaServerAdapter())
+
+        XCTAssertEqual(command.executablePath, "/opt/llama.cpp/llama-server")
+        XCTAssertEqual(command.arguments, [
+            "-m", "/models/hazakura.gguf",
+            "--host", "127.0.0.1",
+            "--port", "4321",
+            "-c", "8192",
+            "-t", "6",
+            "-ngl", "0",
+            "--alias", "desk runtime"
+        ])
+        XCTAssertEqual(
+            command.displayString,
+            "/opt/llama.cpp/llama-server -m /models/hazakura.gguf --host 127.0.0.1 --port 4321 -c 8192 -t 6 -ngl 0 --alias 'desk runtime'"
+        )
+    }
+
+    func testProfileDocumentRejectsLaunchCommandPreviewWithMismatchedAdapter() {
+        let document = RuntimeProfileDocument(
+            name: "Other runtime",
+            runtimeKind: "custom-command",
+            configuration: .defaultValue
+        )
+
+        XCTAssertThrowsError(try document.launchCommand(using: LlamaServerAdapter())) { error in
+            XCTAssertEqual(
+                error as? RuntimeProfileDocument.LaunchCommandError,
+                .adapterMismatch(profileRuntimeKind: "custom-command", adapterID: "llama-server")
+            )
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Runtime profile kind \"custom-command\" cannot be previewed with adapter \"llama-server\"."
+            )
+        }
+    }
+
     func testProfileDocumentImportRejectsUnsupportedSchemaVersionWithTypedError() {
         let json = """
         {

@@ -49,6 +49,17 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         }
     }
 
+    public enum LaunchCommandError: Error, Equatable, LocalizedError, Sendable {
+        case adapterMismatch(profileRuntimeKind: String, adapterID: String)
+
+        public var errorDescription: String? {
+            switch self {
+            case let .adapterMismatch(profileRuntimeKind, adapterID):
+                return "Runtime profile kind \"\(profileRuntimeKind)\" cannot be previewed with adapter \"\(adapterID)\"."
+            }
+        }
+    }
+
     public var schemaVersion: Int
     public var name: String
     public var runtimeKind: String
@@ -84,6 +95,17 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
 
             return LocalFileReference(role: reference.role, path: trimmedPath)
         }
+    }
+
+    public func launchCommand(using adapter: any RuntimeAdapter) throws -> LaunchCommand {
+        guard adapter.id == runtimeKind else {
+            throw LaunchCommandError.adapterMismatch(
+                profileRuntimeKind: runtimeKind,
+                adapterID: adapter.id
+            )
+        }
+
+        return try adapter.buildLaunchCommand(config: configuration)
     }
 
     public static func suggestedExportFileName(for profileName: String) -> String {
