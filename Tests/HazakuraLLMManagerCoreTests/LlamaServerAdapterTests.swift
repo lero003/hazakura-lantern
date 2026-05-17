@@ -62,6 +62,16 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(command.arguments.last, "0")
     }
 
+    func testBuildCommandAllowsUppercaseGGUFExtension() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/Qwen.GGUF"
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertEqual(command.arguments[1], "/Users/kei/Models/Qwen.GGUF")
+    }
+
     func testDisplayStringPreservesQuotedAdditionalArgumentsAsSinglePreviewTokens() throws {
         let config = RuntimeConfiguration(
             runtimeExecutablePath: "/usr/local/bin/llama-server",
@@ -120,6 +130,16 @@ final class LlamaServerAdapterTests: XCTestCase {
 
         XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
             XCTAssertEqual(error as? RuntimeAdapterError, .missingModelPath)
+        }
+    }
+
+    func testRejectsUnsupportedModelType() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.bin"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().buildLaunchCommand(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .unsupportedModelType("/Users/kei/Models/qwen.bin"))
         }
     }
 

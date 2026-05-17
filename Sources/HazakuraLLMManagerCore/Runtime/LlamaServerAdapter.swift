@@ -50,6 +50,13 @@ public struct LlamaServerAdapter: RuntimeAdapter {
             throw RuntimeAdapterError.missingModelPath
         }
 
+        let modelExtension = URL(fileURLWithPath: config.modelPath.trimmingCharacters(in: .whitespacesAndNewlines))
+            .pathExtension
+            .lowercased()
+        if !supportedModelTypes.contains(modelExtension) {
+            throw RuntimeAdapterError.unsupportedModelType(config.modelPath)
+        }
+
         if !(1...65535).contains(config.port) {
             throw RuntimeAdapterError.invalidPort(config.port)
         }
@@ -89,6 +96,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
 public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
     case missingRuntimePath
     case missingModelPath
+    case unsupportedModelType(String)
     case invalidPort(Int)
     case invalidContextSize(Int)
     case invalidNumericOption(name: String, value: String)
@@ -100,6 +108,8 @@ public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
             "Runtime executable path is required."
         case .missingModelPath:
             "Model path is required."
+        case .unsupportedModelType(let path):
+            "Model file must be a .gguf file. Current path: \(path)."
         case .invalidPort(let port):
             "Port must be between 1 and 65535. Current value: \(port)."
         case .invalidContextSize(let contextSize):

@@ -27,7 +27,8 @@ Implemented scope:
   quoted command preview display, plus the copied client and health smoke
   commands and manual health checker.
 - Focused adapter validation tests for missing runtime/model paths and invalid
-  context size.
+  context size, including unsupported model file types before launch command
+  construction.
 
 ## Development Baseline
 
