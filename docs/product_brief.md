@@ -42,7 +42,7 @@ Future adapters may include:
 - launch at login
 - auto restart
 - recent runtime/model lists
-- endpoint health check
+- automatic endpoint health polling
 - metrics and benchmark display
 - multiple profiles
 - LAN exposure controls

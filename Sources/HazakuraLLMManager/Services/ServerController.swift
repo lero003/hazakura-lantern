@@ -6,9 +6,11 @@ final class ServerController: ObservableObject {
     @Published private(set) var logEntries: [LogEntry] = []
     @Published private(set) var lastErrorMessage: String?
     @Published private(set) var processIdentifier: Int32?
+    @Published private(set) var endpointHealthStatus: EndpointHealthStatus = .unchecked
     @Published var configuration: RuntimeConfiguration
 
     private let adapter: LlamaServerAdapter
+    private let endpointHealthChecker: EndpointHealthChecker
     private let configurationStore: ConfigurationStore
     private let fileManager: FileManager
     private var process: Process?
@@ -19,10 +21,12 @@ final class ServerController: ObservableObject {
 
     init(
         adapter: LlamaServerAdapter = LlamaServerAdapter(),
+        endpointHealthChecker: EndpointHealthChecker = EndpointHealthChecker(),
         configurationStore: ConfigurationStore = ConfigurationStore(),
         fileManager: FileManager = .default
     ) {
         self.adapter = adapter
+        self.endpointHealthChecker = endpointHealthChecker
         self.configurationStore = configurationStore
         self.fileManager = fileManager
         self.configuration = configurationStore.load()
@@ -60,6 +64,7 @@ final class ServerController: ObservableObject {
 
         update(&configuration)
         configurationStore.save(configuration)
+        endpointHealthStatus = .unchecked
     }
 
     func start() {
@@ -143,6 +148,26 @@ final class ServerController: ObservableObject {
 
     func clearLogs() {
         logEntries.removeAll()
+    }
+
+    func checkEndpointHealth() {
+        guard let healthURL = adapter.healthCheckURL(config: configuration) else {
+            endpointHealthStatus = .unhealthy(message: "Health check URL is not valid.")
+            return
+        }
+
+        endpointHealthStatus = .checking
+        let checker = endpointHealthChecker
+
+        Task { [weak self] in
+            let result = await checker.check(healthURL)
+            await self?.updateEndpointHealthStatus(result)
+        }
+    }
+
+    @MainActor
+    private func updateEndpointHealthStatus(_ status: EndpointHealthStatus) {
+        endpointHealthStatus = status
     }
 
     private func validateStartPreconditions(_ configuration: RuntimeConfiguration) throws {

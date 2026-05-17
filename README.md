@@ -20,6 +20,7 @@ The first supported runtime is `llama-server` from `llama.cpp`.
 - Start, stop, and restart the server process.
 - Show stdout/stderr logs in memory.
 - Show and copy the local OpenAI-compatible base URL.
+- Check the local endpoint health manually.
 - Save the last GUI configuration with `UserDefaults`.
 
 ## Non-Goals

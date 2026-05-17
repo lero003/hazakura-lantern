@@ -51,6 +51,31 @@ struct EndpointView: View {
                     }
                 }
 
+                HStack(alignment: .top, spacing: 12) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(controller.endpointHealthStatus.title)
+                            if let detail = controller.endpointHealthStatus.detail {
+                                Text(detail)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    } icon: {
+                        Image(systemName: healthSystemImage)
+                            .foregroundStyle(healthColor)
+                    }
+
+                    Spacer()
+
+                    Button {
+                        controller.checkEndpointHealth()
+                    } label: {
+                        Label("Check Health", systemImage: "waveform.path.ecg")
+                    }
+                    .disabled(controller.endpointHealthStatus == .checking)
+                }
+
                 Divider()
 
                 HStack(alignment: .top, spacing: 12) {
@@ -74,5 +99,31 @@ struct EndpointView: View {
     private func copy(_ value: String) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(value, forType: .string)
+    }
+
+    private var healthSystemImage: String {
+        switch controller.endpointHealthStatus {
+        case .unchecked:
+            "questionmark.circle"
+        case .checking:
+            "clock"
+        case .healthy:
+            "checkmark.circle"
+        case .unhealthy:
+            "exclamationmark.triangle"
+        }
+    }
+
+    private var healthColor: Color {
+        switch controller.endpointHealthStatus {
+        case .unchecked:
+            .secondary
+        case .checking:
+            .orange
+        case .healthy:
+            .green
+        case .unhealthy:
+            .red
+        }
     }
 }

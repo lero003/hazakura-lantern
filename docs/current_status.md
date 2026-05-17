@@ -18,11 +18,12 @@ Implemented scope:
 - Local endpoint and environment snippet display.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Local endpoint health-check URL and copyable curl smoke command display.
+- Manual endpoint health status check using the local health-check URL.
 - App bundle launch helper at `script/build_and_run.sh`.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, plus the copied client and health smoke
-  commands.
+  commands and manual health checker.
 - Focused adapter validation tests for missing runtime/model paths and invalid
   context size.
 
@@ -65,8 +66,9 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
 - The project is a Git repository tracking `origin/main` at
   `https://github.com/lero003/hazakura-lantern.git`.
 - No real `llama-server` binary or `.gguf` model is bundled.
-- There is no automatic endpoint health polling yet. The health-check URL and a
-  fail-fast curl command are copyable for manual local smoke checks.
+- There is no automatic endpoint health polling yet. The health-check URL, a
+  fail-fast curl command, and a manual status check are available for local
+  smoke checks.
 - Runtime setup and update awareness should remain advisory. The app should not
   install, upgrade, or mutate runtimes automatically.
 - The app does not manage multiple profiles, launch-at-login, YAML import/export,
@@ -92,7 +94,7 @@ Good next automated candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above
-- add endpoint health status using the existing local health URL
+- improve endpoint health status presentation without adding automatic polling
 - tighten copied client smoke / endpoint reuse flows
 - improve common launch failure messages without adding installer behavior
 - document runtime setup expectations without adding installer behavior

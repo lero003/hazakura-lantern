@@ -128,6 +128,7 @@ Already done or mostly done:
 - start, stop, restart, PID, status, and in-memory logs
 - local endpoint and OpenAI-style environment snippet
 - local endpoint health-check URL and copyable curl smoke command
+- manual endpoint health status check
 - `UserDefaults` configuration persistence
 - app bundle launch helper
 - focused core unit tests
@@ -166,7 +167,7 @@ Make the existing one-runtime app pleasant enough for repeated local use.
 
 Candidate work:
 
-- endpoint health indicator using the existing local health URL
+- endpoint health presentation improvements using the existing local health URL
 - clearer launch, crash, and termination states
 - recent executable and model path lists
 - selected runtime version display when adapter-safe
