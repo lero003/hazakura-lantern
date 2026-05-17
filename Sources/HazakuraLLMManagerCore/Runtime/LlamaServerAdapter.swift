@@ -34,7 +34,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
     }
 
     public func healthCheckURL(config: RuntimeConfiguration) -> URL? {
-        URL(string: "http://localhost:\(config.port)/v1/models")
+        URL(string: config.healthCheckURL)
     }
 
     public func apiBaseURL(config: RuntimeConfiguration) -> URL {

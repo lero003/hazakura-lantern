@@ -127,6 +127,7 @@ Already done or mostly done:
 - direct `Process` launch without shell interpolation
 - start, stop, restart, PID, status, and in-memory logs
 - local endpoint and OpenAI-style environment snippet
+- local endpoint health-check URL and copyable curl smoke command
 - `UserDefaults` configuration persistence
 - app bundle launch helper
 - focused core unit tests

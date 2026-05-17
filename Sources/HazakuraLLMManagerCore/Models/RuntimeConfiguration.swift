@@ -59,4 +59,16 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
     public var aiMobileSmokeCurlCommand: String {
         aiMobileSmokeRequest.curlCommand
     }
+
+    public var healthCheckURL: String {
+        "http://localhost:\(port)/v1/models"
+    }
+
+    public var endpointHealthRequest: EndpointHealthRequest {
+        EndpointHealthRequest(healthURL: healthCheckURL)
+    }
+
+    public var endpointHealthCurlCommand: String {
+        endpointHealthRequest.curlCommand
+    }
 }

@@ -36,6 +36,21 @@ struct EndpointView: View {
                     }
                 }
 
+                HStack(alignment: .top, spacing: 12) {
+                    Text(controller.configuration.endpointHealthCurlCommand)
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+
+                    Spacer()
+
+                    Button {
+                        copy(controller.configuration.endpointHealthCurlCommand)
+                    } label: {
+                        Label("Copy Health Check", systemImage: "cross.case")
+                    }
+                }
+
                 Divider()
 
                 HStack(alignment: .top, spacing: 12) {

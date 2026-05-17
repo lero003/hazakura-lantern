@@ -29,4 +29,12 @@ final class RuntimeConfigurationTests: XCTestCase {
         XCTAssertTrue(config.aiMobileSmokeCurlCommand.contains("http://localhost:9876/v1/chat/completions"))
         XCTAssertTrue(config.aiMobileSmokeCurlCommand.contains(#""stream":false"#))
     }
+
+    func testEndpointHealthCurlCommandUsesConfiguredPort() {
+        var config = RuntimeConfiguration.defaultValue
+        config.port = 9876
+
+        XCTAssertEqual(config.healthCheckURL, "http://localhost:9876/v1/models")
+        XCTAssertEqual(config.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
+    }
 }

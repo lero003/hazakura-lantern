@@ -17,10 +17,12 @@ Implemented scope:
 - Basic runtime/model path preflight before launching.
 - Local endpoint and environment snippet display.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
+- Local endpoint health-check URL and copyable curl smoke command display.
 - App bundle launch helper at `script/build_and_run.sh`.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
-  quoted command preview display, plus the copied client smoke command.
+  quoted command preview display, plus the copied client and health smoke
+  commands.
 - Focused adapter validation tests for missing runtime/model paths and invalid
   context size.
 
@@ -63,8 +65,8 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
 - The project is a Git repository tracking `origin/main` at
   `https://github.com/lero003/hazakura-lantern.git`.
 - No real `llama-server` binary or `.gguf` model is bundled.
-- There is no endpoint health polling yet, even though the adapter can provide a
-  health check URL.
+- There is no automatic endpoint health polling yet. The health-check URL and a
+  fail-fast curl command are copyable for manual local smoke checks.
 - Runtime setup and update awareness should remain advisory. The app should not
   install, upgrade, or mutate runtimes automatically.
 - The app does not manage multiple profiles, launch-at-login, YAML import/export,
