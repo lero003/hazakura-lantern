@@ -34,6 +34,9 @@ Implemented scope:
 - Process-run launch failures now preserve the system error while pointing to
   the selected `llama-server` binary, permissions, or Mac binary mismatch, with
   focused tests for the descriptions.
+- Initial v0.2 runtime profile document contract with schema version `1`,
+  runtime kind, and embedded runtime configuration; unsupported schema versions
+  are rejected by focused tests before import behavior is added.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -122,7 +125,9 @@ Good next automated candidates:
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,
-  keeping v0.2 local and persistence-focused
+  keeping v0.2 local and persistence-focused; the initial schema-version
+  document contract is covered, so prefer export/import encoding helpers,
+  migration behavior, or profile persistence next
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

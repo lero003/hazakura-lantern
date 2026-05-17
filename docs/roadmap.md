@@ -145,6 +145,7 @@ Already done or mostly done:
 - focused tests for launch configuration error descriptions
 - focused tests for file-preflight launch failure descriptions
 - focused tests for process-run launch failure descriptions
+- initial v0.2 runtime profile document schema version contract
 
 Finish before leaving v0:
 
@@ -217,7 +218,7 @@ Candidate work:
 - profile-level runtime metadata, such as install source and last observed
   runtime version
 - JSON profile export/import
-- initial profile schema version
+- export/import helpers around the initial profile schema version
 - migration tests for persisted settings
 - tests that preserve command construction compatibility
 - profile documentation with examples

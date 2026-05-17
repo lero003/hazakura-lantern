@@ -1,0 +1,40 @@
+import Foundation
+
+public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
+    public static let currentSchemaVersion = 1
+
+    public var schemaVersion: Int
+    public var name: String
+    public var runtimeKind: String
+    public var configuration: RuntimeConfiguration
+
+    public init(
+        name: String,
+        runtimeKind: String = "llama-server",
+        configuration: RuntimeConfiguration,
+        schemaVersion: Int = RuntimeProfileDocument.currentSchemaVersion
+    ) {
+        self.schemaVersion = schemaVersion
+        self.name = name
+        self.runtimeKind = runtimeKind
+        self.configuration = configuration
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let schemaVersion = try container.decode(Int.self, forKey: .schemaVersion)
+
+        guard schemaVersion == RuntimeProfileDocument.currentSchemaVersion else {
+            throw DecodingError.dataCorruptedError(
+                forKey: .schemaVersion,
+                in: container,
+                debugDescription: "Unsupported runtime profile schema version \(schemaVersion)."
+            )
+        }
+
+        self.schemaVersion = schemaVersion
+        self.name = try container.decode(String.self, forKey: .name)
+        self.runtimeKind = try container.decode(String.self, forKey: .runtimeKind)
+        self.configuration = try container.decode(RuntimeConfiguration.self, forKey: .configuration)
+    }
+}
