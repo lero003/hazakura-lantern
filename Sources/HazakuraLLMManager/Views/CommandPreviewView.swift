@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct CommandPreviewView: View {
@@ -5,11 +6,24 @@ struct CommandPreviewView: View {
 
     var body: some View {
         GroupBox("Launch Command") {
-            Text(controller.launchCommandPreview)
-                .font(.system(.caption, design: .monospaced))
-                .foregroundStyle(.secondary)
-                .textSelection(.enabled)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(alignment: .top, spacing: 12) {
+                Text(controller.launchCommandPreview)
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Button {
+                    copy(controller.launchCommandPreview)
+                } label: {
+                    Label("Copy Command", systemImage: "doc.on.doc")
+                }
+            }
         }
+    }
+
+    private func copy(_ value: String) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(value, forType: .string)
     }
 }

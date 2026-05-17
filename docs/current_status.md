@@ -13,6 +13,7 @@ Implemented scope:
 - SwiftUI app target plus a small core library target.
 - Runtime configuration stored in `UserDefaults`.
 - `llama-server` launch command construction without shell interpolation.
+- Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
 - Bounded in-memory log buffering with clear-log behavior covered by focused
   core tests.
@@ -108,6 +109,10 @@ a documented blocker. Do not spend every hourly run retrying the same
 carry that blocker as risk and advance into v0.1 daily-use confidence work that
 does not depend on app-bundle launch verification.
 
+The project may proceed with v0.1 daily-use confidence work under this known
+Launch Services risk, but no user-facing v0 app-bundle release should be cut
+until app launch verification succeeds on a normal macOS environment.
+
 The saved automation may continue later into v0.2 when `docs/development_loop.md`
 and `docs/roadmap.md` lane handoff criteria are satisfied. v0.2 should start
 with local profile contract and portability, not runtime breadth.
@@ -118,10 +123,12 @@ Good next automated candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above
+- add a fake-runtime or real-model-free smoke path before treating the runtime
+  launch loop as release-ready
 - improve endpoint health status presentation further only when there is a
   concrete stale-status or ambiguity case, without adding automatic polling
-- tighten copied client smoke / endpoint reuse flows only when a concrete
-  copy-target ambiguity remains
+- add recent executable/model path affordances when daily-use pain justifies the
+  extra persisted UI state
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,

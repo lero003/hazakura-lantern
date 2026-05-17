@@ -19,7 +19,8 @@ The first supported runtime is `llama-server` from `llama.cpp`.
 - Configure port, context size, threads, GPU layers, and extra launch args.
 - Start, stop, and restart the server process.
 - Show stdout/stderr logs in memory.
-- Show and copy the local OpenAI-compatible base URL.
+- Show and copy the runtime-provided local OpenAI-compatible base URL.
+- Show and copy the generated launch command for inspection.
 - Check the local endpoint health manually.
 - Save the last GUI configuration with `UserDefaults`.
 
@@ -71,7 +72,7 @@ Default endpoint:
 http://localhost:1234/v1
 ```
 
-OpenAI SDK style environment values:
+OpenAI SDK style environment values for the selected runtime endpoint:
 
 ```bash
 OPENAI_BASE_URL=http://localhost:1234/v1

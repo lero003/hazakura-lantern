@@ -6,8 +6,9 @@ Hazakura Lantern is a small Mac app for lighting up a local LLM server endpoint.
 It is closer to a server control panel than to a model playground.
 
 It exists so apps such as Hazakura AI Mobile, Habitat, Nenrin, Codex, Hermes,
-and other local clients can point at a stable Mac-hosted endpoint while the
-model, runtime command, logs, and endpoint remain visible at the user's desk.
+and other local clients can point at the selected runtime's Mac-hosted endpoint
+when it is running, while the model, runtime command, logs, and endpoint remain
+visible at the user's desk.
 
 Conceptually, it puts a small lantern beside local LLM work: enough light to see
 the runtime and model clearly, without turning the app into a model platform.
