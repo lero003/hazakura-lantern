@@ -5,6 +5,8 @@ final class ServerController: ObservableObject {
     @Published private(set) var status: ServerStatus = .stopped
     @Published private(set) var logEntries: [LogEntry] = []
     @Published private(set) var lastErrorMessage: String?
+    @Published private(set) var activeProfileName: String
+    @Published private(set) var profileFileMessage: String?
     @Published private(set) var processIdentifier: Int32?
     @Published private(set) var endpointHealthStatus: EndpointHealthStatus = .unchecked
     @Published private(set) var recentPaths: RecentRuntimePaths
@@ -30,7 +32,9 @@ final class ServerController: ObservableObject {
         self.endpointHealthChecker = endpointHealthChecker
         self.configurationStore = configurationStore
         self.fileManager = fileManager
-        self.configuration = configurationStore.load()
+        let activeProfile = configurationStore.loadRuntimeProfile()
+        self.configuration = activeProfile.configuration
+        self.activeProfileName = activeProfile.name
         self.recentPaths = configurationStore.loadRecentPaths()
     }
 
@@ -54,18 +58,22 @@ final class ServerController: ObservableObject {
         }
     }
 
+    var runtimeProfileDocument: RuntimeProfileDocument {
+        RuntimeProfileDocument(name: activeProfileName, configuration: configuration)
+    }
+
     func updateConfiguration(_ update: (inout RuntimeConfiguration) -> Void) {
         guard process == nil else {
             appendLog("Configuration changes will apply on the next start.", stream: .info)
             var updated = configuration
             update(&updated)
             configuration = updated
-            configurationStore.save(updated)
+            saveActiveProfile(configuration: updated)
             return
         }
 
         update(&configuration)
-        configurationStore.save(configuration)
+        saveActiveProfile(configuration: configuration)
         endpointHealthStatus = .unchecked
     }
 
@@ -95,7 +103,7 @@ final class ServerController: ObservableObject {
             let command = try adapter.buildLaunchCommand(config: configuration)
             try validateStartPreconditions(configuration)
 
-            configurationStore.save(configuration)
+            saveActiveProfile(configuration: configuration)
             clearError()
             status = .starting
             appendLog("Launch: \(command.displayString)", stream: .info)
@@ -176,6 +184,36 @@ final class ServerController: ObservableObject {
         logEntries = logBuffer.entries
     }
 
+    func exportRuntimeProfile(to fileURL: URL) {
+        do {
+            try runtimeProfileDocument.exportJSONData().write(to: fileURL, options: .atomic)
+            profileFileMessage = "Exported \(fileURL.lastPathComponent)."
+        } catch {
+            profileFileMessage = error.localizedDescription
+        }
+    }
+
+    func importRuntimeProfile(from fileURL: URL) {
+        do {
+            let data = try Data(contentsOf: fileURL)
+            let profile = try RuntimeProfileDocument.importJSONData(data, fromProfileFileURL: fileURL)
+
+            activeProfileName = profile.name
+            configuration = profile.configuration
+            configurationStore.saveRuntimeProfile(profile)
+            recentPaths = configurationStore.recordRuntimeExecutablePath(profile.configuration.runtimeExecutablePath)
+            recentPaths = configurationStore.recordModelPath(profile.configuration.modelPath)
+            endpointHealthStatus = .unchecked
+            profileFileMessage = "Imported \(profile.name)."
+
+            if process != nil {
+                appendLog("Imported profile changes will apply on the next start.", stream: .info)
+            }
+        } catch {
+            profileFileMessage = error.localizedDescription
+        }
+    }
+
     func checkEndpointHealth() {
         guard let healthURL = adapter.healthCheckURL(config: configuration) else {
             endpointHealthStatus = .unhealthy(message: "Health check URL is not valid.")
@@ -204,6 +242,12 @@ final class ServerController: ObservableObject {
         guard fileManager.fileExists(atPath: configuration.modelPath) else {
             throw LaunchPreflightError.modelFileMissing(configuration.modelPath)
         }
+    }
+
+    private func saveActiveProfile(configuration: RuntimeConfiguration) {
+        configurationStore.saveRuntimeProfile(
+            RuntimeProfileDocument(name: activeProfileName, configuration: configuration)
+        )
     }
 
     private func readAvailableData(from handle: FileHandle, stream: LogEntry.Stream) {

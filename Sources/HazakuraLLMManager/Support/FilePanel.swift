@@ -15,4 +15,24 @@ enum FilePanel {
 
         return panel.runModal() == .OK ? panel.url?.path : nil
     }
+
+    static func chooseProfileImportFile() -> URL? {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canChooseFiles = true
+        panel.resolvesAliases = true
+        panel.allowedContentTypes = [UTType.json]
+
+        return panel.runModal() == .OK ? panel.url : nil
+    }
+
+    static func chooseProfileExportFile(suggestedFileName: String) -> URL? {
+        let panel = NSSavePanel()
+        panel.canCreateDirectories = true
+        panel.allowedContentTypes = [UTType.json]
+        panel.nameFieldStringValue = suggestedFileName
+
+        return panel.runModal() == .OK ? panel.url : nil
+    }
 }

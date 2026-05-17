@@ -73,6 +73,9 @@ Implemented scope:
 - Active runtime profile documents can be persisted through the configuration
   store; missing or unsupported future profile data falls back to the current
   single-runtime configuration instead of breaking startup, with focused tests.
+- The app loads the active runtime profile into the editable configuration and
+  provides minimal `.lantern-profile.json` import/export UI for that active
+  profile without adding multiple-profile management.
 - Runtime profile JSON shape, import failure behavior, and portability
   boundaries are documented with a readable schema-version `1` example.
 - App bundle launch helper at `script/build_and_run.sh`.
@@ -175,10 +178,10 @@ Good next automated candidates:
   failures, active profile persistence fallback, profile JSON shape docs, and
   suggested export filename, supported profile filename, and local file
   reference, profile-file import preflight, and adapter-scoped launch-command
-  preview, profile-file import preview, and blank-name rejection contracts are
-  covered; prefer
-  profile file UI behavior beyond core import-envelope validation or
-  migration transform tests once a concrete v2 shape exists
+  preview, profile-file import preview, blank-name rejection, and minimal
+  active-profile import/export UI contracts are covered; prefer migration
+  transform tests once a concrete v2 shape exists or a narrow v0.3 adapter
+  boundary clarity test if profile work is sufficiently closed
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

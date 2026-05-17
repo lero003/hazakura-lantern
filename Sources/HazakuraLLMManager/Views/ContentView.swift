@@ -14,6 +14,7 @@ struct ContentView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    ProfileView(controller: controller)
                     ConfigurationView(controller: controller)
                     EndpointView(controller: controller)
                     CommandPreviewView(controller: controller)

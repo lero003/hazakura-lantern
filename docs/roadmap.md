@@ -173,6 +173,8 @@ Already done or mostly done:
   covered by focused tests before portability warnings or file UI are added
 - profile-level launch command preview through the matching adapter, covered by
   focused tests before profile UI is added
+- minimal active-profile import/export UI for `.lantern-profile.json` files
+  without adding multiple-profile management
 
 Finish before leaving v0:
 

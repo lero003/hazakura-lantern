@@ -44,18 +44,22 @@ without applying it as the active runtime configuration first. A profile whose
 runtime kind does not match the adapter fails closed instead of guessing a
 command shape.
 
-When the app adds file-based profile export, the suggested filename should use
-the profile name plus `.lantern-profile.json`. The name is sanitized for local
-file systems only; the JSON `name` field remains the user-facing profile name.
-File-based import UI should recognize files with the same
-`.lantern-profile.json` suffix before reading their JSON contents. The core
-import helper also validates that suffix before decoding JSON, so an ordinary
-`.json` file can fail as an unsupported profile file without relying on JSON
-parser errors.
+File-based profile export uses the profile name plus `.lantern-profile.json`.
+The name is sanitized for local file systems only; the JSON `name` field
+remains the user-facing profile name. File-based import UI recognizes files
+with the same `.lantern-profile.json` suffix before reading their JSON
+contents. The core import helper also validates that suffix before decoding
+JSON, so an ordinary `.json` file can fail as an unsupported profile file
+without relying on JSON parser errors.
 
-File-based import UI can preview the profile envelope before full import. The
+File-based import can preview the profile envelope before full import. The
 preview validates the file suffix, supported schema version, profile name, and
 runtime kind, but it does not require decoding the full runtime configuration.
+
+The current app UI can export the active runtime profile and import a supported
+profile file into the active configuration. Importing a profile records the
+profile name, replaces the editable runtime configuration, and keeps local file
+paths as references; it does not copy runtimes or model files.
 
 ## Import Behavior
 
