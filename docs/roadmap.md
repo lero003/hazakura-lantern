@@ -151,6 +151,7 @@ Already done or mostly done:
 - focused tests for process-run launch failure descriptions
 - real-model-free fake runtime smoke test for adapter-built launch commands
 - initial v0.2 runtime profile document schema version contract
+- stable readable JSON export/import helpers for runtime profile documents
 
 Finish before leaving v0:
 
@@ -222,7 +223,7 @@ Candidate work:
 - profile-level runtime metadata, such as install source and last observed
   runtime version
 - JSON profile export/import
-- export/import helpers around the initial profile schema version
+- migration behavior for future profile schema changes
 - migration tests for persisted settings
 - tests that preserve command construction compatibility
 - profile documentation with examples

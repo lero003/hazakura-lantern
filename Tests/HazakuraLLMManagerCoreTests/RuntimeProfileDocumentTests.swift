@@ -26,6 +26,57 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         XCTAssertEqual(decoded, document)
     }
 
+    func testProfileDocumentExportsStableReadableJSON() throws {
+        let document = RuntimeProfileDocument(
+            name: "Desk runtime",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: "/opt/llama.cpp/llama-server",
+                modelPath: "/models/hazakura.gguf",
+                host: "127.0.0.1",
+                port: 4321,
+                contextSize: 8192,
+                threads: "6",
+                gpuLayers: "0",
+                additionalArguments: "--verbose"
+            )
+        )
+
+        let data = try document.exportJSONData()
+        let json = try XCTUnwrap(String(data: data, encoding: .utf8))
+
+        XCTAssertTrue(json.contains("\n  \"configuration\" : {"))
+        XCTAssertTrue(json.contains("\"schemaVersion\" : 1"))
+        XCTAssertTrue(json.contains("/opt/llama.cpp/llama-server"))
+        XCTAssertFalse(json.contains("\\/opt\\/llama.cpp\\/llama-server"))
+        XCTAssertEqual(try RuntimeProfileDocument.importJSONData(data), document)
+    }
+
+    func testProfileDocumentImportRejectsUnsupportedSchemaVersion() {
+        let json = """
+        {
+          "schemaVersion": 2,
+          "name": "Future runtime",
+          "runtimeKind": "llama-server",
+          "configuration": {
+            "runtimeExecutablePath": "/opt/llama.cpp/llama-server",
+            "modelPath": "/models/hazakura.gguf",
+            "host": "127.0.0.1",
+            "port": 1234,
+            "contextSize": 4096,
+            "threads": "auto",
+            "gpuLayers": "auto",
+            "additionalArguments": ""
+          }
+        }
+        """
+
+        XCTAssertThrowsError(
+            try RuntimeProfileDocument.importJSONData(Data(json.utf8))
+        ) { error in
+            XCTAssertTrue(String(describing: error).contains("Unsupported runtime profile schema version 2"))
+        }
+    }
+
     func testProfileDocumentRejectsUnsupportedSchemaVersion() {
         let json = """
         {

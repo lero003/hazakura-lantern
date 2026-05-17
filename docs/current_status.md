@@ -41,7 +41,10 @@ Implemented scope:
   focused tests for the descriptions.
 - Initial v0.2 runtime profile document contract with schema version `1`,
   runtime kind, and embedded runtime configuration; unsupported schema versions
-  are rejected by focused tests before import behavior is added.
+  are rejected by focused tests before profile file UI or persistence behavior
+  is added.
+- Runtime profile documents can now be exported as stable, readable JSON data
+  and imported through the same schema-version guard, with focused tests.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -138,8 +141,8 @@ Good next automated candidates:
 - harden restart behavior if stop/start races are observed
 - add small profile-contract tests or docs when v0.1 confidence work is quiet,
   keeping v0.2 local and persistence-focused; the initial schema-version
-  document contract is covered, so prefer export/import encoding helpers,
-  migration behavior, or profile persistence next
+  document contract and JSON encoding helpers are covered, so prefer migration
+  behavior or profile persistence next
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

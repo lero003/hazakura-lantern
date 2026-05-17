@@ -37,4 +37,22 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         self.runtimeKind = try container.decode(String.self, forKey: .runtimeKind)
         self.configuration = try container.decode(RuntimeConfiguration.self, forKey: .configuration)
     }
+
+    public func exportJSONData() throws -> Data {
+        try RuntimeProfileDocument.exportJSONEncoder.encode(self)
+    }
+
+    public static func importJSONData(_ data: Data) throws -> RuntimeProfileDocument {
+        try JSONDecoder().decode(RuntimeProfileDocument.self, from: data)
+    }
+
+    private static var exportJSONEncoder: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [
+            .prettyPrinted,
+            .sortedKeys,
+            .withoutEscapingSlashes
+        ]
+        return encoder
+    }
 }
