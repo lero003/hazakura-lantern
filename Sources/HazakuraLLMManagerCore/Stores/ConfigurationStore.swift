@@ -2,9 +2,11 @@ import Foundation
 
 public final class ConfigurationStore {
     private static let recentPathLimit = 8
+    private static let defaultRuntimeProfileName = "Default runtime"
 
     private let defaults: UserDefaults
     private let key = "dev.hazakura.llmmanager.runtimeConfiguration.v1"
+    private let runtimeProfileKey = "dev.hazakura.llmmanager.runtimeProfile.v1"
     private let recentPathsKey = "dev.hazakura.llmmanager.recentRuntimePaths.v1"
 
     public init(defaults: UserDefaults = .standard) {
@@ -29,6 +31,31 @@ public final class ConfigurationStore {
         }
 
         defaults.set(data, forKey: key)
+    }
+
+    public func loadRuntimeProfile() -> RuntimeProfileDocument {
+        loadRuntimeProfile(named: Self.defaultRuntimeProfileName)
+    }
+
+    public func loadRuntimeProfile(named fallbackName: String) -> RuntimeProfileDocument {
+        guard let data = defaults.data(forKey: runtimeProfileKey) else {
+            return RuntimeProfileDocument(name: fallbackName, configuration: load())
+        }
+
+        do {
+            return try RuntimeProfileDocument.importJSONData(data)
+        } catch {
+            return RuntimeProfileDocument(name: fallbackName, configuration: load())
+        }
+    }
+
+    public func saveRuntimeProfile(_ profile: RuntimeProfileDocument) {
+        guard let data = try? profile.exportJSONData() else {
+            return
+        }
+
+        defaults.set(data, forKey: runtimeProfileKey)
+        save(profile.configuration)
     }
 
     public func loadRecentPaths() -> RecentRuntimePaths {
