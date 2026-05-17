@@ -139,15 +139,31 @@ before risky or mutating commands.
 For a tiny docs check, read-only inspection, or a no-op run where command choice
 is already clear, Habitat is optional. Do not commit generated Habitat reports.
 
-Use Nenrin as a pruning and judgment aid, not as an hourly work log. Do not
-create a Nenrin record for ordinary implementation, formatting, small copy
-changes, one-off notes, or no-op runs.
+Use Nenrin as a pruning and judgment aid, not as an hourly work log.
+
+Run:
+
+```bash
+nenrin brief
+```
+
+before release, lane-handoff, recurring automation, or workflow-scope decisions
+where prior durable judgment could affect the next step.
+
+After agent-facing docs or automation guidance changes, run:
+
+```bash
+nenrin diff
+nenrin debt
+```
+
+Use the result to decide whether a record, observation, review, or explicit
+no-op is warranted. Do not create a Nenrin record for ordinary implementation,
+formatting, small copy changes, one-off notes, or no-op runs.
 
 Create or update a Nenrin-facing record only when this project changes durable
 future-agent behavior: command policy, verification policy, release gates,
-recurring automation guidance, or a repeated blocker pattern. If no Nenrin root
-or workflow is configured in this repository, do not invent one just for the
-automation.
+recurring automation guidance, or a repeated blocker pattern.
 
 ## Git And Output Hygiene
 

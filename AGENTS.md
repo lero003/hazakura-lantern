@@ -35,16 +35,22 @@ For automated or recurring development, read:
 - `docs/current_status.md`
 - `docs/roadmap.md`
 - `docs/product_brief.md`
+- `docs/troubleshooting.md`
 
 Choose at most one coherent slice per run. A verified no-op is better than a
 speculative feature expansion.
 
 For the saved hourly automation, follow `docs/development_loop.md` for when to
-run Habitat and when Nenrin should stay as a no-op.
+run Habitat, when to read Nenrin, and when Nenrin should stay as a no-op.
 
 ## Nenrin Usage
 
 Use Nenrin as a pruning and judgment aid, not as a work generator.
+
+Run `nenrin brief` before release, lane-handoff, recurring automation, or
+workflow-scope decisions where prior durable judgment could affect the next
+step. After agent-facing docs or automation guidance changes, run `nenrin diff`
+and `nenrin debt` to decide whether a record or explicit no-op is warranted.
 
 Do not create a Nenrin record for ordinary app implementation, formatting,
 small copy changes, or one-off task notes.
