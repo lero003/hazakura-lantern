@@ -96,6 +96,9 @@ Implemented scope:
   host/port values instead of force-unwrapping URL construction; the endpoint
   view and manual health check surface the validation error without adding
   runtime breadth.
+- `llama-server` launch command construction normalizes blank profile host
+  values to the default loopback host and trims configured hosts before launch,
+  keeping imported profile endpoint display and process arguments aligned.
 - Runtime process-run failure descriptions now flow through the runtime adapter
   boundary, preserving the current `llama-server` recovery hints while keeping
   the default protocol behavior free of `llama-server` assumptions.
@@ -193,6 +196,7 @@ Good next automated candidates:
   profile-preview generic adapter-boundary test without a new ambiguity, and
   do not repeat the invalid endpoint host/port fallibility slice or
   adapter-owned launch preflight slice or process-run failure-description slice
+  or blank-host launch normalization slice
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete

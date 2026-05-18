@@ -32,6 +32,9 @@ local edits:
 
 Paths are local machine paths. Moving a profile to another Mac may require
 choosing a different runtime executable or model path before launch.
+For the current `llama-server` adapter, a blank `host` is accepted as a local
+profile edit and launches with the default `127.0.0.1` bind host; endpoint
+display still shows the copyable `localhost` base URL.
 
 The core profile contract can list the local file references a profile depends
 on: the runtime executable and model file paths, when present. File-based UI can

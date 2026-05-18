@@ -72,6 +72,30 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(command.arguments[1], "/Users/kei/Models/Qwen.GGUF")
     }
 
+    func testBuildCommandNormalizesBlankHostToDefaultLoopback() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = " \n\t "
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertEqual(command.arguments[3], "127.0.0.1")
+        XCTAssertEqual(try LlamaServerAdapter().endpoint(config: config).apiBaseURLString, "http://localhost:1234/v1")
+    }
+
+    func testBuildCommandTrimsConfiguredHostBeforeLaunch() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "  192.168.1.12  "
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertEqual(command.arguments[3], "192.168.1.12")
+        XCTAssertEqual(try LlamaServerAdapter().endpoint(config: config).apiBaseURLString, "http://192.168.1.12:1234/v1")
+    }
+
     func testValidateAcceptsSupportedLlamaServerConfigurationWithoutBuildingCommand() throws {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"

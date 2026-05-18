@@ -12,7 +12,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
 
         var arguments = [
             "-m", config.modelPath,
-            "--host", config.host,
+            "--host", launchHost(config.host),
             "--port", String(config.port),
             "-c", String(config.contextSize)
         ]
@@ -114,6 +114,11 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         if trimmedHost.rangeOfCharacter(from: invalidCharacters) != nil {
             throw RuntimeAdapterError.invalidHost(config.host)
         }
+    }
+
+    private func launchHost(_ host: String) -> String {
+        let trimmedHost = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedHost.isEmpty ? RuntimeConfiguration.defaultValue.host : trimmedHost
     }
 
     private func optionalPositiveInt(_ value: String, optionName: String) throws -> Int? {
