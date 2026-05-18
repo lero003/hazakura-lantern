@@ -183,6 +183,9 @@ Already done or mostly done:
 - explicit adapter-owned validation contract that can be tested before command
   construction, preserving `llama-server` validation without adding runtime
   breadth
+- fallible adapter-owned endpoint construction that rejects invalid host/port
+  values and lets the UI surface the error instead of crashing during endpoint
+  display
 
 Finish before leaving v0:
 
@@ -429,7 +432,8 @@ Good next slices:
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
   focused tests before adding runtime breadth; validation already has an
   initial explicit contract, and profile command preview already has a generic
-  matching-adapter boundary test
+  matching-adapter boundary test; invalid endpoint host/port fallibility is
+  also covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only

@@ -7,15 +7,15 @@ public protocol RuntimeAdapter {
 
     func validate(config: RuntimeConfiguration) throws
     func buildLaunchCommand(config: RuntimeConfiguration) throws -> LaunchCommand
-    func endpoint(config: RuntimeConfiguration) -> RuntimeEndpoint
+    func endpoint(config: RuntimeConfiguration) throws -> RuntimeEndpoint
 }
 
 public extension RuntimeAdapter {
-    func healthCheckURL(config: RuntimeConfiguration) -> URL? {
-        endpoint(config: config).healthCheckURL
+    func healthCheckURL(config: RuntimeConfiguration) throws -> URL? {
+        try endpoint(config: config).healthCheckURL
     }
 
-    func apiBaseURL(config: RuntimeConfiguration) -> URL {
-        endpoint(config: config).apiBaseURL
+    func apiBaseURL(config: RuntimeConfiguration) throws -> URL {
+        try endpoint(config: config).apiBaseURL
     }
 }

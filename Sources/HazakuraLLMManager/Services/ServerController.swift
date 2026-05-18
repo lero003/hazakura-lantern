@@ -62,8 +62,17 @@ final class ServerController: ObservableObject {
         RuntimeProfileDocument(name: activeProfileName, configuration: configuration)
     }
 
-    var runtimeEndpoint: RuntimeEndpoint {
-        adapter.endpoint(config: configuration)
+    var runtimeEndpoint: RuntimeEndpoint? {
+        try? adapter.endpoint(config: configuration)
+    }
+
+    var runtimeEndpointErrorMessage: String? {
+        do {
+            _ = try adapter.endpoint(config: configuration)
+            return nil
+        } catch {
+            return error.localizedDescription
+        }
     }
 
     func updateConfiguration(_ update: (inout RuntimeConfiguration) -> Void) {
@@ -219,8 +228,16 @@ final class ServerController: ObservableObject {
     }
 
     func checkEndpointHealth() {
-        guard let healthURL = runtimeEndpoint.healthCheckURL else {
-            endpointHealthStatus = .unhealthy(message: "Health check URL is not valid.")
+        let endpoint: RuntimeEndpoint
+        do {
+            endpoint = try adapter.endpoint(config: configuration)
+        } catch {
+            endpointHealthStatus = .unhealthy(message: error.localizedDescription)
+            return
+        }
+
+        guard let healthURL = endpoint.healthCheckURL else {
+            endpointHealthStatus = .unhealthy(message: "Health check URL is not available for this adapter.")
             return
         }
 

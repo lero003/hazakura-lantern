@@ -5,99 +5,107 @@ struct EndpointView: View {
     @ObservedObject var controller: ServerController
 
     var body: some View {
-        let endpoint = controller.runtimeEndpoint
-        let healthCurlCommand = endpoint.endpointHealthCurlCommand
-
         GroupBox("Endpoint") {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text(endpoint.apiBaseURLString)
-                        .font(.system(.body, design: .monospaced))
-                        .textSelection(.enabled)
+            if let endpoint = controller.runtimeEndpoint {
+                let healthCurlCommand = endpoint.endpointHealthCurlCommand
 
-                    Spacer()
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text(endpoint.apiBaseURLString)
+                            .font(.system(.body, design: .monospaced))
+                            .textSelection(.enabled)
 
-                    Button {
-                        copy(endpoint.apiBaseURLString)
-                    } label: {
-                        Label("Copy Endpoint", systemImage: "doc.on.doc")
-                    }
-                }
+                        Spacer()
 
-                HStack(alignment: .top, spacing: 12) {
-                    Text(endpoint.environmentSnippet)
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .textSelection(.enabled)
-
-                    Spacer()
-
-                    Button {
-                        copy(endpoint.environmentSnippet)
-                    } label: {
-                        Label("Copy Env", systemImage: "terminal")
-                    }
-                }
-
-                HStack(alignment: .top, spacing: 12) {
-                    Text(healthCurlCommand ?? "Health check is not available for this adapter.")
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .textSelection(.enabled)
-
-                    Spacer()
-
-                    Button {
-                        if let healthCurlCommand {
-                            copy(healthCurlCommand)
+                        Button {
+                            copy(endpoint.apiBaseURLString)
+                        } label: {
+                            Label("Copy Endpoint", systemImage: "doc.on.doc")
                         }
-                    } label: {
-                        Label("Copy Health Check", systemImage: "cross.case")
                     }
-                    .disabled(healthCurlCommand == nil)
-                }
 
-                HStack(alignment: .top, spacing: 12) {
-                    Label {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(controller.endpointHealthStatus.title)
-                            if let detail = controller.endpointHealthStatus.detail {
-                                Text(detail)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                    HStack(alignment: .top, spacing: 12) {
+                        Text(endpoint.environmentSnippet)
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .textSelection(.enabled)
+
+                        Spacer()
+
+                        Button {
+                            copy(endpoint.environmentSnippet)
+                        } label: {
+                            Label("Copy Env", systemImage: "terminal")
+                        }
+                    }
+
+                    HStack(alignment: .top, spacing: 12) {
+                        Text(healthCurlCommand ?? "Health check is not available for this adapter.")
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .textSelection(.enabled)
+
+                        Spacer()
+
+                        Button {
+                            if let healthCurlCommand {
+                                copy(healthCurlCommand)
                             }
+                        } label: {
+                            Label("Copy Health Check", systemImage: "cross.case")
                         }
-                    } icon: {
-                        Image(systemName: controller.endpointHealthStatus.systemImageName)
-                            .foregroundStyle(healthColor)
+                        .disabled(healthCurlCommand == nil)
                     }
 
-                    Spacer()
+                    HStack(alignment: .top, spacing: 12) {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(controller.endpointHealthStatus.title)
+                                if let detail = controller.endpointHealthStatus.detail {
+                                    Text(detail)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        } icon: {
+                            Image(systemName: controller.endpointHealthStatus.systemImageName)
+                                .foregroundStyle(healthColor)
+                        }
 
-                    Button {
-                        controller.checkEndpointHealth()
-                    } label: {
-                        Label("Check Health", systemImage: "waveform.path.ecg")
+                        Spacer()
+
+                        Button {
+                            controller.checkEndpointHealth()
+                        } label: {
+                            Label("Check Health", systemImage: "waveform.path.ecg")
+                        }
+                        .disabled(controller.endpointHealthStatus == .checking)
                     }
-                    .disabled(controller.endpointHealthStatus == .checking)
+
+                    Divider()
+
+                    HStack(alignment: .top, spacing: 12) {
+                        Text(endpoint.aiMobileSmokeCurlCommand)
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .textSelection(.enabled)
+
+                        Spacer()
+
+                        Button {
+                            copy(endpoint.aiMobileSmokeCurlCommand)
+                        } label: {
+                            Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
+                        }
+                    }
                 }
-
-                Divider()
-
-                HStack(alignment: .top, spacing: 12) {
-                    Text(endpoint.aiMobileSmokeCurlCommand)
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .textSelection(.enabled)
-
-                    Spacer()
-
-                    Button {
-                        copy(endpoint.aiMobileSmokeCurlCommand)
-                    } label: {
-                        Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
-                    }
-                }
+            } else {
+                Label(
+                    controller.runtimeEndpointErrorMessage ?? "Endpoint is not available for the current configuration.",
+                    systemImage: "exclamationmark.triangle"
+                )
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
         }
     }

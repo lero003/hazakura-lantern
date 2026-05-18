@@ -33,10 +33,20 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         )
     }
 
-    public func endpoint(config: RuntimeConfiguration) -> RuntimeEndpoint {
-        RuntimeEndpoint(
-            apiBaseURL: URL(string: config.apiBaseURL)!,
-            healthCheckURL: URL(string: config.healthCheckURL)
+    public func endpoint(config: RuntimeConfiguration) throws -> RuntimeEndpoint {
+        try validateEndpointConfiguration(config)
+
+        guard let apiBaseURL = URL(string: config.apiBaseURL) else {
+            throw RuntimeAdapterError.invalidHost(config.host)
+        }
+
+        guard let healthCheckURL = URL(string: config.healthCheckURL) else {
+            throw RuntimeAdapterError.invalidPort(config.port)
+        }
+
+        return RuntimeEndpoint(
+            apiBaseURL: apiBaseURL,
+            healthCheckURL: healthCheckURL
         )
     }
 
@@ -60,6 +70,8 @@ public struct LlamaServerAdapter: RuntimeAdapter {
             throw RuntimeAdapterError.invalidPort(config.port)
         }
 
+        try validateEndpointConfiguration(config)
+
         if config.contextSize <= 0 {
             throw RuntimeAdapterError.invalidContextSize(config.contextSize)
         }
@@ -67,6 +79,20 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         _ = try optionalPositiveInt(config.threads, optionName: "threads")
         _ = try optionalNonNegativeInt(config.gpuLayers, optionName: "GPU layers")
         _ = try CommandLineArgumentTokenizer.tokenize(config.additionalArguments)
+    }
+
+    private func validateEndpointConfiguration(_ config: RuntimeConfiguration) throws {
+        if !(1...65535).contains(config.port) {
+            throw RuntimeAdapterError.invalidPort(config.port)
+        }
+
+        let trimmedHost = config.host.trimmingCharacters(in: .whitespacesAndNewlines)
+        let invalidCharacters = CharacterSet.whitespacesAndNewlines
+            .union(CharacterSet(charactersIn: "/\\"))
+
+        if trimmedHost.rangeOfCharacter(from: invalidCharacters) != nil {
+            throw RuntimeAdapterError.invalidHost(config.host)
+        }
     }
 
     private func optionalPositiveInt(_ value: String, optionName: String) throws -> Int? {
@@ -100,6 +126,7 @@ public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
     case missingRuntimePath
     case missingModelPath
     case unsupportedModelType(String)
+    case invalidHost(String)
     case invalidPort(Int)
     case invalidContextSize(Int)
     case invalidNumericOption(name: String, value: String)
@@ -113,6 +140,8 @@ public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
             "Choose a .gguf model file before starting."
         case .unsupportedModelType(let path):
             "Model file must be a .gguf file before launch. Current path: \(path)."
+        case .invalidHost(let host):
+            "Host must be blank, localhost, an IP address, or a DNS name before endpoint copy. Current value: \(host)."
         case .invalidPort(let port):
             "Port must be between 1 and 65535 before launch. Current value: \(port)."
         case .invalidContextSize(let contextSize):

@@ -124,26 +124,26 @@ final class LlamaServerAdapterTests: XCTestCase {
         )
     }
 
-    func testEndpointURLsUseConfiguredPort() {
+    func testEndpointURLsUseConfiguredPort() throws {
         var config = RuntimeConfiguration.defaultValue
         config.port = 9876
 
         let adapter = LlamaServerAdapter()
-        let endpoint = adapter.endpoint(config: config)
+        let endpoint = try adapter.endpoint(config: config)
 
-        XCTAssertEqual(adapter.apiBaseURL(config: config), URL(string: "http://localhost:9876/v1"))
-        XCTAssertEqual(adapter.healthCheckURL(config: config), URL(string: "http://localhost:9876/v1/models"))
+        XCTAssertEqual(try adapter.apiBaseURL(config: config), URL(string: "http://localhost:9876/v1"))
+        XCTAssertEqual(try adapter.healthCheckURL(config: config), URL(string: "http://localhost:9876/v1/models"))
         XCTAssertEqual(endpoint.apiBaseURLString, "http://localhost:9876/v1")
         XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
         XCTAssertTrue(endpoint.aiMobileSmokeCurlCommand.contains("http://localhost:9876/v1/chat/completions"))
     }
 
-    func testEndpointContractKeepsClientReachableHostAndLocalHealthCheckSeparate() {
+    func testEndpointContractKeepsClientReachableHostAndLocalHealthCheckSeparate() throws {
         var config = RuntimeConfiguration.defaultValue
         config.host = "192.168.1.12"
         config.port = 9876
 
-        let endpoint = LlamaServerAdapter().endpoint(config: config)
+        let endpoint = try LlamaServerAdapter().endpoint(config: config)
 
         XCTAssertEqual(endpoint.apiBaseURLString, "http://192.168.1.12:9876/v1")
         XCTAssertEqual(
@@ -154,6 +154,26 @@ final class LlamaServerAdapterTests: XCTestCase {
             """
         )
         XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
+    }
+
+    func testEndpointRejectsInvalidHostWithoutBuildingCommand() {
+        var config = RuntimeConfiguration.defaultValue
+        config.host = "bad host"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().endpoint(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("bad host"))
+        }
+    }
+
+    func testValidateRejectsInvalidHostBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "http://localhost"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("http://localhost"))
+        }
     }
 
     func testRejectsInvalidPort() {
@@ -242,6 +262,10 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(
             RuntimeAdapterError.unsupportedModelType("/Users/kei/Models/qwen.bin").errorDescription,
             "Model file must be a .gguf file before launch. Current path: /Users/kei/Models/qwen.bin."
+        )
+        XCTAssertEqual(
+            RuntimeAdapterError.invalidHost("bad host").errorDescription,
+            "Host must be blank, localhost, an IP address, or a DNS name before endpoint copy. Current value: bad host."
         )
         XCTAssertEqual(
             RuntimeAdapterError.invalidPort(0).errorDescription,

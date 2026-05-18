@@ -596,7 +596,7 @@ private struct CustomCommandAdapter: RuntimeAdapter {
         )
     }
 
-    func endpoint(config: RuntimeConfiguration) -> RuntimeEndpoint {
+    func endpoint(config: RuntimeConfiguration) throws -> RuntimeEndpoint {
         RuntimeEndpoint(
             apiBaseURL: URL(string: "http://localhost:\(config.port)/v1")!,
             healthCheckURL: nil
