@@ -153,7 +153,29 @@ public struct LlamaServerAdapter: RuntimeAdapter {
             return isIPv6Literal(host)
         }
 
+        if isIPv4AddressShape(host) {
+            return isIPv4Literal(host)
+        }
+
         return isDNSName(host)
+    }
+
+    private func isIPv4AddressShape(_ host: String) -> Bool {
+        let labels = host.split(separator: ".", omittingEmptySubsequences: false)
+        guard labels.count == 4 else {
+            return false
+        }
+
+        return labels.allSatisfy { label in
+            !label.isEmpty && label.utf8.allSatisfy { byte in
+                (CharacterCode.zero...CharacterCode.nine).contains(byte)
+            }
+        }
+    }
+
+    private func isIPv4Literal(_ host: String) -> Bool {
+        var address = in_addr()
+        return host.withCString { inet_pton(AF_INET, $0, &address) } == 1
     }
 
     private func isDNSName(_ host: String) -> Bool {

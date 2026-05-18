@@ -120,6 +120,9 @@ Implemented scope:
 - `llama-server` host validation now also rejects malformed DNS labels such as
   underscores, empty labels, or leading/trailing hyphens before command
   construction, while keeping ordinary DNS hosts valid for endpoint reuse.
+- `llama-server` host validation now rejects invalid IPv4-like dotted quads
+  before command construction instead of treating them as DNS names, while
+  preserving valid IPv4 hosts for endpoint reuse.
 - Runtime process-run failure descriptions now flow through the runtime adapter
   boundary, preserving the current `llama-server` recovery hints while keeping
   the default protocol behavior free of `llama-server` assumptions.
@@ -223,7 +226,8 @@ Good next automated candidates:
   failure-description slice or blank-host launch normalization slice or
   bracketed-IPv6 launch-host normalization slice or host-with-port validation
   slice or URL-delimiter/stray-bracket host validation slice or DNS-label host
-  validation slice or adapter-contract documentation slice or
+  validation slice or invalid-IPv4-like host validation slice or
+  adapter-contract documentation slice or
   profile-runtime-kind adapter id alignment slice
 - harden restart behavior only if a new stop/start race or ambiguous restart
   state is observed beyond the explicit pending-restart status

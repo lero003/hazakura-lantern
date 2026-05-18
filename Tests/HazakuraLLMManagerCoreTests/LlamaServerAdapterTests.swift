@@ -111,6 +111,18 @@ final class LlamaServerAdapterTests: XCTestCase {
         )
     }
 
+    func testBuildCommandAllowsIPv4HostBeforeLaunch() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "192.168.1.12"
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertEqual(command.arguments[3], "192.168.1.12")
+        XCTAssertEqual(try LlamaServerAdapter().endpoint(config: config).apiBaseURLString, "http://192.168.1.12:1234/v1")
+    }
+
     func testBuildCommandUnwrapsBracketedIPv6HostBeforeLaunch() throws {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
@@ -378,6 +390,17 @@ final class LlamaServerAdapterTests: XCTestCase {
 
         XCTAssertThrowsError(try LlamaServerAdapter().validate(config: trailingHyphenConfig)) { error in
             XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("desk-.local"))
+        }
+    }
+
+    func testValidateRejectsInvalidIPv4LikeHostBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "999.999.999.999"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("999.999.999.999"))
         }
     }
 

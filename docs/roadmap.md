@@ -223,6 +223,8 @@ Already done or mostly done:
 - host validation rejects malformed DNS labels such as underscores, empty
   labels, or leading/trailing hyphens before command construction while keeping
   ordinary DNS hosts valid for endpoint reuse
+- host validation rejects invalid IPv4-like dotted quads before command
+  construction while preserving valid IPv4 hosts for endpoint reuse
 - adapter-owned process-run failure descriptions that preserve the
   `llama-server` recovery hints without hard-wiring default protocol behavior
   to the current adapter
