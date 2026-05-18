@@ -50,6 +50,8 @@ private struct StatusBadge: View {
             "checkmark.circle"
         case .stopping:
             "pause.circle"
+        case .restarting:
+            "arrow.clockwise.circle"
         case .error:
             "exclamationmark.triangle"
         }
@@ -61,7 +63,7 @@ private struct StatusBadge: View {
             .green
         case .error:
             .red
-        case .starting, .stopping:
+        case .starting, .stopping, .restarting:
             .orange
         case .stopped:
             .secondary

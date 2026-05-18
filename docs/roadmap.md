@@ -141,6 +141,8 @@ Already done or mostly done:
 - launch command preview
 - direct `Process` launch without shell interpolation
 - start, stop, restart, PID, status, and in-memory logs
+- explicit `Restarting` status while a requested restart waits for the current
+  process to terminate before the next launch
 - local endpoint and OpenAI-style environment snippet
 - copied endpoint/client URLs keep local defaults copyable while reflecting a
   configured reachable host
@@ -225,7 +227,6 @@ Already done or mostly done:
 
 Remaining before a packaged app release:
 
-- make restart state explicit enough to avoid stop/start race confusion
 - fix or externally verify the app-bundle launch smoke path
 - keep README, current status, development loop, and roadmap in agreement
 
@@ -478,8 +479,8 @@ Good next slices:
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only
   when a specific ambiguity is visible, without adding installer behavior
-- harden restart behavior only with an observed ambiguity and a testable state
-  transition
+- harden restart behavior only with a newly observed ambiguity and a testable
+  state transition beyond the explicit pending-restart status
 - document launch smoke expectations only when there is a fresh verification
   hypothesis or new evidence
 - update current status after implementation changes

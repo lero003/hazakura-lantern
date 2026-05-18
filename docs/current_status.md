@@ -21,6 +21,8 @@ Implemented scope:
 - `llama-server` launch command construction without shell interpolation.
 - Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
+- Restart requests now show an explicit `Restarting` state while Lantern waits
+  for the current process to terminate before starting the next one.
 - Bounded in-memory log buffering with clear-log behavior covered by focused
   core tests.
 - Basic runtime/model path preflight before launching.
@@ -218,8 +220,8 @@ Good next automated candidates:
   slice or URL-delimiter/stray-bracket host validation slice or
   adapter-contract documentation slice or profile-runtime-kind adapter id
   alignment slice
-- harden restart behavior only if a stop/start race or ambiguous restart state
-  is observed
+- harden restart behavior only if a new stop/start race or ambiguous restart
+  state is observed beyond the explicit pending-restart status
 - improve a copy flow, empty state, or setup hint only when there is a concrete
   repeated-use ambiguity; keep the slice local and small
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated

@@ -164,6 +164,20 @@ final class ServerController: ObservableObject {
     }
 
     func stop() {
+        stop(marking: .stopping)
+    }
+
+    func restart() {
+        if process?.isRunning == true {
+            isRestartPending = true
+            appendLog("Restart requested; waiting for the current process to stop.", stream: .info)
+            stop(marking: .restarting)
+        } else {
+            start()
+        }
+    }
+
+    private func stop(marking stoppingStatus: ServerStatus) {
         guard let process else {
             status = .stopped
             processIdentifier = nil
@@ -176,20 +190,10 @@ final class ServerController: ObservableObject {
             return
         }
 
-        status = .stopping
+        status = stoppingStatus
         endpointHealthStatus = .unchecked
         appendLog("Stopping process pid \(process.processIdentifier).", stream: .info)
         process.terminate()
-    }
-
-    func restart() {
-        if process?.isRunning == true {
-            isRestartPending = true
-            appendLog("Restart requested; waiting for the current process to stop.", stream: .info)
-            stop()
-        } else {
-            start()
-        }
     }
 
     func clearLogs() {
@@ -289,7 +293,7 @@ final class ServerController: ObservableObject {
         appendLog("Process exited with code \(exitCode).", stream: .info)
         endpointHealthStatus = .unchecked
 
-        if status == .stopping || exitCode == 0 {
+        if status == .stopping || status == .restarting || exitCode == 0 {
             status = .stopped
         } else {
             status = .error

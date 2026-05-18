@@ -5,6 +5,7 @@ public enum ServerStatus: String, CaseIterable, Sendable {
     case starting
     case running
     case stopping
+    case restarting
     case error
 
     public var title: String {
@@ -17,6 +18,8 @@ public enum ServerStatus: String, CaseIterable, Sendable {
             "Running"
         case .stopping:
             "Stopping"
+        case .restarting:
+            "Restarting"
         case .error:
             "Error"
         }
