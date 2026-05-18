@@ -81,6 +81,18 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         _ = try CommandLineArgumentTokenizer.tokenize(config.additionalArguments)
     }
 
+    public func validateLaunchPreconditions(config: RuntimeConfiguration, fileManager: FileManager) throws {
+        try validate(config: config)
+
+        guard fileManager.isExecutableFile(atPath: config.runtimeExecutablePath) else {
+            throw LaunchPreflightError.runtimeNotExecutable(config.runtimeExecutablePath)
+        }
+
+        guard fileManager.fileExists(atPath: config.modelPath) else {
+            throw LaunchPreflightError.modelFileMissing(config.modelPath)
+        }
+    }
+
     private func validateEndpointConfiguration(_ config: RuntimeConfiguration) throws {
         if !(1...65535).contains(config.port) {
             throw RuntimeAdapterError.invalidPort(config.port)

@@ -6,11 +6,16 @@ public protocol RuntimeAdapter {
     var supportedModelTypes: [String] { get }
 
     func validate(config: RuntimeConfiguration) throws
+    func validateLaunchPreconditions(config: RuntimeConfiguration, fileManager: FileManager) throws
     func buildLaunchCommand(config: RuntimeConfiguration) throws -> LaunchCommand
     func endpoint(config: RuntimeConfiguration) throws -> RuntimeEndpoint
 }
 
 public extension RuntimeAdapter {
+    func validateLaunchPreconditions(config: RuntimeConfiguration, fileManager: FileManager) throws {
+        try validate(config: config)
+    }
+
     func healthCheckURL(config: RuntimeConfiguration) throws -> URL? {
         try endpoint(config: config).healthCheckURL
     }

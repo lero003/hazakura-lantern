@@ -104,6 +104,57 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testValidateLaunchPreconditionsAcceptsExecutableRuntimeAndExistingModel() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("qwen.gguf")
+        try makeExecutableFile(at: runtime)
+        FileManager.default.createFile(atPath: model.path, contents: Data())
+
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = runtime.path
+        config.modelPath = model.path
+
+        XCTAssertNoThrow(try LlamaServerAdapter().validateLaunchPreconditions(config: config, fileManager: .default))
+    }
+
+    func testValidateLaunchPreconditionsRejectsNonExecutableRuntimeBeforeProcessRun() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("qwen.gguf")
+        FileManager.default.createFile(atPath: runtime.path, contents: Data())
+        FileManager.default.createFile(atPath: model.path, contents: Data())
+
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = runtime.path
+        config.modelPath = model.path
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validateLaunchPreconditions(config: config, fileManager: .default)) { error in
+            XCTAssertEqual(error as? LaunchPreflightError, .runtimeNotExecutable(runtime.path))
+        }
+    }
+
+    func testValidateLaunchPreconditionsRejectsMissingModelBeforeProcessRun() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("missing.gguf")
+        try makeExecutableFile(at: runtime)
+
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = runtime.path
+        config.modelPath = model.path
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validateLaunchPreconditions(config: config, fileManager: .default)) { error in
+            XCTAssertEqual(error as? LaunchPreflightError, .modelFileMissing(model.path))
+        }
+    }
+
     func testDisplayStringPreservesQuotedAdditionalArgumentsAsSinglePreviewTokens() throws {
         let config = RuntimeConfiguration(
             runtimeExecutablePath: "/usr/local/bin/llama-server",
@@ -283,5 +334,17 @@ final class LlamaServerAdapterTests: XCTestCase {
             RuntimeAdapterError.invalidNonNegativeNumericOption(name: "GPU layers", value: "-1").errorDescription,
             "GPU layers must be a non-negative integer or auto before launch. Current value: -1."
         )
+    }
+
+    private func makeWorkspace() throws -> URL {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-lantern-adapter-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        return workspace
+    }
+
+    private func makeExecutableFile(at url: URL) throws {
+        FileManager.default.createFile(atPath: url.path, contents: Data())
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: url.path)
     }
 }

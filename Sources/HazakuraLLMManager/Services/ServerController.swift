@@ -114,7 +114,7 @@ final class ServerController: ObservableObject {
 
         do {
             let command = try adapter.buildLaunchCommand(config: configuration)
-            try validateStartPreconditions(configuration)
+            try adapter.validateLaunchPreconditions(config: configuration, fileManager: fileManager)
 
             saveActiveProfile(configuration: configuration)
             clearError()
@@ -253,16 +253,6 @@ final class ServerController: ObservableObject {
     @MainActor
     private func updateEndpointHealthStatus(_ status: EndpointHealthStatus) {
         endpointHealthStatus = status
-    }
-
-    private func validateStartPreconditions(_ configuration: RuntimeConfiguration) throws {
-        guard fileManager.isExecutableFile(atPath: configuration.runtimeExecutablePath) else {
-            throw LaunchPreflightError.runtimeNotExecutable(configuration.runtimeExecutablePath)
-        }
-
-        guard fileManager.fileExists(atPath: configuration.modelPath) else {
-            throw LaunchPreflightError.modelFileMissing(configuration.modelPath)
-        }
     }
 
     private func saveActiveProfile(configuration: RuntimeConfiguration) {
