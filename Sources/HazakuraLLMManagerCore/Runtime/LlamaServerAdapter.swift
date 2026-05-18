@@ -1,3 +1,4 @@
+import Darwin
 import Foundation
 
 public struct LlamaServerAdapter: RuntimeAdapter {
@@ -118,6 +119,10 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         if trimmedHost.rangeOfCharacter(from: invalidCharacters) != nil {
             throw RuntimeAdapterError.invalidHost(config.host)
         }
+
+        guard isValidHostShape(trimmedHost) else {
+            throw RuntimeAdapterError.invalidHost(config.host)
+        }
     }
 
     private func launchHost(_ host: String) -> String {
@@ -127,6 +132,33 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         }
 
         return trimmedHost.isEmpty ? RuntimeConfiguration.defaultValue.host : trimmedHost
+    }
+
+    private func isValidHostShape(_ host: String) -> Bool {
+        guard !host.isEmpty else {
+            return true
+        }
+
+        if host.hasPrefix("[") || host.hasSuffix("]") {
+            guard host.hasPrefix("["),
+                  host.hasSuffix("]") else {
+                return false
+            }
+
+            let unwrappedHost = String(host.dropFirst().dropLast())
+            return isIPv6Literal(unwrappedHost)
+        }
+
+        if host.contains(":") {
+            return isIPv6Literal(host)
+        }
+
+        return true
+    }
+
+    private func isIPv6Literal(_ host: String) -> Bool {
+        var address = in6_addr()
+        return host.withCString { inet_pton(AF_INET6, $0, &address) } == 1
     }
 
     private func optionalPositiveInt(_ value: String, optionName: String) throws -> Int? {

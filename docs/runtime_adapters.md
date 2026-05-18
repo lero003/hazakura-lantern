@@ -38,6 +38,8 @@ The `llama-server` adapter:
   launch
 - unwraps bracketed IPv6 host values before launch while keeping copied
   endpoint URLs URL-safe
+- rejects URL-like or `host:port` host values before command construction so
+  the configured port remains the single port source
 - keeps copied client URLs reachable through the configured host while local
   health checks use the loopback endpoint
 - validates context size, port, thread count, GPU layer count, additional

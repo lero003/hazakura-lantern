@@ -280,6 +280,28 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testValidateRejectsHostWithPortBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "localhost:1234"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("localhost:1234"))
+        }
+    }
+
+    func testValidateRejectsBracketedIPv6HostWithPortBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "[fd00::12]:1234"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("[fd00::12]:1234"))
+        }
+    }
+
     func testLaunchProcessFailureDescriptionIsAdapterOwned() {
         let error = NSError(
             domain: NSPOSIXErrorDomain,

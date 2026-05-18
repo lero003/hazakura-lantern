@@ -197,6 +197,9 @@ Already done or mostly done:
   `llama-server`
 - launch command construction unwraps bracketed IPv6 host values before passing
   them to `llama-server --host`, while copied endpoint URLs remain URL-safe
+- host validation rejects URL-like or `host:port` values before command
+  construction, keeping port selection in the dedicated profile field while
+  still allowing valid IPv6 literals
 - adapter-owned process-run failure descriptions that preserve the
   `llama-server` recovery hints without hard-wiring default protocol behavior
   to the current adapter
