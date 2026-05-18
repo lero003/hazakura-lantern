@@ -32,7 +32,8 @@ Checks:
 
 - Confirm the runtime process is running and has a PID.
 - Confirm the configured port matches the copied endpoint.
-- Use the copyable health-check curl command before adding new app behavior.
+- Use the timeout-bounded copyable health-check curl command before adding new
+  app behavior.
 - Health state is intentionally manual; there is no automatic polling yet.
 
 The health check is a local smoke signal from this Mac. LAN exposure,

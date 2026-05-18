@@ -30,7 +30,8 @@ Implemented scope:
 - Copied endpoint/client URLs keep local defaults copyable while respecting a
   configured reachable host, with focused tests.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
-- Local endpoint health-check URL and copyable curl smoke command display.
+- Local endpoint health-check URL and timeout-bounded copyable curl smoke
+  command display.
 - Manual endpoint health status check using the local health-check URL.
 - Endpoint health status resets when the runtime starts, stops, or terminates
   so a stale healthy result is not shown as current process state.
@@ -90,9 +91,10 @@ Implemented scope:
 - The app loads the active runtime profile into the editable configuration and
   provides minimal `.lantern-profile.json` import/export UI for that active
   profile without adding multiple-profile management.
-- Endpoint display, environment snippets, health-check curl, and AI Mobile
-  smoke commands now flow through an adapter-owned `RuntimeEndpoint` contract,
-  with focused tests preserving the `llama-server` endpoint/health behavior.
+- Endpoint display, environment snippets, timeout-bounded health-check curl,
+  and AI Mobile smoke commands now flow through an adapter-owned
+  `RuntimeEndpoint` contract, with focused tests preserving the `llama-server`
+  endpoint/health behavior.
 - Runtime adapter validation is now an explicit adapter contract that can be
   tested before command construction, preserving the current `llama-server`
   validation behavior without adding runtime breadth.
@@ -179,8 +181,8 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
   `https://github.com/lero003/hazakura-lantern.git`.
 - No real `llama-server` binary or `.gguf` model is bundled.
 - There is no automatic endpoint health polling yet. The health-check URL, a
-  fail-fast curl command, and a manual status check are available for local
-  smoke checks.
+  timeout-bounded curl command, and a manual status check are available for
+  local smoke checks.
 - Runtime setup and update awareness should remain advisory. The app should not
   install, upgrade, or mutate runtimes automatically.
 - The app does not manage multiple profiles, launch-at-login, YAML import/export,
@@ -223,7 +225,8 @@ Good next automated candidates:
 - harden restart behavior only if a new stop/start race or ambiguous restart
   state is observed beyond the explicit pending-restart status
 - improve a copy flow, empty state, or setup hint only when there is a concrete
-  repeated-use ambiguity; keep the slice local and small
+  repeated-use ambiguity; keep the slice local and small, and do not repeat the
+  timeout-bounded health-check curl slice
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above
 - add profile migration transform tests only after a concrete schema version `2`

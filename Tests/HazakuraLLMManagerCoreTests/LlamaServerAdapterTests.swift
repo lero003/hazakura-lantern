@@ -238,7 +238,7 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(try adapter.apiBaseURL(config: config), URL(string: "http://localhost:9876/v1"))
         XCTAssertEqual(try adapter.healthCheckURL(config: config), URL(string: "http://localhost:9876/v1/models"))
         XCTAssertEqual(endpoint.apiBaseURLString, "http://localhost:9876/v1")
-        XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
+        XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS --max-time 5 http://localhost:9876/v1/models")
         XCTAssertTrue(endpoint.aiMobileSmokeCurlCommand.contains("http://localhost:9876/v1/chat/completions"))
     }
 
@@ -257,7 +257,7 @@ final class LlamaServerAdapterTests: XCTestCase {
             OPENAI_API_KEY=local
             """
         )
-        XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
+        XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS --max-time 5 http://localhost:9876/v1/models")
     }
 
     func testEndpointRejectsInvalidHostWithoutBuildingCommand() {

@@ -64,6 +64,6 @@ final class RuntimeConfigurationTests: XCTestCase {
         config.port = 9876
 
         XCTAssertEqual(config.healthCheckURL, "http://localhost:9876/v1/models")
-        XCTAssertEqual(config.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
+        XCTAssertEqual(config.endpointHealthCurlCommand, "curl -fsS --max-time 5 http://localhost:9876/v1/models")
     }
 }

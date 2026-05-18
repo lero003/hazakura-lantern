@@ -146,7 +146,8 @@ Already done or mostly done:
 - local endpoint and OpenAI-style environment snippet
 - copied endpoint/client URLs keep local defaults copyable while reflecting a
   configured reachable host
-- local endpoint health-check URL and copyable curl smoke command
+- local endpoint health-check URL and timeout-bounded copyable curl smoke
+  command
 - manual endpoint health status check
 - health status reset on start, stop, and termination so stale health does not
   survive process state changes
@@ -197,8 +198,8 @@ Already done or mostly done:
 - minimal active-profile import/export UI for `.lantern-profile.json` files
   without adding multiple-profile management
 - adapter-owned endpoint display contract for base URL, environment snippet,
-  health-check curl, and AI Mobile smoke command generation, covered by focused
-  tests without adding another runtime adapter
+  timeout-bounded health-check curl, and AI Mobile smoke command generation,
+  covered by focused tests without adding another runtime adapter
 - explicit adapter-owned validation contract that can be tested before command
   construction, preserving `llama-server` validation without adding runtime
   breadth
@@ -476,7 +477,8 @@ Good next slices:
   alignment is covered, URL-delimiter/stray-bracket host validation is covered,
   and the first adapter contract documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
-  copy-target ambiguity remains
+  copy-target ambiguity remains; the timeout-bounded health-check curl slice is
+  covered
 - improve common launch failure messages, empty states, or setup hints only
   when a specific ambiguity is visible, without adding installer behavior
 - harden restart behavior only with a newly observed ambiguity and a testable
