@@ -220,6 +220,9 @@ Already done or mostly done:
 - host validation rejects URL-like, URL-delimiter, malformed bracket, or
   `host:port` values before command construction, keeping port selection in the
   dedicated profile field while still allowing valid IPv6 literals
+- host validation rejects malformed DNS labels such as underscores, empty
+  labels, or leading/trailing hyphens before command construction while keeping
+  ordinary DNS hosts valid for endpoint reuse
 - adapter-owned process-run failure descriptions that preserve the
   `llama-server` recovery hints without hard-wiring default protocol behavior
   to the current adapter
@@ -475,7 +478,8 @@ Good next slices:
   descriptions now flow through the adapter boundary, default adapter
   preflight/helper behavior is covered, profile-runtime-kind adapter id
   alignment is covered, URL-delimiter/stray-bracket host validation is covered,
-  and the first adapter contract documentation slice is covered
+  DNS-label host validation is covered, and the first adapter contract
+  documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains; the timeout-bounded health-check curl slice is
   covered

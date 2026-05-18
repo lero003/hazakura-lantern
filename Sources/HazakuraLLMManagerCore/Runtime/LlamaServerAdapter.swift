@@ -153,7 +153,37 @@ public struct LlamaServerAdapter: RuntimeAdapter {
             return isIPv6Literal(host)
         }
 
-        return true
+        return isDNSName(host)
+    }
+
+    private func isDNSName(_ host: String) -> Bool {
+        guard !host.isEmpty, host.utf8.count <= 253 else {
+            return false
+        }
+
+        return host.split(separator: ".", omittingEmptySubsequences: false)
+            .allSatisfy(isValidDNSLabel)
+    }
+
+    private func isValidDNSLabel(_ label: Substring) -> Bool {
+        guard let firstByte = label.utf8.first,
+              let lastByte = label.utf8.last,
+              !label.isEmpty,
+              label.utf8.count <= 63,
+              isASCIILetterOrDigit(firstByte),
+              isASCIILetterOrDigit(lastByte) else {
+            return false
+        }
+
+        return label.utf8.allSatisfy { byte in
+            isASCIILetterOrDigit(byte) || byte == CharacterCode.hyphen
+        }
+    }
+
+    private func isASCIILetterOrDigit(_ byte: UInt8) -> Bool {
+        (CharacterCode.zero...CharacterCode.nine).contains(byte)
+            || (CharacterCode.uppercaseA...CharacterCode.uppercaseZ).contains(byte)
+            || (CharacterCode.lowercaseA...CharacterCode.lowercaseZ).contains(byte)
     }
 
     private func isIPv6Literal(_ host: String) -> Bool {
@@ -186,6 +216,16 @@ public struct LlamaServerAdapter: RuntimeAdapter {
 
         return intValue
     }
+}
+
+private enum CharacterCode {
+    static let hyphen = UInt8(ascii: "-")
+    static let zero = UInt8(ascii: "0")
+    static let nine = UInt8(ascii: "9")
+    static let uppercaseA = UInt8(ascii: "A")
+    static let uppercaseZ = UInt8(ascii: "Z")
+    static let lowercaseA = UInt8(ascii: "a")
+    static let lowercaseZ = UInt8(ascii: "z")
 }
 
 public enum RuntimeAdapterError: Error, Equatable, LocalizedError {

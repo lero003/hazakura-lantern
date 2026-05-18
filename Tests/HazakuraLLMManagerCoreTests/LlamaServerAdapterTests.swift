@@ -96,6 +96,21 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(try LlamaServerAdapter().endpoint(config: config).apiBaseURLString, "http://192.168.1.12:1234/v1")
     }
 
+    func testBuildCommandAllowsDNSHostBeforeLaunch() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "desk-runtime.local"
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertEqual(command.arguments[3], "desk-runtime.local")
+        XCTAssertEqual(
+            try LlamaServerAdapter().endpoint(config: config).apiBaseURLString,
+            "http://desk-runtime.local:1234/v1"
+        )
+    }
+
     func testBuildCommandUnwrapsBracketedIPv6HostBeforeLaunch() throws {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
@@ -321,6 +336,48 @@ final class LlamaServerAdapterTests: XCTestCase {
 
         XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
             XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("localhost]debug"))
+        }
+    }
+
+    func testValidateRejectsHostWithUnderscoreBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "desk_runtime.local"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("desk_runtime.local"))
+        }
+    }
+
+    func testValidateRejectsHostWithEmptyDNSLabelBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "desk..local"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("desk..local"))
+        }
+    }
+
+    func testValidateRejectsHostWithLeadingOrTrailingHyphenBeforeCommandConstruction() {
+        var leadingHyphenConfig = RuntimeConfiguration.defaultValue
+        leadingHyphenConfig.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        leadingHyphenConfig.modelPath = "/Users/kei/Models/qwen.gguf"
+        leadingHyphenConfig.host = "-desk.local"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: leadingHyphenConfig)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("-desk.local"))
+        }
+
+        var trailingHyphenConfig = RuntimeConfiguration.defaultValue
+        trailingHyphenConfig.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        trailingHyphenConfig.modelPath = "/Users/kei/Models/qwen.gguf"
+        trailingHyphenConfig.host = "desk-.local"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: trailingHyphenConfig)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("desk-.local"))
         }
     }
 

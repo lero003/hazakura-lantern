@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-18
+Last reviewed: 2026-05-19
 
 ## Project State
 
@@ -117,6 +117,9 @@ Implemented scope:
 - `llama-server` host validation rejects URL-like, URL-delimiter, malformed
   bracket, or `host:port` values before command construction, while still
   allowing valid IPv6 literals for launch and copied endpoint URLs.
+- `llama-server` host validation now also rejects malformed DNS labels such as
+  underscores, empty labels, or leading/trailing hyphens before command
+  construction, while keeping ordinary DNS hosts valid for endpoint reuse.
 - Runtime process-run failure descriptions now flow through the runtime adapter
   boundary, preserving the current `llama-server` recovery hints while keeping
   the default protocol behavior free of `llama-server` assumptions.
@@ -219,9 +222,9 @@ Good next automated candidates:
   or default adapter preflight/helper slice or process-run
   failure-description slice or blank-host launch normalization slice or
   bracketed-IPv6 launch-host normalization slice or host-with-port validation
-  slice or URL-delimiter/stray-bracket host validation slice or
-  adapter-contract documentation slice or profile-runtime-kind adapter id
-  alignment slice
+  slice or URL-delimiter/stray-bracket host validation slice or DNS-label host
+  validation slice or adapter-contract documentation slice or
+  profile-runtime-kind adapter id alignment slice
 - harden restart behavior only if a new stop/start race or ambiguous restart
   state is observed beyond the explicit pending-restart status
 - improve a copy flow, empty state, or setup hint only when there is a concrete

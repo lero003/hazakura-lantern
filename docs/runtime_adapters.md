@@ -42,6 +42,8 @@ The `llama-server` adapter:
 - rejects URL-like, URL-delimiter, malformed bracket, or `host:port` host
   values before command construction so the configured port remains the single
   port source
+- rejects malformed DNS labels before command construction, including
+  underscores, empty labels, and leading or trailing hyphens
 - keeps copied client URLs reachable through the configured host while local
   health checks use the loopback endpoint
 - validates context size, port, thread count, GPU layer count, additional
