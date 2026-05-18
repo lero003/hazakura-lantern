@@ -110,9 +110,9 @@ Implemented scope:
 - `llama-server` launch command construction unwraps bracketed IPv6 host values
   before passing them to `--host`, while copied endpoint URLs keep URL-safe
   brackets.
-- `llama-server` host validation rejects URL-like or `host:port` values before
-  command construction, while still allowing valid IPv6 literals for launch and
-  copied endpoint URLs.
+- `llama-server` host validation rejects URL-like, URL-delimiter, malformed
+  bracket, or `host:port` values before command construction, while still
+  allowing valid IPv6 literals for launch and copied endpoint URLs.
 - Runtime process-run failure descriptions now flow through the runtime adapter
   boundary, preserving the current `llama-server` recovery hints while keeping
   the default protocol behavior free of `llama-server` assumptions.
@@ -215,8 +215,9 @@ Good next automated candidates:
   or default adapter preflight/helper slice or process-run
   failure-description slice or blank-host launch normalization slice or
   bracketed-IPv6 launch-host normalization slice or host-with-port validation
-  slice or adapter-contract documentation slice or profile-runtime-kind adapter
-  id alignment slice
+  slice or URL-delimiter/stray-bracket host validation slice or
+  adapter-contract documentation slice or profile-runtime-kind adapter id
+  alignment slice
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete

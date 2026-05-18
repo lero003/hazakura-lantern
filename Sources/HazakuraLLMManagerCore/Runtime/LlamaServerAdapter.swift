@@ -114,7 +114,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
 
         let trimmedHost = config.host.trimmingCharacters(in: .whitespacesAndNewlines)
         let invalidCharacters = CharacterSet.whitespacesAndNewlines
-            .union(CharacterSet(charactersIn: "/\\"))
+            .union(CharacterSet(charactersIn: "/\\?#@%"))
 
         if trimmedHost.rangeOfCharacter(from: invalidCharacters) != nil {
             throw RuntimeAdapterError.invalidHost(config.host)
@@ -139,7 +139,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
             return true
         }
 
-        if host.hasPrefix("[") || host.hasSuffix("]") {
+        if host.contains("[") || host.contains("]") {
             guard host.hasPrefix("["),
                   host.hasSuffix("]") else {
                 return false

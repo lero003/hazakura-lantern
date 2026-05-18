@@ -291,6 +291,17 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testValidateRejectsHostWithURLDelimiterBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "localhost?profile=desk"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("localhost?profile=desk"))
+        }
+    }
+
     func testValidateRejectsBracketedIPv6HostWithPortBeforeCommandConstruction() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
@@ -299,6 +310,17 @@ final class LlamaServerAdapterTests: XCTestCase {
 
         XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
             XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("[fd00::12]:1234"))
+        }
+    }
+
+    func testValidateRejectsStrayBracketHostBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "localhost]debug"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidHost("localhost]debug"))
         }
     }
 

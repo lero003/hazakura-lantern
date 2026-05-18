@@ -199,9 +199,9 @@ Already done or mostly done:
   `llama-server`
 - launch command construction unwraps bracketed IPv6 host values before passing
   them to `llama-server --host`, while copied endpoint URLs remain URL-safe
-- host validation rejects URL-like or `host:port` values before command
-  construction, keeping port selection in the dedicated profile field while
-  still allowing valid IPv6 literals
+- host validation rejects URL-like, URL-delimiter, malformed bracket, or
+  `host:port` values before command construction, keeping port selection in the
+  dedicated profile field while still allowing valid IPv6 literals
 - adapter-owned process-run failure descriptions that preserve the
   `llama-server` recovery hints without hard-wiring default protocol behavior
   to the current adapter
@@ -458,8 +458,8 @@ Good next slices:
   covered, missing-runtime-file preflight is covered, process-run failure
   descriptions now flow through the adapter boundary, default adapter
   preflight/helper behavior is covered, profile-runtime-kind adapter id
-  alignment is covered, and the first adapter contract documentation slice is
-  covered
+  alignment is covered, URL-delimiter/stray-bracket host validation is covered,
+  and the first adapter contract documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only
