@@ -72,6 +72,38 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(command.arguments[1], "/Users/kei/Models/Qwen.GGUF")
     }
 
+    func testValidateAcceptsSupportedLlamaServerConfigurationWithoutBuildingCommand() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.threads = "auto"
+        config.gpuLayers = "0"
+
+        XCTAssertNoThrow(try LlamaServerAdapter().validate(config: config))
+    }
+
+    func testValidateRejectsUnsupportedLlamaServerConfigurationBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.threads = "zero"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? RuntimeAdapterError, .invalidNumericOption(name: "threads", value: "zero"))
+        }
+    }
+
+    func testValidateRejectsMalformedAdditionalArgumentsBeforeCommandConstruction() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.additionalArguments = "--alias \"qwen"
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validate(config: config)) { error in
+            XCTAssertEqual(error as? CommandLineArgumentTokenizerError, .unterminatedQuote("\""))
+        }
+    }
+
     func testDisplayStringPreservesQuotedAdditionalArgumentsAsSinglePreviewTokens() throws {
         let config = RuntimeConfiguration(
             runtimeExecutablePath: "/usr/local/bin/llama-server",

@@ -5,6 +5,7 @@ public protocol RuntimeAdapter {
     var displayName: String { get }
     var supportedModelTypes: [String] { get }
 
+    func validate(config: RuntimeConfiguration) throws
     func buildLaunchCommand(config: RuntimeConfiguration) throws -> LaunchCommand
     func endpoint(config: RuntimeConfiguration) -> RuntimeEndpoint
 }

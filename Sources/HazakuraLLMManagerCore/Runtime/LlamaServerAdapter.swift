@@ -8,7 +8,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
     public init() {}
 
     public func buildLaunchCommand(config: RuntimeConfiguration) throws -> LaunchCommand {
-        try validate(config)
+        try validate(config: config)
 
         var arguments = [
             "-m", config.modelPath,
@@ -40,7 +40,7 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         )
     }
 
-    private func validate(_ config: RuntimeConfiguration) throws {
+    public func validate(config: RuntimeConfiguration) throws {
         if config.runtimeExecutablePath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             throw RuntimeAdapterError.missingRuntimePath
         }
@@ -63,6 +63,10 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         if config.contextSize <= 0 {
             throw RuntimeAdapterError.invalidContextSize(config.contextSize)
         }
+
+        _ = try optionalPositiveInt(config.threads, optionName: "threads")
+        _ = try optionalNonNegativeInt(config.gpuLayers, optionName: "GPU layers")
+        _ = try CommandLineArgumentTokenizer.tokenize(config.additionalArguments)
     }
 
     private func optionalPositiveInt(_ value: String, optionName: String) throws -> Int? {

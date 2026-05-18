@@ -178,6 +178,9 @@ Already done or mostly done:
 - adapter-owned endpoint display contract for base URL, environment snippet,
   health-check curl, and AI Mobile smoke command generation, covered by focused
   tests without adding another runtime adapter
+- explicit adapter-owned validation contract that can be tested before command
+  construction, preserving `llama-server` validation without adding runtime
+  breadth
 
 Finish before leaving v0:
 
@@ -421,8 +424,9 @@ Automated development should pick one small slice from the current lane.
 
 Good next slices:
 
-- tighten adapter-owned validation, lifecycle, or error-mapping boundaries with
-  focused tests before adding runtime breadth
+- tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
+  focused tests before adding runtime breadth; validation already has an
+  initial explicit contract
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only

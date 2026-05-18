@@ -83,6 +83,9 @@ Implemented scope:
 - Endpoint display, environment snippets, health-check curl, and AI Mobile
   smoke commands now flow through an adapter-owned `RuntimeEndpoint` contract,
   with focused tests preserving the `llama-server` endpoint/health behavior.
+- Runtime adapter validation is now an explicit adapter contract that can be
+  tested before command construction, preserving the current `llama-server`
+  validation behavior without adding runtime breadth.
 - Runtime profile JSON shape, import failure behavior, and portability
   boundaries are documented with a readable schema-version `1` example.
 - App bundle launch helper at `script/build_and_run.sh`.
@@ -173,7 +176,8 @@ Good next automated candidates:
 
 - tighten the adapter boundary when there is a concrete validation, error
   mapping, lifecycle, or protocol case that can be tested without adding
-  runtime breadth
+  runtime breadth; do not repeat the initial explicit validation-contract slice
+  without a new ambiguity
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete
