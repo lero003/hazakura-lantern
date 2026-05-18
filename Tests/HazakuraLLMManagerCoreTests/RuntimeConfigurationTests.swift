@@ -20,6 +20,9 @@ final class RuntimeConfigurationTests: XCTestCase {
 
         config.host = "::1"
         XCTAssertEqual(config.apiBaseURL, "http://localhost:1234/v1")
+
+        config.host = "[::]"
+        XCTAssertEqual(config.apiBaseURL, "http://localhost:1234/v1")
     }
 
     func testAPIBaseURLUsesConfiguredReachableHost() {

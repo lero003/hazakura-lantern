@@ -135,6 +135,20 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(try LlamaServerAdapter().endpoint(config: config).apiBaseURLString, "http://[fd00::12]:1234/v1")
     }
 
+    func testEndpointKeepsBracketedIPv6BindAllHostCopyableAsLocalhost() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "[::]"
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+        let endpoint = try LlamaServerAdapter().endpoint(config: config)
+
+        XCTAssertEqual(command.arguments[3], "::")
+        XCTAssertEqual(endpoint.apiBaseURLString, "http://localhost:1234/v1")
+        XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS --max-time 5 http://localhost:1234/v1/models")
+    }
+
     func testValidateAcceptsSupportedLlamaServerConfigurationWithoutBuildingCommand() throws {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"

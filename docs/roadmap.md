@@ -219,6 +219,9 @@ Already done or mostly done:
   `llama-server`
 - launch command construction unwraps bracketed IPv6 host values before passing
   them to `llama-server --host`, while copied endpoint URLs remain URL-safe
+- copied endpoint URLs treat bracketed IPv6 bind-all (`[::]`) as a local
+  default, keeping client snippets on `localhost` while launch still passes
+  `::` to `llama-server`
 - host validation rejects URL-like, URL-delimiter, malformed bracket, or
   `host:port` values before command construction, keeping port selection in the
   dedicated profile field while still allowing valid IPv6 literals
@@ -483,8 +486,9 @@ Good next slices:
   descriptions now flow through the adapter boundary, default adapter
   preflight/helper behavior is covered, profile-runtime-kind adapter id
   alignment is covered, URL-delimiter/stray-bracket host validation is covered,
-  DNS-label host validation is covered, and the first adapter contract
-  documentation slice is covered
+  DNS-label host validation is covered, bracketed-IPv6 bind-all endpoint copy
+  behavior is covered, and the first adapter contract documentation slice is
+  covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains; the timeout-bounded health-check curl slice is
   covered

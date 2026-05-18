@@ -44,7 +44,7 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
     public var clientHost: String {
         let trimmedHost = host.trimmingCharacters(in: .whitespacesAndNewlines)
         switch trimmedHost.lowercased() {
-        case "", "127.0.0.1", "::1", "[::1]", "0.0.0.0", "::":
+        case "", "127.0.0.1", "::1", "[::1]", "0.0.0.0", "::", "[::]":
             return "localhost"
         default:
             if trimmedHost.contains(":") && !trimmedHost.hasPrefix("[") {
