@@ -233,6 +233,8 @@ Completion criteria:
 
 ## v0.2 - Profile Contract And Portability
 
+Status: source-only `v0.2.0-alpha.1` checkpoint.
+
 Purpose:
 
 Turn one working configuration into portable local profiles without expanding
@@ -240,11 +242,7 @@ runtime scope too early.
 
 Candidate work:
 
-- multiple local profiles
-- profile rename, duplicate, and delete
 - profile-level command preview
-- profile-level runtime metadata, such as install source and last observed
-  runtime version
 - JSON profile export/import
 - file-based profile export/import UI boundaries
 - migration behavior for future profile schema changes
@@ -252,15 +250,22 @@ Candidate work:
 - tests that preserve command construction compatibility
 - profile documentation with examples
 
+Deferred from this checkpoint:
+
+- multiple local profiles
+- profile rename, duplicate, and delete
+- profile-level runtime metadata, such as install source and last observed
+  runtime version
+
 This lane still manages existing local runtimes. It should not download models,
 install dependencies, or hide where a command comes from.
 
 Completion criteria:
 
-- profiles can be moved, backed up, and restored
+- the active profile can be exported, moved, backed up, and restored
 - exported profile data is understandable without opening the app
 - command construction is stable across persistence changes
-- one broken profile does not make other profiles unusable
+- unsupported future profile data does not break startup
 - docs clearly separate profile data from runtime/model files
 
 ## v0.3 - Adapter Boundary, Not Runtime Expansion

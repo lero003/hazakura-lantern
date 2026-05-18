@@ -20,18 +20,19 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Lane
 
-The project is in v0 / v0.1 transition for a local macOS LLM server manager.
+The project has a source-only v0.2 alpha checkpoint for a local macOS LLM
+server manager. The next source-work lane is v0.3 adapter boundary clarity,
+while the app-bundle launch smoke remains a packaged-release blocker.
 
-Favor work that makes the existing `llama-server` control loop more reliable
-and easier to reuse from local clients:
+Favor work that keeps the existing `llama-server` control loop explicit while
+making future adapter boundaries smaller and easier to test:
 
-- configuration validation
-- process lifecycle behavior
 - launch command preview correctness
-- local endpoint copy and display
-- local endpoint health and client smoke checks
-- in-memory log handling
-- app launch/build reliability
+- adapter-owned command construction
+- adapter-owned endpoint and health contracts
+- validation and error mapping
+- source-only profile compatibility checks
+- app launch/build reliability when there is a fresh hypothesis
 
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
@@ -59,6 +60,15 @@ Lane handoff rules:
   import/export helpers are covered well enough that the next risk is adapter
   boundary clarity. v0.3 work should tighten protocols, tests, and docs before
   adding another runtime adapter.
+
+Release posture:
+
+- `v0.2.0-alpha.1` is acceptable as a source-only checkpoint when SwiftPM
+  verification passes and docs clearly state that no packaged `.app` artifact is
+  attached.
+- Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
+  release until the app-bundle launch smoke is verified on a normal macOS
+  environment.
 
 ## Automation Rules
 

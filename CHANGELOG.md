@@ -4,10 +4,40 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+- No changes yet.
+
+## v0.2.0-alpha.1 - 2026-05-18
+
 ### Added
 
+- Added runtime profile JSON helpers with schema version `1`, runtime kind, and
+  embedded runtime configuration.
+- Added typed import failures for missing or unsupported profile schema
+  versions, runtime kinds, profile names, and unsupported profile file names.
+- Added active runtime profile persistence fallback so unsupported future
+  profile data does not break startup.
+- Added profile export filename and `.lantern-profile.json` recognition
+  contracts.
+- Added profile import preview, local file reference reporting, and
+  adapter-scoped launch command preview helpers.
+- Added minimal active-profile import/export UI for `.lantern-profile.json`
+  files without adding multiple-profile management.
+- Added runtime profile documentation with a readable schema-version `1`
+  example and portability boundaries.
 - Added compact troubleshooting guidance for setup, endpoint health,
   app-bundle smoke, and source-only alpha release boundaries.
+
+### Changed
+
+- Adopted Nenrin for release, automation, and scope judgment while keeping
+  ordinary implementation logs out of durable records.
+
+### Known Issues
+
+- `./script/build_and_run.sh --verify` can still fail with Launch Services
+  `kLSNoExecutableErr` in the Codex environment. This checkpoint is source-only
+  and does not attach a packaged `.app`, zip, dmg, signing, or notarization
+  artifact.
 
 ## v0.1.0-alpha.1 - 2026-05-17
 

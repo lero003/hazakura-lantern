@@ -7,6 +7,10 @@ Last reviewed: 2026-05-18
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
+Current release checkpoint: `v0.2.0-alpha.1` is a source-only alpha for the
+runtime profile contract and active-profile import/export UI. It is not a
+packaged app release.
+
 Implemented scope:
 
 - SwiftPM package with macOS 14 minimum.
@@ -145,22 +149,20 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
 
 ## Automation Lane
 
-The automation should treat the project as v0 / v0.1 transition. The v0
-control loop is mostly in place, while the Launch Services helper smoke remains
-a documented blocker. Do not spend every hourly run retrying the same
-`kLSNoExecutableErr` path unless there is a new hypothesis. It is acceptable to
-carry that blocker as risk and advance into v0.1 daily-use confidence work that
-does not depend on app-bundle launch verification.
+The automation should treat the project as having a source-only v0.2 alpha
+checkpoint for local profile portability, while the Launch Services helper
+smoke remains a documented packaged-app blocker. Do not spend every hourly run
+retrying the same `kLSNoExecutableErr` path unless there is a new hypothesis.
+It is acceptable to carry that blocker as risk and continue with safe source
+work that does not depend on app-bundle launch verification.
 
-The project may proceed with v0.1 daily-use confidence work under this known
-Launch Services risk, but no user-facing v0 app-bundle release should be cut
-until app launch verification succeeds on a normal macOS environment.
+No user-facing app-bundle release should be cut until app launch verification
+succeeds on a normal macOS environment.
 
-The saved automation may continue later into v0.2 and v0.3 when
-`docs/development_loop.md` and `docs/roadmap.md` lane handoff criteria are
-satisfied. v0.2 should start with local profile contract and portability, not
-runtime breadth. v0.3 should clarify adapter boundaries before adding another
-runtime adapter.
+The saved automation may continue into v0.3 when `docs/development_loop.md` and
+`docs/roadmap.md` agree that the next smallest risk is adapter boundary
+clarity. v0.3 should tighten adapter protocols, tests, and docs before adding
+another runtime adapter.
 
 ## Next Best Slice
 
@@ -168,20 +170,13 @@ Good next automated candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above
-- improve endpoint health status presentation further only when there is a
-  concrete stale-status or ambiguity case, without adding automatic polling
+- tighten the adapter boundary when there is a concrete protocol, health,
+  endpoint, or validation case that can be tested without adding runtime
+  breadth
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
-- add small profile-contract tests or docs when v0.1 confidence work is quiet,
-  keeping v0.2 local and persistence-focused; the initial schema-version
-  document contract, JSON encoding helpers, typed import-schema/runtime-kind
-  failures, active profile persistence fallback, profile JSON shape docs, and
-  suggested export filename, supported profile filename, and local file
-  reference, profile-file import preflight, and adapter-scoped launch-command
-  preview, profile-file import preview, blank-name rejection, and minimal
-  active-profile import/export UI contracts are covered; prefer migration
-  transform tests once a concrete v2 shape exists or a narrow v0.3 adapter
-  boundary clarity test if profile work is sufficiently closed
+- add profile migration transform tests only after a concrete schema version `2`
+  shape exists
 
 Do not begin adapter expansion, model management, or chat features during this
 handoff.

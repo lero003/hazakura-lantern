@@ -12,6 +12,10 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
+Current checkpoint: `v0.2.0-alpha.1` is a source-only alpha focused on local
+runtime profile portability. It does not include a packaged `.app`, zip, dmg,
+signing, or notarization artifact.
+
 ## v0 Scope
 
 - Select a `llama-server` executable.
@@ -22,6 +26,7 @@ The first supported runtime is `llama-server` from `llama.cpp`.
 - Show and copy the runtime-provided local OpenAI-compatible base URL.
 - Show and copy the generated launch command for inspection.
 - Check the local endpoint health manually.
+- Export and import the active runtime profile as `.lantern-profile.json`.
 - Save the last GUI configuration with `UserDefaults`.
 
 ## Non-Goals
@@ -40,6 +45,13 @@ Build and test:
 ```bash
 swift build
 swift test
+```
+
+In the Codex environment, prefer:
+
+```bash
+swift test
+swift build --disable-sandbox
 ```
 
 Run the macOS app bundle:

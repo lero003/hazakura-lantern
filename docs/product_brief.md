@@ -42,8 +42,7 @@ Future adapters may include:
 - YAML import/export
 - launch at login
 - auto restart
-- recent runtime/model lists
 - automatic endpoint health polling
 - metrics and benchmark display
-- multiple profiles
+- multiple profile management
 - LAN exposure controls
