@@ -162,6 +162,23 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testValidateLaunchPreconditionsRejectsMissingRuntimeBeforeProcessRun() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("missing-llama-server")
+        let model = workspace.appendingPathComponent("qwen.gguf")
+        FileManager.default.createFile(atPath: model.path, contents: Data())
+
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = runtime.path
+        config.modelPath = model.path
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validateLaunchPreconditions(config: config, fileManager: .default)) { error in
+            XCTAssertEqual(error as? LaunchPreflightError, .runtimeFileMissing(runtime.path))
+        }
+    }
+
     func testValidateLaunchPreconditionsRejectsMissingModelBeforeProcessRun() throws {
         let workspace = try makeWorkspace()
         defer { try? FileManager.default.removeItem(at: workspace) }

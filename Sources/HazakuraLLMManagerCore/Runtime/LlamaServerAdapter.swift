@@ -84,6 +84,10 @@ public struct LlamaServerAdapter: RuntimeAdapter {
     public func validateLaunchPreconditions(config: RuntimeConfiguration, fileManager: FileManager) throws {
         try validate(config: config)
 
+        guard fileManager.fileExists(atPath: config.runtimeExecutablePath) else {
+            throw LaunchPreflightError.runtimeFileMissing(config.runtimeExecutablePath)
+        }
+
         guard fileManager.isExecutableFile(atPath: config.runtimeExecutablePath) else {
             throw LaunchPreflightError.runtimeNotExecutable(config.runtimeExecutablePath)
         }

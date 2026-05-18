@@ -40,6 +40,9 @@ Implemented scope:
   focused tests for the user-facing descriptions.
 - Runtime/model file preflight errors point to the binary permission or missing
   `.gguf` file action before launch, with focused tests for the descriptions.
+- Runtime file preflight now distinguishes a missing selected `llama-server`
+  binary from an existing but non-executable file before process launch, with
+  focused tests.
 - Process-run launch failures now preserve the system error while pointing to
   the selected `llama-server` binary, permissions, or Mac binary mismatch, with
   focused tests for the descriptions.
@@ -197,9 +200,9 @@ Good next automated candidates:
   do not repeat the initial explicit validation-contract slice or the
   profile-preview generic adapter-boundary test without a new ambiguity, and
   do not repeat the invalid endpoint host/port fallibility slice or
-  adapter-owned launch preflight slice or process-run failure-description slice
-  or blank-host launch normalization slice or adapter-contract documentation
-  slice
+  adapter-owned launch preflight slice or missing-runtime-file preflight slice
+  or process-run failure-description slice or blank-host launch normalization
+  slice or adapter-contract documentation slice
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete

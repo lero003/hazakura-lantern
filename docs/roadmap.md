@@ -185,6 +185,8 @@ Already done or mostly done:
   breadth
 - adapter-owned launch preflight for `llama-server` executable and model file
   checks before process launch
+- missing selected `llama-server` files are distinguished from existing but
+  non-executable runtime files before process launch
 - fallible adapter-owned endpoint construction that rejects invalid host/port
   values and lets the UI surface the error instead of crashing during endpoint
   display
@@ -444,8 +446,9 @@ Good next slices:
   initial explicit contract, and profile command preview already has a generic
   matching-adapter boundary test; invalid endpoint host/port fallibility and
   launch preflight ownership are covered, blank-host launch normalization is
-  covered, process-run failure descriptions now flow through the adapter
-  boundary, and the first adapter contract documentation slice is covered
+  covered, missing-runtime-file preflight is covered, process-run failure
+  descriptions now flow through the adapter boundary, and the first adapter
+  contract documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only

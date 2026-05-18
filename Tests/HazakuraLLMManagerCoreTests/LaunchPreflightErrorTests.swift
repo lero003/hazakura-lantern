@@ -2,6 +2,13 @@ import XCTest
 @testable import HazakuraLLMManagerCore
 
 final class LaunchPreflightErrorTests: XCTestCase {
+    func testRuntimeFileMissingDescriptionPointsToExistingBinary() {
+        XCTAssertEqual(
+            LaunchPreflightError.runtimeFileMissing("/Users/kei/bin/llama-server").errorDescription,
+            "Runtime executable does not exist. Choose an existing llama-server binary before starting. Current path: /Users/kei/bin/llama-server."
+        )
+    }
+
     func testRuntimeNotExecutableDescriptionPointsToBinaryAndPermissions() {
         XCTAssertEqual(
             LaunchPreflightError.runtimeNotExecutable("/Users/kei/bin/llama-server").errorDescription,
