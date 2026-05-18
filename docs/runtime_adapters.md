@@ -17,6 +17,7 @@ An adapter owns the runtime-shaped parts of the control loop:
 - launch preflight checks that belong to the runtime shape
 - launch command construction as an argument array, not a shell string
 - endpoint display data, including optional health-check and client smoke URLs
+  plus adapter-scoped health-check timeout hints
 - process-run failure wording when macOS refuses to start the command
 
 The app owns the shared Lantern behavior:

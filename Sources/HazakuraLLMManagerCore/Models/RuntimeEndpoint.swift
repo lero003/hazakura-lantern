@@ -3,15 +3,18 @@ import Foundation
 public struct RuntimeEndpoint: Equatable, Sendable {
     public var apiBaseURL: URL
     public var healthCheckURL: URL?
+    public var healthCheckTimeoutSeconds: Int
     public var apiKey: String
 
     public init(
         apiBaseURL: URL,
         healthCheckURL: URL?,
+        healthCheckTimeoutSeconds: Int = 5,
         apiKey: String = "local"
     ) {
         self.apiBaseURL = apiBaseURL
         self.healthCheckURL = healthCheckURL
+        self.healthCheckTimeoutSeconds = healthCheckTimeoutSeconds
         self.apiKey = apiKey
     }
 
@@ -27,7 +30,12 @@ public struct RuntimeEndpoint: Equatable, Sendable {
     }
 
     public var endpointHealthRequest: EndpointHealthRequest? {
-        healthCheckURL.map { EndpointHealthRequest(healthURL: $0.absoluteString) }
+        healthCheckURL.map {
+            EndpointHealthRequest(
+                healthURL: $0.absoluteString,
+                timeoutSeconds: healthCheckTimeoutSeconds
+            )
+        }
     }
 
     public var endpointHealthCurlCommand: String? {

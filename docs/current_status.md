@@ -98,6 +98,9 @@ Implemented scope:
   and AI Mobile smoke commands now flow through an adapter-owned
   `RuntimeEndpoint` contract, with focused tests preserving the `llama-server`
   endpoint/health behavior.
+- Adapter-owned health endpoints can carry an adapter-scoped health-check curl
+  timeout through `RuntimeEndpoint`, with focused tests preserving the default
+  five-second timeout.
 - Runtime adapter validation is now an explicit adapter contract that can be
   tested before command construction, preserving the current `llama-server`
   validation behavior without adding runtime breadth.
@@ -240,7 +243,8 @@ Good next automated candidates:
   validation slice or invalid-IPv4-like host validation slice or
   adapter-contract documentation slice or
   default-adapter POSIX launch-failure display-name slice or
-  profile-runtime-kind adapter id alignment slice
+  profile-runtime-kind adapter id alignment slice or
+  adapter-scoped health-check timeout propagation slice
 - harden restart behavior only if a new stop/start race or ambiguous restart
   state is observed beyond the explicit pending-restart status
 - improve a copy flow, empty state, or setup hint only when there is a concrete

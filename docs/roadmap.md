@@ -202,6 +202,9 @@ Already done or mostly done:
 - adapter-owned endpoint display contract for base URL, environment snippet,
   timeout-bounded health-check curl, and AI Mobile smoke command generation,
   covered by focused tests without adding another runtime adapter
+- adapter-owned health-check timeout propagation through the `RuntimeEndpoint`
+  contract, keeping the default five-second curl timeout while allowing future
+  adapters to narrow it explicitly
 - explicit adapter-owned validation contract that can be tested before command
   construction, preserving `llama-server` validation without adding runtime
   breadth
@@ -491,8 +494,8 @@ Good next slices:
   alignment is covered, URL-delimiter/stray-bracket host validation is covered,
   DNS-label host validation is covered, bracketed-IPv6 bind-all endpoint copy
   behavior is covered, default-adapter POSIX launch-failure display-name
-  behavior is covered, and the first adapter contract documentation slice is
-  covered
+  behavior is covered, adapter-scoped health-check timeout propagation is
+  covered, and the first adapter contract documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains; the timeout-bounded health-check curl slice is
   covered
