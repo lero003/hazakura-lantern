@@ -194,6 +194,8 @@ Already done or mostly done:
 - adapter-owned process-run failure descriptions that preserve the
   `llama-server` recovery hints without hard-wiring default protocol behavior
   to the current adapter
+- adapter contract documentation for responsibilities, lifecycle boundaries,
+  and future adapter no-go lines before runtime breadth is added
 
 Finish before leaving v0:
 
@@ -442,8 +444,8 @@ Good next slices:
   initial explicit contract, and profile command preview already has a generic
   matching-adapter boundary test; invalid endpoint host/port fallibility and
   launch preflight ownership are covered, blank-host launch normalization is
-  covered, and process-run failure descriptions now flow through the adapter
-  boundary
+  covered, process-run failure descriptions now flow through the adapter
+  boundary, and the first adapter contract documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only

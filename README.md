@@ -74,6 +74,7 @@ Project planning and automation docs:
 - `docs/product_brief.md`
 - `docs/troubleshooting.md`
 - `docs/runtime_profiles.md`
+- `docs/runtime_adapters.md`
 
 ## Runtime Contract
 

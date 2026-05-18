@@ -102,6 +102,8 @@ Implemented scope:
 - Runtime process-run failure descriptions now flow through the runtime adapter
   boundary, preserving the current `llama-server` recovery hints while keeping
   the default protocol behavior free of `llama-server` assumptions.
+- Runtime adapter responsibilities and lifecycle boundaries are documented so
+  future adapter work starts with protocol clarity rather than runtime breadth.
 - Runtime profile JSON shape, import failure behavior, and portability
   boundaries are documented with a readable schema-version `1` example.
 - App bundle launch helper at `script/build_and_run.sh`.
@@ -196,7 +198,8 @@ Good next automated candidates:
   profile-preview generic adapter-boundary test without a new ambiguity, and
   do not repeat the invalid endpoint host/port fallibility slice or
   adapter-owned launch preflight slice or process-run failure-description slice
-  or blank-host launch normalization slice
+  or blank-host launch normalization slice or adapter-contract documentation
+  slice
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete
