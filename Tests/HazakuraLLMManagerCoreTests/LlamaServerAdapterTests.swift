@@ -96,6 +96,18 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(try LlamaServerAdapter().endpoint(config: config).apiBaseURLString, "http://192.168.1.12:1234/v1")
     }
 
+    func testBuildCommandUnwrapsBracketedIPv6HostBeforeLaunch() throws {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "[fd00::12]"
+
+        let command = try LlamaServerAdapter().buildLaunchCommand(config: config)
+
+        XCTAssertEqual(command.arguments[3], "fd00::12")
+        XCTAssertEqual(try LlamaServerAdapter().endpoint(config: config).apiBaseURLString, "http://[fd00::12]:1234/v1")
+    }
+
     func testValidateAcceptsSupportedLlamaServerConfigurationWithoutBuildingCommand() throws {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"

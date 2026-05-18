@@ -36,6 +36,8 @@ The `llama-server` adapter:
 - builds a direct `Process` command with `-m`, `--host`, `--port`, and `-c`
 - treats blank or whitespace-only hosts as the default loopback bind host for
   launch
+- unwraps bracketed IPv6 host values before launch while keeping copied
+  endpoint URLs URL-safe
 - keeps copied client URLs reachable through the configured host while local
   health checks use the loopback endpoint
 - validates context size, port, thread count, GPU layer count, additional

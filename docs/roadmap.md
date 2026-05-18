@@ -195,6 +195,8 @@ Already done or mostly done:
 - launch command construction normalizes blank profile host values to the
   default loopback host and trims configured hosts before passing them to
   `llama-server`
+- launch command construction unwraps bracketed IPv6 host values before passing
+  them to `llama-server --host`, while copied endpoint URLs remain URL-safe
 - adapter-owned process-run failure descriptions that preserve the
   `llama-server` recovery hints without hard-wiring default protocol behavior
   to the current adapter

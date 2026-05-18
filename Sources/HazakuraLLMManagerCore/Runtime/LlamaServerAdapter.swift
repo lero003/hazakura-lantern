@@ -122,6 +122,10 @@ public struct LlamaServerAdapter: RuntimeAdapter {
 
     private func launchHost(_ host: String) -> String {
         let trimmedHost = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedHost.hasPrefix("[") && trimmedHost.hasSuffix("]") {
+            return String(trimmedHost.dropFirst().dropLast())
+        }
+
         return trimmedHost.isEmpty ? RuntimeConfiguration.defaultValue.host : trimmedHost
     }
 
