@@ -112,7 +112,22 @@ Observation is not management. Lantern may tell users that a runtime appears
 old, missing, or installed in an unusual way. It should not run installers,
 upgrade runtimes, mutate package managers, or hide where a runtime came from.
 
-## Current Lane: v0 - Make One Runtime Boring
+## Current Source Lane: v0.3 - Adapter Boundary Clarity
+
+The active source-work lane is v0.3. The project has already reached a
+source-only `v0.2.0-alpha.1` checkpoint for local profile portability, while
+the app-bundle launch smoke remains a packaged-release blocker.
+
+Use v0 and v0.1 notes below as foundation and backlog context, not as a reason
+to reopen closed work without a concrete ambiguity. The next useful source
+work should tighten the adapter contract, tests, and docs before any runtime
+breadth is added.
+
+Do not retry the known `kLSNoExecutableErr` app-bundle helper path unless there
+is a fresh Launch Services hypothesis. Carry it as a release risk and continue
+with source work that can be verified through SwiftPM.
+
+## v0 Foundation - Make One Runtime Boring
 
 Stay here until the `llama-server` path is quiet, predictable, and documented.
 The goal is not feature breadth. The goal is a single-runtime control loop that
@@ -208,9 +223,8 @@ Already done or mostly done:
 - adapter contract documentation for responsibilities, lifecycle boundaries,
   and future adapter no-go lines before runtime breadth is added
 
-Finish before leaving v0:
+Remaining before a packaged app release:
 
-- surface missing runtime and missing model paths clearly before launch
 - make restart state explicit enough to avoid stop/start race confusion
 - fix or externally verify the app-bundle launch smoke path
 - keep README, current status, development loop, and roadmap in agreement
