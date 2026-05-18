@@ -11,6 +11,7 @@ The only implemented adapter is `llama-server`.
 An adapter owns the runtime-shaped parts of the control loop:
 
 - a stable adapter id and display name
+- the profile `runtimeKind` value that selects this adapter
 - supported model file types
 - configuration validation before command construction
 - launch preflight checks that belong to the runtime shape

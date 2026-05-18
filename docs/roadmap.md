@@ -175,6 +175,8 @@ Already done or mostly done:
   focused tests before profile UI is added
 - profile command preview through a test-only matching adapter, proving the
   profile preview boundary is not hard-wired to `LlamaServerAdapter`
+- profile `runtimeKind` alignment with the implemented adapter id, covered by a
+  focused test before runtime breadth is added
 - minimal active-profile import/export UI for `.lantern-profile.json` files
   without adding multiple-profile management
 - adapter-owned endpoint display contract for base URL, environment snippet,
@@ -455,8 +457,9 @@ Good next slices:
   launch preflight ownership are covered, blank-host launch normalization is
   covered, missing-runtime-file preflight is covered, process-run failure
   descriptions now flow through the adapter boundary, default adapter
-  preflight/helper behavior is covered, and the first adapter contract
-  documentation slice is covered
+  preflight/helper behavior is covered, profile-runtime-kind adapter id
+  alignment is covered, and the first adapter contract documentation slice is
+  covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only

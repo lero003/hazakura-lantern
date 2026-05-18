@@ -288,6 +288,10 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testSupportedRuntimeKindMatchesLlamaServerAdapterID() {
+        XCTAssertEqual(RuntimeProfileDocument.supportedRuntimeKind, LlamaServerAdapter().id)
+    }
+
     func testProfileDocumentBuildsLaunchCommandThroughMatchingAdapterBoundary() throws {
         let document = RuntimeProfileDocument(
             name: "Custom runtime",

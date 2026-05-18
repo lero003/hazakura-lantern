@@ -80,6 +80,8 @@ Implemented scope:
 - Runtime profile command preview is covered through a test-only matching
   adapter, so the profile preview contract is not pinned to `LlamaServerAdapter`
   before runtime breadth is intentionally added.
+- Runtime profile `runtimeKind` remains pinned to the implemented adapter id,
+  with a focused test guarding the `llama-server` profile/adapter boundary.
 - Active runtime profile documents can be persisted through the configuration
   store; missing or unsupported future profile data falls back to the current
   single-runtime configuration instead of breaking startup, with focused tests.
@@ -213,7 +215,8 @@ Good next automated candidates:
   or default adapter preflight/helper slice or process-run
   failure-description slice or blank-host launch normalization slice or
   bracketed-IPv6 launch-host normalization slice or host-with-port validation
-  slice or adapter-contract documentation slice
+  slice or adapter-contract documentation slice or profile-runtime-kind adapter
+  id alignment slice
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete
