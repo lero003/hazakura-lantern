@@ -6,7 +6,9 @@ final class LaunchProcessFailureMessageTests: XCTestCase {
     func testMissingExecutableMessagePointsBackToRuntimeSelection() {
         let message = LaunchProcessFailureMessage.describe(
             posixError(.ENOENT, description: "No such file or directory"),
-            command: command
+            command: command,
+            runtimeExecutableName: "llama-server binary",
+            fallbackRecoveryHint: llamaServerFallbackHint
         )
 
         XCTAssertEqual(
@@ -18,7 +20,9 @@ final class LaunchProcessFailureMessageTests: XCTestCase {
     func testPermissionDeniedMessagePointsToExecutablePermission() {
         let message = LaunchProcessFailureMessage.describe(
             posixError(.EACCES, description: "Permission denied"),
-            command: command
+            command: command,
+            runtimeExecutableName: "llama-server binary",
+            fallbackRecoveryHint: llamaServerFallbackHint
         )
 
         XCTAssertEqual(
@@ -30,7 +34,9 @@ final class LaunchProcessFailureMessageTests: XCTestCase {
     func testExecutableFormatMessagePointsToMacBinaryMismatch() {
         let message = LaunchProcessFailureMessage.describe(
             posixError(.ENOEXEC, description: "Exec format error"),
-            command: command
+            command: command,
+            runtimeExecutableName: "llama-server binary",
+            fallbackRecoveryHint: llamaServerFallbackHint
         )
 
         XCTAssertEqual(
@@ -46,7 +52,12 @@ final class LaunchProcessFailureMessageTests: XCTestCase {
             userInfo: [NSLocalizedDescriptionKey: "Unexpected launch failure"]
         )
 
-        let message = LaunchProcessFailureMessage.describe(error, command: command)
+        let message = LaunchProcessFailureMessage.describe(
+            error,
+            command: command,
+            runtimeExecutableName: "llama-server binary",
+            fallbackRecoveryHint: llamaServerFallbackHint
+        )
 
         XCTAssertEqual(
             message,
@@ -59,6 +70,10 @@ final class LaunchProcessFailureMessageTests: XCTestCase {
             executablePath: "/Users/kei/bin/llama-server",
             arguments: ["-m", "/Users/kei/Models/qwen.gguf"]
         )
+    }
+
+    private var llamaServerFallbackHint: String {
+        "Check the selected llama-server binary, model, and launch options, then try again."
     }
 
     private func posixError(_ code: POSIXErrorCode, description: String) -> NSError {

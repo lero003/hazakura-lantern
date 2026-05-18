@@ -93,6 +93,15 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         }
     }
 
+    public func describeLaunchProcessFailure(_ error: Error, command: LaunchCommand) -> String {
+        LaunchProcessFailureMessage.describe(
+            error,
+            command: command,
+            runtimeExecutableName: "llama-server binary",
+            fallbackRecoveryHint: "Check the selected llama-server binary, model, and launch options, then try again."
+        )
+    }
+
     private func validateEndpointConfiguration(_ config: RuntimeConfiguration) throws {
         if !(1...65535).contains(config.port) {
             throw RuntimeAdapterError.invalidPort(config.port)

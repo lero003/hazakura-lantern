@@ -155,7 +155,7 @@ final class ServerController: ObservableObject {
             appendLog("Process started with pid \(process.processIdentifier).", stream: .info)
         } catch {
             let message = processRunCommand.map {
-                LaunchProcessFailureMessage.describe(error, command: $0)
+                adapter.describeLaunchProcessFailure(error, command: $0)
             } ?? error.localizedDescription
             status = .error
             lastErrorMessage = message

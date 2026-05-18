@@ -227,6 +227,25 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testLaunchProcessFailureDescriptionIsAdapterOwned() {
+        let error = NSError(
+            domain: NSPOSIXErrorDomain,
+            code: Int(POSIXErrorCode.EACCES.rawValue),
+            userInfo: [NSLocalizedDescriptionKey: "Permission denied"]
+        )
+        let command = LaunchCommand(
+            executablePath: "/Users/kei/bin/llama-server",
+            arguments: ["-m", "/Users/kei/Models/qwen.gguf"]
+        )
+
+        let message = LlamaServerAdapter().describeLaunchProcessFailure(error, command: command)
+
+        XCTAssertEqual(
+            message,
+            "Runtime process could not start because macOS refused permission for /Users/kei/bin/llama-server. Check that the llama-server binary is executable. System error: Permission denied."
+        )
+    }
+
     func testRejectsInvalidPort() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
