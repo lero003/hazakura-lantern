@@ -33,12 +33,11 @@ public struct LlamaServerAdapter: RuntimeAdapter {
         )
     }
 
-    public func healthCheckURL(config: RuntimeConfiguration) -> URL? {
-        URL(string: config.healthCheckURL)
-    }
-
-    public func apiBaseURL(config: RuntimeConfiguration) -> URL {
-        URL(string: config.apiBaseURL)!
+    public func endpoint(config: RuntimeConfiguration) -> RuntimeEndpoint {
+        RuntimeEndpoint(
+            apiBaseURL: URL(string: config.apiBaseURL)!,
+            healthCheckURL: URL(string: config.healthCheckURL)
+        )
     }
 
     private func validate(_ config: RuntimeConfiguration) throws {

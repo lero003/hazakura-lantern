@@ -12,7 +12,7 @@ final class ServerController: ObservableObject {
     @Published private(set) var recentPaths: RecentRuntimePaths
     @Published var configuration: RuntimeConfiguration
 
-    private let adapter: LlamaServerAdapter
+    private let adapter: any RuntimeAdapter
     private let endpointHealthChecker: EndpointHealthChecker
     private let configurationStore: ConfigurationStore
     private let fileManager: FileManager
@@ -23,7 +23,7 @@ final class ServerController: ObservableObject {
     private var logBuffer = LogBuffer(maxEntries: 2_000)
 
     init(
-        adapter: LlamaServerAdapter = LlamaServerAdapter(),
+        adapter: any RuntimeAdapter = LlamaServerAdapter(),
         endpointHealthChecker: EndpointHealthChecker = EndpointHealthChecker(),
         configurationStore: ConfigurationStore = ConfigurationStore(),
         fileManager: FileManager = .default
@@ -60,6 +60,10 @@ final class ServerController: ObservableObject {
 
     var runtimeProfileDocument: RuntimeProfileDocument {
         RuntimeProfileDocument(name: activeProfileName, configuration: configuration)
+    }
+
+    var runtimeEndpoint: RuntimeEndpoint {
+        adapter.endpoint(config: configuration)
     }
 
     func updateConfiguration(_ update: (inout RuntimeConfiguration) -> Void) {
@@ -215,7 +219,7 @@ final class ServerController: ObservableObject {
     }
 
     func checkEndpointHealth() {
-        guard let healthURL = adapter.healthCheckURL(config: configuration) else {
+        guard let healthURL = runtimeEndpoint.healthCheckURL else {
             endpointHealthStatus = .unhealthy(message: "Health check URL is not valid.")
             return
         }

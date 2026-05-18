@@ -6,6 +6,15 @@ public protocol RuntimeAdapter {
     var supportedModelTypes: [String] { get }
 
     func buildLaunchCommand(config: RuntimeConfiguration) throws -> LaunchCommand
-    func healthCheckURL(config: RuntimeConfiguration) -> URL?
-    func apiBaseURL(config: RuntimeConfiguration) -> URL
+    func endpoint(config: RuntimeConfiguration) -> RuntimeEndpoint
+}
+
+public extension RuntimeAdapter {
+    func healthCheckURL(config: RuntimeConfiguration) -> URL? {
+        endpoint(config: config).healthCheckURL
+    }
+
+    func apiBaseURL(config: RuntimeConfiguration) -> URL {
+        endpoint(config: config).apiBaseURL
+    }
 }

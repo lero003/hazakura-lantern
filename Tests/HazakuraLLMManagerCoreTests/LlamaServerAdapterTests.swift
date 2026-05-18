@@ -97,9 +97,31 @@ final class LlamaServerAdapterTests: XCTestCase {
         config.port = 9876
 
         let adapter = LlamaServerAdapter()
+        let endpoint = adapter.endpoint(config: config)
 
         XCTAssertEqual(adapter.apiBaseURL(config: config), URL(string: "http://localhost:9876/v1"))
         XCTAssertEqual(adapter.healthCheckURL(config: config), URL(string: "http://localhost:9876/v1/models"))
+        XCTAssertEqual(endpoint.apiBaseURLString, "http://localhost:9876/v1")
+        XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
+        XCTAssertTrue(endpoint.aiMobileSmokeCurlCommand.contains("http://localhost:9876/v1/chat/completions"))
+    }
+
+    func testEndpointContractKeepsClientReachableHostAndLocalHealthCheckSeparate() {
+        var config = RuntimeConfiguration.defaultValue
+        config.host = "192.168.1.12"
+        config.port = 9876
+
+        let endpoint = LlamaServerAdapter().endpoint(config: config)
+
+        XCTAssertEqual(endpoint.apiBaseURLString, "http://192.168.1.12:9876/v1")
+        XCTAssertEqual(
+            endpoint.environmentSnippet,
+            """
+            OPENAI_BASE_URL=http://192.168.1.12:9876/v1
+            OPENAI_API_KEY=local
+            """
+        )
+        XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS http://localhost:9876/v1/models")
     }
 
     func testRejectsInvalidPort() {

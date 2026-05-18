@@ -175,6 +175,9 @@ Already done or mostly done:
   focused tests before profile UI is added
 - minimal active-profile import/export UI for `.lantern-profile.json` files
   without adding multiple-profile management
+- adapter-owned endpoint display contract for base URL, environment snippet,
+  health-check curl, and AI Mobile smoke command generation, covered by focused
+  tests without adding another runtime adapter
 
 Finish before leaving v0:
 
@@ -410,7 +413,8 @@ Automated development should pick one small slice from the current lane.
 Good next slices:
 
 - improve common launch failure messages without adding installer behavior
-- improve endpoint health status presentation without adding automatic polling
+- tighten adapter-owned validation, lifecycle, or error-mapping boundaries with
+  focused tests before adding runtime breadth
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - document runtime setup expectations without adding installer behavior

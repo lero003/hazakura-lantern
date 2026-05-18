@@ -80,6 +80,9 @@ Implemented scope:
 - The app loads the active runtime profile into the editable configuration and
   provides minimal `.lantern-profile.json` import/export UI for that active
   profile without adding multiple-profile management.
+- Endpoint display, environment snippets, health-check curl, and AI Mobile
+  smoke commands now flow through an adapter-owned `RuntimeEndpoint` contract,
+  with focused tests preserving the `llama-server` endpoint/health behavior.
 - Runtime profile JSON shape, import failure behavior, and portability
   boundaries are documented with a readable schema-version `1` example.
 - App bundle launch helper at `script/build_and_run.sh`.
@@ -170,9 +173,9 @@ Good next automated candidates:
 
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above
-- tighten the adapter boundary when there is a concrete protocol, health,
-  endpoint, or validation case that can be tested without adding runtime
-  breadth
+- tighten the adapter boundary when there is a concrete validation, error
+  mapping, lifecycle, or protocol case that can be tested without adding
+  runtime breadth
 - document runtime setup expectations without adding installer behavior
 - harden restart behavior if stop/start races are observed
 - add profile migration transform tests only after a concrete schema version `2`
