@@ -202,6 +202,10 @@ Do not add another runtime adapter before this is true.
 
 ## v0.1 - Daily-Use Confidence
 
+Status: mostly satisfied for the source-only v0.2 checkpoint. Remaining ideas
+from this lane are not current defaults; use them only when a concrete
+repeated-use ambiguity is observed.
+
 Purpose:
 
 Make the existing one-runtime app pleasant enough for repeated local use.
@@ -210,13 +214,18 @@ Candidate work:
 
 - endpoint health presentation improvements using the existing local health URL
 - clearer launch, crash, and termination states
-- selected runtime version display when adapter-safe
 - lightweight runtime setup guidance for users who do not know how to install a
   server runtime yet
 - copy buttons for command, base URL, and environment snippet
-- small UI polish for repeated local use
+- small UI polish for repeated local use when a specific ambiguity is visible
 - clearer empty states for missing runtime/model paths
 - a compact troubleshooting section in docs
+
+Deferred from this lane:
+
+- endpoint health auto-polling
+- selected runtime version display unless a later adapter contract defines a
+  safe, advisory, timeout-bounded check
 
 Keep this lane local-only. Do not add LAN exposure, authentication, automatic
 background restart policy, runtime installers, or automatic runtime updates
@@ -412,19 +421,25 @@ Automated development should pick one small slice from the current lane.
 
 Good next slices:
 
-- improve common launch failure messages without adding installer behavior
 - tighten adapter-owned validation, lifecycle, or error-mapping boundaries with
   focused tests before adding runtime breadth
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
-- document runtime setup expectations without adding installer behavior
-- harden restart behavior with a testable state transition
-- document launch smoke expectations
+- improve common launch failure messages, empty states, or setup hints only
+  when a specific ambiguity is visible, without adding installer behavior
+- harden restart behavior only with an observed ambiguity and a testable state
+  transition
+- document launch smoke expectations only when there is a fresh verification
+  hypothesis or new evidence
 - update current status after implementation changes
 
 Rules for automated work:
 
 - do not add a new adapter unless the current lane explicitly allows it
+- do not add endpoint auto-polling before manual health and adapter health
+  boundaries are intentionally revisited
+- do not add multiple-profile management while the source-only checkpoint only
+  promises active-profile import/export
 - do not add model download or install flows
 - do not turn advisory runtime update status into automatic update execution
 - do not hide command construction

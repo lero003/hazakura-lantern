@@ -37,6 +37,12 @@ making future adapter boundaries smaller and easier to test:
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
 
+Recent review feedback that suggests endpoint auto-polling, runtime version
+display, multiple-profile management, or broad UI polish should be treated as
+future backlog unless it can be narrowed to one testable adapter-boundary,
+restart-state, copy-flow, empty-state, or setup-hint ambiguity. Prefer dropping
+the suggestion over reopening a closed lane.
+
 The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
 human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
 previous lane is sufficiently closed. Do not keep re-running the same launch

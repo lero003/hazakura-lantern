@@ -171,15 +171,18 @@ another runtime adapter.
 
 Good next automated candidates:
 
-- diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
-  app bundle only if there is a fresh hypothesis beyond the attempts above
 - tighten the adapter boundary when there is a concrete validation, error
   mapping, lifecycle, or protocol case that can be tested without adding
   runtime breadth
-- document runtime setup expectations without adding installer behavior
-- harden restart behavior if stop/start races are observed
+- harden restart behavior only if a stop/start race or ambiguous restart state
+  is observed
+- improve a copy flow, empty state, or setup hint only when there is a concrete
+  repeated-use ambiguity; keep the slice local and small
+- diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
+  app bundle only if there is a fresh hypothesis beyond the attempts above
 - add profile migration transform tests only after a concrete schema version `2`
   shape exists
 
-Do not begin adapter expansion, model management, or chat features during this
+Do not begin endpoint auto-polling, runtime version checks, multiple-profile
+management, adapter expansion, model management, or chat features during this
 handoff.

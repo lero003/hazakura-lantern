@@ -32,6 +32,7 @@ Hazakura Lantern now has source-only prerelease checkpoints and recurring automa
 ## Expected Behavior
 
 - Future runs use Nenrin for release/automation/scope judgment evidence, keep v0.2.0-alpha.1 as a source-only profile checkpoint, treat Launch Services as a packaged-app release blocker, and skip records for ordinary implementation logs.
+- Future review feedback is pruned against the current lane: keep adapter-boundary, observed restart-state, copy-flow, empty-state, and setup-hint slices; defer endpoint auto-polling, runtime version display, and multiple-profile management unless a later lane explicitly reopens them.
 
 ## Review After
 
@@ -46,6 +47,8 @@ Hazakura Lantern now has source-only prerelease checkpoints and recurring automa
   artifact or release claim.
 - Launch Services remains a packaged-app release blocker but does not block
   source-only adapter-boundary work.
+- External review suggestions that would reopen v0.1 or v0.2 breadth are either
+  narrowed to one testable current-lane slice or dropped.
 - Ordinary implementation work reports Nenrin no-op instead of creating log
   records.
 
