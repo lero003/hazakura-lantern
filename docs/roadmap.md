@@ -166,6 +166,8 @@ Already done or mostly done:
 - focused tests for missing runtime/model paths and invalid context size
 - focused tests for launch configuration error descriptions
 - focused tests for file-preflight launch failure descriptions
+- focused tests for rejecting runtime/model directory selections during launch
+  preflight
 - focused tests for process-run launch failure descriptions
 - real-model-free fake runtime smoke test for adapter-built launch commands
 - initial v0.2 runtime profile document schema version contract
@@ -476,7 +478,8 @@ Good next slices:
   initial explicit contract, and profile command preview already has a generic
   matching-adapter boundary test; invalid endpoint host/port fallibility and
   launch preflight ownership are covered, blank-host launch normalization is
-  covered, missing-runtime-file preflight is covered, process-run failure
+  covered, missing-runtime-file preflight and runtime/model directory preflight
+  are covered, process-run failure
   descriptions now flow through the adapter boundary, default adapter
   preflight/helper behavior is covered, profile-runtime-kind adapter id
   alignment is covered, URL-delimiter/stray-bracket host validation is covered,

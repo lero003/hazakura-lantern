@@ -218,6 +218,24 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testValidateLaunchPreconditionsRejectsRuntimeDirectoryBeforeProcessRun() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("qwen.gguf")
+        try FileManager.default.createDirectory(at: runtime, withIntermediateDirectories: true)
+        FileManager.default.createFile(atPath: model.path, contents: Data())
+
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = runtime.path
+        config.modelPath = model.path
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validateLaunchPreconditions(config: config, fileManager: .default)) { error in
+            XCTAssertEqual(error as? LaunchPreflightError, .runtimePathIsDirectory(runtime.path))
+        }
+    }
+
     func testValidateLaunchPreconditionsRejectsMissingModelBeforeProcessRun() throws {
         let workspace = try makeWorkspace()
         defer { try? FileManager.default.removeItem(at: workspace) }
@@ -232,6 +250,24 @@ final class LlamaServerAdapterTests: XCTestCase {
 
         XCTAssertThrowsError(try LlamaServerAdapter().validateLaunchPreconditions(config: config, fileManager: .default)) { error in
             XCTAssertEqual(error as? LaunchPreflightError, .modelFileMissing(model.path))
+        }
+    }
+
+    func testValidateLaunchPreconditionsRejectsModelDirectoryBeforeProcessRun() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("qwen.gguf")
+        try makeExecutableFile(at: runtime)
+        try FileManager.default.createDirectory(at: model, withIntermediateDirectories: true)
+
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = runtime.path
+        config.modelPath = model.path
+
+        XCTAssertThrowsError(try LlamaServerAdapter().validateLaunchPreconditions(config: config, fileManager: .default)) { error in
+            XCTAssertEqual(error as? LaunchPreflightError, .modelPathIsDirectory(model.path))
         }
     }
 

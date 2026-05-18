@@ -46,6 +46,9 @@ Implemented scope:
 - Runtime file preflight now distinguishes a missing selected `llama-server`
   binary from an existing but non-executable file before process launch, with
   focused tests.
+- Runtime/model file preflight now rejects directory selections before process
+  launch, so a folder named like a binary or `.gguf` model does not fall
+  through to a later runtime failure.
 - Process-run launch failures now preserve the system error while pointing to
   the selected `llama-server` binary, permissions, or Mac binary mismatch, with
   focused tests for the descriptions.
@@ -222,6 +225,7 @@ Good next automated candidates:
   profile-preview generic adapter-boundary test without a new ambiguity, and
   do not repeat the invalid endpoint host/port fallibility slice or
   adapter-owned launch preflight slice or missing-runtime-file preflight slice
+  or runtime/model directory preflight slice
   or default adapter preflight/helper slice or process-run
   failure-description slice or blank-host launch normalization slice or
   bracketed-IPv6 launch-host normalization slice or host-with-port validation
