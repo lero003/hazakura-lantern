@@ -288,6 +288,28 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testProfileDocumentBuildsLaunchCommandThroughMatchingAdapterBoundary() throws {
+        let document = RuntimeProfileDocument(
+            name: "Custom runtime",
+            runtimeKind: "custom-command",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: "/usr/local/bin/custom-runtime",
+                modelPath: "/models/custom.runtime",
+                host: "127.0.0.1",
+                port: 7777,
+                contextSize: 4096,
+                threads: "auto",
+                gpuLayers: "auto",
+                additionalArguments: "--serve"
+            )
+        )
+
+        let command = try document.launchCommand(using: CustomCommandAdapter())
+
+        XCTAssertEqual(command.executablePath, "/usr/local/bin/custom-runtime")
+        XCTAssertEqual(command.arguments, ["--serve", "--port", "7777"])
+    }
+
     func testProfileDocumentRejectsLaunchCommandPreviewWithMismatchedAdapter() {
         let document = RuntimeProfileDocument(
             name: "Other runtime",
@@ -557,5 +579,27 @@ final class RuntimeProfileDocumentTests: XCTestCase {
                 .unsupportedRuntimeKind("ollama", supportedRuntimeKind: "llama-server")
             )
         }
+    }
+}
+
+private struct CustomCommandAdapter: RuntimeAdapter {
+    let id = "custom-command"
+    let displayName = "Custom command"
+    let supportedModelTypes: [String] = []
+
+    func validate(config: RuntimeConfiguration) throws {}
+
+    func buildLaunchCommand(config: RuntimeConfiguration) throws -> LaunchCommand {
+        LaunchCommand(
+            executablePath: config.runtimeExecutablePath,
+            arguments: ["--serve", "--port", String(config.port)]
+        )
+    }
+
+    func endpoint(config: RuntimeConfiguration) -> RuntimeEndpoint {
+        RuntimeEndpoint(
+            apiBaseURL: URL(string: "http://localhost:\(config.port)/v1")!,
+            healthCheckURL: nil
+        )
     }
 }

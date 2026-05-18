@@ -74,6 +74,9 @@ Implemented scope:
 - Runtime profile documents can build an adapter-scoped launch command preview
   without applying the profile as active configuration, with focused mismatch
   tests.
+- Runtime profile command preview is covered through a test-only matching
+  adapter, so the profile preview contract is not pinned to `LlamaServerAdapter`
+  before runtime breadth is intentionally added.
 - Active runtime profile documents can be persisted through the configuration
   store; missing or unsupported future profile data falls back to the current
   single-runtime configuration instead of breaking startup, with focused tests.
@@ -175,9 +178,9 @@ another runtime adapter.
 Good next automated candidates:
 
 - tighten the adapter boundary when there is a concrete validation, error
-  mapping, lifecycle, or protocol case that can be tested without adding
-  runtime breadth; do not repeat the initial explicit validation-contract slice
-  without a new ambiguity
+  mapping or lifecycle case that can be tested without adding runtime breadth;
+  do not repeat the initial explicit validation-contract slice or the
+  profile-preview generic adapter-boundary test without a new ambiguity
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete

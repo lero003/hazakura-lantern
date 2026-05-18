@@ -173,6 +173,8 @@ Already done or mostly done:
   covered by focused tests before portability warnings or file UI are added
 - profile-level launch command preview through the matching adapter, covered by
   focused tests before profile UI is added
+- profile command preview through a test-only matching adapter, proving the
+  profile preview boundary is not hard-wired to `LlamaServerAdapter`
 - minimal active-profile import/export UI for `.lantern-profile.json` files
   without adding multiple-profile management
 - adapter-owned endpoint display contract for base URL, environment snippet,
@@ -426,7 +428,8 @@ Good next slices:
 
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
   focused tests before adding runtime breadth; validation already has an
-  initial explicit contract
+  initial explicit contract, and profile command preview already has a generic
+  matching-adapter boundary test
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only
