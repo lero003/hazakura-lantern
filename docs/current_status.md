@@ -132,6 +132,9 @@ Implemented scope:
 - Runtime process-run failure descriptions now flow through the runtime adapter
   boundary, preserving the current `llama-server` recovery hints while keeping
   the default protocol behavior free of `llama-server` assumptions.
+- Default runtime adapter launch-failure descriptions use the adapter display
+  name for common POSIX failures, with focused tests proving the protocol
+  fallback does not drift back to `llama-server` wording.
 - Runtime adapter responsibilities and lifecycle boundaries are documented so
   future adapter work starts with protocol clarity rather than runtime breadth.
 - Runtime profile JSON shape, import failure behavior, and portability
@@ -236,6 +239,7 @@ Good next automated candidates:
   URL-delimiter/stray-bracket host validation slice or DNS-label host
   validation slice or invalid-IPv4-like host validation slice or
   adapter-contract documentation slice or
+  default-adapter POSIX launch-failure display-name slice or
   profile-runtime-kind adapter id alignment slice
 - harden restart behavior only if a new stop/start race or ambiguous restart
   state is observed beyond the explicit pending-restart status

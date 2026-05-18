@@ -233,6 +233,9 @@ Already done or mostly done:
 - adapter-owned process-run failure descriptions that preserve the
   `llama-server` recovery hints without hard-wiring default protocol behavior
   to the current adapter
+- default adapter launch-failure descriptions use the adapter display name for
+  common POSIX failures, covered by focused tests before runtime breadth is
+  added
 - adapter contract documentation for responsibilities, lifecycle boundaries,
   and future adapter no-go lines before runtime breadth is added
 
@@ -487,6 +490,7 @@ Good next slices:
   preflight/helper behavior is covered, profile-runtime-kind adapter id
   alignment is covered, URL-delimiter/stray-bracket host validation is covered,
   DNS-label host validation is covered, bracketed-IPv6 bind-all endpoint copy
+  behavior is covered, default-adapter POSIX launch-failure display-name
   behavior is covered, and the first adapter contract documentation slice is
   covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
