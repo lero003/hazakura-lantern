@@ -183,6 +183,8 @@ Already done or mostly done:
 - explicit adapter-owned validation contract that can be tested before command
   construction, preserving `llama-server` validation without adding runtime
   breadth
+- adapter protocol default preflight and endpoint URL helpers covered with a
+  minimal adapter test before runtime breadth is added
 - adapter-owned launch preflight for `llama-server` executable and model file
   checks before process launch
 - missing selected `llama-server` files are distinguished from existing but
@@ -447,8 +449,9 @@ Good next slices:
   matching-adapter boundary test; invalid endpoint host/port fallibility and
   launch preflight ownership are covered, blank-host launch normalization is
   covered, missing-runtime-file preflight is covered, process-run failure
-  descriptions now flow through the adapter boundary, and the first adapter
-  contract documentation slice is covered
+  descriptions now flow through the adapter boundary, default adapter
+  preflight/helper behavior is covered, and the first adapter contract
+  documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains
 - improve common launch failure messages, empty states, or setup hints only

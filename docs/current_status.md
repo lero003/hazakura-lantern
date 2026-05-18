@@ -92,6 +92,9 @@ Implemented scope:
 - Runtime adapter validation is now an explicit adapter contract that can be
   tested before command construction, preserving the current `llama-server`
   validation behavior without adding runtime breadth.
+- Runtime adapter default preflight and endpoint URL helpers are covered with a
+  minimal adapter test, so future adapters can inherit the protocol defaults
+  without `llama-server` assumptions.
 - `llama-server` launch preflight is owned by the adapter boundary: executable
   and model file checks are tested before process launch while preserving the
   existing UI controller behavior.
@@ -201,8 +204,9 @@ Good next automated candidates:
   profile-preview generic adapter-boundary test without a new ambiguity, and
   do not repeat the invalid endpoint host/port fallibility slice or
   adapter-owned launch preflight slice or missing-runtime-file preflight slice
-  or process-run failure-description slice or blank-host launch normalization
-  slice or adapter-contract documentation slice
+  or default adapter preflight/helper slice or process-run
+  failure-description slice or blank-host launch normalization slice or
+  adapter-contract documentation slice
 - harden restart behavior only if a stop/start race or ambiguous restart state
   is observed
 - improve a copy flow, empty state, or setup hint only when there is a concrete
