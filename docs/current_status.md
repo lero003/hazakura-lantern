@@ -22,6 +22,8 @@ Implemented scope:
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
 - Restart requests now show an explicit `Restarting` state while Lantern waits
   for the current process to terminate before starting the next one.
+- Runtime termination logs and error text distinguish normal exit codes from
+  signal-based termination.
 - Bounded in-memory log buffering with clear-log behavior covered by focused
   core tests.
 - Basic runtime/model path preflight before launching.

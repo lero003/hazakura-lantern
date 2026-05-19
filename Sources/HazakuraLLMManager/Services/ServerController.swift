@@ -299,14 +299,18 @@ final class ServerController: ObservableObject {
         processIdentifier = nil
 
         let exitCode = terminatedProcess.terminationStatus
-        appendLog("Process exited with code \(exitCode).", stream: .info)
+        let terminationMessage = ProcessTerminationMessage.describe(
+            status: exitCode,
+            reason: terminatedProcess.terminationReason
+        )
+        appendLog(terminationMessage, stream: .info)
         endpointHealthStatus = .unchecked
 
         if status == .stopping || status == .restarting || exitCode == 0 {
             status = .stopped
         } else {
             status = .error
-            lastErrorMessage = "Process exited with code \(exitCode)."
+            lastErrorMessage = terminationMessage
         }
 
         if isRestartPending {

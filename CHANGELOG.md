@@ -16,6 +16,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Clarified runtime termination logs and error text so signal-based termination
+  is no longer described as a normal exit code.
 - Clarified imported profile portability warnings when a saved runtime
   executable path points to a directory instead of a `llama-server` binary.
 - Clarified manual endpoint health-check wording for non-success HTTP responses

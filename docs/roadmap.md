@@ -143,6 +143,8 @@ Already done or mostly done:
 - start, stop, restart, PID, status, and in-memory logs
 - explicit `Restarting` status while a requested restart waits for the current
   process to terminate before the next launch
+- runtime termination logs and error text distinguish normal exit codes from
+  signal-based termination
 - local endpoint and OpenAI-style environment snippet
 - blank runtime or model selections show a setup hint before start
 - copied endpoint/client URLs keep local defaults copyable while reflecting a
