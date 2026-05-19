@@ -56,6 +56,9 @@ v0.4 reliability slice is visible.
   management unless a later lane and human handoff explicitly reopen them.
 - Future automation checks both v0.4 `llama-server` reliability and v0.5
   post-public triage/docs candidates before declaring verified no-op.
+- Future automation may propose issue labels and draft responses locally, but
+  does not apply labels, post replies, close issues, or otherwise mutate public
+  issue state without explicit human approval.
 
 ## Review After
 
@@ -73,6 +76,9 @@ v0.4 reliability slice is visible.
   v0.4 automation primarily improves `llama-server` reliability.
 - If v0.4 is quiet, automation continues into v0.5 issue triage and
   automation-discipline docs instead of stopping early.
+- v0.5 triage handoffs use the local label vocabulary and draft-response
+  shapes in `docs/post_public_operations.md` without promising feature support
+  or mutating public issues.
 - Public-opening or release actions stay human-gated for GitHub visibility,
   settings, branch protection, tags, releases, release assets, public issue
   mutation, packaged artifacts, and binary distribution claims.

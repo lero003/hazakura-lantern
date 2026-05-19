@@ -173,6 +173,8 @@ Implemented scope:
   and source-only alpha release boundaries.
 - Post-public operations guidance for issue triage, automation-safe work,
   human approval gates, and packaged-release separation.
+- Post-public triage guidance now includes local label proposals and safe draft
+  response shapes that automation can prepare without mutating public issues.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, copied endpoint host behavior, bounded log
@@ -283,8 +285,8 @@ Good next automated candidates:
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
   docs confusion, or current-lane daily-use ambiguity
-- tighten v0.5 issue-triage docs, label proposals, or draft-response guidance
-  when no safe v0.4 reliability slice is visible
+- tighten v0.5 issue-triage docs only when the taxonomy, label proposals, or
+  draft-response guidance miss a concrete public-feedback case
 - tighten the adapter boundary when there is a concrete validation, error
   mapping or lifecycle case that can be tested without adding runtime breadth;
   do not repeat the initial explicit validation-contract slice or the

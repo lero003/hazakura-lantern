@@ -64,6 +64,71 @@ Verification:
 Confidence:
 ```
 
+## Label Proposals
+
+Automation may propose labels in local notes or handoff text, but must not apply
+labels to public GitHub issues without explicit human approval.
+
+Use this small label vocabulary unless the repository owner creates a different
+public label set:
+
+- `area:source-build` for A. source-build blockers.
+- `area:llama-server` for B. launch, configuration, endpoint, health, logs, or
+  copied snippet issues in the existing runtime path.
+- `area:profile` for C. active profile import/export, schema, portability,
+  preview, or persistence issues.
+- `area:docs` for D. docs or setup-guidance confusion.
+- `area:packaging` for E. app-bundle, release asset, signing, notarization, or
+  installer expectation issues.
+- `type:runtime-breadth-request` for F. second-runtime, custom command,
+  runtime catalog, version-check, or endpoint-polling requests.
+- `type:out-of-scope` for G. requests outside Lantern's current boundary.
+- `security-sensitive` for H. reports involving secrets, credentials, private
+  paths, network exposure, authentication, supply chain, or host privacy.
+
+Prefer one area label plus one type label only when both add signal. For
+example, an MLX adapter request can be only `type:runtime-breadth-request`,
+while a packaged `.app` launch failure can be only `area:packaging`.
+
+## Draft Response Shape
+
+Automation may prepare draft responses without posting them. Keep drafts short,
+avoid promising feature support, and include the approval boundary when the next
+public action requires a human.
+
+For source or `llama-server` bugs:
+
+```text
+Thanks for the report. I would classify this as <classification>.
+The next local step is <small verification or focused fix>.
+Human approval is <needed/not needed> before any public issue mutation.
+```
+
+For packaged-app or release-asset blockers:
+
+```text
+Thanks for the report. Lantern is currently a source-only alpha, so this is a
+packaged-release blocker rather than a source-build blocker.
+The current safe path is SwiftPM verification while the app-bundle launch path
+is investigated separately.
+```
+
+For runtime-breadth or out-of-scope requests:
+
+```text
+Thanks for the suggestion. This is outside the current source lane.
+Lantern is staying focused on the existing `llama-server` path before new
+runtimes, chat, model management, proxy behavior, LAN exposure, or installers.
+```
+
+For security-sensitive reports:
+
+```text
+Thanks for flagging this. Please avoid posting secrets, tokens, private paths,
+or sensitive host details publicly. This should be handled as a human-reviewed
+security-sensitive report before any public reply or label change.
+```
+
 ## Automation-Safe Work
 
 Automation may do one small, verifiable slice per run:

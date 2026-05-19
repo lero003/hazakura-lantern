@@ -9,6 +9,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added post-public operations guidance for issue triage, automation-safe work,
   human approval gates, and packaged-release separation after the repository
   became public.
+- Added post-public label proposals and draft response shapes that automation
+  can prepare without mutating public GitHub issues.
 
 ### Changed
 

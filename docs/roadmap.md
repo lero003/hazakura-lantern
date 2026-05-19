@@ -462,6 +462,7 @@ Candidate work:
 - distinguish source-build blockers from packaged-release blockers
 - distinguish runtime bugs from Lantern bugs
 - document out-of-scope response rules
+- propose labels without mutating public issue state
 - define when automation may act and when human approval is required
 - prepare draft responses without mutating public issues automatically
 
@@ -623,7 +624,8 @@ Good next slices:
   `llama-server` behavior only when the classification identifies a safe local
   slice
 - tighten post-public issue categories, label proposals, or draft-response
-  guidance when v0.4 is quiet and v0.5 is the next safe source-only step
+  guidance only when a concrete public-feedback case is not covered by the
+  current operations guide
 - keep endpoint auto-polling deferred unless a later slice intentionally
   revisits adapter-owned health lifecycle and proves the polling policy can
   remain local, timeout-bounded, and non-surprising
