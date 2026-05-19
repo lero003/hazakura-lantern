@@ -40,10 +40,10 @@ The core profile contract can list the local file references a profile depends
 on: the runtime executable and model file paths, when present. File-based UI can
 use that list for portability warnings without installing runtimes or copying
 model data into the profile. Imported profiles surface advisory local warnings
-when referenced files are missing, when the runtime path is not executable, when
-the model path is a directory, or when the model path is not a `.gguf` file.
-Those warnings point the user toward rebinding local paths before launch; they
-do not copy, download, or auto-fix runtime files.
+when referenced files are missing, when the runtime path is a directory or not
+executable, when the model path is a directory, or when the model path is not a
+`.gguf` file. Those warnings point the user toward rebinding local paths before
+launch; they do not copy, download, or auto-fix runtime files.
 
 Profile documents can build a launch command through the matching runtime
 adapter. This lets future profile UI show the command preview for a profile

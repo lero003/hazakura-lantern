@@ -85,9 +85,9 @@ Implemented scope:
   references for future portability warnings without checking or copying local
   files, with focused tests.
 - Runtime profile imports now surface local advisory portability warnings for
-  missing runtime/model file references, non-executable runtime paths, model
-  directories, and non-`.gguf` model paths without copying or auto-fixing local
-  files.
+  missing runtime/model file references, runtime executable directories,
+  non-executable runtime paths, model directories, and non-`.gguf` model paths
+  without copying or auto-fixing local files.
 - Runtime profile documents can build an adapter-scoped launch command preview
   without applying the profile as active configuration, with focused mismatch
   tests.

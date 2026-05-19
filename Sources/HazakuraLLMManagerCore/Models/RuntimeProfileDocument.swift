@@ -31,6 +31,7 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
 
     public enum PortabilityWarning: Error, Equatable, LocalizedError, Sendable {
         case runtimeExecutableMissing(String)
+        case runtimeExecutableIsDirectory(String)
         case runtimeExecutableNotExecutable(String)
         case modelFileMissing(String)
         case modelPathIsDirectory(String)
@@ -40,6 +41,8 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
             switch self {
             case .runtimeExecutableMissing(let path):
                 return "Runtime executable is missing. Rebind it before starting. Current path: \(path)."
+            case .runtimeExecutableIsDirectory(let path):
+                return "Runtime executable path is a directory. Choose the llama-server binary file before starting. Current path: \(path)."
             case .runtimeExecutableNotExecutable(let path):
                 return "Runtime executable is not executable. Choose an executable Mac binary before starting. Current path: \(path)."
             case .modelFileMissing(let path):
@@ -150,8 +153,11 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
                     return .runtimeExecutableMissing(reference.path)
                 }
 
-                guard !isDirectory.boolValue,
-                      fileManager.isExecutableFile(atPath: reference.path) else {
+                guard !isDirectory.boolValue else {
+                    return .runtimeExecutableIsDirectory(reference.path)
+                }
+
+                guard fileManager.isExecutableFile(atPath: reference.path) else {
                     return .runtimeExecutableNotExecutable(reference.path)
                 }
 

@@ -350,6 +350,39 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         )
     }
 
+    func testProfileDocumentPortabilityWarningsReportRuntimeDirectory() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("hazakura.gguf")
+        try FileManager.default.createDirectory(at: runtime, withIntermediateDirectories: true)
+        FileManager.default.createFile(atPath: model.path, contents: Data())
+
+        let document = RuntimeProfileDocument(
+            name: "Directory runtime",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: runtime.path,
+                modelPath: model.path,
+                host: "127.0.0.1",
+                port: 1234,
+                contextSize: 4096,
+                threads: "auto",
+                gpuLayers: "auto",
+                additionalArguments: ""
+            )
+        )
+
+        XCTAssertEqual(
+            document.localPortabilityWarnings(),
+            [.runtimeExecutableIsDirectory(runtime.path)]
+        )
+        XCTAssertEqual(
+            RuntimeProfileDocument.PortabilityWarning.runtimeExecutableIsDirectory(runtime.path).localizedDescription,
+            "Runtime executable path is a directory. Choose the llama-server binary file before starting. Current path: \(runtime.path)."
+        )
+    }
+
     func testProfileDocumentPortabilityWarningsReportModelDirectory() throws {
         let workspace = try makeWorkspace()
         defer { try? FileManager.default.removeItem(at: workspace) }

@@ -16,6 +16,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Clarified imported profile portability warnings when a saved runtime
+  executable path points to a directory instead of a `llama-server` binary.
 - Clarified manual endpoint health-check wording for non-success HTTP responses
   so users can verify model load completion or inspect runtime logs.
 - Re-aligned the roadmap so v0.4 focuses on `llama-server` reliability,
