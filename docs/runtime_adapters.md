@@ -84,6 +84,22 @@ The `llama-server` adapter:
 - validates context size, port, thread count, GPU layer count, additional
   arguments, and endpoint host shape before launch
 - maps process-run failures to `llama-server`-specific recovery hints
+- may later expose adapter-scoped advisory capability checks, such as parsing a
+  timeout-bounded `llama-server --help` or `--version` result, but those checks
+  must not install, upgrade, or mutate the runtime
+
+## Option Compatibility
+
+`llama.cpp` changes quickly, so Lantern should treat new `llama-server`
+features as capability-shaped guidance rather than permanent assumptions. For
+example, speculative decoding options such as `--spec-type draft-mtp` and
+`--spec-draft-n-max` should be suggested only when the selected runtime appears
+to support them and the selected model or preset is marked as MTP-capable.
+
+Unsupported or unknown options should remain visible as user-editable launch
+arguments. Lantern may warn that a preset depends on runtime support, but it
+should not silently drop arguments, rewrite a user's command, or download a
+newer runtime to make a preset work.
 
 ## Boundary For Future Adapters
 
@@ -98,3 +114,8 @@ that difference behind the existing command-based adapter shape.
 Adapters may observe runtime facts only when the check is timeout-bounded,
 adapter-scoped, and advisory. They must not install, upgrade, download, expose
 LAN access, add authentication, or mutate package managers.
+
+Guarded runtime update workflows belong above the adapter contract. An adapter
+may provide capability facts for planning, but update execution must stay
+source-scoped, visible to the user, and explicitly confirmed before any real
+mutation.

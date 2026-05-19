@@ -15,6 +15,9 @@ related_files:
   - docs/post_public_operations.md
   - docs/public_opening_preflight.md
   - docs/runtime_adapters.md
+  - docs/runtime_profiles.md
+  - docs/llama_server_presets.md
+  - docs/toolbar_and_navigation.md
   - CHANGELOG.md
   - .github/workflows/ci.yml
   - nenrin/README.md
@@ -31,31 +34,53 @@ review_after:
   handoff guidance, `llama-server` reliability guidance, post-public
   stewardship guidance, troubleshooting checks, and a repo-local Nenrin ledger
   for durable agent-facing workflow decisions.
+- Advanced the source-only checkpoint framing to `v0.5.0-alpha.1`, making
+  post-public issue triage and automation discipline the current default lane
+  while leaving packaged app release work blocked by Launch Services smoke.
+- Reframed v0.6 and v0.7 to stay on the existing `llama-server` adapter:
+  model-family presets, option compatibility, and read-only runtime capability
+  advisories now come before MLX design or implementation.
+- Restored v0.8 as toolbar/navigation work for existing actions, placed v0.9
+  on non-mutating `llama-server` update readiness, and reserved v1.0 for a
+  guarded, user-confirmed `llama-server` update workflow.
 
 ## Reason
 
 Hazakura Lantern now has source-only prerelease checkpoints and recurring
-automation that should close v0.3 only when a concrete adapter ambiguity
-remains, then move to v0.4 `llama-server` reliability without drifting into
-packaged app release work, chat, model download, proxy, LAN/auth, updater,
-custom command profiles, Ollama, or adapter breadth.
-The user has approved continuing through v0.5 automatically when no concrete
-v0.4 reliability slice is visible.
+automation that should treat v0.3 adapter-boundary and v0.4 `llama-server`
+reliability as prior lanes unless a concrete ambiguity or regression is visible.
+The current default lane is v0.5 post-public issue triage and automation
+discipline. Automation may continue through v0.8 without another human prompt
+only while staying on the existing `llama-server` adapter: v0.6 for
+command-visible model-family presets and option compatibility, v0.7 for
+read-only runtime capability advisories, and v0.8 for toolbar/navigation actions
+that mirror existing behavior. Automation may also prepare v0.9 update
+readiness while it remains advisory and non-mutating. It must not drift into
+packaged app release work, chat, model download, proxy, LAN/auth, unattended
+updates, custom command profiles, Ollama, MLX implementation, or adapter
+breadth.
 
 ## Expected Behavior
 
 - Future runs use Nenrin for release/automation/scope judgment evidence, keep
-  `v0.3.0-alpha.1` as a public source-only checkpoint, treat Launch Services
+  `v0.5.0-alpha.1` as a public source-only checkpoint, treat Launch Services
   as a packaged-app release blocker, and skip records for ordinary
   implementation logs.
 - Future review feedback is pruned against the current lane: keep concrete
-  adapter-boundary, `llama-server` launch/configuration, observed restart-state,
-  copy-flow, health-wording, empty-state, setup-hint, profile-warning, and
-  post-public docs hygiene slices; defer endpoint auto-polling, runtime version
-  checks, custom command implementation, new adapters, and multiple-profile
-  management unless a later lane and human handoff explicitly reopen them.
-- Future automation checks both v0.4 `llama-server` reliability and v0.5
-  post-public triage/docs candidates before declaring verified no-op.
+  v0.5 public-feedback classification, automation-safe triage, docs hygiene,
+  and explicitly named `llama-server` launch/configuration, observed
+  restart-state, copy-flow, health-wording, empty-state, setup-hint, or
+  profile-warning slices; keep v0.6/v0.7 work on presets and read-only runtime
+  capability checks; keep v0.8 toolbar/navigation work limited to existing
+  actions; keep v0.9 update-readiness work advisory and non-mutating; defer
+  endpoint auto-polling, unattended runtime installation/update, model download,
+  automatic benchmarking, custom command implementation, new adapters, and
+  multiple-profile management unless a later lane and human handoff explicitly
+  reopen them.
+- Future automation checks v0.5 post-public triage/docs candidates, v0.6
+  preset candidates, v0.7 runtime-advisory candidates, v0.8 toolbar candidates,
+  non-mutating v0.9 update-readiness candidates, and any concrete v0.4
+  reliability signal before declaring verified no-op.
 - Future automation may propose issue labels and draft responses locally, but
   does not apply labels, post replies, close issues, or otherwise mutate public
   issue state without explicit human approval.
@@ -69,13 +94,22 @@ v0.4 reliability slice is visible.
 
 - Future automation runs `nenrin brief` before release, lane-handoff, or
   recurring workflow decisions where prior judgment could change the next step.
-- `v0.3.0-alpha.1` remains framed as source-only, with no packaged `.app`
+- `v0.5.0-alpha.1` remains framed as source-only, with no packaged `.app`
   artifact or release claim.
 - Post-public stewardship classifies public feedback before implementation and
-  keeps public-opening preflight as a historical/release-handoff checklist, but
-  v0.4 automation primarily improves `llama-server` reliability.
-- If v0.4 is quiet, automation continues into v0.5 issue triage and
-  automation-discipline docs instead of stopping early.
+  keeps public-opening preflight as a historical/release-handoff checklist.
+- If v0.5 triage is quiet, automation can progress into v0.6 presets and v0.7
+  runtime-advisory checks, then v0.8 toolbar/navigation work, instead of
+  reopening old reliability work just to fill the lane.
+- v0.9 update-readiness work identifies runtime source, version, option
+  compatibility, and dry-run requirements without executing real package
+  manager, git, download, or binary replacement commands.
+- v1.0 update workflow work remains guarded: every real update is opt-in,
+  user-confirmed, source-scoped, visible before execution, and tested with
+  fakes before it touches a real runtime.
+- MTP guidance stays explicit and conservative: `--spec-type draft-mtp` and
+  `--spec-draft-n-max` belong to MTP-capable model/preset choices, not a global
+  default, and the launch command must remain visible and editable.
 - v0.5 triage handoffs use the local label vocabulary and draft-response
   shapes in `docs/post_public_operations.md` without promising feature support
   or mutating public issues.
@@ -101,8 +135,13 @@ v0.4 reliability slice is visible.
   instead of completing a clear slice.
 - A packaged app release, zip/dmg, signing, or notarization claim appears
   before app-bundle launch verification succeeds.
-- v0.4 work drifts into custom command profiles, Ollama, MLX implementation, or
-  broad adapter abstraction before the `llama-server` path is boring.
+- v0.6/v0.7/v0.8/v0.9 work drifts into hidden optimization, automatic
+  benchmarking, unattended runtime updates, model downloads, custom command
+  profiles, Ollama, MLX implementation, or broad adapter abstraction before the
+  `llama-server` preset, advisory, toolbar, and update-readiness paths are
+  useful.
+- v1.0 update workflow work executes real package-manager, git, download, or
+  binary replacement commands without explicit human confirmation for that run.
 
 ## Result
 

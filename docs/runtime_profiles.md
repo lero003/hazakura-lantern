@@ -69,6 +69,18 @@ profile name, replaces the editable runtime configuration, and keeps local file
 paths as references. It can warn about local portability issues, but it does
 not copy runtimes or model files.
 
+## Preset Boundary
+
+Future `llama-server` presets should remain advisory ways to fill or adjust the
+same active runtime configuration. A preset may suggest context size, threads,
+GPU layers, cache or speculative-decoding arguments, and a profile name, but it
+must keep the resulting command visible and editable before launch.
+
+Preset metadata should not require a profile schema version change unless
+Lantern starts persisting non-configuration facts that older builds cannot
+safely ignore. Until then, model-family guidance belongs in docs and visible
+configuration fields, not in hidden profile behavior.
+
 ## Import Behavior
 
 Lantern imports profile JSON through the schema-version guard:

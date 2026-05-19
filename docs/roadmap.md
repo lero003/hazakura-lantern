@@ -112,16 +112,17 @@ Observation is not management. Lantern may tell users that a runtime appears
 old, missing, or installed in an unusual way. It should not run installers,
 upgrade runtimes, mutate package managers, or hide where a runtime came from.
 
-## Current Source Lane: v0.3 Close-Out, Then v0.4 `llama-server` Reliability
+## Current Source Lane: v0.5 Post-Public Issue Triage And Automation Discipline
 
-The project has reached a source-only `v0.3.0-alpha.1` checkpoint for adapter
-boundary clarity and public opening, while the app-bundle launch smoke remains
-a packaged-release blocker.
+The project has reached a source-only `v0.5.0-alpha.1` checkpoint for
+post-public issue triage and automation discipline, while the app-bundle launch
+smoke remains a packaged-release blocker.
 
-Use v0 and v0.1 notes below as foundation and backlog context, not as a reason
-to reopen closed work without a concrete ambiguity. The next useful source
-work should either close a named v0.3 adapter-boundary ambiguity or move into
-v0.4 `llama-server` reliability and daily-use polish.
+Use v0 through v0.4 notes below as foundation and backlog context, not as a
+reason to reopen closed work without a concrete ambiguity. The next useful
+source work should classify post-public feedback, tighten automation-safe
+triage, or address a specific `llama-server` reliability issue only when it is
+concrete and testable.
 
 Do not retry the known `kLSNoExecutableErr` app-bundle helper path unless there
 is a fresh Launch Services hypothesis. Carry it as a release risk and continue
@@ -493,60 +494,154 @@ Completion criteria:
   promising feature support or mutating GitHub issue state
 - roadmap and current status stay aligned with public feedback
 
-## v0.6 - MLX Server Adapter Design Note
+## v0.6 - llama-server Model Presets And Option Compatibility
 
 Purpose:
 
-Choose one concrete MLX server shape before implementation. This is a
-design-only lane unless explicitly approved.
+Help users start existing GGUF models with sensible, visible `llama-server`
+settings before adding runtime breadth.
 
 Candidate work:
 
-- create `docs/mlx_adapter_design.md`
-- identify the exact MLX server command shape
-- decide whether Lantern supervises it as a child process
-- define adapter-specific model reference wording, such as local model
-  directory or declared model id instead of assuming every runtime uses
-  `modelPath`
-- document endpoint and OpenAI compatibility assumptions
-- document health check behavior
-- document launch validation and preflight checks
-- document what Lantern will not install, download, convert, or catalog
-- define how tests can run without a real model
-- identify profile schema impact, if any
+- maintain `docs/llama_server_presets.md`
+- define a small preset vocabulary: conservative, balanced local, long context,
+  low memory, and MTP capable
+- map presets to visible configuration values and additional arguments
+- keep launch command preview as the source of truth for what will run
+- add focused tests for preset-to-configuration behavior
+- treat `--spec-type draft-mtp` and `--spec-draft-n-max` as MTP-capable preset
+  suggestions, not global defaults
+- keep unsupported or unknown options visible and editable instead of hiding or
+  silently rewriting them
 
 Completion criteria:
 
-- the design names exactly one MLX server shape
-- command, lifecycle, endpoint, health, validation, tests, and profile impact
-  are explicit
-- implementation remains blocked on human approval
+- presets are advisory and user-reviewable
+- MTP stays off unless a preset or user explicitly marks the selected model as
+  MTP-capable
+- no model download, conversion, catalog, benchmark UI, runtime install/update,
+  endpoint auto-polling, multiple-profile management, or adapter expansion is
+  introduced
+- profile schema version `1` remains valid unless a concrete migration design
+  is accepted
 
-## v0.7 - MLX Server Adapter Minimal Alpha
+## v0.7 - llama-server Runtime Capability Advisories
 
 Purpose:
 
-Add one concrete MLX server adapter after v0.6 design and explicit human
-approval. This is not an MLX ecosystem or runtime marketplace.
+Make presets safer as `llama.cpp` changes by checking the selected
+`llama-server` binary locally and read-only.
 
 Candidate work:
 
-- command preview
-- start, stop, and restart when the chosen MLX server is child-process based
-- bounded logs
-- endpoint display
-- health check when available
-- copied client snippet when OpenAI-compatible
-- profile import/export support
-- focused tests without real model download
+- timeout-bounded `llama-server --version` or build-info display
+- timeout-bounded `llama-server --help` parsing for supported option names
+- preset compatibility warnings when an option appears unsupported
+- advisory notes when selected runtime capability is unknown
+- tests that capability parsing never launches a model or mutates the runtime
+- docs that keep runtime checks local, read-only, and adapter-scoped
 
 Completion criteria:
 
-- `llama-server` behavior remains unchanged
-- MLX support stays adapter-specific
-- no MLX package installation, Hugging Face download, model conversion, model
-  catalog, benchmark UI, multimodal UI, runtime marketplace, or generic custom
-  command profile is introduced
+- option and version checks are local, timeout-bounded, and read-only
+- unsupported presets warn rather than silently changing the command
+- Lantern does not install, upgrade, download, benchmark, or mutate
+  `llama-server`
+- automation may complete v0.7 without another human prompt if each slice stays
+  within these constraints
+
+## v0.8 - Toolbar And Navigation
+
+Purpose:
+
+Make the existing `llama-server` control loop feel like a proper Mac app
+without changing runtime ownership.
+
+Candidate work:
+
+- maintain `docs/toolbar_and_navigation.md`
+- add a native macOS toolbar for existing start, stop, restart, health-check,
+  copy, profile import/export, log clear, and command-preview actions
+- keep toolbar state derived from the same controller state as the main views
+- add focused tests or view-model checks for toolbar action availability where
+  practical
+- add keyboard shortcuts only for actions whose enabled/disabled state is
+  already clear
+
+Completion criteria:
+
+- toolbar actions mirror existing behavior and do not add hidden side effects
+- no endpoint auto-polling, launch-at-login, automatic restart, model download,
+  runtime install/update, multiple-profile management, or adapter expansion is
+  introduced
+- automation may complete v0.8 without another human prompt if each slice stays
+  within these constraints
+
+## v0.9 - llama-server Update Readiness
+
+Purpose:
+
+Prepare for a guarded `llama-server` update workflow by identifying the
+selected runtime source and showing update risk before any mutation exists.
+
+Candidate work:
+
+- detect and display the selected runtime path, version, and option capability
+  summary from v0.7
+- let the user record an install source such as Homebrew, source build, manual
+  binary, or unknown
+- document update implications for each source without executing updates
+- add dry-run style checks that explain what Lantern would need before update
+  execution is allowed
+- keep update checks timeout-bounded, local-first, and advisory
+
+Completion criteria:
+
+- Lantern can explain the selected runtime source and update readiness
+- no package manager, git checkout, download, file replacement, or install
+  command is executed
+- update work remains separate from model downloads and packaged app release
+- automation may complete v0.9 without another human prompt if it remains
+  non-mutating and advisory
+
+## v1.0 - Guarded llama-server Update Workflow
+
+Purpose:
+
+Complete the `llama-server`-dedicated product shape with an opt-in,
+user-confirmed update workflow. This is the point where Lantern can be called
+reasonably complete as a `llama-server` companion, if packaging is still tracked
+separately.
+
+Candidate work:
+
+- implement a source-scoped update workflow only for sources with a clear,
+  reversible, user-approved path
+- show the exact command or file operation before execution
+- require explicit user confirmation for every real update
+- stop a running Lantern-managed runtime before any update attempt
+- verify the updated binary with `--version`, `--help`, and preset option
+  compatibility checks after update
+- record failure states without hiding the old selected runtime path
+- test update planning and failure handling with fakes; do not run real package
+  managers in tests
+
+Completion criteria:
+
+- updates are opt-in, visible, user-confirmed, and source-scoped
+- unattended package-manager, git, or binary replacement mutation is still not
+  allowed
+- unsupported sources stay advisory instead of pretending to be updateable
+- `llama-server` launch, presets, toolbar, capability checks, and update
+  workflow form a coherent dedicated companion app
+
+## v1.x - Second Runtime Design
+
+After v1.0, revisit whether a second runtime is still the next smallest risk.
+The first possible candidate remains one concrete MLX-based server shape, not
+Ollama, a custom command profile, or a broad runtime catalog. A design note must
+fix command, model reference, endpoint, health, lifecycle, and profile
+boundaries before implementation.
 
 ## Packaging Track - Separate From Source Milestones
 
@@ -572,7 +667,6 @@ These may become useful, but they should not slip into earlier lanes casually:
 - optional local authentication guidance
 - metrics or benchmark display
 - richer runtime setup assistant that remains documentation-first
-- opt-in runtime update notifications for registered runtimes
 - custom command profiles
 - Ollama or other daemon-style adapters
 - agent-facing integration notes
@@ -600,17 +694,37 @@ Do not use this project for:
 ## Automation Guidance
 
 Automated development should pick one small slice from the current lane. After
-`v0.3.0-alpha.1`, the default lane is v0.3 close-out when a concrete adapter
-ambiguity exists, otherwise v0.4 `llama-server` reliability and daily-use
-polish.
-
-Near-term automation is allowed to continue through v0.5. If v0.4 has no
-concrete, testable reliability or daily-use slice, automation may advance to
-v0.5 issue triage and automation discipline instead of stopping. Do not treat
-v0.4 as a required checklist that must be exhausted before v0.5 docs can move.
+`v0.5.0-alpha.1`, automation may continue through v0.7 without another human
+prompt as long as it stays on the existing `llama-server` path, and may
+continue through v0.8 for toolbar work. The default order is v0.5 post-public
+triage, then v0.6 model presets and option compatibility, v0.7 runtime
+capability advisories, and v0.8 toolbar/navigation. v0.9 update-readiness work
+may also proceed automatically only while it remains non-mutating and advisory.
+v0.4 `llama-server` reliability work remains valid only when a concrete,
+testable daily-use ambiguity is visible; do not force v0.4 work just to fill
+the lane.
 
 Good next slices:
 
+- classify public issues or external review notes using
+  `docs/post_public_operations.md`, then update docs, tests, or small
+  `llama-server` behavior only when the classification identifies a safe local
+  slice
+- tighten post-public issue categories, label proposals, or draft-response
+  guidance only when a concrete public-feedback case is not covered by the
+  current operations guide
+- add or refine `llama-server` preset vocabulary and option compatibility in
+  `docs/llama_server_presets.md`
+- implement one command-visible preset behavior at a time, with focused tests
+  for the resulting configuration and launch command
+- add MTP-capable preset handling only as an explicit model/preset choice, with
+  visible `--spec-type draft-mtp` and `--spec-draft-n-max` arguments
+- add v0.7 runtime capability checks only when they are timeout-bounded,
+  read-only, adapter-scoped, and used for preset compatibility warnings
+- add v0.8 toolbar/navigation slices only when actions mirror existing behavior
+  and do not introduce hidden runtime work
+- add v0.9 update-readiness slices only when they identify source, version,
+  compatibility, or dry-run requirements without executing real updates
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
   focused tests before adding runtime breadth; validation already has an
   initial explicit contract, and profile command preview already has a generic
@@ -638,13 +752,6 @@ Good next slices:
   state transition beyond the explicit pending-restart status
 - document launch smoke expectations only when there is a fresh verification
   hypothesis or new evidence
-- classify public issues or external review notes using
-  `docs/post_public_operations.md`, then update docs, tests, or small
-  `llama-server` behavior only when the classification identifies a safe local
-  slice
-- tighten post-public issue categories, label proposals, or draft-response
-  guidance only when a concrete public-feedback case is not covered by the
-  current operations guide
 - keep endpoint auto-polling deferred unless a later slice intentionally
   revisits adapter-owned health lifecycle and proves the polling policy can
   remain local, timeout-bounded, and non-surprising
@@ -657,8 +764,9 @@ Rules for automated work:
 - do not add a new adapter without explicit human approval
 - do not begin custom command profile implementation without explicit human
   approval; custom command profiles are not the next lane
-- do not begin MLX implementation before the v0.6 design note is accepted and a
-  human explicitly approves v0.7 work
+- do not begin second-runtime design before v1.x, and do not begin second-runtime
+  implementation until a design note is accepted and a human explicitly
+  approves that work
 - do not change the runtime profile schema version without explicit human
   approval
 - do not add endpoint auto-polling before manual health and adapter health
@@ -666,7 +774,8 @@ Rules for automated work:
 - do not add multiple-profile management while the source-only checkpoint only
   promises active-profile import/export
 - do not add model download or install flows
-- do not turn advisory runtime update status into automatic update execution
+- do not turn advisory runtime/version status into unattended update execution
+- do not add automatic benchmarking or hidden optimal-setting discovery
 - do not mutate GitHub settings, secrets, collaborators, branch protection,
   tags, releases, release assets, repository packages, or public issue state as
   part of the hourly loop
@@ -678,7 +787,10 @@ Rules for automated work:
 - do not change runtime ownership assumptions casually
 - update tests and docs with each meaningful behavior change
 - if no change is justified by current evidence, a verified no-op is acceptable
-  only after checking both v0.4 reliability and v0.5 triage/docs candidates
+  only after checking v0.5 triage/docs candidates, v0.6 preset candidates,
+  v0.7 runtime-advisory candidates, v0.8 toolbar candidates, non-mutating v0.9
+  update-readiness candidates, and any concrete v0.4 reliability signal that is
+  actually visible
 
 ## Issue Triage Checklist
 
@@ -692,7 +804,11 @@ Evaluate new ideas with these questions:
 6. Can it be documented without turning Lantern into a runtime tutorial?
 7. If it checks runtime versions or update availability, is that advisory and
    adapter-scoped?
-8. Will it still make sense when runtimes evolve?
+8. If it suggests model settings, does it keep the final command visible and
+   editable?
+9. If it updates runtimes, is the operation user-confirmed, source-scoped, and
+   testable with fakes before any real mutation?
+10. Will it still make sense when runtimes evolve?
 
 If most answers are no, defer the idea even if it is interesting.
 
@@ -709,9 +825,10 @@ A narrow successful Lantern v1 looks like this:
 - bounded logs
 - small, documented adapter set
 - advisory runtime version and update awareness
+- guarded, user-confirmed `llama-server` update workflow
 - no hidden shell behavior
 - no model marketplace
-- no runtime installation
+- no unattended runtime installation
 - no cloud orchestration
 
 The product should feel like a lantern on the desk: it makes the local runtime

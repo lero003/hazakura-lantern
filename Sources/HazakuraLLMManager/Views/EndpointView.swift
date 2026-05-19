@@ -10,42 +10,62 @@ struct EndpointView: View {
                 let healthCurlCommand = endpoint.endpointHealthCurlCommand
 
                 VStack(alignment: .leading, spacing: 10) {
-                    HStack {
+                    HStack(spacing: 8) {
                         Text(endpoint.apiBaseURLString)
                             .font(.system(.body, design: .monospaced))
                             .textSelection(.enabled)
-
-                        Spacer()
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                            )
 
                         Button {
                             copy(endpoint.apiBaseURLString)
                         } label: {
                             Label("Copy Endpoint", systemImage: "doc.on.doc")
                         }
+                        .buttonStyle(SecondaryButtonStyle())
                     }
 
-                    HStack(alignment: .top, spacing: 12) {
+                    HStack(spacing: 8) {
                         Text(endpoint.environmentSnippet)
                             .font(.system(.caption, design: .monospaced))
                             .foregroundStyle(.secondary)
                             .textSelection(.enabled)
-
-                        Spacer()
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                            )
 
                         Button {
                             copy(endpoint.environmentSnippet)
                         } label: {
                             Label("Copy Env", systemImage: "terminal")
                         }
+                        .buttonStyle(SecondaryButtonStyle())
                     }
 
-                    HStack(alignment: .top, spacing: 12) {
+                    HStack(spacing: 8) {
                         Text(healthCurlCommand ?? "Health check is not available for this adapter.")
                             .font(.system(.caption, design: .monospaced))
                             .foregroundStyle(.secondary)
                             .textSelection(.enabled)
-
-                        Spacer()
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                            )
 
                         Button {
                             if let healthCurlCommand {
@@ -54,6 +74,7 @@ struct EndpointView: View {
                         } label: {
                             Label("Copy Health Check", systemImage: "cross.case")
                         }
+                        .buttonStyle(SecondaryButtonStyle())
                         .disabled(healthCurlCommand == nil)
                     }
 
@@ -79,24 +100,32 @@ struct EndpointView: View {
                         } label: {
                             Label("Check Health", systemImage: "waveform.path.ecg")
                         }
+                        .buttonStyle(SecondaryButtonStyle())
                         .disabled(controller.endpointHealthStatus == .checking)
                     }
 
                     Divider()
 
-                    HStack(alignment: .top, spacing: 12) {
+                    HStack(spacing: 8) {
                         Text(endpoint.aiMobileSmokeCurlCommand)
                             .font(.system(.caption, design: .monospaced))
                             .foregroundStyle(.secondary)
                             .textSelection(.enabled)
-
-                        Spacer()
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                            )
 
                         Button {
                             copy(endpoint.aiMobileSmokeCurlCommand)
                         } label: {
                             Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
                         }
+                        .buttonStyle(SecondaryButtonStyle())
                     }
                 }
             } else {

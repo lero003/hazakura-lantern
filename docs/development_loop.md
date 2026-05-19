@@ -25,11 +25,12 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Lane
 
-The project has a public source-only `v0.3.0-alpha.1` checkpoint for adapter
-boundary clarity. The app-bundle launch smoke remains a packaged-release
-blocker.
+The project has a public source-only `v0.5.0-alpha.1` checkpoint for
+post-public issue triage and automation discipline. The app-bundle launch smoke
+remains a packaged-release blocker.
 
-Favor v0.3 close-out only when there is a concrete adapter-boundary ambiguity:
+Treat v0.3 close-out and v0.4 reliability as prior lanes unless there is a
+concrete adapter-boundary or `llama-server` reliability ambiguity:
 
 - launch command preview correctness
 - adapter-owned command construction
@@ -38,24 +39,31 @@ Favor v0.3 close-out only when there is a concrete adapter-boundary ambiguity:
 - source-only profile compatibility checks
 - app launch/build reliability when there is a fresh hypothesis
 
-When no such ambiguity exists, move to v0.4 `llama-server` reliability and
-daily-use polish. Keep the existing runtime path boring, predictable, and
-well-documented before any second runtime is designed.
+The current default lane is v0.5 post-public issue triage and automation
+discipline. A verified no-op is still valid, but only after v0.5 triage/docs
+candidates and any concrete v0.4 reliability signal have been checked.
 
-Near-term automation may continue through v0.5 without another human prompt.
-Do not stop just because v0.4 has no obvious safe slice; if the current
-`llama-server` path is quiet, move to v0.5 post-public issue triage and
-automation discipline. A verified no-op is still valid, but only after both
-v0.4 reliability candidates and v0.5 triage/docs candidates have been checked.
+After v0.5, automation may continue through v0.8 without another human prompt
+as long as it stays on the existing `llama-server` adapter and existing app
+behavior:
+
+- v0.6: model-family presets and option compatibility
+- v0.7: read-only runtime/version capability checks for preset guidance
+- v0.8: toolbar and navigation for existing actions
+
+Automation may also prepare v0.9 update-readiness work without another human
+prompt only while it remains non-mutating and advisory. Any real runtime update
+execution belongs to the guarded v1.0 workflow and must be user-confirmed.
 
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
 
 Recent review feedback that suggests custom command profiles, Ollama, endpoint
-auto-polling, runtime version display, multiple-profile management, or broad UI
-polish should be treated as future backlog unless it can be narrowed to one
-testable `llama-server` reliability, restart-state, copy-flow, empty-state,
-health wording, profile-warning, or setup-hint ambiguity.
+auto-polling, multiple-profile management, or broad UI polish should be treated
+as future backlog unless it can be narrowed to one testable `llama-server`
+reliability, restart-state, copy-flow, empty-state, health wording,
+profile-warning, setup-hint, preset, read-only runtime capability, toolbar, or
+update-readiness ambiguity.
 
 The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
 human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
@@ -90,11 +98,25 @@ Lane handoff rules:
   handoff may happen automatically; v0.4 does not need to be exhaustively
   completed when no concrete reliability slice is visible.
 - v0.5 -> v0.6: allowed when public issue triage rules and automation
-  discipline are documented. v0.6 is an MLX server adapter design note only.
+  discipline are documented. v0.6 stays on `llama-server` model-family presets
+  and option compatibility before runtime breadth.
+- v0.6 -> v0.7: allowed when preset vocabulary and command-visible application
+  are documented or tested. v0.7 may add local, timeout-bounded, read-only
+  runtime/version capability checks to warn about preset compatibility.
+- v0.7 -> v0.8: allowed when runtime capability checks are useful enough that
+  the next smallest risk is making existing actions available from a native
+  toolbar. v0.8 is toolbar/navigation, not runtime breadth.
+- v0.8 -> v0.9: allowed when toolbar actions mirror existing behavior.
+  v0.9 is non-mutating `llama-server` update readiness: source, version,
+  capability, and dry-run explanation.
+- v0.9 -> v1.0: allowed when update readiness can support a guarded,
+  user-confirmed update workflow. v1.0 may implement update planning and
+  execution UI, but automation must not execute real package-manager, git, or
+  binary replacement updates without explicit human confirmation for that run.
 
 Release posture:
 
-- `v0.3.0-alpha.1` is acceptable as a source-only checkpoint when SwiftPM
+- `v0.5.0-alpha.1` is acceptable as a source-only checkpoint when SwiftPM
   verification passes and docs clearly state that no packaged `.app` artifact is
   attached.
 - Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
@@ -152,8 +174,19 @@ Preferred order:
    public feedback or external review notes using
    `docs/post_public_operations.md`, then make one safe local change only if the
    classification justifies it.
-7. End as a verified no-op only when no safe v0.4 or v0.5 slice is justified
-   after the checks above.
+7. If v0.5 triage is quiet, advance into v0.6 preset work using
+   `docs/llama_server_presets.md`: one command-visible preset, option-family,
+   or MTP-capable configuration slice at a time.
+8. If v0.6 preset work is quiet or needs compatibility evidence, advance into
+   v0.7 read-only runtime capability checks such as timeout-bounded
+   `llama-server --version` or `--help` parsing for preset warnings.
+9. If v0.7 capability work is quiet, advance into v0.8 toolbar/navigation work
+   using `docs/toolbar_and_navigation.md`, mirroring existing actions only.
+10. If v0.8 toolbar work is quiet, advance into v0.9 update-readiness work:
+   source detection, version/capability summary, or dry-run guidance, without
+   mutating a real runtime.
+11. End as a verified no-op only when no safe v0.5, v0.6, v0.7, v0.8, or
+   non-mutating v0.9 slice is justified after the checks above.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.
@@ -162,8 +195,9 @@ Human approval is required before automation starts a new runtime adapter,
 custom command profile implementation, profile schema version change, packaged
 artifact, GitHub settings or release mutation, public issue mutation, automation
 cadence change, dependency or lockfile mutation, endpoint auto-polling,
-runtime install/update path, multiple-profile management, launch-at-login, or
-automatic restart policy.
+real runtime install/update execution, model download,
+automatic benchmark/optimization, multiple-profile management, launch-at-login,
+or automatic restart policy.
 
 ## Verification
 

@@ -1,14 +1,15 @@
 # Current Status
 
-Last reviewed: 2026-05-19
+Last reviewed: 2026-05-20
 
 ## Project State
 
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v0.3.0-alpha.1` is a public source-only alpha for
-adapter boundary clarity. It is not a packaged app release.
+Current release checkpoint: `v0.5.0-alpha.1` is a public source-only alpha for
+post-public issue triage and automation discipline. It is not a packaged app
+release.
 
 Implemented scope:
 
@@ -202,6 +203,14 @@ Implemented scope:
   response shapes that automation can prepare without mutating public issues.
 - Post-public `llama-server` triage guidance now separates Lantern-owned
   behavior from runtime-owned behavior before proposing a local fix.
+- llama-server preset guidance now defines v0.6/v0.7 as model-family
+  recommendation, option compatibility, and runtime capability advisory work
+  before any second runtime adapter.
+- toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
+  lane before any second runtime adapter.
+- update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
+  update workflow work, with real runtime mutation requiring explicit user
+  confirmation.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, copied endpoint host behavior, bounded log
@@ -258,6 +267,9 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
   local smoke checks.
 - Runtime setup and update awareness should remain advisory. The app should not
   install, upgrade, or mutate runtimes automatically.
+- Model-family presets should remain advisory and visible. They may suggest
+  `llama-server` settings or additional arguments, but they must not hide
+  command construction or infer unsupported options silently.
 - The app does not manage multiple profiles, launch-at-login, YAML import/export,
   auto restart, model downloads, chat, RAG, or proxy behavior.
 - LAN exposure and authentication are intentionally outside v0.
@@ -265,9 +277,9 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
 ## Automation Lane
 
 The automation should treat the project as having a public source-only
-`v0.3.0-alpha.1` checkpoint for adapter boundary clarity, while the Launch
-Services helper smoke remains a documented packaged-app blocker. Do not spend
-every hourly run retrying the same
+`v0.5.0-alpha.1` checkpoint for post-public issue triage and automation
+discipline, while the Launch Services helper smoke remains a documented
+packaged-app blocker. Do not spend every hourly run retrying the same
 `kLSNoExecutableErr` path unless there is a new hypothesis. It is acceptable to
 carry that blocker as risk and continue with safe source work that does not
 depend on app-bundle launch verification.
@@ -275,18 +287,14 @@ depend on app-bundle launch verification.
 No user-facing app-bundle release should be cut until app launch verification
 succeeds on a normal macOS environment.
 
-The saved automation may close v0.3 only when a concrete adapter-boundary
-ambiguity remains. If no such ambiguity is named, the default next lane is v0.4
-`llama-server` reliability and daily-use polish: improve one confusing launch,
-validation, health, endpoint, copy-flow, restart-state, profile-warning, or
-setup-doc path at a time, and accept verified no-op when no safe slice is
-justified.
-
-The user-approved near-term target is v0.5. Automation may move from v0.4 into
-v0.5 without stopping for another human prompt when no concrete `llama-server`
-reliability slice is visible. Do not force v0.4 work just to fill the lane.
-Before declaring no-op, check both v0.4 reliability candidates and v0.5
-post-public triage/docs candidates.
+The v0.3 adapter-boundary checkpoint is closed unless a new concrete ambiguity
+or regression is named. The v0.4 reliability lane is allowed to stay quiet when
+there is no concrete safe `llama-server` reliability slice; do not force v0.4
+work just to fill the lane. The current source lane is v0.5 post-public issue
+triage and automation discipline, with automation allowed to continue through
+v0.8 on the existing `llama-server` path when each slice is concrete and
+verified. Automation may also prepare v0.9 update-readiness work when it stays
+non-mutating and advisory.
 
 Use `docs/post_public_operations.md` for public issue triage, automation-safe
 work, and human approval gates. Treat post-public triage as the v0.5 lane, while
@@ -294,15 +302,32 @@ its guardrails apply immediately. Keep `docs/public_opening_preflight.md` as a
 pre-open and release-handoff reference rather than the normal work queue.
 Automation must not change GitHub visibility, settings, tags, releases, release
 assets, repository packages, public issue state, automation cadence, a new
-adapter, custom command implementation, profile schema version, or dependencies
+adapter, custom command implementation, profile schema version, dependencies,
+runtime installation/update, model download, or hidden auto-optimization
 without an explicit human handoff.
 
 ## Next Best Slice
 
 Good next automated candidates:
 
-- declare v0.3 close-out as a verified no-op if the current docs and tests
-  still show no concrete unresolved adapter ambiguity
+- classify public feedback or review notes with
+  `docs/post_public_operations.md`, then make one safe local change only when
+  the classification identifies a `llama-server` bug, profile import/export bug,
+  docs confusion, or current-lane daily-use ambiguity
+- tighten v0.5 issue-triage docs only when the taxonomy, label proposals, or
+  draft-response guidance miss a concrete public-feedback case
+- add or refine `llama-server` model-family preset guidance in
+  `docs/llama_server_presets.md`, keeping presets advisory and command-visible
+- implement one tested v0.6 preset slice, such as a core preset model for
+  conservative, balanced, long-context, low-memory, or MTP-capable settings
+- implement one tested v0.7 runtime capability slice, such as timeout-bounded
+  `llama-server --version` display or `--help` option detection for preset
+  compatibility warnings
+- implement one v0.8 toolbar/navigation slice that mirrors existing start,
+  stop, restart, health, copy, profile import/export, clear-log, or command
+  preview behavior
+- implement one non-mutating v0.9 update-readiness slice, such as install-source
+  classification, version/capability summary, or dry-run update requirements
 - improve one `llama-server` reliability or daily-use path when the confusing
   behavior is concrete and testable: launch validation, launch failure wording,
   missing runtime/model file empty states beyond the blank or non-`.gguf`
@@ -311,12 +336,6 @@ Good next automated candidates:
   README, or troubleshooting beyond the local file-check guidance already
   covered; malformed Additional Args and invalid-host setup hints are already
   covered
-- classify public feedback or review notes with
-  `docs/post_public_operations.md`, then make one safe local change only when
-  the classification identifies a `llama-server` bug, profile import/export bug,
-  docs confusion, or current-lane daily-use ambiguity
-- tighten v0.5 issue-triage docs only when the taxonomy, label proposals, or
-  draft-response guidance miss a concrete public-feedback case
 - tighten the adapter boundary when there is a concrete validation, error
   mapping or lifecycle case that can be tested without adding runtime breadth;
   do not repeat the initial explicit validation-contract slice or the
@@ -342,8 +361,9 @@ Good next automated candidates:
   repeated-use ambiguity; keep the slice local and small, and do not repeat the
   timeout-bounded health-check curl slice, numeric launch setup-hint slice, or
   malformed Additional Args setup-hint slice
-- improve post-public docs hygiene when pre-open wording would steer automation
-  toward already-completed visibility preparation
+- improve post-public docs hygiene when old pre-open or v0.3/v0.4 wording would
+  steer automation toward already-completed visibility or reliability
+  preparation
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above,
   such as proving `CFBundleExecutable` / `Contents/MacOS` consistency on the
@@ -352,6 +372,9 @@ Good next automated candidates:
 - add profile migration transform tests only after a concrete schema version `2`
   shape exists
 
-Do not begin endpoint auto-polling, runtime version checks, multiple-profile
-management, adapter expansion, custom command implementation, MLX
-implementation, model management, or chat features during this handoff.
+Do not begin endpoint auto-polling, multiple-profile management, adapter
+expansion, custom command implementation, MLX implementation, model management,
+unattended runtime installation/update, model download, automatic benchmarking,
+or chat features during this handoff. Runtime version and option checks are
+allowed only as local, timeout-bounded, read-only advisory work for v0.7/v0.9.
+Guarded v1.0 update execution must be opt-in and user-confirmed.

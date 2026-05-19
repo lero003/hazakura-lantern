@@ -4,6 +4,22 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+### Changed
+
+- Reworked the post-v0.5 roadmap so v0.6 and v0.7 stay on the existing
+  `llama-server` path: model-family presets, option compatibility, and
+  advisory runtime/version checks now come before any second-runtime adapter
+  design.
+- Restored toolbar and navigation work as the v0.8 lane and moved the
+  llama-server update workflow into v0.9/v1.0, with automation allowed to
+  implement guarded update UX but not to mutate real runtimes unattended.
+
+## v0.5.0-alpha.1 - 2026-05-20
+
+Source-only alpha checkpoint for post-public issue triage and automation
+discipline. This checkpoint does not include a packaged `.app`, zip, dmg,
+signing, notarization, checksum, or binary distribution artifact.
+
 ### Added
 
 - Added post-public operations guidance for issue triage, automation-safe work,
@@ -44,10 +60,16 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Clarified the healthy endpoint status detail so manual checks read as a
   snapshot rather than automatic endpoint polling.
 - Re-aligned the roadmap so v0.4 focuses on `llama-server` reliability,
-  v0.5 on post-public issue triage, v0.6 on an MLX server design note, and
-  v0.7 on MLX implementation only after explicit approval.
+  v0.5 on post-public issue triage, v0.6/v0.7 on `llama-server` presets and
+  runtime advisories, and MLX work stays deferred until a later design lane.
 - Updated automation guidance so runs may continue through v0.5 when v0.4 has
   no concrete safe `llama-server` reliability slice.
+
+### Known Issues
+
+- `./script/build_and_run.sh --verify` can still fail with Launch Services
+  `kLSNoExecutableErr` in the Codex environment. This remains a packaged-app
+  launch-smoke blocker, not a source-only checkpoint blocker.
 
 ## v0.3.0-alpha.1 - 2026-05-19
 

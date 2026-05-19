@@ -30,7 +30,7 @@ struct ConfigurationView: View {
                     Text("Port")
                         .foregroundStyle(.secondary)
                     TextField("1234", value: binding(\.port), format: .number)
-                        .textFieldStyle(.roundedBorder)
+                        .glassTextFieldStyle()
                         .frame(width: 110)
                 }
 
@@ -38,7 +38,7 @@ struct ConfigurationView: View {
                     Text("Context")
                         .foregroundStyle(.secondary)
                     TextField("32768", value: binding(\.contextSize), format: .number)
-                        .textFieldStyle(.roundedBorder)
+                        .glassTextFieldStyle()
                         .frame(width: 110)
                 }
 
@@ -46,7 +46,7 @@ struct ConfigurationView: View {
                     Text("Threads")
                         .foregroundStyle(.secondary)
                     TextField("auto", text: binding(\.threads))
-                        .textFieldStyle(.roundedBorder)
+                        .glassTextFieldStyle()
                         .frame(width: 110)
                 }
 
@@ -54,7 +54,7 @@ struct ConfigurationView: View {
                     Text("GPU Layers")
                         .foregroundStyle(.secondary)
                     TextField("auto", text: binding(\.gpuLayers))
-                        .textFieldStyle(.roundedBorder)
+                        .glassTextFieldStyle()
                         .frame(width: 110)
                 }
 
@@ -62,8 +62,7 @@ struct ConfigurationView: View {
                     Text("Additional Args")
                         .foregroundStyle(.secondary)
                     TextField("--verbose", text: binding(\.additionalArguments))
-                        .textFieldStyle(.roundedBorder)
-                        .font(.system(.body, design: .monospaced))
+                        .glassTextFieldStyle()
                 }
             }
             .padding(.vertical, 4)
@@ -78,12 +77,13 @@ struct ConfigurationView: View {
                     .padding(.bottom, 4)
             }
 
-            HStack(spacing: 10) {
+            HStack(spacing: 12) {
                 Button {
                     controller.start()
                 } label: {
                     Label("Start", systemImage: "play.fill")
                 }
+                .buttonStyle(PrimaryButtonStyle())
                 .keyboardShortcut(.defaultAction)
                 .disabled(!controller.canStart)
 
@@ -92,6 +92,7 @@ struct ConfigurationView: View {
                 } label: {
                     Label("Stop", systemImage: "stop.fill")
                 }
+                .buttonStyle(SecondaryButtonStyle())
                 .disabled(!controller.canStop)
 
                 Button {
@@ -99,6 +100,7 @@ struct ConfigurationView: View {
                 } label: {
                     Label("Restart", systemImage: "arrow.clockwise")
                 }
+                .buttonStyle(SecondaryButtonStyle())
                 .disabled(!controller.canRestart)
 
                 Spacer()
@@ -127,8 +129,7 @@ struct ConfigurationView: View {
 
             HStack(spacing: 8) {
                 TextField(title, text: text)
-                    .textFieldStyle(.roundedBorder)
-                    .font(.system(.body, design: .monospaced))
+                    .glassTextFieldStyle()
 
                 Button {
                     if let path = FilePanel.chooseFile(allowedExtensions: allowedExtensions) {
@@ -137,6 +138,7 @@ struct ConfigurationView: View {
                 } label: {
                     Label(buttonTitle, systemImage: "folder")
                 }
+                .buttonStyle(SecondaryButtonStyle())
 
                 if !recentPaths.isEmpty {
                     Menu {
@@ -150,6 +152,7 @@ struct ConfigurationView: View {
                     } label: {
                         Label("Recent", systemImage: "clock")
                     }
+                    .buttonStyle(SecondaryButtonStyle())
                 }
             }
         }

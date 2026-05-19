@@ -39,10 +39,10 @@ struct LogsView: View {
                         .padding(10)
                     }
                     .frame(minHeight: 220, maxHeight: 320)
-                    .background(.background, in: RoundedRectangle(cornerRadius: 8))
+                    .background(.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
                     .overlay {
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.secondary.opacity(0.25), lineWidth: 1)
+                            .stroke(Color.white.opacity(0.08), lineWidth: 1)
                     }
                     .onChange(of: controller.logEntries.count) {
                         guard let last = controller.logEntries.last else {
