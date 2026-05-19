@@ -39,6 +39,8 @@ automation that should close v0.3 only when a concrete adapter ambiguity
 remains, then move to v0.4 `llama-server` reliability without drifting into
 packaged app release work, chat, model download, proxy, LAN/auth, updater,
 custom command profiles, Ollama, or adapter breadth.
+The user has approved continuing through v0.5 automatically when no concrete
+v0.4 reliability slice is visible.
 
 ## Expected Behavior
 
@@ -52,6 +54,8 @@ custom command profiles, Ollama, or adapter breadth.
   post-public docs hygiene slices; defer endpoint auto-polling, runtime version
   checks, custom command implementation, new adapters, and multiple-profile
   management unless a later lane and human handoff explicitly reopen them.
+- Future automation checks both v0.4 `llama-server` reliability and v0.5
+  post-public triage/docs candidates before declaring verified no-op.
 
 ## Review After
 
@@ -67,6 +71,8 @@ custom command profiles, Ollama, or adapter breadth.
 - Post-public stewardship classifies public feedback before implementation and
   keeps public-opening preflight as a historical/release-handoff checklist, but
   v0.4 automation primarily improves `llama-server` reliability.
+- If v0.4 is quiet, automation continues into v0.5 issue triage and
+  automation-discipline docs instead of stopping early.
 - Public-opening or release actions stay human-gated for GitHub visibility,
   settings, branch protection, tags, releases, release assets, public issue
   mutation, packaged artifacts, and binary distribution claims.

@@ -42,6 +42,12 @@ When no such ambiguity exists, move to v0.4 `llama-server` reliability and
 daily-use polish. Keep the existing runtime path boring, predictable, and
 well-documented before any second runtime is designed.
 
+Near-term automation may continue through v0.5 without another human prompt.
+Do not stop just because v0.4 has no obvious safe slice; if the current
+`llama-server` path is quiet, move to v0.5 post-public issue triage and
+automation discipline. A verified no-op is still valid, but only after both
+v0.4 reliability candidates and v0.5 triage/docs candidates have been checked.
+
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
 
@@ -80,7 +86,9 @@ Lane handoff rules:
   not runtime breadth.
 - v0.4 -> v0.5: allowed when the common `llama-server` launch, health,
   endpoint, copy-flow, restart-state, setup-hint, and profile-warning paths are
-  quiet enough that public feedback triage is the next smallest risk.
+  quiet enough that public feedback triage is the next smallest risk. This
+  handoff may happen automatically; v0.4 does not need to be exhaustively
+  completed when no concrete reliability slice is visible.
 - v0.5 -> v0.6: allowed when public issue triage rules and automation
   discipline are documented. v0.6 is an MLX server adapter design note only.
 
@@ -140,11 +148,12 @@ Preferred order:
    endpoint, restart, copy-flow, or profile-warning behavior.
 5. Tighten docs when they would otherwise steer the next run incorrectly or
    confuse a `llama-server` setup path.
-6. Classify public feedback or external review notes using
+6. If no v0.4 reliability slice is justified, advance into v0.5 and classify
+   public feedback or external review notes using
    `docs/post_public_operations.md`, then make one safe local change only if the
    classification justifies it.
-7. End as a verified no-op only when no safe slice is justified after the
-   checks above.
+7. End as a verified no-op only when no safe v0.4 or v0.5 slice is justified
+   after the checks above.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.

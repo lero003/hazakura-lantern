@@ -586,6 +586,11 @@ Automated development should pick one small slice from the current lane. After
 ambiguity exists, otherwise v0.4 `llama-server` reliability and daily-use
 polish.
 
+Near-term automation is allowed to continue through v0.5. If v0.4 has no
+concrete, testable reliability or daily-use slice, automation may advance to
+v0.5 issue triage and automation discipline instead of stopping. Do not treat
+v0.4 as a required checklist that must be exhausted before v0.5 docs can move.
+
 Good next slices:
 
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
@@ -617,6 +622,8 @@ Good next slices:
   `docs/post_public_operations.md`, then update docs, tests, or small
   `llama-server` behavior only when the classification identifies a safe local
   slice
+- tighten post-public issue categories, label proposals, or draft-response
+  guidance when v0.4 is quiet and v0.5 is the next safe source-only step
 - keep endpoint auto-polling deferred unless a later slice intentionally
   revisits adapter-owned health lifecycle and proves the polling policy can
   remain local, timeout-bounded, and non-surprising
@@ -650,6 +657,7 @@ Rules for automated work:
 - do not change runtime ownership assumptions casually
 - update tests and docs with each meaningful behavior change
 - if no change is justified by current evidence, a verified no-op is acceptable
+  only after checking both v0.4 reliability and v0.5 triage/docs candidates
 
 ## Issue Triage Checklist
 

@@ -14,7 +14,9 @@ Hazakura Lantern is currently public as a source-only alpha. Automated work
 should keep the project understandable, narrow, and easy to review while the
 near-term source lane improves the existing `llama-server` path.
 
-Post-public stewardship is a guardrail now and the formal v0.5 lane later:
+Post-public stewardship is a guardrail now and the formal v0.5 lane later.
+Automation may start v0.5 docs and triage improvements when v0.4 has no
+concrete safe `llama-server` reliability slice:
 
 - classify public feedback before implementing it
 - keep source-only and packaged-release boundaries clear
@@ -74,6 +76,7 @@ Automation may do one small, verifiable slice per run:
 - update README, changelog, current status, roadmap, troubleshooting, runtime
   adapter docs, or this operations guide
 - classify public issues or review notes and propose labels or next actions
+- prepare draft issue responses without posting them
 - improve small `llama-server` empty-state, setup-hint, copy-flow,
   health-wording, profile-warning, or error-message wording when the current
   docs or issue text identify the ambiguity

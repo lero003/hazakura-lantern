@@ -253,6 +253,12 @@ validation, health, endpoint, copy-flow, restart-state, profile-warning, or
 setup-doc path at a time, and accept verified no-op when no safe slice is
 justified.
 
+The user-approved near-term target is v0.5. Automation may move from v0.4 into
+v0.5 without stopping for another human prompt when no concrete `llama-server`
+reliability slice is visible. Do not force v0.4 work just to fill the lane.
+Before declaring no-op, check both v0.4 reliability candidates and v0.5
+post-public triage/docs candidates.
+
 Use `docs/post_public_operations.md` for public issue triage, automation-safe
 work, and human approval gates. Treat post-public triage as the v0.5 lane, while
 its guardrails apply immediately. Keep `docs/public_opening_preflight.md` as a
@@ -277,6 +283,8 @@ Good next automated candidates:
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
   docs confusion, or current-lane daily-use ambiguity
+- tighten v0.5 issue-triage docs, label proposals, or draft-response guidance
+  when no safe v0.4 reliability slice is visible
 - tighten the adapter boundary when there is a concrete validation, error
   mapping or lifecycle case that can be tested without adding runtime breadth;
   do not repeat the initial explicit validation-contract slice or the
