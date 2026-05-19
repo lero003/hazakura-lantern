@@ -40,7 +40,9 @@ public struct EndpointHealthChecker {
                 return .healthy(statusCode: httpResponse.statusCode)
             }
 
-            return .unhealthy(message: "Health check returned HTTP \(httpResponse.statusCode).")
+            return .unhealthy(
+                message: "Health check returned HTTP \(httpResponse.statusCode) from \(healthURL.absoluteString). Confirm the server finished loading the model or inspect runtime logs."
+            )
         } catch {
             return .unhealthy(message: failureMessage(for: error, healthURL: healthURL, timeoutInterval: timeoutInterval))
         }

@@ -34,6 +34,9 @@ Checks:
 - Confirm the configured port matches the copied endpoint.
 - Use the timeout-bounded copyable health-check curl command before adding new
   app behavior.
+- If the health endpoint returns a non-success HTTP status, confirm
+  `llama-server` finished loading the model and inspect the app logs before
+  changing Lantern behavior.
 - Health state is intentionally manual; there is no automatic polling yet.
 
 The health check is a local smoke signal from this Mac. LAN exposure,

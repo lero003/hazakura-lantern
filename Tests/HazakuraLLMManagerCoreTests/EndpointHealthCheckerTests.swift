@@ -23,7 +23,10 @@ final class EndpointHealthCheckerTests: XCTestCase {
 
         let status = await checker.check(try XCTUnwrap(URL(string: "http://localhost:1234/v1/models")))
 
-        XCTAssertEqual(status, .unhealthy(message: "Health check returned HTTP 503."))
+        XCTAssertEqual(
+            status,
+            .unhealthy(message: "Health check returned HTTP 503 from http://localhost:1234/v1/models. Confirm the server finished loading the model or inspect runtime logs.")
+        )
     }
 
     func testCheckReturnsUnhealthyForConnectionFailure() async throws {

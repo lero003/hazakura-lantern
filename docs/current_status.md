@@ -41,6 +41,8 @@ Implemented scope:
   SwiftUI endpoint view and covered by focused tests.
 - Endpoint health failures distinguish common connection and timeout cases with
   focused tests.
+- Endpoint health non-success HTTP responses now include the checked URL and
+  point users toward model-load completion or runtime logs.
 - Launch configuration errors point to the next setup action before launch, with
   focused tests for the user-facing descriptions.
 - Runtime/model file preflight errors point to the binary permission or missing
