@@ -4,6 +4,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+- Added a public bug-report issue template that asks for reproduction steps,
+  runtime/profile context, command previews, and redacted logs without widening
+  Lantern beyond its source-only alpha boundary.
 - Tightened the CI workflow to declare read-only repository contents permission
   for SwiftPM verification.
 - Added public-opening preflight guidance so automation can prepare docs,

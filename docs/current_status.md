@@ -153,6 +153,10 @@ Implemented scope:
   boundaries are documented with a readable schema-version `1` example.
 - CI workflow permissions are pinned to read-only repository contents for the
   SwiftPM verification job.
+- Public bug-report guidance now asks for reproduction steps, runtime adapter
+  id, profile schema version, command previews, and redacted logs while keeping
+  chat, model download, proxy, LAN exposure, authentication, runtime installer,
+  and packaged-app requests outside the current source-only alpha boundary.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -269,6 +273,9 @@ Good next automated candidates:
 - improve a copy flow, empty state, or setup hint only when there is a concrete
   repeated-use ambiguity; keep the slice local and small, and do not repeat the
   timeout-bounded health-check curl slice
+- continue public-opening preparation with another local/static item only when
+  it is not a repeat of CI read-only permissions or public bug-report issue
+  guidance
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above,
   such as proving `CFBundleExecutable` / `Contents/MacOS` consistency on the

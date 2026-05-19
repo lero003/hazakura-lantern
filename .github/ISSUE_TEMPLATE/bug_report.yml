@@ -1,0 +1,106 @@
+name: Bug report
+description: Report a Hazakura Lantern runtime, profile, or source-build issue.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a Hazakura Lantern issue. Please redact private
+        home-directory names, tokens, model names, and other sensitive local
+        paths before posting logs or command previews.
+
+        Hazakura Lantern currently ships as a source-only alpha. It does not
+        provide a packaged app artifact, model download, runtime installer,
+        proxy, chat UI, LAN exposure, or authentication layer.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of Lantern is affected?
+      options:
+        - Runtime launch or process control
+        - Endpoint health or copied client command
+        - Runtime profile import or export
+        - Source build or test
+        - App-bundle launch smoke
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Lantern version or commit
+      description: Use the tag, release checkpoint, or commit hash you tested.
+      placeholder: "v0.2.0-alpha.1 or commit hash"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: List the smallest steps that reproduce the issue.
+      placeholder: |
+        1. Build with `swift build --disable-sandbox`
+        2. Open Lantern
+        3. Select an existing `llama-server` binary and `.gguf` model
+        4. Click Start
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should Lantern have done?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: runtime-context
+    attributes:
+      label: Runtime and profile context
+      description: Include only values relevant to the issue, with private paths redacted.
+      placeholder: |
+        Runtime adapter id: llama-server
+        Profile schema version: 1
+        macOS version:
+        Swift version:
+        Runtime source: Homebrew / source build / manual binary / unknown
+        Model file type: .gguf / other
+
+  - type: textarea
+    id: command-preview
+    attributes:
+      label: Command preview and endpoint details
+      description: Paste the Lantern command preview, endpoint URL, or health-check command if relevant. Redact private paths.
+      render: shell
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or errors
+      description: Paste the smallest useful stdout/stderr or SwiftPM error excerpt. Redact private paths and tokens.
+      render: text
+
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Boundary checks
+      options:
+        - label: I am not asking Lantern to download models, install runtimes, provide chat, expose LAN access, or act as a proxy.
+          required: true
+        - label: I have redacted private paths, tokens, and sensitive local details from pasted output.
+          required: true
