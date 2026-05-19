@@ -13,6 +13,8 @@ Start each substantial run with:
 4. `docs/roadmap.md`
 5. `docs/product_brief.md`
 6. `docs/troubleshooting.md`
+7. `docs/public_opening_preflight.md` when a run touches public-opening,
+   release, GitHub visibility, GitHub settings, or pre-open automation work
 
 Run Hazakura Habitat before choosing commands for code, dependencies, Git,
 release, or automation work. Read its `agent_context.md` first, and consult
@@ -76,6 +78,17 @@ Release posture:
   release until the app-bundle launch smoke is verified on a normal macOS
   environment.
 
+Public-opening posture:
+
+- Public-opening preparation may begin before the repository visibility changes,
+  especially after v0.3 adapter-boundary work is mostly quiet.
+- Use `docs/public_opening_preflight.md` as the checklist for automation-ready
+  preparation. The automation may improve docs, changelog, static workflow
+  hygiene, and public-facing instructions one small slice at a time.
+- Do not change GitHub repository visibility, branch protection, collaborators,
+  secrets, webhooks, Actions settings, tags, GitHub Releases, or release assets
+  without an explicit human handoff for that exact action.
+
 ## Automation Rules
 
 Each automated run should choose at most one coherent slice that can be
@@ -109,7 +122,9 @@ Preferred order:
    smoke issue, advance to the next lane's smallest safe item.
 4. Add focused tests for an existing boundary.
 5. Tighten docs when they would otherwise steer the next run incorrectly.
-6. End as a verified no-op only when no safe slice is justified after the
+6. After v0.3 is mostly quiet, close one public-opening preflight item that can
+   be verified locally without remote GitHub mutation.
+7. End as a verified no-op only when no safe slice is justified after the
    checks above.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or

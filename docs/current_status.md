@@ -233,6 +233,12 @@ The saved automation may continue into v0.3 when `docs/development_loop.md` and
 clarity. v0.3 should tighten adapter protocols, tests, and docs before adding
 another runtime adapter.
 
+After v0.3 is mostly quiet, the saved automation may begin public-opening
+preparation from `docs/public_opening_preflight.md`: docs alignment, changelog
+readiness, static workflow review, and public-facing instruction cleanup. It
+must not change GitHub visibility, settings, tags, releases, or release assets
+without an explicit human handoff.
+
 ## Next Best Slice
 
 Good next automated candidates:

@@ -427,14 +427,18 @@ Completion criteria:
   product promises
 - Lantern remains understandable with all adapters disabled except one
 
-## v0.5 - Release And Trust Hygiene
+## v0.5 - Public Opening And Trust Hygiene
 
 Purpose:
 
-Make the project easier to use and review without broadening scope.
+Make the project easier to use, review, and eventually open on GitHub without
+broadening scope or implying packaged-app readiness.
 
 Candidate work:
 
+- public-opening preflight checklist
+- README and changelog cleanup for source-only checkpoints
+- static GitHub workflow review and least-surprise CI permissions
 - signed or clearly documented unsigned local builds
 - release notes
 - changelog
@@ -449,11 +453,15 @@ Candidate work:
 Completion criteria:
 
 - users understand how to install or build the app locally
+- public readers can tell whether the project is source-only, prerelease, or a
+  packaged app release
 - users understand what data a bug report should include
 - release-to-release changes are understandable
 - profile compatibility expectations are documented
 - runtime update information is clearly advisory, not an automatic updater
 - docs do not imply that Lantern installs, owns, or updates runtimes
+- GitHub visibility, settings, tags, releases, and release assets remain human
+  handoff actions rather than background automation side effects
 
 ## Later, Separate Design Decisions
 
@@ -523,6 +531,9 @@ Good next slices:
 - keep endpoint auto-polling deferred unless a later slice intentionally
   revisits adapter-owned health lifecycle and proves the polling policy can
   remain local, timeout-bounded, and non-surprising
+- after v0.3 is mostly quiet, close one `docs/public_opening_preflight.md` item
+  at a time; keep the work static and local unless the user explicitly hands off
+  GitHub visibility, settings, tags, releases, or release assets
 - update current status after implementation changes
 
 Rules for automated work:
@@ -534,6 +545,9 @@ Rules for automated work:
   promises active-profile import/export
 - do not add model download or install flows
 - do not turn advisory runtime update status into automatic update execution
+- do not make the repository public or mutate GitHub settings, secrets,
+  collaborators, branch protection, tags, releases, or release assets as part of
+  the hourly loop
 - do not hide command construction
 - do not change runtime ownership assumptions casually
 - update tests and docs with each meaningful behavior change

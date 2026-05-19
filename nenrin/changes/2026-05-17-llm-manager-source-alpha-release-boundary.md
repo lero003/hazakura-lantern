@@ -11,6 +11,7 @@ related_files:
   - docs/current_status.md
   - docs/roadmap.md
   - docs/troubleshooting.md
+  - docs/public_opening_preflight.md
   - CHANGELOG.md
   - .github/workflows/ci.yml
   - nenrin/README.md
@@ -45,6 +46,9 @@ Hazakura Lantern now has source-only prerelease checkpoints and recurring automa
   recurring workflow decisions where prior judgment could change the next step.
 - `v0.2.0-alpha.1` remains framed as source-only, with no packaged `.app`
   artifact or release claim.
+- Public-opening preparation stays local and static until a human explicitly
+  hands off GitHub visibility, settings, branch protection, tags, releases, or
+  release assets.
 - Launch Services remains a packaged-app release blocker but does not block
   source-only adapter-boundary work.
 - External review suggestions that would reopen v0.1 or v0.2 breadth are either

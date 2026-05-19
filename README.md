@@ -75,6 +75,7 @@ Project planning and automation docs:
 - `docs/troubleshooting.md`
 - `docs/runtime_profiles.md`
 - `docs/runtime_adapters.md`
+- `docs/public_opening_preflight.md`
 
 ## Runtime Contract
 

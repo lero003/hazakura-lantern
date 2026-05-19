@@ -4,7 +4,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-- No changes yet.
+- Added public-opening preflight guidance so automation can prepare docs,
+  workflow hygiene, and release-boundary checks before any GitHub visibility
+  handoff.
 
 ## v0.2.0-alpha.1 - 2026-05-18
 
