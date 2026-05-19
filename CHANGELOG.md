@@ -21,6 +21,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   launch.
 - Added a fail-fast, timeout-bounded copied client smoke curl command so local
   OpenAI-compatible checks do not hang indefinitely.
+- Added troubleshooting guidance for locally checking the selected
+  `llama-server` executable and `.gguf` model without adding installer or
+  model-download behavior.
 
 ### Changed
 

@@ -18,6 +18,17 @@ Checks:
 - The generated launch command is copyable from the app for terminal
   inspection.
 
+Local file checks:
+
+```bash
+test -x /path/to/llama-server
+test -f /path/to/model.gguf
+file /path/to/llama-server
+```
+
+Use these only to confirm that the selected files already exist on this Mac.
+They are not install, update, or model-conversion steps.
+
 Do not add installer or model-download behavior to fix these cases. Lantern
 should point to the missing local setup step and remain advisory.
 

@@ -188,6 +188,8 @@ Implemented scope:
   can close a leftover `HazakuraLLMManager` process.
 - Compact troubleshooting guide for setup, endpoint health, app-bundle smoke,
   and source-only alpha release boundaries.
+- Troubleshooting now includes local file checks for confirming the selected
+  `llama-server` executable and `.gguf` model before widening runtime scope.
 - Post-public operations guidance for issue triage, automation-safe work,
   human approval gates, and packaged-release separation.
 - Post-public triage guidance now includes local label proposals and safe draft
@@ -298,7 +300,8 @@ Good next automated candidates:
   missing runtime/model file empty states beyond the blank or non-`.gguf`
   setup hints, endpoint/client snippets, health-check wording,
   restart/terminated/stopped state clarity, profile portability warnings,
-  README, or troubleshooting
+  README, or troubleshooting beyond the local file-check guidance already
+  covered
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
