@@ -3,6 +3,11 @@
 This checklist is for preparing Hazakura Lantern before the GitHub repository
 is made public. It is not the public-opening command itself.
 
+Status: this checklist was used for the `v0.3.0-alpha.1` source-only public
+opening. Keep it as a pre-open and release-handoff reference. For ongoing
+public issue triage and automation guidance, use
+`docs/post_public_operations.md`.
+
 The automation may work through this checklist after the v0.3 adapter-boundary
 lane is mostly quiet, or earlier only when a documentation or release-boundary
 gap would mislead future public readers.

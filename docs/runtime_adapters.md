@@ -6,6 +6,38 @@ runtime catalogs.
 
 The only implemented adapter is `llama-server`.
 
+## Adapter Lifecycle Classes
+
+Use these classes before adding runtime breadth. A future adapter should name
+which class it belongs to before implementation starts.
+
+### Child-Process Adapter
+
+Lantern launches and supervises the runtime process directly. It owns the child
+process lifecycle for the command it started, including PID, stop, restart,
+logs, endpoint display, and process-run failure wording.
+
+The current `llama-server` adapter is a child-process adapter.
+
+### External-Service Adapter
+
+Lantern observes an already-running local service. It may provide endpoint
+display, health checks, and copyable client snippets, but it does not own
+installation, model management, service startup, or service shutdown unless a
+separate design explicitly grants that ownership.
+
+External-service adapters need lifecycle wording before code. Do not make a
+service look like a child process if Lantern did not start it.
+
+### Custom-Command Profile
+
+Lantern launches a user-declared executable with explicit arguments and visible
+risk warnings. It should not store secrets, run shell strings by default,
+perform placeholder expansion, or claim runtime-specific understanding unless a
+later design adds those contracts deliberately.
+
+Custom-command profile work requires design approval before implementation.
+
 ## Adapter Responsibilities
 
 An adapter owns the runtime-shaped parts of the control loop:

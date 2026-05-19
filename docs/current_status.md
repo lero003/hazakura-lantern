@@ -7,9 +7,8 @@ Last reviewed: 2026-05-19
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v0.3.0-alpha.1` is a source-only alpha for adapter
-boundary clarity and public-opening readiness. It is not a packaged app
-release.
+Current release checkpoint: `v0.3.0-alpha.1` is a public source-only alpha for
+adapter boundary clarity. It is not a packaged app release.
 
 Implemented scope:
 
@@ -149,6 +148,8 @@ Implemented scope:
   fallback does not drift back to `llama-server` wording.
 - Runtime adapter responsibilities and lifecycle boundaries are documented so
   future adapter work starts with protocol clarity rather than runtime breadth.
+- Runtime adapter docs now distinguish child-process, external-service, and
+  custom-command lifecycle classes before future adapter breadth begins.
 - Runtime profile JSON shape, import failure behavior, and portability
   boundaries are documented with a readable schema-version `1` example.
 - CI workflow permissions are pinned to read-only repository contents for the
@@ -170,6 +171,8 @@ Implemented scope:
   can close a leftover `HazakuraLLMManager` process.
 - Compact troubleshooting guide for setup, endpoint health, app-bundle smoke,
   and source-only alpha release boundaries.
+- Post-public operations guidance for issue triage, automation-safe work,
+  human approval gates, and packaged-release separation.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, copied endpoint host behavior, bounded log
@@ -232,10 +235,10 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
 
 ## Automation Lane
 
-The automation should treat the project as having a source-only
-`v0.3.0-alpha.1` checkpoint for adapter boundary clarity and public-opening
-readiness, while the Launch Services helper smoke remains a documented
-packaged-app blocker. Do not spend every hourly run retrying the same
+The automation should treat the project as having a public source-only
+`v0.3.0-alpha.1` checkpoint for adapter boundary clarity, while the Launch
+Services helper smoke remains a documented packaged-app blocker. Do not spend
+every hourly run retrying the same
 `kLSNoExecutableErr` path unless there is a new hypothesis. It is acceptable to
 carry that blocker as risk and continue with safe source work that does not
 depend on app-bundle launch verification.
@@ -243,21 +246,30 @@ depend on app-bundle launch verification.
 No user-facing app-bundle release should be cut until app launch verification
 succeeds on a normal macOS environment.
 
-The saved automation may continue into v0.3 when `docs/development_loop.md` and
-`docs/roadmap.md` agree that the next smallest risk is adapter boundary
-clarity. v0.3 should tighten adapter protocols, tests, and docs before adding
-another runtime adapter.
+The saved automation may close v0.3 only when a concrete adapter-boundary
+ambiguity remains. If no such ambiguity is named, the default next lane is v0.4
+post-public stewardship: classify public feedback, keep docs current, make
+small current-behavior fixes, and accept verified no-op when no safe slice is
+justified.
 
-After v0.3 is mostly quiet, the saved automation may begin public-opening
-preparation from `docs/public_opening_preflight.md`: docs alignment, changelog
-readiness, static workflow review, and public-facing instruction cleanup. It
-must not change GitHub visibility, settings, tags, releases, or release assets
-without an explicit human handoff.
+Use `docs/post_public_operations.md` for public issue triage, automation-safe
+work, and human approval gates. Keep `docs/public_opening_preflight.md` as a
+pre-open and release-handoff reference rather than the normal post-public work
+queue. Automation must not change GitHub visibility, settings, tags, releases,
+release assets, repository packages, public issue state, automation cadence, a
+new adapter, custom command implementation, profile schema version, or
+dependencies without an explicit human handoff.
 
 ## Next Best Slice
 
 Good next automated candidates:
 
+- declare v0.3 close-out as a verified no-op if the current docs and tests
+  still show no concrete unresolved adapter ambiguity
+- classify public feedback or review notes with
+  `docs/post_public_operations.md`, then make one safe local change only when
+  the classification identifies a current-lane bug, docs drift, or daily-use
+  ambiguity
 - tighten the adapter boundary when there is a concrete validation, error
   mapping or lifecycle case that can be tested without adding runtime breadth;
   do not repeat the initial explicit validation-contract slice or the
@@ -282,9 +294,8 @@ Good next automated candidates:
 - improve a copy flow, empty state, or setup hint only when there is a concrete
   repeated-use ambiguity; keep the slice local and small, and do not repeat the
   timeout-bounded health-check curl slice
-- continue public-opening preparation with another local/static item only when
-  it is not a repeat of CI read-only permissions or public bug-report issue
-  guidance or the first workflow/script/docs static scan
+- improve post-public docs hygiene when pre-open wording would steer automation
+  toward already-completed visibility preparation
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above,
   such as proving `CFBundleExecutable` / `Contents/MacOS` consistency on the
@@ -294,5 +305,5 @@ Good next automated candidates:
   shape exists
 
 Do not begin endpoint auto-polling, runtime version checks, multiple-profile
-management, adapter expansion, model management, or chat features during this
-handoff.
+management, adapter expansion, custom command implementation, model management,
+or chat features during this handoff.

@@ -112,17 +112,16 @@ Observation is not management. Lantern may tell users that a runtime appears
 old, missing, or installed in an unusual way. It should not run installers,
 upgrade runtimes, mutate package managers, or hide where a runtime came from.
 
-## Current Source Lane: v0.3 - Adapter Boundary Clarity
+## Current Source Lane: v0.3 Close-Out, Then v0.4 Stewardship
 
-The active source-work lane is v0.3. The project has reached a source-only
-`v0.3.0-alpha.1` checkpoint for adapter boundary clarity and public-opening
-readiness, while the app-bundle launch smoke remains a packaged-release
-blocker.
+The project has reached a source-only `v0.3.0-alpha.1` checkpoint for adapter
+boundary clarity and public opening, while the app-bundle launch smoke remains
+a packaged-release blocker.
 
 Use v0 and v0.1 notes below as foundation and backlog context, not as a reason
 to reopen closed work without a concrete ambiguity. The next useful source
-work should tighten the adapter contract, tests, and docs before any runtime
-breadth is added.
+work should either close a named v0.3 adapter-boundary ambiguity or move into
+v0.4 post-public stewardship.
 
 Do not retry the known `kLSNoExecutableErr` app-bundle helper path unless there
 is a fresh Launch Services hypothesis. Carry it as a release risk and continue
@@ -369,8 +368,8 @@ Candidate work:
 - adapter-owned endpoint snippet behavior
 - adapter-owned validation and error mapping
 - tests that prove adapters do not require UI rewrites
-- one experimental adapter or custom command profile only if the boundary is
-  already stable
+- documentation that separates child-process, external-service, and
+  custom-command lifecycle classes
 
 Adapter requirements:
 
@@ -382,7 +381,7 @@ Adapter requirements:
 - health behavior must be documented
 - unsupported runtime behavior must fail clearly
 
-Possible first adapter experiments:
+Future adapter experiments, after close-out and human approval:
 
 - custom command profile
 - Ollama
@@ -401,68 +400,146 @@ Completion criteria:
 - UI language remains about local control, not runtime marketplace features
 - docs describe what Lantern manages and what the runtime still owns
 
-## v0.4 - Existing Runtime Aggregation
+### v0.3 Close-Out Criteria
+
+v0.3 is closed when:
+
+- adapter ownership is documented for command construction, validation, launch
+  preflight, endpoint display, health contract, health timeout, environment
+  snippets, and launch failure descriptions
+- `llama-server` regression tests cover executable and model validation,
+  `.gguf` boundaries, host and port validation, IPv4/IPv6/bracket behavior,
+  blank host normalization, copied local endpoint behavior, and process-run
+  failure wording
+- a minimal or test-only adapter fixture proves the boundary can be exercised
+  without rewriting the UI
+- `docs/runtime_adapters.md` explains current responsibilities and future
+  adapter lifecycle classes
+- `docs/current_status.md` names no concrete unresolved v0.3 adapter ambiguity
+- `swift test` and `swift build --disable-sandbox` pass
+- `kLSNoExecutableErr` remains classified as a packaged-release blocker rather
+  than a v0.3 source-work blocker
+
+After close-out, automation should not add more adapter-boundary tests unless a
+new bug report, design note, or regression identifies a specific ambiguity.
+
+## v0.4 - Post-Public Stewardship And Daily-Use Stabilization
 
 Purpose:
 
-Support a small set of existing local runtime shapes as thin wrappers.
+Keep the newly public source-only alpha understandable, narrow, and safe for
+automated maintenance without adding runtime breadth.
 
 Candidate work:
 
-- one or two additional well-scoped adapters
-- custom command profiles with visible risk warnings
-- adapter-specific docs
-- adapter-specific fixture tests
-- profile examples for each supported runtime shape
-- compatibility notes for known runtime quirks
+- public issue triage taxonomy and response boundaries
+- post-public docs hygiene for README, current status, roadmap, changelog,
+  troubleshooting, and issue templates
+- small reproducible bug fixes in current behavior
+- small empty-state, setup-hint, copy-flow, or error-message improvements when
+  a public issue or repeated-use ambiguity names the problem
+- advisory runtime version display only if it is adapter-scoped,
+  timeout-bounded, and does not mutate runtimes
+- automation no-op criteria and human approval gates
 
-This is still not a model platform. Each adapter should be small enough to
-remove if it becomes brittle.
+This lane is mostly stewardship, not feature breadth. Public feedback should be
+classified before implementation so interesting requests can be parked without
+pulling Lantern outside its boundary.
 
 Completion criteria:
 
-- each adapter has a clear local endpoint contract
-- each adapter has focused tests
-- each adapter has docs that explain what is not managed
-- unsupported flags and runtime-specific features are pass-through, not hidden
-  product promises
-- Lantern remains understandable with all adapters disabled except one
+- issue triage rules are documented in `docs/post_public_operations.md`
+- automation can classify most public bug reports as current-lane, packaged
+  release, runtime breadth, or out-of-scope before making changes
+- public docs no longer describe public opening as a future default lane
+- source-only and packaged-release boundaries remain visible
+- no new adapter, custom command implementation, endpoint auto-polling,
+  package-manager mutation, or runtime installer work starts without human
+  approval
 
-## v0.5 - Public Opening And Trust Hygiene
+## v0.5 - Custom Command Profile Design
 
 Purpose:
 
-Make the project easier to use, review, and eventually open on GitHub without
-broadening scope or implying packaged-app readiness.
+Design custom command profiles before implementation. The goal is to make the
+dangerous part explicit enough that a later alpha can stay predictable.
 
 Candidate work:
 
-- public-opening preflight checklist
-- README and changelog cleanup for source-only checkpoints
-- static GitHub workflow review and least-surprise CI permissions
-- signed or clearly documented unsigned local builds
-- release notes
-- changelog
-- checksum guidance if distributing binaries
-- versioned profile schema notes
-- compatibility notes for runtime adapters
-- advisory runtime update-check documentation that explains what is observed and
-  what Lantern will not update
-- issue templates that ask for command preview, logs, adapter, and profile data
-- docs cleanup before public or wider use
+- design note for executable path plus explicit argument array
+- shell-string mode rejected or deferred behind a separate approval gate
+- no secrets persisted in profiles
+- lifecycle semantics for commands Lantern starts and stops
+- visible risk warnings for user-declared commands
+- profile storage and portability boundaries
+- migration risks before any schema version change
+- tests planned before UI work
 
 Completion criteria:
 
-- users understand how to install or build the app locally
-- public readers can tell whether the project is source-only, prerelease, or a
-  packaged app release
-- users understand what data a bug report should include
-- release-to-release changes are understandable
-- profile compatibility expectations are documented
-- runtime update information is clearly advisory, not an automatic updater
-- docs do not imply that Lantern installs, owns, or updates runtimes
-- GitHub visibility, settings, tags, releases, and release assets remain human
-  handoff actions rather than background automation side effects
+- docs explain why custom command profiles are not shell execution shortcuts
+- the profile schema impact is understood before implementation starts
+- lifecycle ownership remains limited to child processes Lantern starts
+- implementation is explicitly approved by a human before v0.6 work begins
+
+## v0.6 - Custom Command Profile Minimal Alpha
+
+Purpose:
+
+Implement the smallest advanced-user custom command profile only after v0.5
+design is accepted.
+
+Candidate work:
+
+- explicit executable plus argument array
+- no shell interpolation
+- no secret storage
+- clear warnings in UI and docs
+- direct child-process lifecycle only
+- focused command, profile, validation, and launch-failure tests
+
+Completion criteria:
+
+- existing `llama-server` behavior remains unchanged
+- custom command profiles are visibly advanced and local-only
+- failure messages do not imply runtime-specific knowledge
+- schema migration behavior is tested if the schema changes
+
+## v0.7 - First Additional Runtime Shape
+
+Purpose:
+
+Add one concrete additional runtime shape only after public feedback identifies
+the most valuable class and the adapter lifecycle is designed.
+
+Candidate work:
+
+- one child-process adapter or one external-service adapter, not both
+- adapter-specific docs and fixture tests
+- explicit start/stop ownership statement
+- no model pull, installer, package-manager mutation, proxy, or service
+  manager behavior
+
+Completion criteria:
+
+- the second runtime shape does not change the core lifecycle for the first
+  adapter
+- docs explain what Lantern does not manage
+- each adapter can still be understood, tested, and removed independently
+
+## Packaging Track - Separate From Source Milestones
+
+Packaging work should not block source-only roadmap progress unless a packaged
+release is being prepared.
+
+- P0: Codex-environment reproduction and diagnostics for `kLSNoExecutableErr`
+- P1: normal macOS verification outside the restricted Codex environment
+- P2: bundle metadata, signing, launch-path, or Launch Services fix
+- P3: unsigned local app artifact
+- P4: signed and notarized distribution
+
+No `.app`, zip, dmg, signing, notarization, checksum, or binary distribution
+claim should be published until the relevant packaging gate is satisfied.
 
 ## Later, Separate Design Decisions
 
@@ -473,10 +550,8 @@ These may become useful, but they should not slip into earlier lanes casually:
 - LAN exposure controls
 - optional local authentication guidance
 - metrics or benchmark display
-- signed release packaging and notarization
 - richer runtime setup assistant that remains documentation-first
 - opt-in runtime update notifications for registered runtimes
-- richer adapter catalog
 - agent-facing integration notes
 
 Treat each as a design decision with its own trade-offs, not incidental polish.
@@ -501,7 +576,9 @@ Do not use this project for:
 
 ## Automation Guidance
 
-Automated development should pick one small slice from the current lane.
+Automated development should pick one small slice from the current lane. After
+`v0.3.0-alpha.1`, the default lane is v0.3 close-out when a concrete adapter
+ambiguity exists, otherwise v0.4 post-public stewardship.
 
 Good next slices:
 
@@ -529,26 +606,36 @@ Good next slices:
   state transition beyond the explicit pending-restart status
 - document launch smoke expectations only when there is a fresh verification
   hypothesis or new evidence
+- classify public issues or external review notes using
+  `docs/post_public_operations.md`, then update docs, tests, or small current
+  behavior only when the classification identifies a safe local slice
 - keep endpoint auto-polling deferred unless a later slice intentionally
   revisits adapter-owned health lifecycle and proves the polling policy can
   remain local, timeout-bounded, and non-surprising
-- after v0.3 is mostly quiet, close one `docs/public_opening_preflight.md` item
-  at a time; keep the work static and local unless the user explicitly hands off
-  GitHub visibility, settings, tags, releases, or release assets
+- use `docs/public_opening_preflight.md` only for pre-open or release-handoff
+  checks; use `docs/post_public_operations.md` for normal public operation
 - update current status after implementation changes
 
 Rules for automated work:
 
-- do not add a new adapter unless the current lane explicitly allows it
+- do not add a new adapter without explicit human approval
+- do not begin custom command profile implementation without explicit human
+  approval; v0.5 is design, not implementation
+- do not change the runtime profile schema version without explicit human
+  approval
 - do not add endpoint auto-polling before manual health and adapter health
   boundaries are intentionally revisited
 - do not add multiple-profile management while the source-only checkpoint only
   promises active-profile import/export
 - do not add model download or install flows
 - do not turn advisory runtime update status into automatic update execution
-- do not make the repository public or mutate GitHub settings, secrets,
-  collaborators, branch protection, tags, releases, or release assets as part of
-  the hourly loop
+- do not mutate GitHub settings, secrets, collaborators, branch protection,
+  tags, releases, release assets, repository packages, or public issue state as
+  part of the hourly loop
+- do not publish packaged `.app`, zip, dmg, signing, notarization, checksum, or
+  binary distribution claims
+- do not mutate dependencies, lockfiles, package managers, or version-manager
+  files unless a human explicitly hands off that work
 - do not hide command construction
 - do not change runtime ownership assumptions casually
 - update tests and docs with each meaningful behavior change

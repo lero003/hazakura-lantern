@@ -13,8 +13,11 @@ Start each substantial run with:
 4. `docs/roadmap.md`
 5. `docs/product_brief.md`
 6. `docs/troubleshooting.md`
-7. `docs/public_opening_preflight.md` when a run touches public-opening,
-   release, GitHub visibility, GitHub settings, or pre-open automation work
+7. `docs/post_public_operations.md` when a run touches public issues, external
+   review feedback, post-public docs hygiene, or automation scope
+8. `docs/public_opening_preflight.md` only when a run touches pre-open
+   checklist history, release, GitHub visibility, GitHub settings, tags, or
+   release assets
 
 Run Hazakura Habitat before choosing commands for code, dependencies, Git,
 release, or automation work. Read its `agent_context.md` first, and consult
@@ -22,12 +25,11 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Lane
 
-The project has a source-only `v0.3.0-alpha.1` checkpoint for adapter boundary
-clarity and public-opening readiness, while the app-bundle launch smoke remains
-a packaged-release blocker.
+The project has a public source-only `v0.3.0-alpha.1` checkpoint for adapter
+boundary clarity. The app-bundle launch smoke remains a packaged-release
+blocker.
 
-Favor work that keeps the existing `llama-server` control loop explicit while
-making future adapter boundaries smaller and easier to test:
+Favor v0.3 close-out only when there is a concrete adapter-boundary ambiguity:
 
 - launch command preview correctness
 - adapter-owned command construction
@@ -35,6 +37,11 @@ making future adapter boundaries smaller and easier to test:
 - validation and error mapping
 - source-only profile compatibility checks
 - app launch/build reliability when there is a fresh hypothesis
+
+When no such ambiguity exists, move to v0.4 post-public stewardship: classify
+public feedback, tighten docs that steer automation, and make small current
+behavior fixes only when a concrete issue or repeated-use ambiguity justifies
+them.
 
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
@@ -68,6 +75,9 @@ Lane handoff rules:
   import/export helpers are covered well enough that the next risk is adapter
   boundary clarity. v0.3 work should tighten protocols, tests, and docs before
   adding another runtime adapter.
+- v0.3 -> v0.4: allowed when adapter ownership is documented and tested well
+  enough that `docs/current_status.md` names no concrete unresolved adapter
+  ambiguity. The next lane is post-public stewardship, not runtime breadth.
 
 Release posture:
 
@@ -78,16 +88,16 @@ Release posture:
   release until the app-bundle launch smoke is verified on a normal macOS
   environment.
 
-Public-opening posture:
+Post-public posture:
 
-- Public-opening preparation may begin before the repository visibility changes,
-  especially after v0.3 adapter-boundary work is mostly quiet.
-- Use `docs/public_opening_preflight.md` as the checklist for automation-ready
-  preparation. The automation may improve docs, changelog, static workflow
-  hygiene, and public-facing instructions one small slice at a time.
+- Use `docs/post_public_operations.md` for issue triage, external review notes,
+  automation-safe work, and human approval gates.
+- Keep `docs/public_opening_preflight.md` as the pre-open and release-handoff
+  checklist, not as the default post-public work queue.
 - Do not change GitHub repository visibility, branch protection, collaborators,
-  secrets, webhooks, Actions settings, tags, GitHub Releases, or release assets
-  without an explicit human handoff for that exact action.
+  secrets, webhooks, Actions settings, tags, GitHub Releases, release assets,
+  repository packages, or public issue state without an explicit human handoff
+  for that exact action.
 
 ## Automation Rules
 
@@ -122,13 +132,21 @@ Preferred order:
    smoke issue, advance to the next lane's smallest safe item.
 4. Add focused tests for an existing boundary.
 5. Tighten docs when they would otherwise steer the next run incorrectly.
-6. After v0.3 is mostly quiet, close one public-opening preflight item that can
-   be verified locally without remote GitHub mutation.
+6. Classify public feedback or external review notes using
+   `docs/post_public_operations.md`, then make one safe local change only if the
+   classification justifies it.
 7. End as a verified no-op only when no safe slice is justified after the
    checks above.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.
+
+Human approval is required before automation starts a new runtime adapter,
+custom command profile implementation, profile schema version change, packaged
+artifact, GitHub settings or release mutation, public issue mutation, automation
+cadence change, dependency or lockfile mutation, endpoint auto-polling,
+runtime install/update path, multiple-profile management, launch-at-login, or
+automatic restart policy.
 
 ## Verification
 

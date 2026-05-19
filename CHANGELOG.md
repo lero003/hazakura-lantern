@@ -4,7 +4,17 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-No changes yet.
+### Added
+
+- Added post-public operations guidance for issue triage, automation-safe work,
+  human approval gates, and packaged-release separation after the repository
+  became public.
+
+### Changed
+
+- Reframed the roadmap after `v0.3.0-alpha.1` so v0.4 focuses on post-public
+  stewardship, v0.5 on custom command profile design, and packaged app work on
+  a separate verification track.
 
 ## v0.3.0-alpha.1 - 2026-05-19
 

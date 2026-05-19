@@ -11,7 +11,9 @@ related_files:
   - docs/current_status.md
   - docs/roadmap.md
   - docs/troubleshooting.md
+  - docs/post_public_operations.md
   - docs/public_opening_preflight.md
+  - docs/runtime_adapters.md
   - CHANGELOG.md
   - .github/workflows/ci.yml
   - nenrin/README.md
@@ -24,19 +26,30 @@ review_after:
 
 ## Changed
 
-- Adopted a source-only alpha release boundary, v0.2 checkpoint and v0.3 automation handoff guidance, troubleshooting checks, and a repo-local Nenrin ledger for durable agent-facing workflow decisions.
+- Adopted a source-only alpha release boundary, v0.2 checkpoint, v0.3 automation
+  handoff guidance, post-public stewardship guidance, troubleshooting checks,
+  and a repo-local Nenrin ledger for durable agent-facing workflow decisions.
 
 ## Reason
 
-Hazakura Lantern now has source-only prerelease checkpoints and recurring automation that should continue toward v0.3 without drifting into packaged app release work, chat, model download, proxy, LAN/auth, updater, or adapter breadth.
+Hazakura Lantern now has source-only prerelease checkpoints and recurring
+automation that should close v0.3 only when a concrete adapter ambiguity
+remains, then move to v0.4 post-public stewardship without drifting into
+packaged app release work, chat, model download, proxy, LAN/auth, updater, or
+adapter breadth.
 
 ## Expected Behavior
 
 - Future runs use Nenrin for release/automation/scope judgment evidence, keep
-  `v0.3.0-alpha.1` as a source-only public-opening checkpoint, treat Launch
-  Services as a packaged-app release blocker, and skip records for ordinary
+  `v0.3.0-alpha.1` as a public source-only checkpoint, treat Launch Services
+  as a packaged-app release blocker, and skip records for ordinary
   implementation logs.
-- Future review feedback is pruned against the current lane: keep adapter-boundary, observed restart-state, copy-flow, empty-state, and setup-hint slices; defer endpoint auto-polling, runtime version display, and multiple-profile management unless a later lane explicitly reopens them.
+- Future review feedback is pruned against the current lane: keep concrete
+  adapter-boundary, observed restart-state, copy-flow, empty-state, setup-hint,
+  and post-public docs hygiene slices; defer endpoint auto-polling, runtime
+  version checks, custom command implementation, new adapters, and
+  multiple-profile management unless a later lane and human handoff explicitly
+  reopen them.
 
 ## Review After
 
@@ -49,9 +62,11 @@ Hazakura Lantern now has source-only prerelease checkpoints and recurring automa
   recurring workflow decisions where prior judgment could change the next step.
 - `v0.3.0-alpha.1` remains framed as source-only, with no packaged `.app`
   artifact or release claim.
-- Public-opening preparation stays local and static until a human explicitly
-  hands off GitHub visibility, settings, branch protection, tags, releases, or
-  release assets.
+- Post-public stewardship classifies public feedback before implementation and
+  keeps public-opening preflight as a historical/release-handoff checklist.
+- Public-opening or release actions stay human-gated for GitHub visibility,
+  settings, branch protection, tags, releases, release assets, public issue
+  mutation, packaged artifacts, and binary distribution claims.
 - Public-facing agent guidance uses placeholders instead of maintainer-local
   absolute paths.
 - Launch Services remains a packaged-app release blocker but does not block

@@ -37,6 +37,7 @@ For automated or recurring development, read:
 - `docs/roadmap.md`
 - `docs/product_brief.md`
 - `docs/troubleshooting.md`
+- `docs/post_public_operations.md`
 
 Choose at most one coherent slice per run. A verified no-op is better than a
 speculative feature expansion.
