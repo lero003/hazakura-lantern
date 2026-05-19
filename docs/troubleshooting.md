@@ -54,6 +54,14 @@ Current status:
 - Do not keep retrying the same Codex-environment smoke path without a fresh
   hypothesis.
 
+Useful fresh hypotheses:
+
+- Confirm that the newly generated `Info.plist` `CFBundleExecutable` value
+  exactly matches the executable under `Contents/MacOS/`.
+- Compare Launch Services behavior after an explicit bundle registration or
+  cache reset on a normal macOS environment. Treat cache reset commands as
+  environment-mutating diagnostics, not as an hourly automation default.
+
 Before a user-facing `.app`, zip, dmg, signing, or notarization release, verify
 the app-bundle launch path on a normal macOS environment and update
 `docs/current_status.md`.

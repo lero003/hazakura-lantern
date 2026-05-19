@@ -320,6 +320,9 @@ Candidate work:
 - profile-level command preview
 - JSON profile export/import
 - file-based profile export/import UI boundaries
+- advisory portability warnings for imported runtime/model file references
+  when they can be checked locally without copying, downloading, or mutating
+  runtime files
 - migration behavior for future profile schema changes
 - migration tests for persisted settings
 - tests that preserve command construction compatibility
@@ -379,7 +382,9 @@ Possible first adapter experiments:
 - MLX-based local server
 
 Prefer custom command profile if runtime churn is high. It lets users benefit
-from new runtimes without Lantern pretending to understand them deeply.
+from new runtimes without Lantern pretending to understand them deeply. Do not
+start it until command parsing, visible risk warnings, lifecycle behavior, and
+profile storage boundaries can be kept explicit and testable.
 
 Completion criteria:
 
@@ -508,6 +513,9 @@ Good next slices:
   state transition beyond the explicit pending-restart status
 - document launch smoke expectations only when there is a fresh verification
   hypothesis or new evidence
+- keep endpoint auto-polling deferred unless a later slice intentionally
+  revisits adapter-owned health lifecycle and proves the polling policy can
+  remain local, timeout-bounded, and non-surprising
 - update current status after implementation changes
 
 Rules for automated work:

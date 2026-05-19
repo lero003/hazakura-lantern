@@ -253,8 +253,15 @@ Good next automated candidates:
 - improve a copy flow, empty state, or setup hint only when there is a concrete
   repeated-use ambiguity; keep the slice local and small, and do not repeat the
   timeout-bounded health-check curl slice
+- add profile portability warnings only if the slice stays advisory and local:
+  check imported runtime/model file references for missing, non-executable, or
+  non-`.gguf` paths and point the user toward rebinding them without copying,
+  downloading, or auto-fixing runtime files
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
-  app bundle only if there is a fresh hypothesis beyond the attempts above
+  app bundle only if there is a fresh hypothesis beyond the attempts above,
+  such as proving `CFBundleExecutable` / `Contents/MacOS` consistency on the
+  newly generated bundle or testing Launch Services cache behavior outside the
+  normal hourly loop
 - add profile migration transform tests only after a concrete schema version `2`
   shape exists
 
