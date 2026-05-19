@@ -49,6 +49,8 @@ Hazakura Lantern now has source-only prerelease checkpoints and recurring automa
 - Public-opening preparation stays local and static until a human explicitly
   hands off GitHub visibility, settings, branch protection, tags, releases, or
   release assets.
+- Public-facing agent guidance uses placeholders instead of maintainer-local
+  absolute paths.
 - Launch Services remains a packaged-app release blocker but does not block
   source-only adapter-boundary work.
 - External review suggestions that would reopen v0.1 or v0.2 breadth are either

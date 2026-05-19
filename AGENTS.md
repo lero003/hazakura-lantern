@@ -9,11 +9,12 @@ Run Hazakura Habitat before substantial coding, dependency, release, Git/GitHub,
 or command-selection work.
 
 Prefer a temporary Habitat output directory unless `habitat-report/` is
-intentionally ignored by the repo:
+intentionally ignored by the repo. Use local paths appropriate for your
+environment:
 
 ```bash
-HABITAT_SCAN=/Users/keisetsu/Projects/hazakura_Habitat/.build/debug/habitat-scan \
-  /Users/keisetsu/.codex/skills/hazakura-habitat/scripts/run_habitat_scan.sh . \
+HABITAT_SCAN=/path/to/habitat-scan \
+  /path/to/run_habitat_scan.sh . \
   "$(mktemp -d "${TMPDIR:-/tmp}/hazakura-llm-manager-habitat.XXXXXX")"
 ```
 

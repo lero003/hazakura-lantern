@@ -4,6 +4,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+- Sanitized public agent guidance to avoid local home-directory paths and
+  surfaced the known app-bundle smoke blocker in README local-development
+  instructions.
 - Recorded a local public-opening verification baseline for SwiftPM tests and
   build while keeping the packaged-app launch-smoke blocker explicit.
 - Recorded a local/static public-opening scan of workflow, issue-template,
