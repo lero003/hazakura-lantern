@@ -368,6 +368,18 @@ final class LlamaServerAdapterTests: XCTestCase {
         }
     }
 
+    func testLaunchSetupHintReportsInvalidHostBeforeStart() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.host = "localhost:1234"
+
+        XCTAssertEqual(
+            LlamaServerAdapter().launchSetupHint(config: config),
+            "Host must be blank, localhost, an IP address, or a DNS name before launch or endpoint copy. Current value: localhost:1234."
+        )
+    }
+
     func testValidateRejectsHostWithURLDelimiterBeforeCommandConstruction() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
@@ -562,7 +574,7 @@ final class LlamaServerAdapterTests: XCTestCase {
         )
         XCTAssertEqual(
             RuntimeAdapterError.invalidHost("bad host").errorDescription,
-            "Host must be blank, localhost, an IP address, or a DNS name before endpoint copy. Current value: bad host."
+            "Host must be blank, localhost, an IP address, or a DNS name before launch or endpoint copy. Current value: bad host."
         )
         XCTAssertEqual(
             RuntimeAdapterError.invalidPort(0).errorDescription,

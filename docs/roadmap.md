@@ -153,6 +153,8 @@ Already done or mostly done:
   conversion or download behavior
 - invalid numeric launch settings show a setup hint before start for port,
   context size, threads, and GPU layers
+- invalid host values show a setup hint before start so launch-host and
+  endpoint-copy mistakes are explained together
 - malformed Additional Args quoting shows a setup hint before start so launch
   argument typos do not wait for a failed start attempt
 - copied endpoint/client URLs keep local defaults copyable while reflecting a

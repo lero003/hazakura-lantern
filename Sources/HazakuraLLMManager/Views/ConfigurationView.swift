@@ -71,7 +71,7 @@ struct ConfigurationView: View {
             Divider()
                 .padding(.vertical, 8)
 
-            if let launchSetupHint = controller.configuration.launchSetupHint {
+            if let launchSetupHint = controller.launchSetupHint {
                 Label(launchSetupHint, systemImage: "info.circle")
                     .font(.caption)
                     .foregroundStyle(.secondary)

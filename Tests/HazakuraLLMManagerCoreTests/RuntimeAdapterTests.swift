@@ -9,6 +9,27 @@ final class RuntimeAdapterTests: XCTestCase {
         XCTAssertNoThrow(try adapter.validateLaunchPreconditions(config: .defaultValue, fileManager: .default))
     }
 
+    func testLaunchSetupHintUsesConfigurationHintBeforeAdapterValidation() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = ""
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        let adapter = RejectingAdapter(error: RuntimeAdapterError.invalidHost("bad host"))
+
+        XCTAssertEqual(adapter.launchSetupHint(config: config), "Choose a llama-server executable before starting.")
+    }
+
+    func testLaunchSetupHintReportsAdapterValidationFailure() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/minimal-runtime"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        let adapter = RejectingAdapter(error: RuntimeAdapterError.invalidHost("bad host"))
+
+        XCTAssertEqual(
+            adapter.launchSetupHint(config: config),
+            "Host must be blank, localhost, an IP address, or a DNS name before launch or endpoint copy. Current value: bad host."
+        )
+    }
+
     func testDefaultLaunchPreconditionsPropagateValidationFailure() {
         let adapter = RejectingAdapter(error: RuntimeAdapterError.missingRuntimePath)
 

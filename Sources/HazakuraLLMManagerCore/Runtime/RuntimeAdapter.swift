@@ -13,6 +13,19 @@ public protocol RuntimeAdapter {
 }
 
 public extension RuntimeAdapter {
+    func launchSetupHint(config: RuntimeConfiguration) -> String? {
+        if let configurationHint = config.launchSetupHint {
+            return configurationHint
+        }
+
+        do {
+            try validate(config: config)
+            return nil
+        } catch {
+            return error.localizedDescription
+        }
+    }
+
     func validateLaunchPreconditions(config: RuntimeConfiguration, fileManager: FileManager) throws {
         try validate(config: config)
     }

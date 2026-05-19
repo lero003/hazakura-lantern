@@ -58,6 +58,10 @@ final class ServerController: ObservableObject {
         }
     }
 
+    var launchSetupHint: String? {
+        adapter.launchSetupHint(config: configuration)
+    }
+
     var runtimeProfileDocument: RuntimeProfileDocument {
         RuntimeProfileDocument(name: activeProfileName, configuration: configuration)
     }

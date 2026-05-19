@@ -39,6 +39,8 @@ Implemented scope:
 - Invalid numeric launch settings now show a setup hint before start, so port,
   context size, threads, and GPU layers point to the required local value
   without waiting for a failed launch attempt.
+- Invalid host values now show a setup hint before start, so endpoint-copy and
+  launch-host mistakes are explained before a failed launch attempt.
 - Malformed Additional Args quoting now shows a setup hint before start, so
   launch argument typos can be fixed before a failed launch attempt.
 - Copied endpoint/client URLs keep local defaults copyable while respecting a
@@ -307,7 +309,8 @@ Good next automated candidates:
   setup hints, endpoint/client snippets, health-check wording,
   restart/terminated/stopped state clarity, profile portability warnings,
   README, or troubleshooting beyond the local file-check guidance already
-  covered; malformed Additional Args setup hints are already covered
+  covered; malformed Additional Args and invalid-host setup hints are already
+  covered
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,

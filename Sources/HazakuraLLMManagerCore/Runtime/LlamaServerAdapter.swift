@@ -279,7 +279,7 @@ public enum RuntimeAdapterError: Error, Equatable, LocalizedError {
         case .unsupportedModelType(let path):
             "Model file must be a .gguf file before launch. Current path: \(path)."
         case .invalidHost(let host):
-            "Host must be blank, localhost, an IP address, or a DNS name before endpoint copy. Current value: \(host)."
+            "Host must be blank, localhost, an IP address, or a DNS name before launch or endpoint copy. Current value: \(host)."
         case .invalidPort(let port):
             "Port must be between 1 and 65535 before launch. Current value: \(port)."
         case .invalidContextSize(let contextSize):
