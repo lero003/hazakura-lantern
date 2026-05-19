@@ -85,4 +85,20 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
     public var endpointHealthCurlCommand: String {
         endpointHealthRequest.curlCommand
     }
+
+    public var launchSetupHint: String? {
+        let missingRuntime = runtimeExecutablePath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let missingModel = modelPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+
+        switch (missingRuntime, missingModel) {
+        case (true, true):
+            return "Choose a llama-server executable and .gguf model before starting."
+        case (true, false):
+            return "Choose a llama-server executable before starting."
+        case (false, true):
+            return "Choose a .gguf model before starting."
+        case (false, false):
+            return nil
+        }
+    }
 }

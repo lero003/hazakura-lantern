@@ -144,6 +144,7 @@ Already done or mostly done:
 - explicit `Restarting` status while a requested restart waits for the current
   process to terminate before the next launch
 - local endpoint and OpenAI-style environment snippet
+- blank runtime or model selections show a setup hint before start
 - copied endpoint/client URLs keep local defaults copyable while reflecting a
   configured reachable host
 - local endpoint health-check URL and timeout-bounded copyable curl smoke
@@ -612,9 +613,10 @@ Good next slices:
 - tighten copied command, client smoke, or endpoint reuse flows only when a
   concrete copy-target ambiguity remains; the timeout-bounded health-check curl
   slice is covered
-- improve common launch failure messages, empty states, health-check wording,
-  profile warnings, or setup hints only when a specific `llama-server`
-  ambiguity is visible, without adding installer behavior
+- improve common launch failure messages, file empty states beyond the
+  blank-selection setup hint, health-check wording, profile warnings, or setup
+  hints only when a specific `llama-server` ambiguity is visible, without
+  adding installer behavior
 - harden restart behavior only with a newly observed ambiguity and a testable
   state transition beyond the explicit pending-restart status
 - document launch smoke expectations only when there is a fresh verification

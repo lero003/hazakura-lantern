@@ -26,6 +26,9 @@ Implemented scope:
   core tests.
 - Basic runtime/model path preflight before launching.
 - Local endpoint and environment snippet display.
+- Blank runtime or model selections now show a setup hint before start, so the
+  empty state points to the next local selection step without installing or
+  downloading anything.
 - Copied endpoint/client URLs keep local defaults copyable while respecting a
   configured reachable host, with focused tests.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
@@ -278,9 +281,10 @@ Good next automated candidates:
   still show no concrete unresolved adapter ambiguity
 - improve one `llama-server` reliability or daily-use path when the confusing
   behavior is concrete and testable: launch validation, launch failure wording,
-  missing runtime/model empty states, endpoint/client snippets, health-check
-  wording, restart/terminated/stopped state clarity, profile portability
-  warnings, README, or troubleshooting
+  missing runtime/model file empty states beyond the blank-selection setup
+  hint, endpoint/client snippets, health-check wording,
+  restart/terminated/stopped state clarity, profile portability warnings,
+  README, or troubleshooting
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,

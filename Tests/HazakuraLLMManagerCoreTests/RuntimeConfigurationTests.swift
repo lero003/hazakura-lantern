@@ -69,4 +69,39 @@ final class RuntimeConfigurationTests: XCTestCase {
         XCTAssertEqual(config.healthCheckURL, "http://localhost:9876/v1/models")
         XCTAssertEqual(config.endpointHealthCurlCommand, "curl -fsS --max-time 5 http://localhost:9876/v1/models")
     }
+
+    func testLaunchSetupHintReportsMissingRuntimeAndModelSelections() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = " \n"
+        config.modelPath = "\t"
+
+        XCTAssertEqual(
+            config.launchSetupHint,
+            "Choose a llama-server executable and .gguf model before starting."
+        )
+    }
+
+    func testLaunchSetupHintReportsMissingRuntimeSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = ""
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+
+        XCTAssertEqual(config.launchSetupHint, "Choose a llama-server executable before starting.")
+    }
+
+    func testLaunchSetupHintReportsMissingModelSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = ""
+
+        XCTAssertEqual(config.launchSetupHint, "Choose a .gguf model before starting.")
+    }
+
+    func testLaunchSetupHintIsNilWhenRequiredSelectionsArePresent() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+
+        XCTAssertNil(config.launchSetupHint)
+    }
 }

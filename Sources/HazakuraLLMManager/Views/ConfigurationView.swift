@@ -71,6 +71,13 @@ struct ConfigurationView: View {
             Divider()
                 .padding(.vertical, 8)
 
+            if let launchSetupHint = controller.configuration.launchSetupHint {
+                Label(launchSetupHint, systemImage: "info.circle")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 4)
+            }
+
             HStack(spacing: 10) {
                 Button {
                     controller.start()
