@@ -221,7 +221,16 @@ final class ServerController: ObservableObject {
             recentPaths = configurationStore.recordRuntimeExecutablePath(profile.configuration.runtimeExecutablePath)
             recentPaths = configurationStore.recordModelPath(profile.configuration.modelPath)
             endpointHealthStatus = .unchecked
-            profileFileMessage = "Imported \(profile.name)."
+            let portabilityWarnings = profile.localPortabilityWarnings()
+            if let firstWarning = portabilityWarnings.first {
+                if portabilityWarnings.count == 1 {
+                    profileFileMessage = "Imported \(profile.name). \(firstWarning.localizedDescription)"
+                } else {
+                    profileFileMessage = "Imported \(profile.name). \(portabilityWarnings.count) local file warnings. \(firstWarning.localizedDescription)"
+                }
+            } else {
+                profileFileMessage = "Imported \(profile.name)."
+            }
 
             if process != nil {
                 appendLog("Imported profile changes will apply on the next start.", stream: .info)

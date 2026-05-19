@@ -38,8 +38,12 @@ display still shows the copyable `localhost` base URL.
 
 The core profile contract can list the local file references a profile depends
 on: the runtime executable and model file paths, when present. File-based UI can
-use that list for portability warnings without checking the file system,
-installing runtimes, or copying model data into the profile.
+use that list for portability warnings without installing runtimes or copying
+model data into the profile. Imported profiles surface advisory local warnings
+when referenced files are missing, when the runtime path is not executable, when
+the model path is a directory, or when the model path is not a `.gguf` file.
+Those warnings point the user toward rebinding local paths before launch; they
+do not copy, download, or auto-fix runtime files.
 
 Profile documents can build a launch command through the matching runtime
 adapter. This lets future profile UI show the command preview for a profile
@@ -62,7 +66,8 @@ runtime kind, but it does not require decoding the full runtime configuration.
 The current app UI can export the active runtime profile and import a supported
 profile file into the active configuration. Importing a profile records the
 profile name, replaces the editable runtime configuration, and keeps local file
-paths as references; it does not copy runtimes or model files.
+paths as references. It can warn about local portability issues, but it does
+not copy runtimes or model files.
 
 ## Import Behavior
 

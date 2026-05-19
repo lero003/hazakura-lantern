@@ -191,6 +191,10 @@ Already done or mostly done:
   to decode
 - profile local file reference contract for runtime executable and model paths,
   covered by focused tests before portability warnings or file UI are added
+- imported profile portability warnings for missing runtime/model file
+  references, non-executable runtime paths, model directories, and non-`.gguf`
+  model paths, kept advisory without copying, downloading, or auto-fixing local
+  files
 - profile-level launch command preview through the matching adapter, covered by
   focused tests before profile UI is added
 - profile command preview through a test-only matching adapter, proving the

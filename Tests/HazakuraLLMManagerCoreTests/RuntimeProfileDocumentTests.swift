@@ -255,6 +255,130 @@ final class RuntimeProfileDocumentTests: XCTestCase {
         XCTAssertEqual(document.localFileReferences, [])
     }
 
+    func testProfileDocumentPortabilityWarningsPassForExistingExecutableRuntimeAndModel() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("hazakura.gguf")
+        try makeExecutableFile(at: runtime)
+        FileManager.default.createFile(atPath: model.path, contents: Data())
+
+        let document = RuntimeProfileDocument(
+            name: "Portable runtime",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: runtime.path,
+                modelPath: model.path,
+                host: "127.0.0.1",
+                port: 1234,
+                contextSize: 4096,
+                threads: "auto",
+                gpuLayers: "auto",
+                additionalArguments: ""
+            )
+        )
+
+        XCTAssertEqual(document.localPortabilityWarnings(), [])
+    }
+
+    func testProfileDocumentPortabilityWarningsReportMissingLocalReferences() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("missing-llama-server")
+        let model = workspace.appendingPathComponent("missing.gguf")
+        let document = RuntimeProfileDocument(
+            name: "Moved runtime",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: runtime.path,
+                modelPath: model.path,
+                host: "127.0.0.1",
+                port: 1234,
+                contextSize: 4096,
+                threads: "auto",
+                gpuLayers: "auto",
+                additionalArguments: ""
+            )
+        )
+
+        XCTAssertEqual(
+            document.localPortabilityWarnings(),
+            [
+                .runtimeExecutableMissing(runtime.path),
+                .modelFileMissing(model.path)
+            ]
+        )
+        XCTAssertEqual(
+            RuntimeProfileDocument.PortabilityWarning.modelFileMissing(model.path).localizedDescription,
+            "Model file is missing. Rebind it before starting. Current path: \(model.path)."
+        )
+    }
+
+    func testProfileDocumentPortabilityWarningsReportNonExecutableRuntimeAndUnsupportedModelType() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("hazakura.bin")
+        FileManager.default.createFile(atPath: runtime.path, contents: Data())
+        FileManager.default.createFile(atPath: model.path, contents: Data())
+
+        let document = RuntimeProfileDocument(
+            name: "Needs rebinding",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: runtime.path,
+                modelPath: model.path,
+                host: "127.0.0.1",
+                port: 1234,
+                contextSize: 4096,
+                threads: "auto",
+                gpuLayers: "auto",
+                additionalArguments: ""
+            )
+        )
+
+        XCTAssertEqual(
+            document.localPortabilityWarnings(),
+            [
+                .runtimeExecutableNotExecutable(runtime.path),
+                .unsupportedModelFileType(model.path)
+            ]
+        )
+        XCTAssertEqual(
+            RuntimeProfileDocument.PortabilityWarning.runtimeExecutableNotExecutable(runtime.path).localizedDescription,
+            "Runtime executable is not executable. Choose an executable Mac binary before starting. Current path: \(runtime.path)."
+        )
+    }
+
+    func testProfileDocumentPortabilityWarningsReportModelDirectory() throws {
+        let workspace = try makeWorkspace()
+        defer { try? FileManager.default.removeItem(at: workspace) }
+
+        let runtime = workspace.appendingPathComponent("llama-server")
+        let model = workspace.appendingPathComponent("hazakura.gguf")
+        try makeExecutableFile(at: runtime)
+        try FileManager.default.createDirectory(at: model, withIntermediateDirectories: true)
+
+        let document = RuntimeProfileDocument(
+            name: "Directory model",
+            configuration: RuntimeConfiguration(
+                runtimeExecutablePath: runtime.path,
+                modelPath: model.path,
+                host: "127.0.0.1",
+                port: 1234,
+                contextSize: 4096,
+                threads: "auto",
+                gpuLayers: "auto",
+                additionalArguments: ""
+            )
+        )
+
+        XCTAssertEqual(
+            document.localPortabilityWarnings(),
+            [.modelPathIsDirectory(model.path)]
+        )
+    }
+
     func testProfileDocumentBuildsLaunchCommandWithMatchingAdapter() throws {
         let document = RuntimeProfileDocument(
             name: "Desk runtime",
@@ -583,6 +707,18 @@ final class RuntimeProfileDocumentTests: XCTestCase {
                 .unsupportedRuntimeKind("ollama", supportedRuntimeKind: "llama-server")
             )
         }
+    }
+
+    private func makeWorkspace() throws -> URL {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-lantern-profile-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        return workspace
+    }
+
+    private func makeExecutableFile(at url: URL) throws {
+        FileManager.default.createFile(atPath: url.path, contents: Data())
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: url.path)
     }
 }
 

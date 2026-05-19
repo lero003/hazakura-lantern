@@ -29,6 +29,29 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
         }
     }
 
+    public enum PortabilityWarning: Error, Equatable, LocalizedError, Sendable {
+        case runtimeExecutableMissing(String)
+        case runtimeExecutableNotExecutable(String)
+        case modelFileMissing(String)
+        case modelPathIsDirectory(String)
+        case unsupportedModelFileType(String)
+
+        public var errorDescription: String? {
+            switch self {
+            case .runtimeExecutableMissing(let path):
+                return "Runtime executable is missing. Rebind it before starting. Current path: \(path)."
+            case .runtimeExecutableNotExecutable(let path):
+                return "Runtime executable is not executable. Choose an executable Mac binary before starting. Current path: \(path)."
+            case .modelFileMissing(let path):
+                return "Model file is missing. Rebind it before starting. Current path: \(path)."
+            case .modelPathIsDirectory(let path):
+                return "Model path is a directory. Choose a .gguf model file before starting. Current path: \(path)."
+            case .unsupportedModelFileType(let path):
+                return "Model path is not a .gguf file. Choose a .gguf model before starting. Current path: \(path)."
+            }
+        }
+    }
+
     public enum ImportError: Error, Equatable, LocalizedError, Sendable {
         case missingSchemaVersion
         case missingName
@@ -115,6 +138,43 @@ public struct RuntimeProfileDocument: Codable, Equatable, Sendable {
             }
 
             return LocalFileReference(role: reference.role, path: trimmedPath)
+        }
+    }
+
+    public func localPortabilityWarnings(fileManager: FileManager = .default) -> [PortabilityWarning] {
+        localFileReferences.compactMap { reference in
+            switch reference.role {
+            case .runtimeExecutable:
+                var isDirectory: ObjCBool = false
+                guard fileManager.fileExists(atPath: reference.path, isDirectory: &isDirectory) else {
+                    return .runtimeExecutableMissing(reference.path)
+                }
+
+                guard !isDirectory.boolValue,
+                      fileManager.isExecutableFile(atPath: reference.path) else {
+                    return .runtimeExecutableNotExecutable(reference.path)
+                }
+
+                return nil
+            case .modelFile:
+                let fileExtension = URL(fileURLWithPath: reference.path)
+                    .pathExtension
+                    .lowercased()
+                guard fileExtension == "gguf" else {
+                    return .unsupportedModelFileType(reference.path)
+                }
+
+                var isDirectory: ObjCBool = false
+                guard fileManager.fileExists(atPath: reference.path, isDirectory: &isDirectory) else {
+                    return .modelFileMissing(reference.path)
+                }
+
+                guard !isDirectory.boolValue else {
+                    return .modelPathIsDirectory(reference.path)
+                }
+
+                return nil
+            }
         }
     }
 

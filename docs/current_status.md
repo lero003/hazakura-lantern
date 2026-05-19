@@ -80,6 +80,10 @@ Implemented scope:
 - Runtime profile documents expose their runtime executable and model file
   references for future portability warnings without checking or copying local
   files, with focused tests.
+- Runtime profile imports now surface local advisory portability warnings for
+  missing runtime/model file references, non-executable runtime paths, model
+  directories, and non-`.gguf` model paths without copying or auto-fixing local
+  files.
 - Runtime profile documents can build an adapter-scoped launch command preview
   without applying the profile as active configuration, with focused mismatch
   tests.
@@ -253,10 +257,6 @@ Good next automated candidates:
 - improve a copy flow, empty state, or setup hint only when there is a concrete
   repeated-use ambiguity; keep the slice local and small, and do not repeat the
   timeout-bounded health-check curl slice
-- add profile portability warnings only if the slice stays advisory and local:
-  check imported runtime/model file references for missing, non-executable, or
-  non-`.gguf` paths and point the user toward rebinding them without copying,
-  downloading, or auto-fixing runtime files
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above,
   such as proving `CFBundleExecutable` / `Contents/MacOS` consistency on the
