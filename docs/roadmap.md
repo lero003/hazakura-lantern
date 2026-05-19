@@ -209,6 +209,9 @@ Already done or mostly done:
 - adapter-owned health-check timeout propagation through the `RuntimeEndpoint`
   contract, keeping the default five-second curl timeout while allowing future
   adapters to narrow it explicitly
+- manual endpoint health checks honor the adapter-scoped timeout from
+  `RuntimeEndpoint`, keeping actual local health requests aligned with copied
+  curl smoke commands
 - adapter-owned environment snippets shell-quote adapter-scoped base URL and API
   key values when needed while preserving the readable default local snippet
 - explicit adapter-owned validation contract that can be tested before command

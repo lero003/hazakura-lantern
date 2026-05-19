@@ -4,6 +4,7 @@ import XCTest
 final class EndpointHealthCheckerTests: XCTestCase {
     override func tearDown() {
         EndpointHealthURLProtocol.result = nil
+        EndpointHealthURLProtocol.observedTimeoutInterval = nil
         super.tearDown()
     }
 
@@ -49,6 +50,21 @@ final class EndpointHealthCheckerTests: XCTestCase {
         )
     }
 
+    func testCheckUsesRequestScopedTimeout() async throws {
+        EndpointHealthURLProtocol.result = .success(statusCode: 200)
+        EndpointHealthURLProtocol.observedTimeoutInterval = nil
+        let checker = EndpointHealthChecker(session: makeSession(), timeoutInterval: 2)
+        let request = EndpointHealthRequest(
+            healthURL: "http://localhost:1234/v1/models",
+            timeoutSeconds: 7
+        )
+
+        let status = await checker.check(request)
+
+        XCTAssertEqual(status, .healthy(statusCode: 200))
+        XCTAssertEqual(EndpointHealthURLProtocol.observedTimeoutInterval, 7)
+    }
+
     func testCheckReturnsGenericUnhealthyForOtherRequestFailure() async throws {
         EndpointHealthURLProtocol.result = .failure(URLError(.badServerResponse))
         let checker = EndpointHealthChecker(session: makeSession())
@@ -75,6 +91,7 @@ private final class EndpointHealthURLProtocol: URLProtocol {
     }
 
     static var result: Result?
+    static var observedTimeoutInterval: TimeInterval?
 
     override class func canInit(with request: URLRequest) -> Bool {
         true
@@ -85,6 +102,8 @@ private final class EndpointHealthURLProtocol: URLProtocol {
     }
 
     override func startLoading() {
+        Self.observedTimeoutInterval = request.timeoutInterval
+
         guard let result = Self.result else {
             client?.urlProtocol(self, didFailWithError: URLError(.badServerResponse))
             return

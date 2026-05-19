@@ -249,7 +249,7 @@ final class ServerController: ObservableObject {
             return
         }
 
-        guard let healthURL = endpoint.healthCheckURL else {
+        guard let healthRequest = endpoint.endpointHealthRequest else {
             endpointHealthStatus = .unhealthy(message: "Health check URL is not available for this adapter.")
             return
         }
@@ -258,7 +258,7 @@ final class ServerController: ObservableObject {
         let checker = endpointHealthChecker
 
         Task { [weak self] in
-            let result = await checker.check(healthURL)
+            let result = await checker.check(healthRequest)
             await self?.updateEndpointHealthStatus(result)
         }
     }
