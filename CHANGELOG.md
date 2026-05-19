@@ -4,6 +4,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+- Recorded a local/static public-opening scan of workflow, issue-template,
+  manifest, script, and docs guidance without changing remote GitHub settings.
 - Added a public bug-report issue template that asks for reproduction steps,
   runtime/profile context, command previews, and redacted logs without widening
   Lantern beyond its source-only alpha boundary.

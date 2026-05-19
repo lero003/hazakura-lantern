@@ -157,6 +157,11 @@ Implemented scope:
   id, profile schema version, command previews, and redacted logs while keeping
   chat, model download, proxy, LAN exposure, authentication, runtime installer,
   and packaged-app requests outside the current source-only alpha boundary.
+- Local/static public-opening review has checked workflow, issue-template,
+  manifest, script, README, changelog, and docs guidance for surprising CI
+  triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
+  distribution claims, and release-asset claims without changing remote GitHub
+  settings.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -275,7 +280,7 @@ Good next automated candidates:
   timeout-bounded health-check curl slice
 - continue public-opening preparation with another local/static item only when
   it is not a repeat of CI read-only permissions or public bug-report issue
-  guidance
+  guidance or the first workflow/script/docs static scan
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
   app bundle only if there is a fresh hypothesis beyond the attempts above,
   such as proving `CFBundleExecutable` / `Contents/MacOS` consistency on the

@@ -42,6 +42,20 @@ Static review means reading repository files and GitHub workflow text. It does
 not mean installing dependencies, running package lifecycle scripts, dumping
 environment variables, reading secret values, or changing remote settings.
 
+## Last Local Static Review
+
+2026-05-19 local/static pass:
+
+- Reviewed `.github/workflows/ci.yml`, `.github/ISSUE_TEMPLATE/bug_report.yml`,
+  `Package.swift`, `script/build_and_run.sh`, README, changelog, and docs.
+- CI is limited to `pull_request` and `push` on `main` with read-only
+  `contents` permission.
+- No committed public instructions were found that ask users to run `curl | sh`,
+  mutate package managers, claim packaged `.app` distribution, or publish
+  GitHub Release assets.
+- The known `kLSNoExecutableErr` app-bundle launch-smoke blocker remains
+  visible as a packaged-release blocker.
+
 ## Pre-Open Checklist
 
 Before asking a human to make the repository public, confirm:
