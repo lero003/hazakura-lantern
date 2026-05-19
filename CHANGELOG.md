@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added a core `llama-server` preset model for conservative, balanced local,
+  long-context, low-memory, and MTP-capable settings while keeping every
+  generated option visible in the launch command.
 - Reworked the post-v0.5 roadmap so v0.6 and v0.7 stay on the existing
   `llama-server` path: model-family presets, option compatibility, and
   advisory runtime/version checks now come before any second-runtime adapter

@@ -107,14 +107,12 @@ but the user must be able to review and edit the resulting configuration.
 
 ## Suggested Slice Order
 
-1. Document the preset vocabulary and option compatibility rules.
+1. Document the preset vocabulary and option compatibility rules. Done.
 2. Add a core preset model that maps an intent to visible configuration values
-   and additional arguments.
-3. Add focused tests that MTP-capable presets add `--spec-type draft-mtp` and
-   `--spec-draft-n-max` only when explicitly selected.
-4. Add UI to preview and apply one preset to the active configuration.
-5. Add advisory runtime capability checks for `--version` and `--help`.
-6. Add warnings when a selected preset appears incompatible with the selected
+   and additional arguments. Done.
+3. Add UI to preview and apply one preset to the active configuration.
+4. Add advisory runtime capability checks for `--version` and `--help`.
+5. Add warnings when a selected preset appears incompatible with the selected
    runtime.
 
 Each slice should keep the `llama-server` command visible and editable.

@@ -268,6 +268,9 @@ Already done or mostly done:
   added
 - adapter contract documentation for responsibilities, lifecycle boundaries,
   and future adapter no-go lines before runtime breadth is added
+- core `llama-server` preset model for conservative, balanced local,
+  long-context, low-memory, and MTP-capable settings, with generated options
+  kept visible in the launch command
 
 Remaining before a packaged app release:
 
@@ -505,7 +508,7 @@ Candidate work:
 
 - maintain `docs/llama_server_presets.md`
 - define a small preset vocabulary: conservative, balanced local, long context,
-  low memory, and MTP capable
+  low memory, and MTP capable (core model done)
 - map presets to visible configuration values and additional arguments
 - keep launch command preview as the source of truth for what will run
 - add focused tests for preset-to-configuration behavior

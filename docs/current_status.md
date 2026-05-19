@@ -206,6 +206,10 @@ Implemented scope:
 - llama-server preset guidance now defines v0.6/v0.7 as model-family
   recommendation, option compatibility, and runtime capability advisory work
   before any second runtime adapter.
+- Core `llama-server` presets now model conservative, balanced local,
+  long-context, low-memory, and MTP-capable settings as visible configuration
+  values and additional launch arguments, with MTP arguments added only by the
+  explicit MTP-capable preset.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -318,8 +322,8 @@ Good next automated candidates:
   draft-response guidance miss a concrete public-feedback case
 - add or refine `llama-server` model-family preset guidance in
   `docs/llama_server_presets.md`, keeping presets advisory and command-visible
-- implement one tested v0.6 preset slice, such as a core preset model for
-  conservative, balanced, long-context, low-memory, or MTP-capable settings
+- implement one tested v0.6 preset slice beyond the core preset model, such as
+  previewing or applying a single preset to the active configuration
 - implement one tested v0.7 runtime capability slice, such as timeout-bounded
   `llama-server --version` display or `--help` option detection for preset
   compatibility warnings
