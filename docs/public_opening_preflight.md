@@ -56,6 +56,15 @@ environment variables, reading secret values, or changing remote settings.
 - The known `kLSNoExecutableErr` app-bundle launch-smoke blocker remains
   visible as a packaged-release blocker.
 
+## Last Local Verification Baseline
+
+2026-05-19 local verification pass:
+
+- `swift test` passed in the Codex environment with 129 XCTest tests.
+- `swift build --disable-sandbox` passed in the Codex environment.
+- This did not run `./script/build_and_run.sh --verify`; the known
+  `kLSNoExecutableErr` app-bundle launch-smoke blocker remains unresolved.
+
 ## Pre-Open Checklist
 
 Before asking a human to make the repository public, confirm:

@@ -162,6 +162,9 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
+- Local public-opening verification baseline has run `swift test` and
+  `swift build --disable-sandbox` successfully while leaving the app-bundle
+  launch-smoke blocker unresolved.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
