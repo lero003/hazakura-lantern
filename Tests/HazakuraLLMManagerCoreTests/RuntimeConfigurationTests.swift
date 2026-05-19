@@ -97,6 +97,25 @@ final class RuntimeConfigurationTests: XCTestCase {
         XCTAssertEqual(config.launchSetupHint, "Choose a .gguf model before starting.")
     }
 
+    func testLaunchSetupHintReportsUnsupportedModelSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.bin"
+
+        XCTAssertEqual(
+            config.launchSetupHint,
+            "Choose a .gguf model file before starting. Lantern does not convert or download models."
+        )
+    }
+
+    func testLaunchSetupHintAcceptsUppercaseGGUFModelSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.GGUF"
+
+        XCTAssertNil(config.launchSetupHint)
+    }
+
     func testLaunchSetupHintIsNilWhenRequiredSelectionsArePresent() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"

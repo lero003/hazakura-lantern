@@ -147,6 +147,8 @@ Already done or mostly done:
   signal-based termination
 - local endpoint and OpenAI-style environment snippet
 - blank runtime or model selections show a setup hint before start
+- non-`.gguf` model selections show a setup hint before start without adding
+  conversion or download behavior
 - copied endpoint/client URLs keep local defaults copyable while reflecting a
   configured reachable host
 - local endpoint health-check URL and timeout-bounded copyable curl smoke

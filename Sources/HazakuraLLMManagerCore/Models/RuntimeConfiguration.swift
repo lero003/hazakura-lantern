@@ -88,7 +88,8 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
 
     public var launchSetupHint: String? {
         let missingRuntime = runtimeExecutablePath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let missingModel = modelPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let trimmedModelPath = modelPath.trimmingCharacters(in: .whitespacesAndNewlines)
+        let missingModel = trimmedModelPath.isEmpty
 
         switch (missingRuntime, missingModel) {
         case (true, true):
@@ -98,6 +99,11 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
         case (false, true):
             return "Choose a .gguf model before starting."
         case (false, false):
+            let modelExtension = URL(fileURLWithPath: trimmedModelPath).pathExtension.lowercased()
+            if modelExtension != "gguf" {
+                return "Choose a .gguf model file before starting. Lantern does not convert or download models."
+            }
+
             return nil
         }
     }

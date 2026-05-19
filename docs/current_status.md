@@ -31,6 +31,9 @@ Implemented scope:
 - Blank runtime or model selections now show a setup hint before start, so the
   empty state points to the next local selection step without installing or
   downloading anything.
+- Non-`.gguf` model selections now show a setup hint before start, so an
+  unsupported local model file is explained without adding conversion or
+  download behavior.
 - Copied endpoint/client URLs keep local defaults copyable while respecting a
   configured reachable host, with focused tests.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
@@ -287,8 +290,8 @@ Good next automated candidates:
   still show no concrete unresolved adapter ambiguity
 - improve one `llama-server` reliability or daily-use path when the confusing
   behavior is concrete and testable: launch validation, launch failure wording,
-  missing runtime/model file empty states beyond the blank-selection setup
-  hint, endpoint/client snippets, health-check wording,
+  missing runtime/model file empty states beyond the blank or non-`.gguf`
+  setup hints, endpoint/client snippets, health-check wording,
   restart/terminated/stopped state clarity, profile portability warnings,
   README, or troubleshooting
 - classify public feedback or review notes with
