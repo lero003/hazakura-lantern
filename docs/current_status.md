@@ -151,6 +151,8 @@ Implemented scope:
   future adapter work starts with protocol clarity rather than runtime breadth.
 - Runtime profile JSON shape, import failure behavior, and portability
   boundaries are documented with a readable schema-version `1` example.
+- CI workflow permissions are pinned to read-only repository contents for the
+  SwiftPM verification job.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.

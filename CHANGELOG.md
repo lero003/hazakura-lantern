@@ -4,6 +4,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+- Tightened the CI workflow to declare read-only repository contents permission
+  for SwiftPM verification.
 - Added public-opening preflight guidance so automation can prepare docs,
   workflow hygiene, and release-boundary checks before any GitHub visibility
   handoff.
