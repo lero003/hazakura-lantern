@@ -198,6 +198,8 @@ Implemented scope:
   human approval gates, and packaged-release separation.
 - Post-public triage guidance now includes local label proposals and safe draft
   response shapes that automation can prepare without mutating public issues.
+- Post-public `llama-server` triage guidance now separates Lantern-owned
+  behavior from runtime-owned behavior before proposing a local fix.
 - Unit tests for command tokenization, adapter behavior, and configuration
   storage, including invalid numeric options, endpoint snippet generation, and
   quoted command preview display, copied endpoint host behavior, bounded log

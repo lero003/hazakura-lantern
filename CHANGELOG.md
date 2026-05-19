@@ -11,6 +11,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   became public.
 - Added post-public label proposals and draft response shapes that automation
   can prepare without mutating public GitHub issues.
+- Added post-public `llama-server` ownership triage guidance so automation
+  separates Lantern-owned fixes from runtime-owned behavior before acting.
 - Added a start-time setup hint for blank runtime or model selections so the
   empty state points to the next local choice before launch.
 - Added a start-time setup hint for non-`.gguf` model selections so unsupported

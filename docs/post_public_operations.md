@@ -54,10 +54,24 @@ Classify incoming issues or review notes before choosing work:
 - H. `security-sensitive report`: secrets, credentials, private paths,
   network exposure, authentication, supply chain, or host privacy concerns.
 
+For B-class reports, separate Lantern-owned behavior from runtime-owned
+behavior before proposing a fix. Lantern owns selected paths, validation,
+generated arguments, process supervision, displayed endpoint values, manual
+health-check requests, copied snippets, and wording. The local runtime owns
+model loading, supported flags, server API behavior, response quality, and
+runtime crashes after Lantern successfully starts the process.
+
+When the report is runtime-owned, keep the local action narrow: improve setup
+guidance, copied commands, or troubleshooting only if Lantern wording made the
+boundary confusing. Do not add installers, package-manager mutation, runtime
+updates, endpoint polling, proxy behavior, or a new adapter to work around an
+upstream runtime issue.
+
 When reporting a triage result, prefer:
 
 ```text
 Classification:
+Owner:
 Recommended action:
 Human approval needed:
 Verification:
@@ -100,6 +114,7 @@ For source or `llama-server` bugs:
 
 ```text
 Thanks for the report. I would classify this as <classification>.
+I would treat the owner as <Lantern/runtime/setup> based on <short evidence>.
 The next local step is <small verification or focused fix>.
 Human approval is <needed/not needed> before any public issue mutation.
 ```
