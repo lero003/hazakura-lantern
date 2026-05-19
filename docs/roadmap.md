@@ -114,9 +114,10 @@ upgrade runtimes, mutate package managers, or hide where a runtime came from.
 
 ## Current Source Lane: v0.3 - Adapter Boundary Clarity
 
-The active source-work lane is v0.3. The project has already reached a
-source-only `v0.2.0-alpha.1` checkpoint for local profile portability, while
-the app-bundle launch smoke remains a packaged-release blocker.
+The active source-work lane is v0.3. The project has reached a source-only
+`v0.3.0-alpha.1` checkpoint for adapter boundary clarity and public-opening
+readiness, while the app-bundle launch smoke remains a packaged-release
+blocker.
 
 Use v0 and v0.1 notes below as foundation and backlog context, not as a reason
 to reopen closed work without a concrete ambiguity. The next useful source

@@ -32,7 +32,10 @@ Hazakura Lantern now has source-only prerelease checkpoints and recurring automa
 
 ## Expected Behavior
 
-- Future runs use Nenrin for release/automation/scope judgment evidence, keep v0.2.0-alpha.1 as a source-only profile checkpoint, treat Launch Services as a packaged-app release blocker, and skip records for ordinary implementation logs.
+- Future runs use Nenrin for release/automation/scope judgment evidence, keep
+  `v0.3.0-alpha.1` as a source-only public-opening checkpoint, treat Launch
+  Services as a packaged-app release blocker, and skip records for ordinary
+  implementation logs.
 - Future review feedback is pruned against the current lane: keep adapter-boundary, observed restart-state, copy-flow, empty-state, and setup-hint slices; defer endpoint auto-polling, runtime version display, and multiple-profile management unless a later lane explicitly reopens them.
 
 ## Review After
@@ -44,7 +47,7 @@ Hazakura Lantern now has source-only prerelease checkpoints and recurring automa
 
 - Future automation runs `nenrin brief` before release, lane-handoff, or
   recurring workflow decisions where prior judgment could change the next step.
-- `v0.2.0-alpha.1` remains framed as source-only, with no packaged `.app`
+- `v0.3.0-alpha.1` remains framed as source-only, with no packaged `.app`
   artifact or release claim.
 - Public-opening preparation stays local and static until a human explicitly
   hands off GitHub visibility, settings, branch protection, tags, releases, or

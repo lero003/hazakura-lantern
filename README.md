@@ -12,9 +12,9 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v0.2.0-alpha.1` is a source-only alpha focused on local
-runtime profile portability. It does not include a packaged `.app`, zip, dmg,
-signing, or notarization artifact.
+Current checkpoint: `v0.3.0-alpha.1` is a source-only alpha focused on adapter
+boundary clarity and public-opening readiness. It does not include a packaged
+`.app`, zip, dmg, signing, or notarization artifact.
 
 ## v0 Scope
 

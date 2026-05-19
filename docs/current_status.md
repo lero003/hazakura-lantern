@@ -7,9 +7,9 @@ Last reviewed: 2026-05-19
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v0.2.0-alpha.1` is a source-only alpha for the
-runtime profile contract and active-profile import/export UI. It is not a
-packaged app release.
+Current release checkpoint: `v0.3.0-alpha.1` is a source-only alpha for adapter
+boundary clarity and public-opening readiness. It is not a packaged app
+release.
 
 Implemented scope:
 
@@ -232,12 +232,13 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
 
 ## Automation Lane
 
-The automation should treat the project as having a source-only v0.2 alpha
-checkpoint for local profile portability, while the Launch Services helper
-smoke remains a documented packaged-app blocker. Do not spend every hourly run
-retrying the same `kLSNoExecutableErr` path unless there is a new hypothesis.
-It is acceptable to carry that blocker as risk and continue with safe source
-work that does not depend on app-bundle launch verification.
+The automation should treat the project as having a source-only
+`v0.3.0-alpha.1` checkpoint for adapter boundary clarity and public-opening
+readiness, while the Launch Services helper smoke remains a documented
+packaged-app blocker. Do not spend every hourly run retrying the same
+`kLSNoExecutableErr` path unless there is a new hypothesis. It is acceptable to
+carry that blocker as risk and continue with safe source work that does not
+depend on app-bundle launch verification.
 
 No user-facing app-bundle release should be cut until app launch verification
 succeeds on a normal macOS environment.

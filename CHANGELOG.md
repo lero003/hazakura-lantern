@@ -4,21 +4,37 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-- Sanitized public agent guidance to avoid local home-directory paths and
-  surfaced the known app-bundle smoke blocker in README local-development
-  instructions.
-- Recorded a local public-opening verification baseline for SwiftPM tests and
-  build while keeping the packaged-app launch-smoke blocker explicit.
-- Recorded a local/static public-opening scan of workflow, issue-template,
-  manifest, script, and docs guidance without changing remote GitHub settings.
-- Added a public bug-report issue template that asks for reproduction steps,
-  runtime/profile context, command previews, and redacted logs without widening
-  Lantern beyond its source-only alpha boundary.
-- Tightened the CI workflow to declare read-only repository contents permission
-  for SwiftPM verification.
+No changes yet.
+
+## v0.3.0-alpha.1 - 2026-05-19
+
+### Added
+
 - Added public-opening preflight guidance so automation can prepare docs,
   workflow hygiene, and release-boundary checks before any GitHub visibility
   handoff.
+- Added a public bug-report issue template that asks for reproduction steps,
+  runtime/profile context, command previews, and redacted logs without widening
+  Lantern beyond its source-only alpha boundary.
+
+### Changed
+
+- Tightened the CI workflow to declare read-only repository contents permission
+  for SwiftPM verification.
+- Recorded a local/static public-opening scan of workflow, issue-template,
+  manifest, script, and docs guidance without changing remote GitHub settings.
+- Recorded a local public-opening verification baseline for SwiftPM tests and
+  build while keeping the packaged-app launch-smoke blocker explicit.
+- Sanitized public agent guidance to avoid local home-directory paths and
+  surfaced the known app-bundle smoke blocker in README local-development
+  instructions.
+
+### Known Issues
+
+- `./script/build_and_run.sh --verify` can still fail with Launch Services
+  `kLSNoExecutableErr` in the Codex environment. This checkpoint is source-only
+  and does not attach a packaged `.app`, zip, dmg, signing, or notarization
+  artifact.
 
 ## v0.2.0-alpha.1 - 2026-05-18
 
