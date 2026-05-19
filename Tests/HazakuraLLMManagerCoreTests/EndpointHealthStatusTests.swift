@@ -24,7 +24,7 @@ final class EndpointHealthStatusTests: XCTestCase {
         let status = EndpointHealthStatus.healthy(statusCode: 200)
 
         XCTAssertEqual(status.title, "Healthy (HTTP 200)")
-        XCTAssertEqual(status.detail, "The health endpoint returned a successful response.")
+        XCTAssertEqual(status.detail, "Manual health check passed. This is a snapshot, not automatic polling.")
         XCTAssertEqual(status.systemImageName, "checkmark.circle")
         XCTAssertEqual(status.tone, .success)
     }

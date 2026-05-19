@@ -160,6 +160,8 @@ Already done or mostly done:
   survive process state changes
 - endpoint health status presentation contract for title, detail, icon, and
   tone covered by focused tests
+- healthy endpoint status detail makes the manual, snapshot-only check explicit
+  without adding automatic polling
 - `UserDefaults` configuration persistence
 - recent executable/model path menus stored outside exported runtime
   configuration

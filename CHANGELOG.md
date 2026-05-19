@@ -27,6 +27,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   executable path points to a directory instead of a `llama-server` binary.
 - Clarified manual endpoint health-check wording for non-success HTTP responses
   so users can verify model load completion or inspect runtime logs.
+- Clarified the healthy endpoint status detail so manual checks read as a
+  snapshot rather than automatic endpoint polling.
 - Re-aligned the roadmap so v0.4 focuses on `llama-server` reliability,
   v0.5 on post-public issue triage, v0.6 on an MLX server design note, and
   v0.7 on MLX implementation only after explicit approval.

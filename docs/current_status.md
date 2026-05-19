@@ -46,6 +46,8 @@ Implemented scope:
   so a stale healthy result is not shown as current process state.
 - Endpoint health status presentation has a core icon/tone contract used by the
   SwiftUI endpoint view and covered by focused tests.
+- Healthy endpoint status detail now states that the manual check is a snapshot
+  rather than automatic polling.
 - Endpoint health failures distinguish common connection and timeout cases with
   focused tests.
 - Endpoint health non-success HTTP responses now include the checked URL and

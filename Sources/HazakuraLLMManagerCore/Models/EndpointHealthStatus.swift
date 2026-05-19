@@ -26,7 +26,7 @@ public enum EndpointHealthStatus: Equatable, Sendable {
         case .checking:
             "Requesting the local health endpoint..."
         case .healthy:
-            "The health endpoint returned a successful response."
+            "Manual health check passed. This is a snapshot, not automatic polling."
         case .unhealthy(let message):
             message
         }
