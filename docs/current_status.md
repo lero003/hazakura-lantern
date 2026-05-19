@@ -248,17 +248,19 @@ succeeds on a normal macOS environment.
 
 The saved automation may close v0.3 only when a concrete adapter-boundary
 ambiguity remains. If no such ambiguity is named, the default next lane is v0.4
-post-public stewardship: classify public feedback, keep docs current, make
-small current-behavior fixes, and accept verified no-op when no safe slice is
+`llama-server` reliability and daily-use polish: improve one confusing launch,
+validation, health, endpoint, copy-flow, restart-state, profile-warning, or
+setup-doc path at a time, and accept verified no-op when no safe slice is
 justified.
 
 Use `docs/post_public_operations.md` for public issue triage, automation-safe
-work, and human approval gates. Keep `docs/public_opening_preflight.md` as a
-pre-open and release-handoff reference rather than the normal post-public work
-queue. Automation must not change GitHub visibility, settings, tags, releases,
-release assets, repository packages, public issue state, automation cadence, a
-new adapter, custom command implementation, profile schema version, or
-dependencies without an explicit human handoff.
+work, and human approval gates. Treat post-public triage as the v0.5 lane, while
+its guardrails apply immediately. Keep `docs/public_opening_preflight.md` as a
+pre-open and release-handoff reference rather than the normal work queue.
+Automation must not change GitHub visibility, settings, tags, releases, release
+assets, repository packages, public issue state, automation cadence, a new
+adapter, custom command implementation, profile schema version, or dependencies
+without an explicit human handoff.
 
 ## Next Best Slice
 
@@ -266,10 +268,15 @@ Good next automated candidates:
 
 - declare v0.3 close-out as a verified no-op if the current docs and tests
   still show no concrete unresolved adapter ambiguity
+- improve one `llama-server` reliability or daily-use path when the confusing
+  behavior is concrete and testable: launch validation, launch failure wording,
+  missing runtime/model empty states, endpoint/client snippets, health-check
+  wording, restart/terminated/stopped state clarity, profile portability
+  warnings, README, or troubleshooting
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
-  the classification identifies a current-lane bug, docs drift, or daily-use
-  ambiguity
+  the classification identifies a `llama-server` bug, profile import/export bug,
+  docs confusion, or current-lane daily-use ambiguity
 - tighten the adapter boundary when there is a concrete validation, error
   mapping or lifecycle case that can be tested without adding runtime breadth;
   do not repeat the initial explicit validation-contract slice or the
@@ -305,5 +312,5 @@ Good next automated candidates:
   shape exists
 
 Do not begin endpoint auto-polling, runtime version checks, multiple-profile
-management, adapter expansion, custom command implementation, model management,
-or chat features during this handoff.
+management, adapter expansion, custom command implementation, MLX
+implementation, model management, or chat features during this handoff.

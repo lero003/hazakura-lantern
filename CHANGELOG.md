@@ -12,9 +12,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
-- Reframed the roadmap after `v0.3.0-alpha.1` so v0.4 focuses on post-public
-  stewardship, v0.5 on custom command profile design, and packaged app work on
-  a separate verification track.
+- Re-aligned the roadmap so v0.4 focuses on `llama-server` reliability,
+  v0.5 on post-public issue triage, v0.6 on an MLX server design note, and
+  v0.7 on MLX implementation only after explicit approval.
 
 ## v0.3.0-alpha.1 - 2026-05-19
 

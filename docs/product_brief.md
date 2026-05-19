@@ -30,12 +30,13 @@ The first implementation proves the core loop:
 The app keeps runtime-specific command construction behind `RuntimeAdapter`.
 Only `LlamaServerAdapter` is implemented for v0.
 
-Future adapters may include:
+Near-term work should keep improving the existing `llama-server` path before
+adding runtime breadth. The first possible second runtime lane is an
+MLX-based server, but only after a design note fixes the command, model
+reference, endpoint, health, and profile boundaries.
 
-- Ollama
-- llama-cpp-python server
-- MLX-based servers
-- Custom command profiles
+Custom command profiles, Ollama, runtime catalogs, and broad adapter expansion
+are not current roadmap lanes.
 
 ## Deferred Work
 

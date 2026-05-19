@@ -38,19 +38,18 @@ Favor v0.3 close-out only when there is a concrete adapter-boundary ambiguity:
 - source-only profile compatibility checks
 - app launch/build reliability when there is a fresh hypothesis
 
-When no such ambiguity exists, move to v0.4 post-public stewardship: classify
-public feedback, tighten docs that steer automation, and make small current
-behavior fixes only when a concrete issue or repeated-use ambiguity justifies
-them.
+When no such ambiguity exists, move to v0.4 `llama-server` reliability and
+daily-use polish. Keep the existing runtime path boring, predictable, and
+well-documented before any second runtime is designed.
 
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 or bundled inference.
 
-Recent review feedback that suggests endpoint auto-polling, runtime version
-display, multiple-profile management, or broad UI polish should be treated as
-future backlog unless it can be narrowed to one testable adapter-boundary,
-restart-state, copy-flow, empty-state, or setup-hint ambiguity. Prefer dropping
-the suggestion over reopening a closed lane.
+Recent review feedback that suggests custom command profiles, Ollama, endpoint
+auto-polling, runtime version display, multiple-profile management, or broad UI
+polish should be treated as future backlog unless it can be narrowed to one
+testable `llama-server` reliability, restart-state, copy-flow, empty-state,
+health wording, profile-warning, or setup-hint ambiguity.
 
 The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
 human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
@@ -77,7 +76,13 @@ Lane handoff rules:
   adding another runtime adapter.
 - v0.3 -> v0.4: allowed when adapter ownership is documented and tested well
   enough that `docs/current_status.md` names no concrete unresolved adapter
-  ambiguity. The next lane is post-public stewardship, not runtime breadth.
+  ambiguity. The next lane is `llama-server` reliability and daily-use polish,
+  not runtime breadth.
+- v0.4 -> v0.5: allowed when the common `llama-server` launch, health,
+  endpoint, copy-flow, restart-state, setup-hint, and profile-warning paths are
+  quiet enough that public feedback triage is the next smallest risk.
+- v0.5 -> v0.6: allowed when public issue triage rules and automation
+  discipline are documented. v0.6 is an MLX server adapter design note only.
 
 Release posture:
 
@@ -91,7 +96,8 @@ Release posture:
 Post-public posture:
 
 - Use `docs/post_public_operations.md` for issue triage, external review notes,
-  automation-safe work, and human approval gates.
+  automation-safe work, and human approval gates. Formal post-public triage is
+  the v0.5 lane, but these guardrails apply immediately.
 - Keep `docs/public_opening_preflight.md` as the pre-open and release-handoff
   checklist, not as the default post-public work queue.
 - Do not change GitHub repository visibility, branch protection, collaborators,
@@ -130,8 +136,10 @@ Preferred order:
 2. Close a small correctness gap in the current roadmap lane.
 3. If the current lane is blocked only by a documented environment-specific
    smoke issue, advance to the next lane's smallest safe item.
-4. Add focused tests for an existing boundary.
-5. Tighten docs when they would otherwise steer the next run incorrectly.
+4. Add focused tests for observed `llama-server` launch, validation, health,
+   endpoint, restart, copy-flow, or profile-warning behavior.
+5. Tighten docs when they would otherwise steer the next run incorrectly or
+   confuse a `llama-server` setup path.
 6. Classify public feedback or external review notes using
    `docs/post_public_operations.md`, then make one safe local change only if the
    classification justifies it.

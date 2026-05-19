@@ -11,14 +11,14 @@ feedback, automation triage, and post-public docs hygiene.
 ## Operating Posture
 
 Hazakura Lantern is currently public as a source-only alpha. Automated work
-should keep the project understandable, narrow, and easy to review before it
-adds runtime breadth.
+should keep the project understandable, narrow, and easy to review while the
+near-term source lane improves the existing `llama-server` path.
 
-The default next lane is post-public stewardship:
+Post-public stewardship is a guardrail now and the formal v0.5 lane later:
 
 - classify public feedback before implementing it
 - keep source-only and packaged-release boundaries clear
-- fix small reproducible bugs in the existing behavior
+- fix small reproducible bugs in the existing `llama-server` behavior
 - improve docs, empty states, setup hints, or copy flows only when a concrete
   user-facing ambiguity exists
 - accept verified no-op when no safe slice is justified
@@ -31,23 +31,26 @@ runner.
 
 Classify incoming issues or review notes before choosing work:
 
-- `source-alpha bug`: a reproducible failure in SwiftPM build, tests, profile
-  JSON, adapter validation, command preview, logs, endpoint display, health
-  check, or current docs.
-- `packaged-release blocker`: app-bundle launch, `.app`, zip, dmg, signing,
+- A. `source-build blocker`: SwiftPM build, test, or source verification fails.
+- B. `llama-server launch/configuration bug`: existing runtime selection,
+  validation, command construction, launch preflight, process lifecycle,
+  endpoint display, health check, logs, or copied snippet behavior is wrong or
+  confusing.
+- C. `profile import/export bug`: active profile JSON, schema version `1`,
+  runtime kind, portability warnings, preview, import, export, or persistence
+  behavior is wrong.
+- D. `docs confusion`: README, troubleshooting, current status, roadmap,
+  issue templates, or setup guidance misleads users.
+- E. `packaged app blocker`: app-bundle launch, `.app`, zip, dmg, signing,
   notarization, checksums, GitHub Release assets, or installer expectations.
-- `adapter-boundary ambiguity`: unclear ownership around command construction,
-  validation, launch preflight, endpoint display, health timeout, environment
-  snippets, or launch failure wording.
-- `post-public docs hygiene`: stale pre-open wording, unclear source-only
-  status, missing troubleshooting, or issue-template improvements.
-- `daily-use friction`: small setup hints, empty states, copy-flow confusion,
-  or failure messages that are concrete and testable.
-- `runtime-breadth request`: custom command profiles, new adapters, runtime
-  version checks, endpoint polling, or second-runtime support.
-- `out-of-scope request`: chat, model downloads, model catalogs, RAG, tools,
-  proxy behavior, LAN exposure, authentication, runtime installation,
-  automatic updates, package-manager mutation, or marketplace behavior.
+- F. `runtime-breadth request`: MLX, Ollama, custom command profiles, runtime
+  catalogs, runtime version checks, endpoint polling, or second-runtime support.
+- G. `out-of-scope request`: chat, model downloads, model conversion, RAG,
+  tools, proxy behavior, LAN exposure, authentication, runtime installation,
+  automatic updates, package-manager mutation, marketplace behavior, multiple
+  profile management, launch-at-login, or automatic restart policy.
+- H. `security-sensitive report`: secrets, credentials, private paths,
+  network exposure, authentication, supply chain, or host privacy concerns.
 
 When reporting a triage result, prefer:
 
@@ -71,8 +74,9 @@ Automation may do one small, verifiable slice per run:
 - update README, changelog, current status, roadmap, troubleshooting, runtime
   adapter docs, or this operations guide
 - classify public issues or review notes and propose labels or next actions
-- improve small empty-state, setup-hint, copy-flow, or error-message wording
-  when the current docs or issue text identify the ambiguity
+- improve small `llama-server` empty-state, setup-hint, copy-flow,
+  health-wording, profile-warning, or error-message wording when the current
+  docs or issue text identify the ambiguity
 - record a known blocker or verified no-op when no safe slice exists
 
 Automation should not keep adding adapter-boundary tests after v0.3 close-out
@@ -84,6 +88,7 @@ Require explicit human handoff before:
 
 - adding a new runtime adapter
 - starting custom command profile implementation
+- starting MLX adapter implementation before a design note is accepted
 - changing the runtime profile schema version
 - changing GitHub visibility, branch protection, collaborators, secrets,
   webhooks, Actions settings, tags, GitHub Releases, release assets, or

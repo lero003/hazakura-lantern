@@ -55,9 +55,9 @@ Every roadmap item must strengthen at least one of these:
 
 If an item does not improve one of those, park it.
 
-Do not add runtime breadth while the single-runtime loop still feels surprising.
-A new adapter is allowed only when it can be added without changing the core
-lifecycle model.
+Do not add runtime breadth while the single-runtime loop still feels
+surprising. A new adapter is allowed only after the `llama-server` path is
+quiet and a design note fixes the next runtime boundary.
 
 ## Product Boundary
 
@@ -91,10 +91,10 @@ lifecycle model.
 ### Lantern may pass through
 
 - user-provided runtime flags
-- user-provided server commands
+- adapter-declared server commands
 - runtime-specific endpoints when documented
 - runtime-specific health URLs when adapter-scoped
-- custom command profiles when the risks are visible
+- one explicitly designed second runtime lane after `llama-server` is quiet
 
 Pass-through is not ownership. If a runtime changes, Lantern should fail clearly,
 not silently invent behavior.
@@ -112,7 +112,7 @@ Observation is not management. Lantern may tell users that a runtime appears
 old, missing, or installed in an unusual way. It should not run installers,
 upgrade runtimes, mutate package managers, or hide where a runtime came from.
 
-## Current Source Lane: v0.3 Close-Out, Then v0.4 Stewardship
+## Current Source Lane: v0.3 Close-Out, Then v0.4 `llama-server` Reliability
 
 The project has reached a source-only `v0.3.0-alpha.1` checkpoint for adapter
 boundary clarity and public opening, while the app-bundle launch smoke remains
@@ -121,7 +121,7 @@ a packaged-release blocker.
 Use v0 and v0.1 notes below as foundation and backlog context, not as a reason
 to reopen closed work without a concrete ambiguity. The next useful source
 work should either close a named v0.3 adapter-boundary ambiguity or move into
-v0.4 post-public stewardship.
+v0.4 `llama-server` reliability and daily-use polish.
 
 Do not retry the known `kLSNoExecutableErr` app-bundle helper path unless there
 is a fresh Launch Services hypothesis. Carry it as a release risk and continue
@@ -374,24 +374,16 @@ Candidate work:
 Adapter requirements:
 
 - command construction must be explicit
-- shell interpolation must stay avoided unless a custom command mode makes the
-  risk visible
+- shell interpolation must stay avoided; any future custom command profile
+  requires a separate design and approval
 - lifecycle semantics must be documented
 - endpoint behavior must be documented
 - health behavior must be documented
 - unsupported runtime behavior must fail clearly
 
-Future adapter experiments, after close-out and human approval:
-
-- custom command profile
-- Ollama
-- llama-cpp-python server
-- MLX-based local server
-
-Prefer custom command profile if runtime churn is high. It lets users benefit
-from new runtimes without Lantern pretending to understand them deeply. Do not
-start it until command parsing, visible risk warnings, lifecycle behavior, and
-profile storage boundaries can be kept explicit and testable.
+Future adapter experiments require a design note and human approval. The next
+candidate is one concrete MLX-based server shape, not Ollama, a custom command
+profile, or a broad runtime catalog.
 
 Completion criteria:
 
@@ -423,109 +415,120 @@ v0.3 is closed when:
 After close-out, automation should not add more adapter-boundary tests unless a
 new bug report, design note, or regression identifies a specific ambiguity.
 
-## v0.4 - Post-Public Stewardship And Daily-Use Stabilization
+## v0.4 - `llama-server` Reliability And Daily-Use Polish
 
 Purpose:
 
-Keep the newly public source-only alpha understandable, narrow, and safe for
-automated maintenance without adding runtime breadth.
+Make the existing `llama-server` workflow quiet, predictable, trustworthy, and
+well-documented for repeated personal local use.
 
 Candidate work:
 
-- public issue triage taxonomy and response boundaries
-- post-public docs hygiene for README, current status, roadmap, changelog,
-  troubleshooting, and issue templates
-- small reproducible bug fixes in current behavior
-- small empty-state, setup-hint, copy-flow, or error-message improvements when
-  a public issue or repeated-use ambiguity names the problem
-- advisory runtime version display only if it is adapter-scoped,
-  timeout-bounded, and does not mutate runtimes
-- automation no-op criteria and human approval gates
+- improve launch failure messages
+- improve empty states for missing runtime or model paths
+- improve copied command, endpoint, and client snippet clarity
+- improve health-check wording and failure classification
+- improve restart, terminated, and stopped state clarity
+- improve profile portability warnings
+- improve README and troubleshooting for common `llama-server` setup issues
+- add focused tests for observed edge cases
+- update current status and changelog after verified behavior changes
 
-This lane is mostly stewardship, not feature breadth. Public feedback should be
-classified before implementation so interesting requests can be parked without
-pulling Lantern outside its boundary.
+This lane should make the first runtime path boring before any second runtime
+is selected.
 
 Completion criteria:
 
-- issue triage rules are documented in `docs/post_public_operations.md`
-- automation can classify most public bug reports as current-lane, packaged
-  release, runtime breadth, or out-of-scope before making changes
-- public docs no longer describe public opening as a future default lane
-- source-only and packaged-release boundaries remain visible
-- no new adapter, custom command implementation, endpoint auto-polling,
-  package-manager mutation, or runtime installer work starts without human
-  approval
+- common `llama-server` setup mistakes produce useful next-step guidance
+- copied commands, endpoints, and client snippets are understandable and stable
+- health, restart, stopped, and terminated states do not leave stale or
+  misleading UI
+- profile portability warnings are advisory and clear
+- README, troubleshooting, current status, and changelog match behavior
+- no new adapter, custom command profile, endpoint auto-polling, model download,
+  runtime install/update, multiple-profile management, LAN/auth, chat, proxy,
+  or packaged artifact work starts in this lane
 
-## v0.5 - Custom Command Profile Design
+## v0.5 - Post-Public Issue Triage And Automation Discipline
 
 Purpose:
 
-Design custom command profiles before implementation. The goal is to make the
-dangerous part explicit enough that a later alpha can stay predictable.
+Keep public feedback from widening the product accidentally.
 
 Candidate work:
 
-- design note for executable path plus explicit argument array
-- shell-string mode rejected or deferred behind a separate approval gate
-- no secrets persisted in profiles
-- lifecycle semantics for commands Lantern starts and stops
-- visible risk warnings for user-declared commands
-- profile storage and portability boundaries
-- migration risks before any schema version change
-- tests planned before UI work
+- maintain `docs/post_public_operations.md`
+- classify public issues and review notes before implementation
+- distinguish source-build blockers from packaged-release blockers
+- distinguish runtime bugs from Lantern bugs
+- document out-of-scope response rules
+- define when automation may act and when human approval is required
+- prepare draft responses without mutating public issues automatically
 
 Completion criteria:
 
-- docs explain why custom command profiles are not shell execution shortcuts
-- the profile schema impact is understood before implementation starts
-- lifecycle ownership remains limited to child processes Lantern starts
-- implementation is explicitly approved by a human before v0.6 work begins
+- issue categories cover source-build blockers, `llama-server`
+  launch/configuration bugs, profile import/export bugs, docs confusion,
+  packaged app blockers, runtime-breadth requests, out-of-scope requests, and
+  security-sensitive reports
+- automation can propose labels, docs fixes, and focused tests without
+  promising feature support or mutating GitHub issue state
+- roadmap and current status stay aligned with public feedback
 
-## v0.6 - Custom Command Profile Minimal Alpha
+## v0.6 - MLX Server Adapter Design Note
 
 Purpose:
 
-Implement the smallest advanced-user custom command profile only after v0.5
-design is accepted.
+Choose one concrete MLX server shape before implementation. This is a
+design-only lane unless explicitly approved.
 
 Candidate work:
 
-- explicit executable plus argument array
-- no shell interpolation
-- no secret storage
-- clear warnings in UI and docs
-- direct child-process lifecycle only
-- focused command, profile, validation, and launch-failure tests
+- create `docs/mlx_adapter_design.md`
+- identify the exact MLX server command shape
+- decide whether Lantern supervises it as a child process
+- define adapter-specific model reference wording, such as local model
+  directory or declared model id instead of assuming every runtime uses
+  `modelPath`
+- document endpoint and OpenAI compatibility assumptions
+- document health check behavior
+- document launch validation and preflight checks
+- document what Lantern will not install, download, convert, or catalog
+- define how tests can run without a real model
+- identify profile schema impact, if any
 
 Completion criteria:
 
-- existing `llama-server` behavior remains unchanged
-- custom command profiles are visibly advanced and local-only
-- failure messages do not imply runtime-specific knowledge
-- schema migration behavior is tested if the schema changes
+- the design names exactly one MLX server shape
+- command, lifecycle, endpoint, health, validation, tests, and profile impact
+  are explicit
+- implementation remains blocked on human approval
 
-## v0.7 - First Additional Runtime Shape
+## v0.7 - MLX Server Adapter Minimal Alpha
 
 Purpose:
 
-Add one concrete additional runtime shape only after public feedback identifies
-the most valuable class and the adapter lifecycle is designed.
+Add one concrete MLX server adapter after v0.6 design and explicit human
+approval. This is not an MLX ecosystem or runtime marketplace.
 
 Candidate work:
 
-- one child-process adapter or one external-service adapter, not both
-- adapter-specific docs and fixture tests
-- explicit start/stop ownership statement
-- no model pull, installer, package-manager mutation, proxy, or service
-  manager behavior
+- command preview
+- start, stop, and restart when the chosen MLX server is child-process based
+- bounded logs
+- endpoint display
+- health check when available
+- copied client snippet when OpenAI-compatible
+- profile import/export support
+- focused tests without real model download
 
 Completion criteria:
 
-- the second runtime shape does not change the core lifecycle for the first
-  adapter
-- docs explain what Lantern does not manage
-- each adapter can still be understood, tested, and removed independently
+- `llama-server` behavior remains unchanged
+- MLX support stays adapter-specific
+- no MLX package installation, Hugging Face download, model conversion, model
+  catalog, benchmark UI, multimodal UI, runtime marketplace, or generic custom
+  command profile is introduced
 
 ## Packaging Track - Separate From Source Milestones
 
@@ -552,6 +555,8 @@ These may become useful, but they should not slip into earlier lanes casually:
 - metrics or benchmark display
 - richer runtime setup assistant that remains documentation-first
 - opt-in runtime update notifications for registered runtimes
+- custom command profiles
+- Ollama or other daemon-style adapters
 - agent-facing integration notes
 
 Treat each as a design decision with its own trade-offs, not incidental polish.
@@ -578,7 +583,8 @@ Do not use this project for:
 
 Automated development should pick one small slice from the current lane. After
 `v0.3.0-alpha.1`, the default lane is v0.3 close-out when a concrete adapter
-ambiguity exists, otherwise v0.4 post-public stewardship.
+ambiguity exists, otherwise v0.4 `llama-server` reliability and daily-use
+polish.
 
 Good next slices:
 
@@ -597,18 +603,20 @@ Good next slices:
   behavior is covered, adapter-scoped health-check timeout propagation is
   covered, adapter-scoped environment-snippet shell quoting is covered, and the
   first adapter contract documentation slice is covered
-- tighten copied client smoke / endpoint reuse flows only when a concrete
-  copy-target ambiguity remains; the timeout-bounded health-check curl slice is
-  covered
-- improve common launch failure messages, empty states, or setup hints only
-  when a specific ambiguity is visible, without adding installer behavior
+- tighten copied command, client smoke, or endpoint reuse flows only when a
+  concrete copy-target ambiguity remains; the timeout-bounded health-check curl
+  slice is covered
+- improve common launch failure messages, empty states, health-check wording,
+  profile warnings, or setup hints only when a specific `llama-server`
+  ambiguity is visible, without adding installer behavior
 - harden restart behavior only with a newly observed ambiguity and a testable
   state transition beyond the explicit pending-restart status
 - document launch smoke expectations only when there is a fresh verification
   hypothesis or new evidence
 - classify public issues or external review notes using
-  `docs/post_public_operations.md`, then update docs, tests, or small current
-  behavior only when the classification identifies a safe local slice
+  `docs/post_public_operations.md`, then update docs, tests, or small
+  `llama-server` behavior only when the classification identifies a safe local
+  slice
 - keep endpoint auto-polling deferred unless a later slice intentionally
   revisits adapter-owned health lifecycle and proves the polling policy can
   remain local, timeout-bounded, and non-surprising
@@ -620,7 +628,9 @@ Rules for automated work:
 
 - do not add a new adapter without explicit human approval
 - do not begin custom command profile implementation without explicit human
-  approval; v0.5 is design, not implementation
+  approval; custom command profiles are not the next lane
+- do not begin MLX implementation before the v0.6 design note is accepted and a
+  human explicitly approves v0.7 work
 - do not change the runtime profile schema version without explicit human
   approval
 - do not add endpoint auto-polling before manual health and adapter health
