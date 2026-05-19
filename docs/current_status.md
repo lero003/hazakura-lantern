@@ -34,6 +34,8 @@ Implemented scope:
 - Copied endpoint/client URLs keep local defaults copyable while respecting a
   configured reachable host, with focused tests.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
+- Copied AI Mobile / OpenAI-compatible client smoke commands are fail-fast and
+  timeout-bounded so a local client check does not hang indefinitely.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.

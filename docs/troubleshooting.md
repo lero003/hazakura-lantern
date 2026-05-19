@@ -34,6 +34,8 @@ Checks:
 - Confirm the configured port matches the copied endpoint.
 - Use the timeout-bounded copyable health-check curl command before adding new
   app behavior.
+- Use the timeout-bounded copied client smoke command after health succeeds if
+  the endpoint is reachable but a client still fails.
 - If the health endpoint returns a non-success HTTP status, confirm
   `llama-server` finished loading the model and inspect the app logs before
   changing Lantern behavior.

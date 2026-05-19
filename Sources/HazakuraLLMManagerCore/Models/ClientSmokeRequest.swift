@@ -5,17 +5,20 @@ public struct ClientSmokeRequest: Equatable, Sendable {
     public var apiKey: String
     public var model: String
     public var userText: String
+    public var timeoutSeconds: Int
 
     public init(
         baseURL: String,
         apiKey: String = "local",
         model: String = "local",
-        userText: String = "Hazakura AI Mobile runtime smoke. Reply with OK."
+        userText: String = "Hazakura AI Mobile runtime smoke. Reply with OK.",
+        timeoutSeconds: Int = 60
     ) {
         self.baseURL = baseURL
         self.apiKey = apiKey
         self.model = model
         self.userText = userText
+        self.timeoutSeconds = max(1, timeoutSeconds)
     }
 
     public var chatCompletionsURL: String {
@@ -38,7 +41,7 @@ public struct ClientSmokeRequest: Equatable, Sendable {
             ?? #"{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}"#
 
         return """
-        curl -sS \(ShellQuoter.quote(chatCompletionsURL)) \\
+        curl -fsS --max-time \(timeoutSeconds) \(ShellQuoter.quote(chatCompletionsURL)) \\
           -H \(ShellQuoter.quote("Authorization: Bearer \(apiKey)")) \\
           -H \(ShellQuoter.quote("Content-Type: application/json")) \\
           -d \(ShellQuoter.quote(payloadString))

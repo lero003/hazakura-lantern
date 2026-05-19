@@ -13,6 +13,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   can prepare without mutating public GitHub issues.
 - Added a start-time setup hint for blank runtime or model selections so the
   empty state points to the next local choice before launch.
+- Added a fail-fast, timeout-bounded copied client smoke curl command so local
+  OpenAI-compatible checks do not hang indefinitely.
 
 ### Changed
 

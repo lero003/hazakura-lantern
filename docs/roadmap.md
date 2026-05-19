@@ -151,6 +151,8 @@ Already done or mostly done:
   configured reachable host
 - local endpoint health-check URL and timeout-bounded copyable curl smoke
   command
+- fail-fast, timeout-bounded copied client smoke command for AI Mobile and
+  other OpenAI-compatible local clients
 - manual endpoint health status check
 - health status reset on start, stop, and termination so stale health does not
   survive process state changes
@@ -614,7 +616,7 @@ Good next slices:
   first adapter contract documentation slice is covered
 - tighten copied command, client smoke, or endpoint reuse flows only when a
   concrete copy-target ambiguity remains; the timeout-bounded health-check curl
-  slice is covered
+  and fail-fast client smoke curl slices are covered
 - improve common launch failure messages, file empty states beyond the
   blank-selection setup hint, health-check wording, profile warnings, or setup
   hints only when a specific `llama-server` ambiguity is visible, without
