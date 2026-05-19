@@ -27,6 +27,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Clarified Stop and Restart termination log messages so expected process
+  termination is not worded like an unexpected runtime crash.
 - Clarified runtime termination logs and error text so signal-based termination
   is no longer described as a normal exit code.
 - Clarified imported profile portability warnings when a saved runtime

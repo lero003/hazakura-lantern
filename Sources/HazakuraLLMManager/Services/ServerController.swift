@@ -299,9 +299,18 @@ final class ServerController: ObservableObject {
         processIdentifier = nil
 
         let exitCode = terminatedProcess.terminationStatus
+        let requestedAction: ProcessTerminationRequest? = switch status {
+        case .stopping:
+            .stop
+        case .restarting:
+            .restart
+        default:
+            nil
+        }
         let terminationMessage = ProcessTerminationMessage.describe(
             status: exitCode,
-            reason: terminatedProcess.terminationReason
+            reason: terminatedProcess.terminationReason,
+            requestedAction: requestedAction
         )
         appendLog(terminationMessage, stream: .info)
         endpointHealthStatus = .unchecked

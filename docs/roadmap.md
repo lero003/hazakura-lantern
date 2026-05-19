@@ -145,6 +145,8 @@ Already done or mostly done:
   process to terminate before the next launch
 - runtime termination logs and error text distinguish normal exit codes from
   signal-based termination
+- expected Stop and Restart termination logs avoid unexpected-crash wording
+  when Lantern intentionally terminates the current process
 - local endpoint and OpenAI-style environment snippet
 - blank runtime or model selections show a setup hint before start
 - non-`.gguf` model selections show a setup hint before start without adding

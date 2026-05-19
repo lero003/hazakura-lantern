@@ -24,6 +24,8 @@ Implemented scope:
   for the current process to terminate before starting the next one.
 - Runtime termination logs and error text distinguish normal exit codes from
   signal-based termination.
+- Expected Stop and Restart termination logs now say the requested action
+  completed instead of making a normal `SIGTERM` look like an unexpected crash.
 - Bounded in-memory log buffering with clear-log behavior covered by focused
   core tests.
 - Basic runtime/model path preflight before launching.
