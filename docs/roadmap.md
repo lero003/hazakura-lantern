@@ -149,6 +149,8 @@ Already done or mostly done:
 - blank runtime or model selections show a setup hint before start
 - non-`.gguf` model selections show a setup hint before start without adding
   conversion or download behavior
+- invalid numeric launch settings show a setup hint before start for port,
+  context size, threads, and GPU layers
 - copied endpoint/client URLs keep local defaults copyable while reflecting a
   configured reachable host
 - local endpoint health-check URL and timeout-bounded copyable curl smoke
@@ -624,7 +626,7 @@ Good next slices:
 - improve common launch failure messages, file empty states beyond the
   blank-selection setup hint, health-check wording, profile warnings, or setup
   hints only when a specific `llama-server` ambiguity is visible, without
-  adding installer behavior
+  adding installer behavior; numeric launch setup hints are covered
 - harden restart behavior only with a newly observed ambiguity and a testable
   state transition beyond the explicit pending-restart status
 - document launch smoke expectations only when there is a fresh verification

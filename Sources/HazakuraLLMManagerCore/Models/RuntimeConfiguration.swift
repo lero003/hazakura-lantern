@@ -104,7 +104,49 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
                 return "Choose a .gguf model file before starting. Lantern does not convert or download models."
             }
 
+            if !(1...65535).contains(port) {
+                return "Choose a port between 1 and 65535 before starting."
+            }
+
+            if contextSize <= 0 {
+                return "Choose a context size greater than zero before starting."
+            }
+
+            if !isAutoOrPositiveInteger(threads) {
+                return "Set threads to auto or a positive integer before starting."
+            }
+
+            if !isAutoOrNonNegativeInteger(gpuLayers) {
+                return "Set GPU layers to auto or a non-negative integer before starting."
+            }
+
             return nil
         }
+    }
+
+    private func isAutoOrPositiveInteger(_ value: String) -> Bool {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty || trimmed.lowercased() == "auto" {
+            return true
+        }
+
+        guard let intValue = Int(trimmed) else {
+            return false
+        }
+
+        return intValue > 0
+    }
+
+    private func isAutoOrNonNegativeInteger(_ value: String) -> Bool {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty || trimmed.lowercased() == "auto" {
+            return true
+        }
+
+        guard let intValue = Int(trimmed) else {
+            return false
+        }
+
+        return intValue >= 0
     }
 }

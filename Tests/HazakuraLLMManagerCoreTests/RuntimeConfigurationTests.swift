@@ -108,6 +108,52 @@ final class RuntimeConfigurationTests: XCTestCase {
         )
     }
 
+    func testLaunchSetupHintReportsInvalidPortSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.port = 70_000
+
+        XCTAssertEqual(config.launchSetupHint, "Choose a port between 1 and 65535 before starting.")
+    }
+
+    func testLaunchSetupHintReportsInvalidContextSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.contextSize = 0
+
+        XCTAssertEqual(config.launchSetupHint, "Choose a context size greater than zero before starting.")
+    }
+
+    func testLaunchSetupHintReportsInvalidThreadsSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.threads = "zero"
+
+        XCTAssertEqual(config.launchSetupHint, "Set threads to auto or a positive integer before starting.")
+    }
+
+    func testLaunchSetupHintReportsInvalidGPULayersSelection() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.gpuLayers = "-1"
+
+        XCTAssertEqual(config.launchSetupHint, "Set GPU layers to auto or a non-negative integer before starting.")
+    }
+
+    func testLaunchSetupHintAcceptsAutoAndWhitespaceNumericSelections() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.threads = " auto "
+        config.gpuLayers = " 0 "
+
+        XCTAssertNil(config.launchSetupHint)
+    }
+
     func testLaunchSetupHintAcceptsUppercaseGGUFModelSelection() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"

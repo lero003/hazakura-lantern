@@ -34,6 +34,9 @@ Implemented scope:
 - Non-`.gguf` model selections now show a setup hint before start, so an
   unsupported local model file is explained without adding conversion or
   download behavior.
+- Invalid numeric launch settings now show a setup hint before start, so port,
+  context size, threads, and GPU layers point to the required local value
+  without waiting for a failed launch attempt.
 - Copied endpoint/client URLs keep local defaults copyable while respecting a
   configured reachable host, with focused tests.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
@@ -325,7 +328,7 @@ Good next automated candidates:
   state is observed beyond the explicit pending-restart status
 - improve a copy flow, empty state, or setup hint only when there is a concrete
   repeated-use ambiguity; keep the slice local and small, and do not repeat the
-  timeout-bounded health-check curl slice
+  timeout-bounded health-check curl slice or numeric launch setup-hint slice
 - improve post-public docs hygiene when pre-open wording would steer automation
   toward already-completed visibility preparation
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated

@@ -16,6 +16,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added a start-time setup hint for non-`.gguf` model selections so unsupported
   local model files are called out before launch without adding conversion or
   download behavior.
+- Added start-time setup hints for invalid numeric launch settings so port,
+  context, threads, and GPU layers point to the required local value before
+  launch.
 - Added a fail-fast, timeout-bounded copied client smoke curl command so local
   OpenAI-compatible checks do not hang indefinitely.
 
