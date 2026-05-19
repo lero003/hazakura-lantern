@@ -205,6 +205,8 @@ Already done or mostly done:
 - adapter-owned health-check timeout propagation through the `RuntimeEndpoint`
   contract, keeping the default five-second curl timeout while allowing future
   adapters to narrow it explicitly
+- adapter-owned environment snippets shell-quote adapter-scoped base URL and API
+  key values when needed while preserving the readable default local snippet
 - explicit adapter-owned validation contract that can be tested before command
   construction, preserving `llama-server` validation without adding runtime
   breadth
@@ -495,7 +497,8 @@ Good next slices:
   DNS-label host validation is covered, bracketed-IPv6 bind-all endpoint copy
   behavior is covered, default-adapter POSIX launch-failure display-name
   behavior is covered, adapter-scoped health-check timeout propagation is
-  covered, and the first adapter contract documentation slice is covered
+  covered, adapter-scoped environment-snippet shell quoting is covered, and the
+  first adapter contract documentation slice is covered
 - tighten copied client smoke / endpoint reuse flows only when a concrete
   copy-target ambiguity remains; the timeout-bounded health-check curl slice is
   covered

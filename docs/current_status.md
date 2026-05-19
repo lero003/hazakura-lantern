@@ -101,6 +101,8 @@ Implemented scope:
 - Adapter-owned health endpoints can carry an adapter-scoped health-check curl
   timeout through `RuntimeEndpoint`, with focused tests preserving the default
   five-second timeout.
+- Adapter-owned environment snippets shell-quote adapter-scoped base URL and API
+  key values when needed, while keeping the default local snippet readable.
 - Runtime adapter validation is now an explicit adapter contract that can be
   tested before command construction, preserving the current `llama-server`
   validation behavior without adding runtime breadth.
@@ -244,7 +246,8 @@ Good next automated candidates:
   adapter-contract documentation slice or
   default-adapter POSIX launch-failure display-name slice or
   profile-runtime-kind adapter id alignment slice or
-  adapter-scoped health-check timeout propagation slice
+  adapter-scoped health-check timeout propagation slice or
+  adapter-scoped environment-snippet shell-quoting slice
 - harden restart behavior only if a new stop/start race or ambiguous restart
   state is observed beyond the explicit pending-restart status
 - improve a copy flow, empty state, or setup hint only when there is a concrete

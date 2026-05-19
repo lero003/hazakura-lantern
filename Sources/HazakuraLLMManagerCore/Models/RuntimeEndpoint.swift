@@ -24,8 +24,8 @@ public struct RuntimeEndpoint: Equatable, Sendable {
 
     public var environmentSnippet: String {
         """
-        OPENAI_BASE_URL=\(apiBaseURLString)
-        OPENAI_API_KEY=\(apiKey)
+        OPENAI_BASE_URL=\(ShellQuoter.quote(apiBaseURLString))
+        OPENAI_API_KEY=\(ShellQuoter.quote(apiKey))
         """
     }
 
