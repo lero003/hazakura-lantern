@@ -19,6 +19,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added start-time setup hints for invalid numeric launch settings so port,
   context, threads, and GPU layers point to the required local value before
   launch.
+- Added a start-time setup hint for malformed Additional Args quoting so users
+  can fix launch arguments before a failed start attempt.
 - Added a fail-fast, timeout-bounded copied client smoke curl command so local
   OpenAI-compatible checks do not hang indefinitely.
 - Added troubleshooting guidance for locally checking the selected

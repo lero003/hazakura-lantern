@@ -39,6 +39,8 @@ Implemented scope:
 - Invalid numeric launch settings now show a setup hint before start, so port,
   context size, threads, and GPU layers point to the required local value
   without waiting for a failed launch attempt.
+- Malformed Additional Args quoting now shows a setup hint before start, so
+  launch argument typos can be fixed before a failed launch attempt.
 - Copied endpoint/client URLs keep local defaults copyable while respecting a
   configured reachable host, with focused tests.
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
@@ -303,7 +305,7 @@ Good next automated candidates:
   setup hints, endpoint/client snippets, health-check wording,
   restart/terminated/stopped state clarity, profile portability warnings,
   README, or troubleshooting beyond the local file-check guidance already
-  covered
+  covered; malformed Additional Args setup hints are already covered
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
@@ -333,7 +335,8 @@ Good next automated candidates:
   state is observed beyond the explicit pending-restart status
 - improve a copy flow, empty state, or setup hint only when there is a concrete
   repeated-use ambiguity; keep the slice local and small, and do not repeat the
-  timeout-bounded health-check curl slice or numeric launch setup-hint slice
+  timeout-bounded health-check curl slice, numeric launch setup-hint slice, or
+  malformed Additional Args setup-hint slice
 - improve post-public docs hygiene when pre-open wording would steer automation
   toward already-completed visibility preparation
 - diagnose why Launch Services reports `kLSNoExecutableErr` for the generated

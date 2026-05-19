@@ -120,6 +120,12 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
                 return "Set GPU layers to auto or a non-negative integer before starting."
             }
 
+            do {
+                _ = try CommandLineArgumentTokenizer.tokenize(additionalArguments)
+            } catch {
+                return "Fix Additional Args before starting: \(error.localizedDescription)"
+            }
+
             return nil
         }
     }

@@ -144,6 +144,18 @@ final class RuntimeConfigurationTests: XCTestCase {
         XCTAssertEqual(config.launchSetupHint, "Set GPU layers to auto or a non-negative integer before starting.")
     }
 
+    func testLaunchSetupHintReportsMalformedAdditionalArguments() {
+        var config = RuntimeConfiguration.defaultValue
+        config.runtimeExecutablePath = "/usr/local/bin/llama-server"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.additionalArguments = "--alias \"qwen"
+
+        XCTAssertEqual(
+            config.launchSetupHint,
+            "Fix Additional Args before starting: Additional args contains an unterminated \" quote."
+        )
+    }
+
     func testLaunchSetupHintAcceptsAutoAndWhitespaceNumericSelections() {
         var config = RuntimeConfiguration.defaultValue
         config.runtimeExecutablePath = "/usr/local/bin/llama-server"
