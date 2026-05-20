@@ -24,6 +24,8 @@ Implemented scope:
 - Settings now includes a System / Japanese / English language toggle for UI
   labels and controls only; runtime logs, command text, profile data, and
   adapter-owned messages remain outside the localization scope.
+- Settings now shows the current source checkpoint and makes the source-only,
+  no-packaged-app boundary visible inside the app without adding release assets.
 - HelpTooltip explanation button accessibility and help text now follows the
   selected app UI language while leaving adapter-owned diagnostics unchanged.
 - `llama-server` launch command construction without shell interpolation.

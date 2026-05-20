@@ -79,7 +79,8 @@ behavior, or one testable controller boundary:
   repeated start/stop/restart edge handling when testable without real
   `llama-server`
 - About/settings version information if it can be implemented without signing,
-  notarization, packaging, or release-asset claims
+  notarization, packaging, or release-asset claims (covered for the current
+  source-only checkpoint and no-packaged-app boundary)
 - copy feedback consistency for one family of copy controls at a time
 - shared pasteboard-copy helper extraction when it reduces real duplicated UI
   code without changing behavior (covered for the current toolbar, menu bar,
