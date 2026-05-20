@@ -3,6 +3,7 @@ import SwiftUI
 
 struct EndpointView: View {
     @ObservedObject var controller: ServerController
+    @State private var isAdvancedExpanded = false
 
     var body: some View {
         GroupBox("Endpoint") {
@@ -29,53 +30,6 @@ struct EndpointView: View {
                             Label("Copy Endpoint", systemImage: "doc.on.doc")
                         }
                         .buttonStyle(SecondaryButtonStyle())
-                    }
-
-                    HStack(spacing: 8) {
-                        Text(endpoint.environmentSnippet)
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundStyle(.secondary)
-                            .textSelection(.enabled)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                            )
-
-                        Button {
-                            copy(endpoint.environmentSnippet)
-                        } label: {
-                            Label("Copy Env", systemImage: "terminal")
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                    }
-
-                    HStack(spacing: 8) {
-                        Text(healthCurlCommand ?? "Health check is not available for this adapter.")
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundStyle(.secondary)
-                            .textSelection(.enabled)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                            )
-
-                        Button {
-                            if let healthCurlCommand {
-                                copy(healthCurlCommand)
-                            }
-                        } label: {
-                            Label("Copy Health Check", systemImage: "cross.case")
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        .disabled(healthCurlCommand == nil)
                     }
 
                     HStack(alignment: .top, spacing: 12) {
@@ -106,26 +60,97 @@ struct EndpointView: View {
 
                     Divider()
 
-                    HStack(spacing: 8) {
-                        Text(endpoint.aiMobileSmokeCurlCommand)
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundStyle(.secondary)
-                            .textSelection(.enabled)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                            )
+                    DisclosureGroup(isExpanded: $isAdvancedExpanded) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("環境変数 / Environment Variables")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                HStack(spacing: 8) {
+                                    Text(endpoint.environmentSnippet)
+                                        .font(.system(.caption, design: .monospaced))
+                                        .foregroundStyle(.secondary)
+                                        .textSelection(.enabled)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 6)
+                                                .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                                        )
 
-                        Button {
-                            copy(endpoint.aiMobileSmokeCurlCommand)
-                        } label: {
-                            Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
+                                    Button {
+                                        copy(endpoint.environmentSnippet)
+                                    } label: {
+                                        Label("Copy Env", systemImage: "terminal")
+                                    }
+                                    .buttonStyle(SecondaryButtonStyle())
+                                }
+                            }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("ヘルスチェック / Health Check curl")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                HStack(spacing: 8) {
+                                    Text(healthCurlCommand ?? "Health check is not available for this adapter.")
+                                        .font(.system(.caption, design: .monospaced))
+                                        .foregroundStyle(.secondary)
+                                        .textSelection(.enabled)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 6)
+                                                .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                                        )
+
+                                    Button {
+                                        if let healthCurlCommand {
+                                            copy(healthCurlCommand)
+                                        }
+                                    } label: {
+                                        Label("Copy Health Check", systemImage: "cross.case")
+                                    }
+                                    .buttonStyle(SecondaryButtonStyle())
+                                    .disabled(healthCurlCommand == nil)
+                                }
+                            }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("外部クライアント接続テスト / Client Connection curl")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                HStack(spacing: 8) {
+                                    Text(endpoint.aiMobileSmokeCurlCommand)
+                                        .font(.system(.caption, design: .monospaced))
+                                        .foregroundStyle(.secondary)
+                                        .textSelection(.enabled)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 6)
+                                                .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                                        )
+
+                                    Button {
+                                        copy(endpoint.aiMobileSmokeCurlCommand)
+                                    } label: {
+                                        Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
+                                    }
+                                    .buttonStyle(SecondaryButtonStyle())
+                                }
+                            }
                         }
-                        .buttonStyle(SecondaryButtonStyle())
+                        .padding(.top, 8)
+                    } label: {
+                        Text("詳細な接続情報 / Advanced Connection Details")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
                     }
                 }
             } else {

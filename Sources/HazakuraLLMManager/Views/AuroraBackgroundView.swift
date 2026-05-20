@@ -1,9 +1,12 @@
 import SwiftUI
+import HazakuraLLMManagerCore
 
 struct AuroraBackgroundView: View {
+    let status: ServerStatus
+
     var body: some View {
         TimelineView(.animation) { timeline in
-            AuroraBackgroundLayer(date: timeline.date)
+            AuroraBackgroundLayer(date: timeline.date, status: status)
         }
         .ignoresSafeArea()
     }
@@ -11,6 +14,7 @@ struct AuroraBackgroundView: View {
 
 private struct AuroraBackgroundLayer: View {
     let date: Date
+    let status: ServerStatus
 
     var body: some View {
         GeometryReader { geometry in
@@ -18,6 +22,8 @@ private struct AuroraBackgroundLayer: View {
             let width = geometry.size.width
             let height = geometry.size.height
             let size = min(width, height)
+
+            let colors = currentColors(for: status)
 
             ZStack {
                 Color(nsColor: .windowBackgroundColor)
@@ -27,7 +33,7 @@ private struct AuroraBackgroundLayer: View {
                     .opacity(0.65)
 
                 AuroraOrb(
-                    color: .cyan,
+                    color: colors.orb1,
                     opacity: 0.35,
                     radius: size * 0.4,
                     diameter: size * 0.8,
@@ -37,7 +43,7 @@ private struct AuroraBackgroundLayer: View {
                 )
 
                 AuroraOrb(
-                    color: .purple,
+                    color: colors.orb2,
                     opacity: 0.3,
                     radius: size * 0.45,
                     diameter: size * 0.9,
@@ -47,7 +53,7 @@ private struct AuroraBackgroundLayer: View {
                 )
 
                 AuroraOrb(
-                    color: .pink,
+                    color: colors.orb3,
                     opacity: 0.22,
                     radius: size * 0.35,
                     diameter: size * 0.7,
@@ -57,7 +63,21 @@ private struct AuroraBackgroundLayer: View {
                 )
             }
             .blur(radius: size * 0.12 + 45)
+            .animation(.easeInOut(duration: 1.5), value: status)
             .drawingGroup()
+        }
+    }
+
+    private func currentColors(for status: ServerStatus) -> (orb1: Color, orb2: Color, orb3: Color) {
+        switch status {
+        case .running:
+            return (orb1: .mint, orb2: .cyan, orb3: .yellow)
+        case .starting, .restarting, .stopping:
+            return (orb1: .orange, orb2: .yellow, orb3: .pink)
+        case .error:
+            return (orb1: .red, orb2: .orange, orb3: .purple)
+        case .stopped:
+            return (orb1: .cyan, orb2: .purple, orb3: .pink)
         }
     }
 }
