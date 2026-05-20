@@ -3,9 +3,22 @@ import HazakuraLLMManagerCore
 
 struct StatusHeaderView: View {
     @ObservedObject var controller: ServerController
+    @State private var lanternPulse: CGFloat = 1.0
 
     var body: some View {
         HStack(spacing: 14) {
+            Image(systemName: "lightbulb.fill")
+                .font(.title2)
+                .foregroundStyle(lanternColor)
+                .scaleEffect(controller.status == .running ? lanternPulse : 1.0)
+                .shadow(color: lanternColor.opacity(controller.status == .running ? 0.8 : 0.0), radius: 6)
+                .onAppear {
+                    startLanternPulse()
+                }
+                .onChange(of: controller.status) {
+                    startLanternPulse()
+                }
+
             VStack(alignment: .leading, spacing: 4) {
                 Text("Hazakura Lantern")
                     .font(.title2.weight(.semibold))
@@ -24,6 +37,33 @@ struct StatusHeaderView: View {
             }
 
             StatusBadge(status: controller.status)
+        }
+    }
+
+    private func startLanternPulse() {
+        if controller.status == .running {
+            lanternPulse = 1.0
+            withAnimation(
+                .easeInOut(duration: 1.2)
+                .repeatForever(autoreverses: true)
+            ) {
+                lanternPulse = 1.15
+            }
+        } else {
+            lanternPulse = 1.0
+        }
+    }
+
+    private var lanternColor: Color {
+        switch controller.status {
+        case .running:
+            return .orange
+        case .starting, .stopping, .restarting:
+            return .yellow
+        case .error:
+            return .red
+        case .stopped:
+            return .secondary
         }
     }
 }

@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         ScrollViewReader { scrollProxy in
             ZStack {
-                AuroraBackgroundView()
+                AuroraBackgroundView(status: controller.status)
 
                 VStack(spacing: 0) {
                     StatusHeaderView(controller: controller)
