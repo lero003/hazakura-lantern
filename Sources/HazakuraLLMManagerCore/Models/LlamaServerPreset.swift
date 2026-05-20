@@ -1,6 +1,6 @@
 import Foundation
 
-public enum LlamaServerPresetIntent: String, CaseIterable, Codable, Equatable, Sendable {
+public enum LlamaServerPresetIntent: String, CaseIterable, Codable, Equatable, Hashable, Sendable {
     case conservative
     case balancedLocal
     case longContext
@@ -95,6 +95,13 @@ public struct LlamaServerPreset: Equatable, Sendable {
         case .mtpCapable:
             return mtpCapable
         }
+    }
+
+    public var previewSummary: String {
+        let argumentsSummary = additionalArguments.isEmpty
+            ? "no added args"
+            : "adds \(additionalArguments.joined(separator: " "))"
+        return "Sets context \(contextSize), threads \(threads), GPU layers \(gpuLayers), \(argumentsSummary)."
     }
 
     public func applying(to configuration: RuntimeConfiguration) -> RuntimeConfiguration {

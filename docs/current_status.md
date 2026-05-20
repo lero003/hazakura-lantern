@@ -210,6 +210,10 @@ Implemented scope:
   long-context, low-memory, and MTP-capable settings as visible configuration
   values and additional launch arguments, with MTP arguments added only by the
   explicit MTP-capable preset.
+- The server configuration view now lets users choose a `llama-server` preset,
+  review its context/thread/GPU/additional-argument summary, and apply it to
+  the active configuration while preserving the selected runtime, model, host,
+  and port.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -322,8 +326,9 @@ Good next automated candidates:
   draft-response guidance miss a concrete public-feedback case
 - add or refine `llama-server` model-family preset guidance in
   `docs/llama_server_presets.md`, keeping presets advisory and command-visible
-- implement one tested v0.6 preset slice beyond the core preset model, such as
-  previewing or applying a single preset to the active configuration
+- implement one tested v0.6 preset slice beyond the core preset model and
+  initial picker/apply UI, such as preset compatibility notes or safer
+  option-family warnings
 - implement one tested v0.7 runtime capability slice, such as timeout-bounded
   `llama-server --version` display or `--help` option detection for preset
   compatibility warnings

@@ -4,6 +4,11 @@ import HazakuraLLMManagerCore
 
 struct ConfigurationView: View {
     @ObservedObject var controller: ServerController
+    @State private var selectedPresetIntent: LlamaServerPresetIntent = .balancedLocal
+
+    private var selectedPreset: LlamaServerPreset {
+        LlamaServerPreset.preset(for: selectedPresetIntent)
+    }
 
     var body: some View {
         GroupBox("Server Configuration") {
@@ -25,6 +30,37 @@ struct ConfigurationView: View {
                     recentPaths: controller.recentPaths.modelPaths,
                     selectPath: controller.selectModelPath
                 )
+
+                GridRow {
+                    Text("Preset")
+                        .foregroundStyle(.secondary)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 8) {
+                            Picker("Preset", selection: $selectedPresetIntent) {
+                                ForEach(LlamaServerPreset.all, id: \.intent) { preset in
+                                    Text(preset.displayName)
+                                        .tag(preset.intent)
+                                }
+                            }
+                            .labelsHidden()
+                            .pickerStyle(.menu)
+                            .frame(width: 180)
+
+                            Button {
+                                controller.applyPreset(selectedPreset)
+                            } label: {
+                                Label("Apply Preset", systemImage: "slider.horizontal.3")
+                            }
+                            .buttonStyle(SecondaryButtonStyle())
+                        }
+
+                        Text(selectedPreset.previewSummary)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+                }
 
                 GridRow {
                     Text("Port")

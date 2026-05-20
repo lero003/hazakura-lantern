@@ -28,6 +28,17 @@ final class LlamaServerPresetTests: XCTestCase {
         XCTAssertEqual(updated.additionalArguments, "")
     }
 
+    func testPresetPreviewSummaryKeepsGeneratedSettingsVisible() {
+        XCTAssertEqual(
+            LlamaServerPreset.lowMemory.previewSummary,
+            "Sets context 4096, threads auto, GPU layers 0, no added args."
+        )
+        XCTAssertEqual(
+            LlamaServerPreset.mtpCapable.previewSummary,
+            "Sets context 8192, threads auto, GPU layers auto, adds --spec-type draft-mtp --spec-draft-n-max 16."
+        )
+    }
+
     func testLowMemoryPresetKeepsGPULayersCommandVisibleAsZero() throws {
         let command = try LlamaServerAdapter().buildLaunchCommand(
             config: configured(LlamaServerPreset.lowMemory)

@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added a compact preset picker in the server configuration view so
+  `llama-server` presets can be previewed and applied to the active
+  configuration while keeping generated settings visible before launch.
 - Added a core `llama-server` preset model for conservative, balanced local,
   long-context, low-memory, and MTP-capable settings while keeping every
   generated option visible in the launch command.

@@ -110,7 +110,7 @@ but the user must be able to review and edit the resulting configuration.
 1. Document the preset vocabulary and option compatibility rules. Done.
 2. Add a core preset model that maps an intent to visible configuration values
    and additional arguments. Done.
-3. Add UI to preview and apply one preset to the active configuration.
+3. Add UI to preview and apply presets to the active configuration. Done.
 4. Add advisory runtime capability checks for `--version` and `--help`.
 5. Add warnings when a selected preset appears incompatible with the selected
    runtime.

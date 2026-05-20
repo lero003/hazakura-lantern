@@ -271,6 +271,8 @@ Already done or mostly done:
 - core `llama-server` preset model for conservative, balanced local,
   long-context, low-memory, and MTP-capable settings, with generated options
   kept visible in the launch command
+- compact preset picker and apply action in the server configuration view, with
+  a visible settings summary before launch
 
 Remaining before a packaged app release:
 
@@ -510,6 +512,7 @@ Candidate work:
 - define a small preset vocabulary: conservative, balanced local, long context,
   low memory, and MTP capable (core model done)
 - map presets to visible configuration values and additional arguments
+- preview and apply presets from the server configuration view
 - keep launch command preview as the source of truth for what will run
 - add focused tests for preset-to-configuration behavior
 - treat `--spec-type draft-mtp` and `--spec-draft-n-max` as MTP-capable preset

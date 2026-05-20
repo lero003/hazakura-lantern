@@ -108,6 +108,12 @@ final class ServerController: ObservableObject {
         recentPaths = configurationStore.recordModelPath(path)
     }
 
+    func applyPreset(_ preset: LlamaServerPreset) {
+        updateConfiguration { configuration in
+            configuration = preset.applying(to: configuration)
+        }
+    }
+
     func start() {
         guard canStart else {
             return
