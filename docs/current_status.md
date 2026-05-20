@@ -327,6 +327,20 @@ depend on app-bundle launch verification.
 No user-facing app-bundle release should be cut until app launch verification
 succeeds on a normal macOS environment.
 
+Formal-release UI blockers:
+
+- verify the menu bar daily-use path on a normal macOS desktop, including
+  status visibility, lifecycle actions, copy actions, and `Open Window`
+  behavior from hidden or backgrounded window states
+- decide whether the toolbar remains a secondary power-user surface, is reduced,
+  or is removed after the menu bar becomes the primary resident control surface
+- review the Setup Guide against the normal configuration flow so onboarding
+  help does not duplicate or obscure the main window controls
+- perform one manual UI smoke pass that covers main-window launch, Setup Guide
+  toggling, menu bar commands, toolbar commands, and clean quit behavior
+- keep menu-bar-only lifecycle, launch-at-login, and automatic restart policy
+  out of the release unless a later explicit product decision reopens them
+
 The v0.3 adapter-boundary checkpoint is closed unless a new concrete ambiguity
 or regression is named. The v0.4 reliability lane is allowed to stay quiet when
 there is no concrete safe `llama-server` reliability slice; do not force v0.4

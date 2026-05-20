@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Documented the pre-release UI blockers for the recent menu bar, toolbar, and
+  Setup Guide additions before a user-facing packaged release.
 - Added a native toolbar shell for existing start, stop, restart, and manual
   endpoint health-check actions without adding new runtime behavior.
 - Added a toolbar copy menu for the existing launch command, endpoint,

@@ -122,6 +122,9 @@ Release posture:
 - Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
   release until the app-bundle launch smoke is verified on a normal macOS
   environment.
+- Do not cut a user-facing packaged release until the menu bar, toolbar, and
+  Setup Guide release blockers in `docs/current_status.md` and `docs/roadmap.md`
+  are resolved or explicitly deferred from the release scope.
 
 Post-public posture:
 

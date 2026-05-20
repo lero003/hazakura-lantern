@@ -50,6 +50,21 @@ slice.
    Done.
 7. Add keyboard shortcuts only for actions whose state is already well-defined.
 
+## Pre-Release UI Blockers
+
+Before a user-facing packaged release, do not treat v0.8 UI work as release
+ready until these are checked or explicitly deferred:
+
+- menu bar daily-use behavior works on a normal macOS desktop, including status
+  visibility, lifecycle actions, copy actions, and opening the main window from
+  hidden or backgrounded states
+- the toolbar's role is decided after the menu bar becomes the resident control
+  surface: keep it as secondary, reduce it, or remove it
+- Setup Guide onboarding is reviewed against the main configuration flow so it
+  helps first-run setup without crowding normal daily use
+- a manual UI smoke pass covers main-window launch, Setup Guide toggling, menu
+  bar commands, toolbar commands, and clean quit behavior
+
 ## Non-Goals
 
 - new runtime adapters

@@ -287,6 +287,13 @@ Already done or mostly done:
 Remaining before a packaged app release:
 
 - fix or externally verify the app-bundle launch smoke path
+- resolve the pre-release UI blockers for the recent menu bar, toolbar, and
+  Setup Guide additions:
+  - verify menu bar daily-use behavior on a normal macOS desktop
+  - decide the toolbar's role after the menu bar becomes the resident surface
+  - confirm the Setup Guide helps onboarding without crowding the main flow
+  - run a manual UI smoke pass across main window, Setup Guide, menu bar,
+    toolbar, and quit behavior
 - keep README, current status, development loop, and roadmap in agreement
 
 v0 exit criteria:
@@ -685,6 +692,8 @@ release is being prepared.
 
 No `.app`, zip, dmg, signing, notarization, checksum, or binary distribution
 claim should be published until the relevant packaging gate is satisfied.
+Before a user-facing packaged release, also resolve the menu bar/toolbar/Setup
+Guide UI blockers recorded in the v0 remaining-release list.
 
 ## Later, Separate Design Decisions
 
