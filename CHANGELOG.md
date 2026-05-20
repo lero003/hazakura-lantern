@@ -26,6 +26,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added non-mutating update-readiness dry-run guidance that explains whether
   Lantern still needs runtime capability evidence before any guarded update
   plan can be prepared.
+- Refined update-readiness dry-run wording so incomplete evidence names the
+  missing `--version` or `--help` signal before any guarded update plan.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,
   Dependabot proposal configuration, and common local secret-ignore rules
   without changing remote GitHub settings or shipping packaged artifacts.

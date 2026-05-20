@@ -249,6 +249,9 @@ Implemented scope:
 - The server configuration view now shows non-mutating update-readiness dry-run
   guidance that combines selected runtime source with local version/help
   capability evidence before any future guarded update plan can be prepared.
+- Incomplete update-readiness dry-run guidance now names the missing local
+  `--version` or `--help` evidence, so a guarded update plan is not prepared
+  from a generic "capability incomplete" state.
 - menu bar/toolbar/navigation guidance now restores v0.8 as a native Mac
   control-surface lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -389,9 +392,8 @@ Good next automated candidates:
   new control surfaces; menu-bar-only lifecycle and launch-at-login behavior
   need an explicit human handoff
 - implement one non-mutating v0.9 update-readiness slice beyond the path-only
-  install-source advice and dry-run requirements now covered, such as refining
-  version/capability summary wording or documenting a concrete update-readiness
-  case
+  install-source advice, dry-run requirements, and missing-evidence wording now
+  covered, such as documenting a concrete update-readiness case
 - improve one `llama-server` reliability or daily-use path when the confusing
   behavior is concrete and testable: launch validation, launch failure wording,
   missing runtime/model file empty states beyond the blank or non-`.gguf`

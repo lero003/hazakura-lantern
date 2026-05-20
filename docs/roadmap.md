@@ -286,6 +286,8 @@ Already done or mostly done:
 - non-mutating update-readiness dry-run guidance that combines selected runtime
   source with local version/help capability evidence before any future guarded
   update plan can be prepared
+- incomplete update-readiness evidence wording that names whether local
+  `--version` or `--help` evidence is missing before any guarded update plan
 
 Remaining before a packaged app release:
 

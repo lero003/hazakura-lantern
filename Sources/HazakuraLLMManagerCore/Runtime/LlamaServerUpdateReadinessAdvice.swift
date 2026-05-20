@@ -38,7 +38,7 @@ public struct LlamaServerUpdateReadinessAdvice: Equatable, Sendable {
             return LlamaServerUpdateReadinessAdvice(
                 readiness: .needsCapabilityCheck,
                 title: "Update dry-run: check runtime first",
-                detail: "Before any guarded update plan, Lantern needs the selected path source plus a local version and --help capability check."
+                detail: "Run Check Runtime to capture local version and --help option evidence before any guarded update plan."
             )
         }
 
@@ -46,7 +46,7 @@ public struct LlamaServerUpdateReadinessAdvice: Equatable, Sendable {
             return LlamaServerUpdateReadinessAdvice(
                 readiness: .capabilityEvidenceIncomplete,
                 title: "Update dry-run: capability evidence incomplete",
-                detail: "Lantern detected the runtime source, but version or option support is incomplete. No update plan should be prepared yet."
+                detail: capabilityResult.incompleteUpdatePlanningEvidenceDetail
             )
         }
 
@@ -64,6 +64,53 @@ private extension LlamaServerCapabilityProbeResult {
             && helpCheck.completedSuccessfully
             && capabilities.versionSummary != nil
             && !capabilities.supportedOptions.isEmpty
+    }
+
+    var incompleteUpdatePlanningEvidenceDetail: String {
+        var missingEvidence: [String] = []
+
+        if !versionCheck.completedSuccessfully || capabilities.versionSummary == nil {
+            missingEvidence.append(versionEvidenceGap)
+        }
+
+        if !helpCheck.completedSuccessfully || capabilities.supportedOptions.isEmpty {
+            missingEvidence.append(helpEvidenceGap)
+        }
+
+        let gapSummary = missingEvidence.joined(separator: " and ")
+        return "Lantern detected the runtime source, but \(gapSummary). No update plan should be prepared yet."
+    }
+
+    private var versionEvidenceGap: String {
+        if versionCheck.didTimeOut {
+            return "the --version check timed out"
+        }
+
+        if let errorDescription = versionCheck.errorDescription {
+            return "the --version check failed: \(errorDescription)"
+        }
+
+        if let terminationStatus = versionCheck.terminationStatus, terminationStatus != 0 {
+            return "the --version check exited with status \(terminationStatus)"
+        }
+
+        return "the version summary is unavailable"
+    }
+
+    private var helpEvidenceGap: String {
+        if helpCheck.didTimeOut {
+            return "the --help check timed out"
+        }
+
+        if let errorDescription = helpCheck.errorDescription {
+            return "the --help check failed: \(errorDescription)"
+        }
+
+        if let terminationStatus = helpCheck.terminationStatus, terminationStatus != 0 {
+            return "the --help check exited with status \(terminationStatus)"
+        }
+
+        return "the --help option list is unavailable"
     }
 }
 

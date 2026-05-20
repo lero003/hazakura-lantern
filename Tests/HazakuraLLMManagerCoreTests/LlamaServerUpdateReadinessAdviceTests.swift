@@ -21,7 +21,8 @@ final class LlamaServerUpdateReadinessAdviceTests: XCTestCase {
 
         XCTAssertEqual(advice.readiness, .needsCapabilityCheck)
         XCTAssertEqual(advice.title, "Update dry-run: check runtime first")
-        XCTAssertTrue(advice.detail.contains("local version and --help capability check"))
+        XCTAssertTrue(advice.detail.contains("Run Check Runtime"))
+        XCTAssertTrue(advice.detail.contains("local version and --help option evidence"))
     }
 
     func testEvaluateKeepsManualPathsManualOnly() throws {
@@ -45,6 +46,20 @@ final class LlamaServerUpdateReadinessAdviceTests: XCTestCase {
         )
 
         XCTAssertEqual(advice.readiness, .capabilityEvidenceIncomplete)
+        XCTAssertTrue(advice.detail.contains("No update plan should be prepared yet"))
+        XCTAssertTrue(advice.detail.contains("--version check timed out"))
+    }
+
+    func testEvaluateExplainsMissingHelpOptionEvidence() throws {
+        let advice = try XCTUnwrap(
+            LlamaServerUpdateReadinessAdvice.evaluate(
+                executablePath: "/opt/local/bin/llama-server",
+                capabilityResult: missingHelpOptionProbeResult()
+            )
+        )
+
+        XCTAssertEqual(advice.readiness, .capabilityEvidenceIncomplete)
+        XCTAssertTrue(advice.detail.contains("--help option list is unavailable"))
         XCTAssertTrue(advice.detail.contains("No update plan should be prepared yet"))
     }
 
@@ -112,6 +127,27 @@ final class LlamaServerUpdateReadinessAdviceTests: XCTestCase {
             capabilities: .parse(
                 versionOutput: nil,
                 helpOutput: "--model FNAME"
+            )
+        )
+    }
+
+    private func missingHelpOptionProbeResult() -> LlamaServerCapabilityProbeResult {
+        LlamaServerCapabilityProbeResult(
+            versionCheck: .init(
+                output: "llama-server version b4600",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            helpCheck: .init(
+                output: "usage: llama-server\n",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            capabilities: .parse(
+                versionOutput: "llama-server version b4600",
+                helpOutput: "usage: llama-server\n"
             )
         )
     }
