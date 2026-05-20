@@ -237,6 +237,8 @@ Implemented scope:
   adding multiple-profile management.
 - The main window toolbar now exposes clear-log behavior using the existing
   in-memory log reset path, disabled when there are no logs.
+- The main window toolbar now exposes a command-preview action that scrolls to
+  the existing launch command audit surface without changing runtime behavior.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -355,11 +357,10 @@ Good next automated candidates:
 - implement one tested v0.7 runtime capability slice beyond the core probe and
   initial manual UI advisory, such as refining unknown-capability wording or
   documenting a concrete runtime-version compatibility case
-- implement one v0.8 toolbar/navigation slice that mirrors existing start,
-  stop, restart, health, copy, profile import/export, clear-log, or command
-  preview behavior; the initial start/stop/restart/health toolbar shell is
-  covered, and the copy, profile, plus clear-log toolbar entries are covered,
-  so the next toolbar slice should focus on command-preview affordances
+- implement one v0.8 toolbar/navigation slice only if a new existing-action
+  affordance remains concrete; the start/stop/restart/health toolbar shell,
+  copy menu, profile import/export, clear-log, and command-preview reveal
+  entries are now covered
 - implement one non-mutating v0.9 update-readiness slice, such as install-source
   classification, version/capability summary, or dry-run update requirements
 - improve one `llama-server` reliability or daily-use path when the confusing

@@ -278,6 +278,8 @@ Already done or mostly done:
   runtime version display and preset option advisories
 - native toolbar shell for existing start, stop, restart, and manual endpoint
   health-check actions, with state derived from the existing controller
+- toolbar copy, profile import/export, clear-log, and command-preview reveal
+  affordances that mirror existing behavior without changing runtime ownership
 
 Remaining before a packaged app release:
 
@@ -577,7 +579,8 @@ Candidate work:
 - maintain `docs/toolbar_and_navigation.md`
 - add a native macOS toolbar for existing start, stop, restart, health-check,
   copy, profile import/export, log clear, and command-preview actions (initial
-  start, stop, restart, health-check, copy, profile, and log-clear entries done)
+  start, stop, restart, health-check, copy, profile, log-clear, and
+  command-preview reveal entries done)
 - keep toolbar state derived from the same controller state as the main views
 - add focused tests or view-model checks for toolbar action availability where
   practical
