@@ -320,6 +320,7 @@ struct SetupGuideView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(LocalizedStringKey(title))
@@ -333,6 +334,11 @@ struct SetupGuideView: View {
 
                 Spacer()
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityValue(Text(LocalizedStringKey(isCompleted ? "Complete" : "Incomplete")))
+            .accessibilityHint(Text(LocalizedStringKey(
+                isCompleted ? "This setup step is complete." : "Complete this setup step to continue."
+            )))
 
             content()
                 .padding(.leading, 32)

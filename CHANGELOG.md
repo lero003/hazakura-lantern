@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Improved Setup Guide step-card accessibility so each step reports
+  complete/incomplete state with localized hints.
 - Moved Setup Guide out of the primary sidebar and into a toolbar-toggled
   inspector, with the Dashboard setup hint opening the same onboarding surface.
 - Added non-mutating installed `llama-server` discovery for PATH, Homebrew, and

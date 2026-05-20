@@ -17,6 +17,8 @@
 "Context" = "コンテキスト";
 "Copy" = "コピー";
 "Copied!" = "コピー済み";
+"Complete" = "完了";
+"Complete this setup step to continue." = "次へ進むには、このセットアップ手順を完了してください。";
 "Copy AI Mobile Test" = "AI Mobileテストをコピー";
 "Copy Client Smoke" = "クライアント疎通をコピー";
 "Copy Command" = "コマンドをコピー";
@@ -44,6 +46,7 @@
 "Health check is not available for this adapter." = "このアダプタではヘルスチェックを利用できません。";
 "If not installed, run this command via Terminal:" = "未インストールの場合は、ターミナルで次を実行してください:";
 "Import" = "読み込み";
+"Incomplete" = "未完了";
 "Import or export the active runtime profile" = "現在のランタイムプロファイルを読み込み・書き出しします";
 "Import Profile" = "プロファイルを読み込み";
 "Installed" = "インストール済み";
@@ -93,6 +96,7 @@
 "Stopping" = "停止処理中";
 "Stop Server" = "サーバーを停止";
 "System" = "システム";
+"This setup step is complete." = "このセットアップ手順は完了しています。";
 "Threads" = "スレッド";
 "Additional Args" = "追加引数";
 "Use Installed Runtime" = "インストール済みを使用";

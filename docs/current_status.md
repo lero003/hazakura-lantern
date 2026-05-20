@@ -273,6 +273,8 @@ Implemented scope:
   and the Dashboard setup hint can reveal it without changing runtime behavior.
 - The Setup Guide model-search link no longer force-unwraps its static URL,
   removing the known app-UI crash edge from the automation smoke backlog.
+- Setup Guide step headers now expose complete/incomplete accessibility values
+  and hints while keeping decorative step indicators out of the reading order.
 - Advanced configuration fields are now grouped behind disclosure controls, with
   context, thread, and GPU-layer sliders supplementing the existing editable
   values.

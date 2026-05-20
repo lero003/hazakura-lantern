@@ -17,6 +17,8 @@
 "Context" = "Context";
 "Copy" = "Copy";
 "Copied!" = "Copied!";
+"Complete" = "Complete";
+"Complete this setup step to continue." = "Complete this setup step to continue.";
 "Copy AI Mobile Test" = "Copy AI Mobile Test";
 "Copy Client Smoke" = "Copy Client Smoke";
 "Copy Command" = "Copy Command";
@@ -44,6 +46,7 @@
 "Health check is not available for this adapter." = "Health check is not available for this adapter.";
 "If not installed, run this command via Terminal:" = "If not installed, run this command via Terminal:";
 "Import" = "Import";
+"Incomplete" = "Incomplete";
 "Import or export the active runtime profile" = "Import or export the active runtime profile";
 "Import Profile" = "Import Profile";
 "Installed" = "Installed";
@@ -93,6 +96,7 @@
 "Stopping" = "Stopping";
 "Stop Server" = "Stop Server";
 "System" = "System";
+"This setup step is complete." = "This setup step is complete.";
 "Threads" = "Threads";
 "Additional Args" = "Additional Args";
 "Use Installed Runtime" = "Use Installed Runtime";
