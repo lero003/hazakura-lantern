@@ -6,6 +6,8 @@ struct SetupGuideView: View {
     @State private var selectedPresetIntent: LlamaServerPresetIntent = .balancedLocal
     @State private var isHomebrewCopied = false
 
+    private static let ggufModelSearchURL = URL(string: "https://huggingface.co/models?search=gguf")
+
     private var selectedPreset: LlamaServerPreset {
         LlamaServerPreset.preset(for: selectedPresetIntent)
     }
@@ -156,13 +158,15 @@ struct SetupGuideView: View {
                         isCompleted: isStep2Completed
                     ) {
                         VStack(alignment: .leading, spacing: 10) {
-                            HStack {
-                                Link(destination: URL(string: "https://huggingface.co/models?search=gguf")!) {
-                                    Label("Find on Hugging Face", systemImage: "safari")
-                                        .font(.caption)
+                            if let ggufModelSearchURL = Self.ggufModelSearchURL {
+                                HStack {
+                                    Link(destination: ggufModelSearchURL) {
+                                        Label("Find on Hugging Face", systemImage: "safari")
+                                            .font(.caption)
+                                    }
+                                    .buttonStyle(SecondaryButtonStyle())
+                                    Spacer()
                                 }
-                                .buttonStyle(SecondaryButtonStyle())
-                                Spacer()
                             }
 
                             Divider()

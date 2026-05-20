@@ -71,8 +71,8 @@ behavior, or one testable controller boundary:
 - accessibility labels, values, and hints for toolbar buttons, sidebar items,
   menu bar actions, copy buttons, status badges, health status, log rows, and
   Setup Guide step cards
-- removal of the remaining force unwrap in app UI code, such as static URL
-  construction in Setup Guide links
+- removal of any newly discovered force unwrap in app UI code. The known static
+  URL construction in the Setup Guide model-search link is covered.
 - one focused `ServerController` thread-safety or lifecycle hardening slice,
   backed by tests or a small audit note
 - graceful child-process shutdown fallback, app-termination cleanup, or

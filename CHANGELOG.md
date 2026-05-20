@@ -13,6 +13,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   back to manual file choice.
 - Added a Settings language toggle for System, Japanese, and English UI labels,
   backed by app-local localization resources.
+- Removed the Setup Guide's forced static model-search URL construction so the
+  inspector no longer carries that app-UI crash edge.
 - Added an automation smoke backlog for pre-release rough-edge discovery and
   small verifiable polish slices.
 - Folded external general-distribution improvement feedback into the automation

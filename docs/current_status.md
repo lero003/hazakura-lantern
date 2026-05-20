@@ -262,6 +262,8 @@ Implemented scope:
   Configuration, and Logs destinations. Setup Guide is a toolbar-toggled
   inspector that opens automatically when runtime or model selection is empty,
   and the Dashboard setup hint can reveal it without changing runtime behavior.
+- The Setup Guide model-search link no longer force-unwraps its static URL,
+  removing the known app-UI crash edge from the automation smoke backlog.
 - Advanced configuration fields are now grouped behind disclosure controls, with
   context, thread, and GPU-layer sliders supplementing the existing editable
   values.
@@ -396,9 +398,10 @@ Good next automated candidates:
   Setup Guide inspector flow, runtime setup, endpoint/health/copy/logs,
   profiles, packaging-prep, or non-mutating update-readiness
 - when using the external improvement proposal, prefer automatable P0/P1
-  candidates such as accessibility, force-unwrap removal, copy feedback, error
-  visibility, focused localization gaps, fake-driven controller tests, and
-  stopped-state animation performance before low-priority polish
+  candidates such as accessibility, any newly discovered app-UI force unwrap,
+  copy feedback, error visibility, focused localization gaps, fake-driven
+  controller tests, and stopped-state animation performance before low-priority
+  polish
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
