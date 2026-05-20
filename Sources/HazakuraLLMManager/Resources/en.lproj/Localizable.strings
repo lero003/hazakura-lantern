@@ -68,6 +68,7 @@
 "Prepare GGUF Model" = "Prepare GGUF Model";
 "Prepare llama-server" = "Prepare llama-server";
 "Preset" = "Preset";
+"Process Status" = "Process Status";
 "Process Status:" = "Process Status:";
 "Profile" = "Profile";
 "Quit" = "Quit";

@@ -12,6 +12,7 @@ struct StatusHeaderView: View {
                 .foregroundStyle(lanternColor)
                 .scaleEffect(controller.status == .running ? lanternPulse : 1.0)
                 .shadow(color: lanternColor.opacity(controller.status == .running ? 0.8 : 0.0), radius: 6)
+                .accessibilityHidden(true)
                 .onAppear {
                     startLanternPulse()
                 }
@@ -95,6 +96,9 @@ private struct StatusBadge: View {
         .padding(.vertical, 6)
         .background(backgroundStyle, in: Capsule())
         .foregroundStyle(foregroundStyle)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Process Status"))
+        .accessibilityValue(Text(LocalizedStringKey(status.title)))
     }
 
     private func startPulseIfNeeded() {

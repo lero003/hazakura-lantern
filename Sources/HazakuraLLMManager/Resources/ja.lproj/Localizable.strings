@@ -68,6 +68,7 @@
 "Prepare GGUF Model" = "GGUFモデルを準備";
 "Prepare llama-server" = "llama-serverを準備";
 "Preset" = "プリセット";
+"Process Status" = "プロセス状態";
 "Process Status:" = "プロセス状態:";
 "Profile" = "プロファイル";
 "Quit" = "終了";

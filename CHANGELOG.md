@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Improved the process status badge accessibility value so assistive reading
+  exposes the localized server state instead of the decorative indicator.
 - Improved Setup Guide step-card accessibility so each step reports
   complete/incomplete state with localized hints.
 - Moved Setup Guide out of the primary sidebar and into a toolbar-toggled
