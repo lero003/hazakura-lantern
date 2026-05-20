@@ -13,9 +13,11 @@ Start each substantial run with:
 4. `docs/roadmap.md`
 5. `docs/product_brief.md`
 6. `docs/troubleshooting.md`
-7. `docs/post_public_operations.md` when a run touches public issues, external
+7. `docs/automation_smoke_backlog.md` when choosing UI, smoke, localization,
+   menu bar, setup-flow, update-readiness, or pre-release polish work
+8. `docs/post_public_operations.md` when a run touches public issues, external
    review feedback, post-public docs hygiene, or automation scope
-8. `docs/public_opening_preflight.md` only when a run touches pre-open
+9. `docs/public_opening_preflight.md` only when a run touches pre-open
    checklist history, release, GitHub visibility, GitHub settings, tags, or
    release assets
 
@@ -64,6 +66,12 @@ as future backlog unless it can be narrowed to one testable `llama-server`
 reliability, restart-state, copy-flow, empty-state, health wording,
 profile-warning, setup-hint, preset, read-only runtime capability,
 menu-bar/toolbar, or update-readiness ambiguity.
+
+For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
+Automation may fix one concrete UI, localization, smoke, setup-flow,
+menu-bar/toolbar, profile-warning, health/copy, packaging-prep, or
+non-mutating update-readiness issue from that document per run when the issue is
+observable and verifiable.
 
 The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
 human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
@@ -188,8 +196,12 @@ Preferred order:
 10. If v0.8 menu bar/toolbar work is quiet, advance into v0.9 update-readiness work:
    source detection, version/capability summary, or dry-run guidance, without
    mutating a real runtime.
-11. End as a verified no-op only when no safe v0.5, v0.6, v0.7, v0.8, or
-   non-mutating v0.9 slice is justified after the checks above.
+11. If no lane-specific slice is justified, check
+   `docs/automation_smoke_backlog.md` for one concrete pre-release rough edge
+   that can be verified in the same run.
+12. End as a verified no-op only when no safe v0.5, v0.6, v0.7, v0.8,
+   non-mutating v0.9, or smoke-backlog slice is justified after the checks
+   above.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.

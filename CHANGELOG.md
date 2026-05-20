@@ -8,6 +8,15 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 - Moved Setup Guide out of the primary sidebar and into a toolbar-toggled
   inspector, with the Dashboard setup hint opening the same onboarding surface.
+- Added non-mutating installed `llama-server` discovery for PATH, Homebrew, and
+  MacPorts locations so runtime selection can use an in-app menu before falling
+  back to manual file choice.
+- Added a Settings language toggle for System, Japanese, and English UI labels,
+  backed by app-local localization resources.
+- Added an automation smoke backlog for pre-release rough-edge discovery and
+  small verifiable polish slices.
+- Folded external general-distribution improvement feedback into the automation
+  smoke backlog with explicit automation and human-decision boundaries.
 - Added a sidebar-based main window layout with a dashboard for server controls,
   endpoint details, and launch command preview while keeping runtime behavior
   unchanged.

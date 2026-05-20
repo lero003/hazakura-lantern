@@ -18,6 +18,12 @@ Implemented scope:
 - Runtime configuration stored in `UserDefaults`.
 - Recent runtime executable and model path lists stored separately from the
   active runtime configuration.
+- Installed `llama-server` discovery observes executable files from PATH plus
+  common Homebrew and MacPorts binary locations, surfacing them as selectable UI
+  choices without running package-manager commands.
+- Settings now includes a System / Japanese / English language toggle for UI
+  labels and controls only; runtime logs, command text, profile data, and
+  adapter-owned messages remain outside the localization scope.
 - `llama-server` launch command construction without shell interpolation.
 - Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
@@ -368,6 +374,13 @@ Use `docs/post_public_operations.md` for public issue triage, automation-safe
 work, and human approval gates. Treat post-public triage as the v0.5 lane, while
 its guardrails apply immediately. Keep `docs/public_opening_preflight.md` as a
 pre-open and release-handoff reference rather than the normal work queue.
+Use `docs/automation_smoke_backlog.md` for pre-release rough-edge discovery and
+small automatable polish. It names safe smoke checks, good automation slices,
+and release boundaries for UI, localization, menu bar, setup-flow,
+health/copy/log, profile, update-readiness, and packaging-prep work.
+The backlog also classifies the 2026-05-20 external improvement proposal into
+automatable candidates, human-decision items, low-priority polish, and explicit
+scope boundaries.
 Automation must not change GitHub visibility, settings, tags, releases, release
 assets, repository packages, public issue state, automation cadence, a new
 adapter, custom command implementation, profile schema version, dependencies,
@@ -378,6 +391,14 @@ without an explicit human handoff.
 
 Good next automated candidates:
 
+- use `docs/automation_smoke_backlog.md` to expose or fix one concrete
+  pre-release rough edge in UI labels, localization, menu bar/toolbar behavior,
+  Setup Guide inspector flow, runtime setup, endpoint/health/copy/logs,
+  profiles, packaging-prep, or non-mutating update-readiness
+- when using the external improvement proposal, prefer automatable P0/P1
+  candidates such as accessibility, force-unwrap removal, copy feedback, error
+  visibility, focused localization gaps, fake-driven controller tests, and
+  stopped-state animation performance before low-priority polish
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,

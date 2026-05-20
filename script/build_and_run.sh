@@ -14,6 +14,7 @@ APP_BUNDLE_RELATIVE="dist/$APP_BUNDLE_NAME"
 APP_BUNDLE="$ROOT_DIR/$APP_BUNDLE_RELATIVE"
 APP_CONTENTS="$APP_BUNDLE/Contents"
 APP_MACOS="$APP_CONTENTS/MacOS"
+APP_RESOURCES="$APP_CONTENTS/Resources"
 APP_BINARY="$APP_MACOS/$APP_EXECUTABLE"
 INFO_PLIST="$APP_CONTENTS/Info.plist"
 
@@ -31,12 +32,22 @@ if [[ "$MODE" == "--stop" || "$MODE" == "stop" ]]; then
 fi
 
 swift build "${SWIFT_BUILD_FLAGS[@]}"
-BUILD_BINARY="$(swift build "${SWIFT_BUILD_FLAGS[@]}" --show-bin-path)/$APP_EXECUTABLE"
+BUILD_BIN_DIR="$(swift build "${SWIFT_BUILD_FLAGS[@]}" --show-bin-path)"
+BUILD_BINARY="$BUILD_BIN_DIR/$APP_EXECUTABLE"
 
 rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_MACOS"
+mkdir -p "$APP_RESOURCES"
 cp "$BUILD_BINARY" "$APP_BINARY"
 chmod +x "$APP_BINARY"
+
+find "$BUILD_BIN_DIR" -maxdepth 1 \
+  \( -name "*$APP_EXECUTABLE*.resources" -o -name "*$APP_EXECUTABLE*.bundle" \) \
+  -exec cp -R {} "$APP_RESOURCES/" \;
+
+find "$BUILD_BIN_DIR" -maxdepth 2 -type d -name "*.lproj" | while IFS= read -r lproj_dir; do
+  cp -R "$lproj_dir" "$APP_RESOURCES/"
+done
 
 cat >"$INFO_PLIST" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>

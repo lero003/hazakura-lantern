@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "hazakura-lantern",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v14)
     ],
@@ -19,7 +20,10 @@ let package = Package(
         ),
         .executableTarget(
             name: "HazakuraLLMManager",
-            dependencies: ["HazakuraLLMManagerCore"]
+            dependencies: ["HazakuraLLMManagerCore"],
+            resources: [
+                .process("Resources")
+            ]
         ),
         .testTarget(
             name: "HazakuraLLMManagerCoreTests",

@@ -303,6 +303,14 @@ Remaining before a packaged app release:
     main flow
   - run a manual UI smoke pass across main window, Setup Guide inspector, menu
     bar, toolbar, and quit behavior
+- use `docs/automation_smoke_backlog.md` to keep rough-edge discovery concrete
+  and automatable before broad polish or release work
+- treat the 2026-05-20 external improvement proposal as triaged backlog input:
+  accessibility, force-unwrap removal, copy feedback, error visibility,
+  app-UI localization gaps, controller tests, and performance throttling are
+  automatable only as small verified slices; branding, first-run flow changes,
+  toolchain/CI additions, entitlements, signing, notarization, and packaged
+  release work need explicit human handoff
 - keep README, current status, development loop, and roadmap in agreement
 
 v0 exit criteria:
@@ -755,9 +763,19 @@ automatically only while it remains non-mutating and advisory.
 v0.4 `llama-server` reliability work remains valid only when a concrete,
 testable daily-use ambiguity is visible; do not force v0.4 work just to fill
 the lane.
+For pre-release rough-edge discovery that does not fit a single roadmap lane,
+use `docs/automation_smoke_backlog.md`; it is the allowed source for one small
+automatable UI, localization, menu bar, setup-flow, health/copy/log, profile,
+packaging-prep, or non-mutating update-readiness polish slice.
+The 2026-05-20 external improvement proposal has been folded into that backlog;
+automation should not re-read it as permission for broad redesign, new tools,
+runtime mutation, or release packaging.
 
 Good next slices:
 
+- expose or fix one concrete rough edge from `docs/automation_smoke_backlog.md`
+  when it can be verified without broad restyling, runtime mutation, packaging
+  publication, or GitHub mutation
 - classify public issues or external review notes using
   `docs/post_public_operations.md`, then update docs, tests, or small
   `llama-server` behavior only when the classification identifies a safe local

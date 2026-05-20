@@ -76,6 +76,7 @@ struct ConfigurationView: View {
                         text: binding(\.runtimeExecutablePath),
                         buttonTitle: "Choose Runtime",
                         allowedExtensions: nil,
+                        detectedPaths: controller.detectedRuntimeExecutablePaths,
                         recentPaths: controller.recentPaths.runtimeExecutablePaths,
                         isHighlighted: controller.configuration.runtimeExecutablePath.isEmpty,
                         stepLabel: "Step 1",
@@ -88,6 +89,7 @@ struct ConfigurationView: View {
                         text: binding(\.modelPath),
                         buttonTitle: "Choose GGUF",
                         allowedExtensions: ["gguf"],
+                        detectedPaths: [],
                         recentPaths: controller.recentPaths.modelPaths,
                         isHighlighted: controller.configuration.modelPath.isEmpty,
                         stepLabel: "Step 2",
@@ -308,6 +310,7 @@ struct ConfigurationView: View {
         text: Binding<String>,
         buttonTitle: String,
         allowedExtensions: [String]?,
+        detectedPaths: [String],
         recentPaths: [String],
         isHighlighted: Bool,
         stepLabel: String?,
@@ -344,6 +347,21 @@ struct ConfigurationView: View {
                     Label(buttonTitle, systemImage: "folder")
                 }
                 .buttonStyle(SecondaryButtonStyle())
+
+                if !detectedPaths.isEmpty {
+                    Menu {
+                        ForEach(detectedPaths, id: \.self) { path in
+                            Button {
+                                selectPath(path)
+                            } label: {
+                                Text(recentPathLabel(path))
+                            }
+                        }
+                    } label: {
+                        Label("Installed", systemImage: "checkmark.seal")
+                    }
+                    .buttonStyle(SecondaryButtonStyle())
+                }
 
                 if !recentPaths.isEmpty {
                     Menu {

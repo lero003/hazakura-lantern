@@ -13,11 +13,13 @@ final class ServerController: ObservableObject {
     @Published private(set) var runtimeCapabilityProbeMessage: String?
     @Published private(set) var isRuntimeCapabilityProbeRunning = false
     @Published private(set) var recentPaths: RecentRuntimePaths
+    @Published private(set) var detectedRuntimeExecutablePaths: [String]
     @Published var configuration: RuntimeConfiguration
 
     private let adapter: any RuntimeAdapter
     private let endpointHealthChecker: EndpointHealthChecker
     private let configurationStore: ConfigurationStore
+    private let runtimeDiscovery: LlamaServerRuntimeDiscovery
     private let fileManager: FileManager
     private var process: Process?
     private var stdoutPipe: Pipe?
@@ -29,16 +31,19 @@ final class ServerController: ObservableObject {
         adapter: any RuntimeAdapter = LlamaServerAdapter(),
         endpointHealthChecker: EndpointHealthChecker = EndpointHealthChecker(),
         configurationStore: ConfigurationStore = ConfigurationStore(),
+        runtimeDiscovery: LlamaServerRuntimeDiscovery = LlamaServerRuntimeDiscovery(),
         fileManager: FileManager = .default
     ) {
         self.adapter = adapter
         self.endpointHealthChecker = endpointHealthChecker
         self.configurationStore = configurationStore
+        self.runtimeDiscovery = runtimeDiscovery
         self.fileManager = fileManager
         let activeProfile = configurationStore.loadRuntimeProfile()
         self.configuration = activeProfile.configuration
         self.activeProfileName = activeProfile.name
         self.recentPaths = configurationStore.loadRecentPaths()
+        self.detectedRuntimeExecutablePaths = runtimeDiscovery.installedExecutablePaths(fileManager: fileManager)
     }
 
     var canStart: Bool {
@@ -121,6 +126,10 @@ final class ServerController: ObservableObject {
             configuration.runtimeExecutablePath = path
         }
         recentPaths = configurationStore.recordRuntimeExecutablePath(path)
+    }
+
+    func refreshDetectedRuntimeExecutablePaths() {
+        detectedRuntimeExecutablePaths = runtimeDiscovery.installedExecutablePaths(fileManager: fileManager)
     }
 
     func selectModelPath(_ path: String) {

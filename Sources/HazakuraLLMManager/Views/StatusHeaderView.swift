@@ -88,7 +88,7 @@ private struct StatusBadge: View {
                     startPulseIfNeeded()
                 }
 
-            Text(status.title)
+            Text(LocalizedStringKey(status.title))
                 .font(.callout.weight(.medium))
         }
         .padding(.horizontal, 12)

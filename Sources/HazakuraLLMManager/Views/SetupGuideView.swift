@@ -105,6 +105,30 @@ struct SetupGuideView: View {
                             Divider()
                                 .padding(.vertical, 2)
 
+                            if !controller.detectedRuntimeExecutablePaths.isEmpty {
+                                Text("Installed runtime detected:")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+
+                                ViewThatFits(in: .horizontal) {
+                                    HStack {
+                                        installedRuntimeMenu
+                                        refreshInstalledRuntimeButton
+                                        Spacer()
+                                    }
+
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        installedRuntimeMenu
+                                        refreshInstalledRuntimeButton
+                                    }
+                                }
+                            } else {
+                                HStack {
+                                    refreshInstalledRuntimeButton
+                                    Spacer()
+                                }
+                            }
+
                             HStack {
                                 Button {
                                     if let path = FilePanel.chooseFile(allowedExtensions: nil) {
@@ -294,10 +318,10 @@ struct SetupGuideView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
+                    Text(LocalizedStringKey(title))
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(isCompleted ? Color.primary : Color.primary.opacity(0.85))
-                    Text(description)
+                    Text(LocalizedStringKey(description))
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -339,6 +363,39 @@ struct SetupGuideView: View {
                 .help(path)
         }
         .padding(.top, 4)
+    }
+
+    private var installedRuntimeMenu: some View {
+        Menu {
+            ForEach(controller.detectedRuntimeExecutablePaths, id: \.self) { path in
+                Button {
+                    controller.selectRuntimeExecutablePath(path)
+                } label: {
+                    Text(runtimePathMenuLabel(path))
+                }
+            }
+        } label: {
+            Label("Installed Runtime", systemImage: "checkmark.seal")
+        }
+        .buttonStyle(SecondaryButtonStyle())
+    }
+
+    private var refreshInstalledRuntimeButton: some View {
+        Button {
+            controller.refreshDetectedRuntimeExecutablePaths()
+        } label: {
+            Label("Scan Installed", systemImage: "arrow.clockwise")
+        }
+        .buttonStyle(SecondaryButtonStyle())
+    }
+
+    private func runtimePathMenuLabel(_ path: String) -> String {
+        let name = URL(fileURLWithPath: path).lastPathComponent
+        guard !name.isEmpty else {
+            return path
+        }
+
+        return "\(name) - \(path)"
     }
 
     private var homebrewCommandLabel: some View {

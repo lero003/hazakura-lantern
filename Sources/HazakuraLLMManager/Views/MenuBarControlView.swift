@@ -7,7 +7,11 @@ struct MenuBarControlView: View {
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
-        Label(controller.status.title, systemImage: statusSystemImage)
+        Label {
+            Text(LocalizedStringKey(controller.status.title))
+        } icon: {
+            Image(systemName: statusSystemImage)
+        }
 
         if let processIdentifier = controller.processIdentifier {
             Text("pid \(processIdentifier)")
