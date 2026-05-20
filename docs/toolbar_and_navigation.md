@@ -39,8 +39,10 @@ new behavior contract, that contract belongs in its own focused slice.
    Done.
 3. Add profile import/export entry points without adding multiple-profile
    management. Done.
-4. Add log clear and command-preview focus affordances if they stay local.
-5. Add keyboard shortcuts only for actions whose state is already well-defined.
+4. Add a log clear toolbar action that reuses the existing clear-log behavior.
+   Done.
+5. Add command-preview focus affordances if they stay local.
+6. Add keyboard shortcuts only for actions whose state is already well-defined.
 
 ## Non-Goals
 

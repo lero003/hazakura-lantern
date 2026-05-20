@@ -71,6 +71,16 @@ struct ContentView: View {
             }
 
             ToolbarItem {
+                Button {
+                    controller.clearLogs()
+                } label: {
+                    Label("Clear Logs", systemImage: "trash")
+                }
+                .disabled(controller.logEntries.isEmpty)
+                .help("Clear the in-memory runtime logs")
+            }
+
+            ToolbarItem {
                 Menu {
                     Button {
                         exportRuntimeProfile()

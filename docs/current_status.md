@@ -235,6 +235,8 @@ Implemented scope:
 - The main window toolbar now exposes active runtime profile import/export
   actions that reuse the existing `.lantern-profile.json` file flow without
   adding multiple-profile management.
+- The main window toolbar now exposes clear-log behavior using the existing
+  in-memory log reset path, disabled when there are no logs.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -356,8 +358,8 @@ Good next automated candidates:
 - implement one v0.8 toolbar/navigation slice that mirrors existing start,
   stop, restart, health, copy, profile import/export, clear-log, or command
   preview behavior; the initial start/stop/restart/health toolbar shell is
-  covered, and the copy plus profile toolbar entries are covered, so the next
-  toolbar slice should focus on logs or command-preview affordances
+  covered, and the copy, profile, plus clear-log toolbar entries are covered,
+  so the next toolbar slice should focus on command-preview affordances
 - implement one non-mutating v0.9 update-readiness slice, such as install-source
   classification, version/capability summary, or dry-run update requirements
 - improve one `llama-server` reliability or daily-use path when the confusing

@@ -12,6 +12,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   environment, health-check, and AI Mobile smoke snippets.
 - Added toolbar profile import/export entry points that reuse the existing
   active-profile file flow without adding multiple-profile management.
+- Added a toolbar clear-log action that reuses the existing in-memory log reset
+  behavior and disables itself when there are no logs.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,
   Dependabot proposal configuration, and common local secret-ignore rules
   without changing remote GitHub settings or shipping packaged artifacts.
