@@ -218,6 +218,9 @@ Implemented scope:
   `--version` and `--help` checks without model launch or runtime mutation,
   parse supported option names, and report preset options that appear
   unsupported by the selected runtime.
+- The server configuration view now offers a manual runtime capability check
+  that displays the selected `llama-server` version when available and shows
+  supported, unsupported, or unknown preset-option advisory text before launch.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -333,9 +336,9 @@ Good next automated candidates:
 - implement one tested v0.6 preset slice beyond the core preset model and
   initial picker/apply UI, such as preset compatibility notes or safer
   option-family warnings
-- implement one tested v0.7 runtime capability slice beyond the core
-  timeout-bounded `--version` / `--help` probe, such as surfacing the local
-  version summary or showing preset compatibility warnings in the UI
+- implement one tested v0.7 runtime capability slice beyond the core probe and
+  initial manual UI advisory, such as refining unknown-capability wording or
+  documenting a concrete runtime-version compatibility case
 - implement one v0.8 toolbar/navigation slice that mirrors existing start,
   stop, restart, health, copy, profile import/export, clear-log, or command
   preview behavior

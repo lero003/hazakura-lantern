@@ -274,8 +274,8 @@ Already done or mostly done:
 - compact preset picker and apply action in the server configuration view, with
   a visible settings summary before launch
 - timeout-bounded, read-only `llama-server --version` and `--help` capability
-  probing in the core layer, with supported-option parsing for future preset
-  compatibility warnings
+  probing in the core layer, with a manual server-configuration UI check for
+  runtime version display and preset option advisories
 
 Remaining before a packaged app release:
 
@@ -543,12 +543,14 @@ Make presets safer as `llama.cpp` changes by checking the selected
 
 Candidate work:
 
-- timeout-bounded `llama-server --version` or build-info display (core probe
-  done; UI display still pending)
+- timeout-bounded `llama-server --version` or build-info display (manual UI
+  display exists)
 - timeout-bounded `llama-server --help` parsing for supported option names
-  (core parser done; UI warnings still pending)
-- preset compatibility warnings when an option appears unsupported
-- advisory notes when selected runtime capability is unknown
+  (core parser done)
+- preset compatibility warnings when an option appears unsupported (initial
+  manual UI advisory exists)
+- advisory notes when selected runtime capability is unknown (initial manual
+  UI advisory exists)
 - tests that capability parsing never launches a model or mutates the runtime
 - docs that keep runtime checks local, read-only, and adapter-scoped
 

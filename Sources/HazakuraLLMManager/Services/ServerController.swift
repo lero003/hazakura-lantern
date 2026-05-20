@@ -9,6 +9,9 @@ final class ServerController: ObservableObject {
     @Published private(set) var profileFileMessage: String?
     @Published private(set) var processIdentifier: Int32?
     @Published private(set) var endpointHealthStatus: EndpointHealthStatus = .unchecked
+    @Published private(set) var runtimeCapabilityProbeResult: LlamaServerCapabilityProbeResult?
+    @Published private(set) var runtimeCapabilityProbeMessage: String?
+    @Published private(set) var isRuntimeCapabilityProbeRunning = false
     @Published private(set) var recentPaths: RecentRuntimePaths
     @Published var configuration: RuntimeConfiguration
 
@@ -83,13 +86,21 @@ final class ServerController: ObservableObject {
         guard process == nil else {
             appendLog("Configuration changes will apply on the next start.", stream: .info)
             var updated = configuration
+            let previousRuntimeExecutablePath = updated.runtimeExecutablePath
             update(&updated)
             configuration = updated
+            if updated.runtimeExecutablePath != previousRuntimeExecutablePath {
+                clearRuntimeCapabilityProbe()
+            }
             saveActiveProfile(configuration: updated)
             return
         }
 
+        let previousRuntimeExecutablePath = configuration.runtimeExecutablePath
         update(&configuration)
+        if configuration.runtimeExecutablePath != previousRuntimeExecutablePath {
+            clearRuntimeCapabilityProbe()
+        }
         saveActiveProfile(configuration: configuration)
         endpointHealthStatus = .unchecked
     }
@@ -111,6 +122,43 @@ final class ServerController: ObservableObject {
     func applyPreset(_ preset: LlamaServerPreset) {
         updateConfiguration { configuration in
             configuration = preset.applying(to: configuration)
+        }
+    }
+
+    func checkRuntimeCapabilities() {
+        let executablePath = configuration.runtimeExecutablePath.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !executablePath.isEmpty else {
+            runtimeCapabilityProbeResult = nil
+            runtimeCapabilityProbeMessage = "Choose a llama-server executable before checking runtime options."
+            return
+        }
+
+        guard !isRuntimeCapabilityProbeRunning else {
+            return
+        }
+
+        isRuntimeCapabilityProbeRunning = true
+        runtimeCapabilityProbeMessage = nil
+
+        DispatchQueue.global(qos: .utility).async {
+            let result = LlamaServerCapabilityProbe().probe(executablePath: executablePath)
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self else {
+                    return
+                }
+
+                self.isRuntimeCapabilityProbeRunning = false
+                guard self.configuration.runtimeExecutablePath.trimmingCharacters(in: .whitespacesAndNewlines) == executablePath else {
+                    self.runtimeCapabilityProbeMessage = "Runtime selection changed; check capabilities again."
+                    return
+                }
+
+                self.runtimeCapabilityProbeResult = result
+                self.runtimeCapabilityProbeMessage = result.capabilities.versionSummary.map {
+                    "Runtime: \($0)"
+                } ?? "Runtime version unavailable."
+            }
         }
     }
 
@@ -227,6 +275,7 @@ final class ServerController: ObservableObject {
 
             activeProfileName = profile.name
             configuration = profile.configuration
+            clearRuntimeCapabilityProbe()
             configurationStore.saveRuntimeProfile(profile)
             recentPaths = configurationStore.recordRuntimeExecutablePath(profile.configuration.runtimeExecutablePath)
             recentPaths = configurationStore.recordModelPath(profile.configuration.modelPath)
@@ -345,5 +394,10 @@ final class ServerController: ObservableObject {
 
     private func clearError() {
         lastErrorMessage = nil
+    }
+
+    private func clearRuntimeCapabilityProbe() {
+        runtimeCapabilityProbeResult = nil
+        runtimeCapabilityProbeMessage = nil
     }
 }

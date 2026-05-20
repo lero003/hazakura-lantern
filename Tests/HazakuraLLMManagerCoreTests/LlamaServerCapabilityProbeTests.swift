@@ -41,6 +41,81 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
         )
     }
 
+    func testPresetCompatibilityNoteReportsSupportedOptions() {
+        let result = LlamaServerCapabilityProbeResult(
+            versionCheck: .init(
+                output: "llama-server fake b1",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            helpCheck: .init(
+                output: "--spec-type TYPE\n--spec-draft-n-max N",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            capabilities: .parse(
+                versionOutput: "llama-server fake b1",
+                helpOutput: "--spec-type TYPE\n--spec-draft-n-max N"
+            )
+        )
+
+        let note = result.presetCompatibilityNote(for: .mtpCapable)
+
+        XCTAssertEqual(note.severity, .supported)
+        XCTAssertEqual(note.title, "Preset options are listed by this runtime")
+    }
+
+    func testPresetCompatibilityNoteWarnsAboutMissingOptions() {
+        let result = LlamaServerCapabilityProbeResult(
+            versionCheck: .init(
+                output: "",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            helpCheck: .init(
+                output: "--spec-type TYPE",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            capabilities: .parse(
+                versionOutput: nil,
+                helpOutput: "--spec-type TYPE"
+            )
+        )
+
+        let note = result.presetCompatibilityNote(for: .mtpCapable)
+
+        XCTAssertEqual(note.severity, .warning)
+        XCTAssertTrue(note.detail.contains("--spec-draft-n-max"))
+    }
+
+    func testPresetCompatibilityNoteKeepsTimeoutUnknown() {
+        let result = LlamaServerCapabilityProbeResult(
+            versionCheck: .init(
+                output: "",
+                terminationStatus: nil,
+                didTimeOut: true,
+                errorDescription: nil
+            ),
+            helpCheck: .init(
+                output: "",
+                terminationStatus: nil,
+                didTimeOut: true,
+                errorDescription: nil
+            ),
+            capabilities: .parse(versionOutput: nil, helpOutput: nil)
+        )
+
+        let note = result.presetCompatibilityNote(for: .mtpCapable)
+
+        XCTAssertEqual(note.severity, .unknown)
+        XCTAssertTrue(note.detail.contains("--help check did not finish"))
+    }
+
     func testProbeRunsVersionAndHelpWithoutModelArguments() throws {
         let workspace = try makeWorkspace()
         defer { try? FileManager.default.removeItem(at: workspace) }

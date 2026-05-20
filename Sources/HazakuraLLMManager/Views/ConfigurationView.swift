@@ -59,6 +59,40 @@ struct ConfigurationView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .lineLimit(2)
+
+                        HStack(spacing: 8) {
+                            Button {
+                                controller.checkRuntimeCapabilities()
+                            } label: {
+                                Label("Check Runtime", systemImage: "checkmark.shield")
+                            }
+                            .buttonStyle(SecondaryButtonStyle())
+                            .disabled(controller.isRuntimeCapabilityProbeRunning)
+
+                            if controller.isRuntimeCapabilityProbeRunning {
+                                ProgressView()
+                                    .controlSize(.small)
+                            }
+                        }
+
+                        if let message = controller.runtimeCapabilityProbeMessage {
+                            Label(message, systemImage: "info.circle")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        if let note = controller.runtimeCapabilityProbeResult?.presetCompatibilityNote(for: selectedPreset) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Label(note.title, systemImage: compatibilitySystemImage(for: note.severity))
+                                    .font(.caption)
+                                    .foregroundStyle(compatibilityForegroundStyle(for: note.severity))
+
+                                Text(note.detail)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(2)
+                            }
+                        }
                     }
                 }
 
@@ -212,5 +246,27 @@ struct ConfigurationView: View {
         }
 
         return "\(name) - \(path)"
+    }
+
+    private func compatibilitySystemImage(for severity: LlamaServerPresetCompatibilityNote.Severity) -> String {
+        switch severity {
+        case .supported:
+            return "checkmark.circle"
+        case .warning:
+            return "exclamationmark.triangle"
+        case .unknown:
+            return "questionmark.circle"
+        }
+    }
+
+    private func compatibilityForegroundStyle(for severity: LlamaServerPresetCompatibilityNote.Severity) -> Color {
+        switch severity {
+        case .supported:
+            return .green
+        case .warning:
+            return .orange
+        case .unknown:
+            return .secondary
+        }
     }
 }
