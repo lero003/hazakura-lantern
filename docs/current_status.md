@@ -178,6 +178,11 @@ Implemented scope:
   boundaries are documented with a readable schema-version `1` example.
 - CI workflow permissions are pinned to read-only repository contents for the
   SwiftPM verification job.
+- Public repository hygiene now includes local CODEOWNERS coverage for
+  repository-critical files, a SHA-pinned checkout action in CI, weekly
+  Dependabot version-update proposals for GitHub Actions and SwiftPM manifests,
+  and ignore rules for common local secret or credential files. This does not
+  change remote repository settings or apply public labels.
 - Public bug-report guidance now asks for reproduction steps, runtime adapter
   id, profile schema version, command previews, and redacted logs while keeping
   chat, model download, proxy, LAN exposure, authentication, runtime installer,

@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added post-public repository hygiene for CI action pinning, CODEOWNERS,
+  Dependabot proposal configuration, and common local secret-ignore rules
+  without changing remote GitHub settings or shipping packaged artifacts.
 - Surfaced the local `llama-server` capability probe in the server
   configuration view so users can manually check the selected runtime version
   and see advisory preset-option support before launch.

@@ -158,6 +158,10 @@ Automation may do one small, verifiable slice per run:
   adapter docs, or this operations guide
 - classify public issues or review notes and propose labels or next actions
 - prepare draft issue responses without posting them
+- maintain local repository hygiene files such as CODEOWNERS, pinned CI action
+  references, Dependabot proposal configuration, and local secret-ignore rules
+  when they reduce review or supply-chain ambiguity without changing remote
+  repository settings
 - improve small `llama-server` empty-state, setup-hint, copy-flow,
   health-wording, profile-warning, or error-message wording when the current
   docs or issue text identify the ambiguity
