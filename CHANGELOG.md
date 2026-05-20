@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added a local, timeout-bounded `llama-server` capability probe that reads
+  `--version` and `--help` output without model launch or runtime mutation,
+  giving preset compatibility warnings a tested core boundary.
 - Added a compact preset picker in the server configuration view so
   `llama-server` presets can be previewed and applied to the active
   configuration while keeping generated settings visible before launch.

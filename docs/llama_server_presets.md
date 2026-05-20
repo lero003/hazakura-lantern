@@ -72,8 +72,10 @@ safe fallback is more useful than a surprising failed launch.
 Future v0.7 work may add advisory checks for the selected `llama-server`
 binary:
 
-- `--version` or build info display
-- timeout-bounded `--help` parsing for supported options
+- `--version` or build info display (core timeout-bounded probe exists; UI
+  display is still pending)
+- timeout-bounded `--help` parsing for supported options (core parser exists;
+  user-facing warnings are still pending)
 - warnings when a preset depends on options absent from the selected runtime
 - notes when a runtime is too old for a preset
 
@@ -111,7 +113,8 @@ but the user must be able to review and edit the resulting configuration.
 2. Add a core preset model that maps an intent to visible configuration values
    and additional arguments. Done.
 3. Add UI to preview and apply presets to the active configuration. Done.
-4. Add advisory runtime capability checks for `--version` and `--help`.
+4. Add advisory runtime capability checks for `--version` and `--help`. Core
+   probe done; UI display still pending.
 5. Add warnings when a selected preset appears incompatible with the selected
    runtime.
 

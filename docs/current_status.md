@@ -214,6 +214,10 @@ Implemented scope:
   review its context/thread/GPU/additional-argument summary, and apply it to
   the active configuration while preserving the selected runtime, model, host,
   and port.
+- Local `llama-server` capability probing can now run timeout-bounded
+  `--version` and `--help` checks without model launch or runtime mutation,
+  parse supported option names, and report preset options that appear
+  unsupported by the selected runtime.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -329,9 +333,9 @@ Good next automated candidates:
 - implement one tested v0.6 preset slice beyond the core preset model and
   initial picker/apply UI, such as preset compatibility notes or safer
   option-family warnings
-- implement one tested v0.7 runtime capability slice, such as timeout-bounded
-  `llama-server --version` display or `--help` option detection for preset
-  compatibility warnings
+- implement one tested v0.7 runtime capability slice beyond the core
+  timeout-bounded `--version` / `--help` probe, such as surfacing the local
+  version summary or showing preset compatibility warnings in the UI
 - implement one v0.8 toolbar/navigation slice that mirrors existing start,
   stop, restart, health, copy, profile import/export, clear-log, or command
   preview behavior
