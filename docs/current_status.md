@@ -239,6 +239,10 @@ Implemented scope:
   in-memory log reset path, disabled when there are no logs.
 - The main window toolbar now exposes a command-preview action that scrolls to
   the existing launch command audit surface without changing runtime behavior.
+- The server configuration view now shows non-mutating install-source advice for
+  selected `llama-server` paths that look Homebrew-managed, MacPorts-managed,
+  source-checkout-built, or manual, while keeping update execution outside
+  Lantern.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -361,8 +365,9 @@ Good next automated candidates:
   affordance remains concrete; the start/stop/restart/health toolbar shell,
   copy menu, profile import/export, clear-log, and command-preview reveal
   entries are now covered
-- implement one non-mutating v0.9 update-readiness slice, such as install-source
-  classification, version/capability summary, or dry-run update requirements
+- implement one non-mutating v0.9 update-readiness slice beyond the path-only
+  install-source advice now covered, such as a version/capability summary or
+  dry-run update requirements
 - improve one `llama-server` reliability or daily-use path when the confusing
   behavior is concrete and testable: launch validation, launch failure wording,
   missing runtime/model file empty states beyond the blank or non-`.gguf`

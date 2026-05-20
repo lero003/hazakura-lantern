@@ -93,6 +93,19 @@ struct ConfigurationView: View {
                                 .foregroundStyle(.secondary)
                         }
 
+                        if let advice = controller.runtimeInstallSourceAdvice {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Label(advice.title, systemImage: "arrow.triangle.2.circlepath.circle")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+
+                                Text(advice.detail)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(2)
+                            }
+                        }
+
                         if let note = controller.runtimeCapabilityProbeResult?.presetCompatibilityNote(for: selectedPreset) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Label(note.title, systemImage: compatibilitySystemImage(for: note.severity))

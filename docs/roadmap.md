@@ -280,6 +280,9 @@ Already done or mostly done:
   health-check actions, with state derived from the existing controller
 - toolbar copy, profile import/export, clear-log, and command-preview reveal
   affordances that mirror existing behavior without changing runtime ownership
+- path-only install-source advice for selected `llama-server` runtimes that look
+  Homebrew-managed, MacPorts-managed, source-checkout-built, or manual, without
+  executing any runtime update
 
 Remaining before a packaged app release:
 
@@ -605,8 +608,8 @@ selected runtime source and showing update risk before any mutation exists.
 
 Candidate work:
 
-- detect and display the selected runtime path, version, and option capability
-  summary from v0.7
+- detect and display the selected runtime path source (path-only advice done),
+  version, and option capability summary from v0.7
 - let the user record an install source such as Homebrew, source build, manual
   binary, or unknown
 - document update implications for each source without executing updates
@@ -742,8 +745,9 @@ Good next slices:
   read-only, adapter-scoped, and used for preset compatibility warnings
 - add v0.8 toolbar/navigation slices only when actions mirror existing behavior
   and do not introduce hidden runtime work
-- add v0.9 update-readiness slices only when they identify source, version,
-  compatibility, or dry-run requirements without executing real updates
+- add v0.9 update-readiness slices only when they identify source (path-only
+  advice covered), version, compatibility, or dry-run requirements without
+  executing real updates
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
   focused tests before adding runtime breadth; validation already has an
   initial explicit contract, and profile command preview already has a generic
