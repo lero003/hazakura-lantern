@@ -49,7 +49,7 @@ behavior:
 
 - v0.6: model-family presets and option compatibility
 - v0.7: read-only runtime/version capability checks for preset guidance
-- v0.8: toolbar and navigation for existing actions
+- v0.8: menu bar, toolbar, and navigation for existing actions
 
 Automation may also prepare v0.9 update-readiness work without another human
 prompt only while it remains non-mutating and advisory. Any real runtime update
@@ -62,8 +62,8 @@ Recent review feedback that suggests custom command profiles, Ollama, endpoint
 auto-polling, multiple-profile management, or broad UI polish should be treated
 as future backlog unless it can be narrowed to one testable `llama-server`
 reliability, restart-state, copy-flow, empty-state, health wording,
-profile-warning, setup-hint, preset, read-only runtime capability, toolbar, or
-update-readiness ambiguity.
+profile-warning, setup-hint, preset, read-only runtime capability,
+menu-bar/toolbar, or update-readiness ambiguity.
 
 The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
 human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
@@ -105,7 +105,7 @@ Lane handoff rules:
   runtime/version capability checks to warn about preset compatibility.
 - v0.7 -> v0.8: allowed when runtime capability checks are useful enough that
   the next smallest risk is making existing actions available from a native
-  toolbar. v0.8 is toolbar/navigation, not runtime breadth.
+  menu bar or toolbar. v0.8 is menu bar/toolbar/navigation, not runtime breadth.
 - v0.8 -> v0.9: allowed when toolbar actions mirror existing behavior.
   v0.9 is non-mutating `llama-server` update readiness: source, version,
   capability, and dry-run explanation.
@@ -180,9 +180,9 @@ Preferred order:
 8. If v0.6 preset work is quiet or needs compatibility evidence, advance into
    v0.7 read-only runtime capability checks such as timeout-bounded
    `llama-server --version` or `--help` parsing for preset warnings.
-9. If v0.7 capability work is quiet, advance into v0.8 toolbar/navigation work
+9. If v0.7 capability work is quiet, advance into v0.8 menu bar/toolbar/navigation work
    using `docs/toolbar_and_navigation.md`, mirroring existing actions only.
-10. If v0.8 toolbar work is quiet, advance into v0.9 update-readiness work:
+10. If v0.8 menu bar/toolbar work is quiet, advance into v0.9 update-readiness work:
    source detection, version/capability summary, or dry-run guidance, without
    mutating a real runtime.
 11. End as a verified no-op only when no safe v0.5, v0.6, v0.7, v0.8, or

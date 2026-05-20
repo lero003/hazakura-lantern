@@ -16,6 +16,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   behavior and disables itself when there are no logs.
 - Added a toolbar command-preview action that scrolls to the existing launch
   command audit surface without changing runtime behavior.
+- Added a menu bar control surface for the existing server actions, copy
+  helpers, profile import/export, log clearing, window opening, and quitting
+  while keeping the regular main window intact.
 - Added non-mutating `llama-server` install-source advice for Homebrew-style,
   MacPorts-style, source-checkout, and manual runtime paths.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,

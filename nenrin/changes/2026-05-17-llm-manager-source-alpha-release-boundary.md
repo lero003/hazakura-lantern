@@ -40,9 +40,9 @@ review_after:
 - Reframed v0.6 and v0.7 to stay on the existing `llama-server` adapter:
   model-family presets, option compatibility, and read-only runtime capability
   advisories now come before MLX design or implementation.
-- Restored v0.8 as toolbar/navigation work for existing actions, placed v0.9
-  on non-mutating `llama-server` update readiness, and reserved v1.0 for a
-  guarded, user-confirmed `llama-server` update workflow.
+- Restored v0.8 as menu bar/toolbar/navigation work for existing actions,
+  placed v0.9 on non-mutating `llama-server` update readiness, and reserved
+  v1.0 for a guarded, user-confirmed `llama-server` update workflow.
 
 ## Reason
 
@@ -53,8 +53,8 @@ The current default lane is v0.5 post-public issue triage and automation
 discipline. Automation may continue through v0.8 without another human prompt
 only while staying on the existing `llama-server` adapter: v0.6 for
 command-visible model-family presets and option compatibility, v0.7 for
-read-only runtime capability advisories, and v0.8 for toolbar/navigation actions
-that mirror existing behavior. Automation may also prepare v0.9 update
+read-only runtime capability advisories, and v0.8 for menu bar/toolbar/navigation
+actions that mirror existing behavior. Automation may also prepare v0.9 update
 readiness while it remains advisory and non-mutating. It must not drift into
 packaged app release work, chat, model download, proxy, LAN/auth, unattended
 updates, custom command profiles, Ollama, MLX implementation, or adapter
@@ -71,16 +71,19 @@ breadth.
   and explicitly named `llama-server` launch/configuration, observed
   restart-state, copy-flow, health-wording, empty-state, setup-hint, or
   profile-warning slices; keep v0.6/v0.7 work on presets and read-only runtime
-  capability checks; keep v0.8 toolbar/navigation work limited to existing
-  actions; keep v0.9 update-readiness work advisory and non-mutating; defer
+  capability checks; keep v0.8 menu bar/toolbar/navigation work limited to
+  existing actions; after the initial menu bar control surface, prefer
+  daily-use verification or toolbar demotion decisions over new control
+  surfaces; keep v0.9 update-readiness work advisory and non-mutating; defer
   endpoint auto-polling, unattended runtime installation/update, model download,
   automatic benchmarking, custom command implementation, new adapters, and
   multiple-profile management unless a later lane and human handoff explicitly
   reopen them.
 - Future automation checks v0.5 post-public triage/docs candidates, v0.6
-  preset candidates, v0.7 runtime-advisory candidates, v0.8 toolbar candidates,
-  non-mutating v0.9 update-readiness candidates, and any concrete v0.4
-  reliability signal before declaring verified no-op.
+  preset candidates, v0.7 runtime-advisory candidates, v0.8 menu
+  bar/toolbar/navigation candidates, non-mutating v0.9 update-readiness
+  candidates, and any concrete v0.4 reliability signal before declaring
+  verified no-op.
 - Future automation may propose issue labels and draft responses locally, but
   does not apply labels, post replies, close issues, or otherwise mutate public
   issue state without explicit human approval.
@@ -99,8 +102,8 @@ breadth.
 - Post-public stewardship classifies public feedback before implementation and
   keeps public-opening preflight as a historical/release-handoff checklist.
 - If v0.5 triage is quiet, automation can progress into v0.6 presets and v0.7
-  runtime-advisory checks, then v0.8 toolbar/navigation work, instead of
-  reopening old reliability work just to fill the lane.
+  runtime-advisory checks, then v0.8 menu bar/toolbar/navigation work, instead
+  of reopening old reliability work just to fill the lane.
 - v0.9 update-readiness work identifies runtime source, version, option
   compatibility, and dry-run requirements without executing real package
   manager, git, download, or binary replacement commands.
@@ -138,8 +141,8 @@ breadth.
 - v0.6/v0.7/v0.8/v0.9 work drifts into hidden optimization, automatic
   benchmarking, unattended runtime updates, model downloads, custom command
   profiles, Ollama, MLX implementation, or broad adapter abstraction before the
-  `llama-server` preset, advisory, toolbar, and update-readiness paths are
-  useful.
+  `llama-server` preset, advisory, menu bar/toolbar, and update-readiness paths
+  are useful.
 - v1.0 update workflow work executes real package-manager, git, download, or
   binary replacement commands without explicit human confirmation for that run.
 

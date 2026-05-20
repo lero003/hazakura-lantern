@@ -1,13 +1,12 @@
-# Toolbar And Navigation
+# Menu Bar, Toolbar, And Navigation
 
 This document defines the v0.8 lane for making Hazakura Lantern easier to use
-without changing runtime ownership. Toolbar work should make existing actions
-discoverable, not add new runtime behavior by stealth.
+without changing runtime ownership. Toolbar and menu bar work should make
+existing actions discoverable, not add new runtime behavior by stealth.
 
 ## Purpose
 
-The app should expose the main control-loop actions in a predictable Mac
-surface:
+The app should expose the main control-loop actions in predictable Mac surfaces:
 
 - start, stop, and restart
 - check endpoint health
@@ -17,16 +16,20 @@ surface:
 - clear logs
 - open troubleshooting or post-public guidance when useful
 
-Toolbar actions should mirror existing behavior. If a toolbar button requires a
-new behavior contract, that contract belongs in its own focused slice.
+Toolbar and menu bar actions should mirror existing behavior. If a button
+requires a new behavior contract, that contract belongs in its own focused
+slice.
 
 ## Rules
 
 - Keep toolbar state derived from existing controller state.
+- Keep menu bar state derived from the same controller state as the window.
 - Disable actions when the same action is unavailable elsewhere.
 - Do not add hidden side effects or background runtime work.
-- Do not start endpoint auto-polling as part of toolbar work.
+- Do not start endpoint auto-polling as part of control-surface work.
 - Use native macOS SwiftUI toolbar patterns before custom controls.
+- Prefer `MenuBarExtra` for the lightweight resident control surface before
+  considering a menu-bar-only app lifecycle.
 - Keep labels and accessibility names clear enough for keyboard and VoiceOver
   users.
 - Preserve the launch command preview as the audit surface for runtime changes.
@@ -42,13 +45,17 @@ new behavior contract, that contract belongs in its own focused slice.
 4. Add a log clear toolbar action that reuses the existing clear-log behavior.
    Done.
 5. Add command-preview focus affordances if they stay local. Done.
-6. Add keyboard shortcuts only for actions whose state is already well-defined.
+6. Add a menu bar control surface for existing lifecycle, health, copy, profile,
+   log, open-window, and quit actions while keeping the normal window intact.
+   Done.
+7. Add keyboard shortcuts only for actions whose state is already well-defined.
 
 ## Non-Goals
 
 - new runtime adapters
 - endpoint auto-polling
 - launch-at-login
+- menu-bar-only lifecycle changes
 - automatic restart policy
 - model download or runtime install/update
 - hidden command changes

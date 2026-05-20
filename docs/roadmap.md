@@ -570,12 +570,14 @@ Completion criteria:
 - automation may complete v0.7 without another human prompt if each slice stays
   within these constraints
 
-## v0.8 - Toolbar And Navigation
+## v0.8 - Menu Bar, Toolbar, And Navigation
 
 Purpose:
 
 Make the existing `llama-server` control loop feel like a proper Mac app
-without changing runtime ownership.
+without changing runtime ownership. The menu bar is the preferred resident
+control surface; the main window remains the full configuration and audit
+surface.
 
 Candidate work:
 
@@ -584,7 +586,11 @@ Candidate work:
   copy, profile import/export, log clear, and command-preview actions (initial
   start, stop, restart, health-check, copy, profile, log-clear, and
   command-preview reveal entries done)
+- add a `MenuBarExtra` for existing start, stop, restart, health-check, copy,
+  profile import/export, log clear, open-window, and quit actions while keeping
+  the regular main window intact (initial menu bar surface done)
 - keep toolbar state derived from the same controller state as the main views
+- keep menu bar state derived from the same controller state as the main views
 - add focused tests or view-model checks for toolbar action availability where
   practical
 - add keyboard shortcuts only for actions whose enabled/disabled state is
@@ -593,9 +599,10 @@ Candidate work:
 Completion criteria:
 
 - toolbar actions mirror existing behavior and do not add hidden side effects
+- menu bar actions mirror existing behavior and do not add hidden side effects
 - no endpoint auto-polling, launch-at-login, automatic restart, model download,
-  runtime install/update, multiple-profile management, or adapter expansion is
-  introduced
+  runtime install/update, menu-bar-only lifecycle change, multiple-profile
+  management, or adapter expansion is introduced
 - automation may complete v0.8 without another human prompt if each slice stays
   within these constraints
 
@@ -718,10 +725,11 @@ Do not use this project for:
 Automated development should pick one small slice from the current lane. After
 `v0.5.0-alpha.1`, automation may continue through v0.7 without another human
 prompt as long as it stays on the existing `llama-server` path, and may
-continue through v0.8 for toolbar work. The default order is v0.5 post-public
-triage, then v0.6 model presets and option compatibility, v0.7 runtime
-capability advisories, and v0.8 toolbar/navigation. v0.9 update-readiness work
-may also proceed automatically only while it remains non-mutating and advisory.
+continue through v0.8 for menu bar, toolbar, and navigation work. The default
+order is v0.5 post-public triage, then v0.6 model presets and option
+compatibility, v0.7 runtime capability advisories, and v0.8 menu
+bar/toolbar/navigation. v0.9 update-readiness work may also proceed
+automatically only while it remains non-mutating and advisory.
 v0.4 `llama-server` reliability work remains valid only when a concrete,
 testable daily-use ambiguity is visible; do not force v0.4 work just to fill
 the lane.
@@ -743,8 +751,10 @@ Good next slices:
   visible `--spec-type draft-mtp` and `--spec-draft-n-max` arguments
 - add v0.7 runtime capability checks only when they are timeout-bounded,
   read-only, adapter-scoped, and used for preset compatibility warnings
-- add v0.8 toolbar/navigation slices only when actions mirror existing behavior
-  and do not introduce hidden runtime work
+- add v0.8 menu bar/toolbar/navigation slices only when actions mirror existing
+  behavior and do not introduce hidden runtime work; after the initial menu bar
+  control surface, prefer daily-use verification or toolbar demotion decisions
+  over new control surfaces
 - add v0.9 update-readiness slices only when they identify source (path-only
   advice covered), version, compatibility, or dry-run requirements without
   executing real updates
@@ -811,9 +821,9 @@ Rules for automated work:
 - update tests and docs with each meaningful behavior change
 - if no change is justified by current evidence, a verified no-op is acceptable
   only after checking v0.5 triage/docs candidates, v0.6 preset candidates,
-  v0.7 runtime-advisory candidates, v0.8 toolbar candidates, non-mutating v0.9
-  update-readiness candidates, and any concrete v0.4 reliability signal that is
-  actually visible
+  v0.7 runtime-advisory candidates, v0.8 menu bar/toolbar/navigation
+  candidates, non-mutating v0.9 update-readiness candidates, and any concrete
+  v0.4 reliability signal that is actually visible
 
 ## Issue Triage Checklist
 

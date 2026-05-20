@@ -4,6 +4,7 @@ import HazakuraLLMManagerCore
 
 struct ContentView: View {
     @ObservedObject var controller: ServerController
+    @AppStorage("showSetupGuide") private var showSetupGuide = false
 
     private enum ContentSection: Hashable {
         case commandPreview
@@ -87,6 +88,15 @@ struct ContentView: View {
 
                 ToolbarItem {
                     Button {
+                        showSetupGuide.toggle()
+                    } label: {
+                        Label("Setup Guide", systemImage: "laurel.leading")
+                    }
+                    .help("Toggle Setup Guide")
+                }
+
+                ToolbarItem {
+                    Button {
                         controller.clearLogs()
                     } label: {
                         Label("Clear Logs", systemImage: "trash")
@@ -161,6 +171,9 @@ struct ContentView: View {
         }
         .groupBoxStyle(GlassGroupBoxStyle())
         .frame(minWidth: 640, minHeight: 700)
+        .inspector(isPresented: $showSetupGuide) {
+            SetupGuideView(controller: controller)
+        }
     }
 
     private func copy(_ value: String) {

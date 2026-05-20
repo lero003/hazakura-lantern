@@ -8,7 +8,7 @@ struct HazakuraLLMManagerApp: App {
     @StateObject private var controller = ServerController()
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup("Hazakura Lantern", id: "main") {
             ContentView(controller: controller)
                 .frame(minWidth: 860, minHeight: 680)
         }
@@ -32,6 +32,25 @@ struct HazakuraLLMManagerApp: App {
                 .keyboardShortcut("r", modifiers: [.command, .shift])
                 .disabled(!controller.canRestart)
             }
+        }
+
+        MenuBarExtra {
+            MenuBarControlView(controller: controller)
+        } label: {
+            Label("Lantern", systemImage: menuBarSystemImage)
+        }
+    }
+
+    private var menuBarSystemImage: String {
+        switch controller.status {
+        case .running:
+            "lightbulb.fill"
+        case .starting, .stopping, .restarting:
+            "lightbulb"
+        case .error:
+            "exclamationmark.triangle.fill"
+        case .stopped:
+            "lightbulb"
         }
     }
 }
