@@ -5,6 +5,7 @@ struct HelpTooltip: View {
     let description: String
     let tips: String
 
+    @Environment(\.locale) private var locale
     @State private var isShowingPopover = false
 
     var body: some View {
@@ -17,8 +18,8 @@ struct HelpTooltip: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Show explanation for \(title)")
-        .help("Show explanation for \(title)")
+        .accessibilityLabel(explanationLabel)
+        .help(explanationLabel)
         .popover(isPresented: $isShowingPopover, arrowEdge: .trailing) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
@@ -58,6 +59,14 @@ struct HelpTooltip: View {
             .padding(14)
             .frame(width: 320)
         }
+    }
+
+    private var explanationLabel: String {
+        String(
+            localized: String.LocalizationValue("Show explanation for \(title)"),
+            bundle: .module,
+            locale: locale
+        )
     }
 }
 

@@ -24,6 +24,8 @@ Implemented scope:
 - Settings now includes a System / Japanese / English language toggle for UI
   labels and controls only; runtime logs, command text, profile data, and
   adapter-owned messages remain outside the localization scope.
+- HelpTooltip explanation button accessibility and help text now follows the
+  selected app UI language while leaving adapter-owned diagnostics unchanged.
 - `llama-server` launch command construction without shell interpolation.
 - Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.

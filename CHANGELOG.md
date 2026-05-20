@@ -48,6 +48,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   do not look eligible for an in-app guarded update plan.
 - Refined update-readiness dry-run wording so incomplete evidence names the
   missing `--version` or `--help` signal before any guarded update plan.
+- Localized HelpTooltip accessibility and help text through the app language
+  resources instead of leaving the explanation button assistive text fixed.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,
   Dependabot proposal configuration, and common local secret-ignore rules
   without changing remote GitHub settings or shipping packaged artifacts.
