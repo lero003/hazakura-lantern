@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 import HazakuraLLMManagerCore
 
@@ -68,6 +69,55 @@ struct ContentView: View {
                 }
                 .disabled(controller.endpointHealthStatus == .checking)
             }
+
+            ToolbarItem {
+                Menu {
+                    Button {
+                        copy(controller.launchCommandPreview)
+                    } label: {
+                        Label("Copy Launch Command", systemImage: "terminal")
+                    }
+
+                    if let endpoint = controller.runtimeEndpoint {
+                        Divider()
+
+                        Button {
+                            copy(endpoint.apiBaseURLString)
+                        } label: {
+                            Label("Copy Endpoint", systemImage: "link")
+                        }
+
+                        Button {
+                            copy(endpoint.environmentSnippet)
+                        } label: {
+                            Label("Copy Environment", systemImage: "terminal")
+                        }
+
+                        Button {
+                            if let healthCurlCommand = endpoint.endpointHealthCurlCommand {
+                                copy(healthCurlCommand)
+                            }
+                        } label: {
+                            Label("Copy Health Check", systemImage: "cross.case")
+                        }
+                        .disabled(endpoint.endpointHealthCurlCommand == nil)
+
+                        Button {
+                            copy(endpoint.aiMobileSmokeCurlCommand)
+                        } label: {
+                            Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
+                        }
+                    }
+                } label: {
+                    Label("Copy", systemImage: "doc.on.doc")
+                }
+                .help("Copy existing command, endpoint, and client snippets")
+            }
         }
+    }
+
+    private func copy(_ value: String) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(value, forType: .string)
     }
 }

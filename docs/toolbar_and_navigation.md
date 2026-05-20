@@ -36,6 +36,7 @@ new behavior contract, that contract belongs in its own focused slice.
 1. Add a toolbar shell with existing start, stop, restart, and health actions.
    Done.
 2. Add copy actions that reuse existing endpoint and smoke-command behavior.
+   Done.
 3. Add profile import/export entry points without adding multiple-profile
    management.
 4. Add log clear and command-preview focus affordances if they stay local.

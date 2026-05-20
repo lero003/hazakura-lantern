@@ -8,6 +8,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 - Added a native toolbar shell for existing start, stop, restart, and manual
   endpoint health-check actions without adding new runtime behavior.
+- Added a toolbar copy menu for the existing launch command, endpoint,
+  environment, health-check, and AI Mobile smoke snippets.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,
   Dependabot proposal configuration, and common local secret-ignore rules
   without changing remote GitHub settings or shipping packaged artifacts.

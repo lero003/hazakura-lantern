@@ -229,6 +229,9 @@ Implemented scope:
 - The main window now has a native toolbar shell for the existing start, stop,
   restart, and manual endpoint health-check actions, with availability derived
   from the same controller state as the in-page controls.
+- The main window toolbar now exposes copy actions for the existing launch
+  command, endpoint, environment, health-check, and AI Mobile smoke snippets
+  without changing runtime behavior.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
