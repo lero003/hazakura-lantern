@@ -75,6 +75,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Restored toolbar and navigation work as the v0.8 lane and moved the
   llama-server update workflow into v0.9/v1.0, with automation allowed to
   implement guarded update UX but not to mutate real runtimes unattended.
+- Improved log-row accessibility so each runtime log entry is announced with
+  its stream and message together.
 
 ## v0.5.0-alpha.1 - 2026-05-20
 

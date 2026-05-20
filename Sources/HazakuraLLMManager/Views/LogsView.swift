@@ -73,6 +73,8 @@ private struct LogEntryRow: View {
                 .textSelection(.enabled)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(entry.stream.rawValue) log: \(entry.text)")
     }
 
     private var streamColor: Color {

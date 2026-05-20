@@ -37,6 +37,8 @@ Implemented scope:
   completed instead of making a normal `SIGTERM` look like an unexpected crash.
 - Bounded in-memory log buffering with clear-log behavior covered by focused
   core tests.
+- Runtime log rows expose a combined accessibility label for the stream and
+  message so assistive reading keeps each entry together.
 - Basic runtime/model path preflight before launching.
 - Local endpoint and environment snippet display.
 - Blank runtime or model selections now show a setup hint before start, so the
