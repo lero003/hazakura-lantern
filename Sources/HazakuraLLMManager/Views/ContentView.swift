@@ -1,4 +1,3 @@
-import AppKit
 import SwiftUI
 import HazakuraLLMManagerCore
 
@@ -155,7 +154,7 @@ struct ContentView: View {
                 ToolbarItem {
                     Menu {
                         Button {
-                            copy(controller.launchCommandPreview)
+                            PasteboardWriter.copy(controller.launchCommandPreview)
                         } label: {
                             Label("Copy Launch Command", systemImage: "terminal")
                         }
@@ -164,20 +163,20 @@ struct ContentView: View {
                             Divider()
 
                             Button {
-                                copy(endpoint.apiBaseURLString)
+                                PasteboardWriter.copy(endpoint.apiBaseURLString)
                             } label: {
                                 Label("Copy Endpoint", systemImage: "link")
                             }
 
                             Button {
-                                copy(endpoint.environmentSnippet)
+                                PasteboardWriter.copy(endpoint.environmentSnippet)
                             } label: {
                                 Label("Copy Environment", systemImage: "terminal")
                             }
 
                             Button {
                                 if let healthCurlCommand = endpoint.endpointHealthCurlCommand {
-                                    copy(healthCurlCommand)
+                                    PasteboardWriter.copy(healthCurlCommand)
                                 }
                             } label: {
                                 Label("Copy Health Check", systemImage: "cross.case")
@@ -185,7 +184,7 @@ struct ContentView: View {
                             .disabled(endpoint.endpointHealthCurlCommand == nil)
 
                             Button {
-                                copy(endpoint.aiMobileSmokeCurlCommand)
+                                PasteboardWriter.copy(endpoint.aiMobileSmokeCurlCommand)
                             } label: {
                                 Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
                             }
@@ -209,11 +208,6 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 860, minHeight: 640)
-    }
-
-    private func copy(_ value: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(value, forType: .string)
     }
 
     private func exportRuntimeProfile() {

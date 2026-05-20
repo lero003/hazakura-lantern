@@ -1,4 +1,3 @@
-import AppKit
 import SwiftUI
 
 struct EndpointView: View {
@@ -25,7 +24,7 @@ struct EndpointView: View {
                             )
 
                         Button {
-                            copy(endpoint.apiBaseURLString)
+                            PasteboardWriter.copy(endpoint.apiBaseURLString)
                         } label: {
                             Label("Copy Endpoint", systemImage: "doc.on.doc")
                         }
@@ -81,7 +80,7 @@ struct EndpointView: View {
                                         )
 
                                     Button {
-                                        copy(endpoint.environmentSnippet)
+                                        PasteboardWriter.copy(endpoint.environmentSnippet)
                                     } label: {
                                         Label("Copy Env", systemImage: "terminal")
                                     }
@@ -109,7 +108,7 @@ struct EndpointView: View {
 
                                     Button {
                                         if let healthCurlCommand {
-                                            copy(healthCurlCommand)
+                                            PasteboardWriter.copy(healthCurlCommand)
                                         }
                                     } label: {
                                         Label("Copy Health Check", systemImage: "cross.case")
@@ -138,7 +137,7 @@ struct EndpointView: View {
                                         )
 
                                     Button {
-                                        copy(endpoint.aiMobileSmokeCurlCommand)
+                                        PasteboardWriter.copy(endpoint.aiMobileSmokeCurlCommand)
                                     } label: {
                                         Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
                                     }
@@ -162,11 +161,6 @@ struct EndpointView: View {
                 .foregroundStyle(.secondary)
             }
         }
-    }
-
-    private func copy(_ value: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(value, forType: .string)
     }
 
     private var healthColor: Color {

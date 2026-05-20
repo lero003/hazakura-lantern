@@ -82,7 +82,8 @@ behavior, or one testable controller boundary:
   notarization, packaging, or release-asset claims
 - copy feedback consistency for one family of copy controls at a time
 - shared pasteboard-copy helper extraction when it reduces real duplicated UI
-  code without changing behavior
+  code without changing behavior (covered for the current toolbar, menu bar,
+  endpoint, command-preview, and Setup Guide copy surfaces)
 - improved error visibility for one existing error surface, such as launch
   errors or profile import/export messages
 - one explicit localization gap in app UI, such as sidebar labels, preset
@@ -191,7 +192,8 @@ exists.
 - Tighten copy button labels or disabled states when the copied target is not
   obvious.
 - Add feedback for one copy action family when the user cannot tell whether a
-  copy succeeded.
+  copy succeeded. The shared pasteboard write helper is already covered; future
+  copy work should address a visible feedback or disabled-state ambiguity.
 - Improve one visible error surface when truncation hides the next action.
 - Keep log buffering bounded and clear-log behavior simple; do not add log
   persistence without a human decision.

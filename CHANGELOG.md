@@ -50,6 +50,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   missing `--version` or `--help` signal before any guarded update plan.
 - Localized HelpTooltip accessibility and help text through the app language
   resources instead of leaving the explanation button assistive text fixed.
+- Centralized UI pasteboard writes for existing copy actions so toolbar,
+  menu bar, endpoint, command-preview, and Setup Guide copy behavior use one
+  shared helper without changing copied values.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,
   Dependabot proposal configuration, and common local secret-ignore rules
   without changing remote GitHub settings or shipping packaged artifacts.

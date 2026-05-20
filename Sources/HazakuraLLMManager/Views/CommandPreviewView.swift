@@ -1,4 +1,3 @@
-import AppKit
 import SwiftUI
 
 struct CommandPreviewView: View {
@@ -21,7 +20,7 @@ struct CommandPreviewView: View {
                     )
 
                 Button {
-                    copy(controller.launchCommandPreview)
+                    PasteboardWriter.copy(controller.launchCommandPreview)
                 } label: {
                     Label("Copy Command", systemImage: "doc.on.doc")
                 }
@@ -29,10 +28,5 @@ struct CommandPreviewView: View {
             }
             .padding(.vertical, 2)
         }
-    }
-
-    private func copy(_ value: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(value, forType: .string)
     }
 }

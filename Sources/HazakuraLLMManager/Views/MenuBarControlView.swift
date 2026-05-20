@@ -49,29 +49,29 @@ struct MenuBarControlView: View {
 
         Button("Copy Endpoint") {
             if let endpoint = controller.runtimeEndpoint {
-                copy(endpoint.apiBaseURLString)
+                PasteboardWriter.copy(endpoint.apiBaseURLString)
             }
         }
         .disabled(controller.runtimeEndpoint == nil)
 
         Button("Copy Launch Command") {
-            copy(controller.launchCommandPreview)
+            PasteboardWriter.copy(controller.launchCommandPreview)
         }
 
         if let endpoint = controller.runtimeEndpoint {
             Button("Copy Env") {
-                copy(endpoint.environmentSnippet)
+                PasteboardWriter.copy(endpoint.environmentSnippet)
             }
 
             Button("Copy Health Curl") {
                 if let healthCurlCommand = endpoint.endpointHealthCurlCommand {
-                    copy(healthCurlCommand)
+                    PasteboardWriter.copy(healthCurlCommand)
                 }
             }
             .disabled(endpoint.endpointHealthCurlCommand == nil)
 
             Button("Copy Client Smoke") {
-                copy(endpoint.aiMobileSmokeCurlCommand)
+                PasteboardWriter.copy(endpoint.aiMobileSmokeCurlCommand)
             }
         }
 
@@ -123,11 +123,6 @@ struct MenuBarControlView: View {
 
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
-    }
-
-    private func copy(_ value: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(value, forType: .string)
     }
 
     private func exportRuntimeProfile() {

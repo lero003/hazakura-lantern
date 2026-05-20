@@ -240,6 +240,9 @@ Implemented scope:
 - The main window toolbar now exposes copy actions for the existing launch
   command, endpoint, environment, health-check, and AI Mobile smoke snippets
   without changing runtime behavior.
+- Existing UI copy actions now write to the pasteboard through one shared app
+  helper, keeping toolbar, menu bar, endpoint, command-preview, and Setup Guide
+  copy behavior aligned without changing copied values.
 - The main window toolbar now exposes active runtime profile import/export
   actions that reuse the existing `.lantern-profile.json` file flow without
   adding multiple-profile management.
@@ -403,9 +406,9 @@ Good next automated candidates:
   profiles, packaging-prep, or non-mutating update-readiness
 - when using the external improvement proposal, prefer automatable P0/P1
   candidates such as accessibility, any newly discovered app-UI force unwrap,
-  copy feedback, error visibility, focused localization gaps, fake-driven
-  controller tests, and stopped-state animation performance before low-priority
-  polish
+  copy feedback beyond the shared pasteboard helper already covered, error
+  visibility, focused localization gaps, fake-driven controller tests, and
+  stopped-state animation performance before low-priority polish
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,

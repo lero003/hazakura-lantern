@@ -278,7 +278,7 @@ struct SetupGuideView: View {
                                     Spacer()
 
                                     Button {
-                                        copyToPasteboard(endpoint.apiBaseURLString)
+                                        PasteboardWriter.copy(endpoint.apiBaseURLString)
                                     } label: {
                                         Image(systemName: "doc.on.doc")
                                             .font(.caption)
@@ -414,7 +414,7 @@ struct SetupGuideView: View {
 
     private var copyHomebrewButton: some View {
         Button {
-            copyToPasteboard("brew install llama.cpp")
+            PasteboardWriter.copy("brew install llama.cpp")
             isHomebrewCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 isHomebrewCopied = false
@@ -483,11 +483,6 @@ struct SetupGuideView: View {
         case .unchecked:
             return .secondary
         }
-    }
-
-    private func copyToPasteboard(_ text: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: .string)
     }
 }
 
