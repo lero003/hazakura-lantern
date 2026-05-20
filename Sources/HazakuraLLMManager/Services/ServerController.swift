@@ -86,6 +86,13 @@ final class ServerController: ObservableObject {
         LlamaServerInstallSourceAdvice.classify(executablePath: configuration.runtimeExecutablePath)
     }
 
+    var runtimeUpdateReadinessAdvice: LlamaServerUpdateReadinessAdvice? {
+        LlamaServerUpdateReadinessAdvice.evaluate(
+            executablePath: configuration.runtimeExecutablePath,
+            capabilityResult: runtimeCapabilityProbeResult
+        )
+    }
+
     func updateConfiguration(_ update: (inout RuntimeConfiguration) -> Void) {
         guard process == nil else {
             appendLog("Configuration changes will apply on the next start.", stream: .info)

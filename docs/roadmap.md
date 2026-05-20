@@ -283,6 +283,9 @@ Already done or mostly done:
 - path-only install-source advice for selected `llama-server` runtimes that look
   Homebrew-managed, MacPorts-managed, source-checkout-built, or manual, without
   executing any runtime update
+- non-mutating update-readiness dry-run guidance that combines selected runtime
+  source with local version/help capability evidence before any future guarded
+  update plan can be prepared
 
 Remaining before a packaged app release:
 
@@ -628,7 +631,7 @@ Candidate work:
   binary, or unknown
 - document update implications for each source without executing updates
 - add dry-run style checks that explain what Lantern would need before update
-  execution is allowed
+  execution is allowed (initial source plus capability-evidence guidance done)
 - keep update checks timeout-bounded, local-first, and advisory
 
 Completion criteria:
@@ -765,8 +768,9 @@ Good next slices:
   control surface, prefer daily-use verification or toolbar demotion decisions
   over new control surfaces
 - add v0.9 update-readiness slices only when they identify source (path-only
-  advice covered), version, compatibility, or dry-run requirements without
-  executing real updates
+  advice covered), version, compatibility, or dry-run requirements (initial
+  source plus capability-evidence guidance covered) without executing real
+  updates
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
   focused tests before adding runtime breadth; validation already has an
   initial explicit contract, and profile command preview already has a generic

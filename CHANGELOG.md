@@ -23,6 +23,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   while keeping the regular main window intact.
 - Added non-mutating `llama-server` install-source advice for Homebrew-style,
   MacPorts-style, source-checkout, and manual runtime paths.
+- Added non-mutating update-readiness dry-run guidance that explains whether
+  Lantern still needs runtime capability evidence before any guarded update
+  plan can be prepared.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,
   Dependabot proposal configuration, and common local secret-ignore rules
   without changing remote GitHub settings or shipping packaged artifacts.
