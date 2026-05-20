@@ -44,7 +44,7 @@ visual rough edge, prefer these targets:
 
 - first launch with no runtime or model selected
 - Setup Guide inspector open, close, and reopen from toolbar and Dashboard
-- Runtime row with Installed, Recent, and manual Choose controls present
+- Runtime row with Installed and manual Choose controls present
 - Japanese and English Settings language changes
 - menu bar status, Start, Stop, Restart, Check Health, copy actions, Open Window,
   and Quit
@@ -175,8 +175,8 @@ exists.
 ### Runtime Setup
 
 - Improve the Installed Runtime empty state when `llama-server` is not found.
-- Deduplicate or clarify Installed and Recent runtime path presentation if a
-  concrete duplicate case appears.
+- Keep runtime/model path rows compact; do not reintroduce a Recent menu unless
+  a concrete daily-use path-switching need outweighs the width cost.
 - Improve runtime/model selection hints only when the existing blank,
   non-`.gguf`, directory, missing-file, or non-executable-file guidance leaves a
   concrete gap.

@@ -21,16 +21,12 @@ configuration guesswork without hiding how `llama-server` is launched.
 
 Start with a small vocabulary:
 
-- `Conservative`: stable local defaults, no speculative decoding, modest
-  context, and low surprise.
-- `Balanced Local`: ordinary daily-use settings for a local Mac where the
-  selected model is expected to fit.
-- `Long Context`: larger context and cache-oriented notes when the model and
-  machine can support it.
-- `Low Memory`: smaller context, conservative GPU layers, and guidance to avoid
-  unnecessary extra arguments.
-- `MTP Capable`: enables MTP-style speculative decoding only when the selected
-  model and runtime support it.
+- `Standard`: calm local defaults that leave model-family assumptions out of
+  the command.
+- `Qwen Recommended`: a Qwen-family starting point with a longer context and
+  visible KV-cache-oriented arguments.
+- `Gemma Recommended`: a Gemma-family starting point with moderate context and
+  visible KV-cache-oriented arguments.
 
 These are intents, not promises. Names should describe why a preset exists
 rather than imply benchmarked superiority.
@@ -52,20 +48,35 @@ display safely:
 Do not add hidden option generation. If a preset inserts an argument, the launch
 command preview must show it.
 
-## MTP Boundary
+## External Configuration Candidate
 
-MTP should be treated as model-family and runtime capability guidance, not as a
-global toggle.
+`llama-server` supports router/model preset files through `--models-preset`.
+Lantern should not jump to that mode for the current single-model control
+surface, but it is the first candidate if preset arguments grow too large for a
+single editable Additional Args field.
 
-Use MTP only when all are true:
+Before externalizing arguments, require a small design note that explains:
+
+- whether Lantern is still supervising one selected local model or entering
+  router mode
+- where the preset file lives and whether Lantern writes it
+- how the generated file remains visible and editable before launch
+- how command-line precedence interacts with model-specific preset values
+
+## Speculative Decoding Boundary
+
+Speculative decoding should be treated as model-family and runtime capability
+guidance, not as a global toggle.
+
+Use speculative decoding only when all are true:
 
 - the preset or user marks the model as MTP-capable
 - the selected `llama-server` appears to support the required options
 - the added options remain visible in the launch command preview
 - the user can turn the preset off or edit the arguments before launch
 
-If capability is unknown, prefer leaving MTP off and showing a clear note. A
-safe fallback is more useful than a surprising failed launch.
+If capability is unknown, prefer leaving speculative decoding off and showing a
+clear note. A safe fallback is more useful than a surprising failed launch.
 
 ## Runtime Capability Checks
 

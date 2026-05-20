@@ -37,8 +37,9 @@ struct LogsView: View {
                             }
                         }
                         .padding(10)
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
                     }
-                    .frame(minHeight: 220, maxHeight: 320)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                     .background(.black.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
                     .overlay {
                         RoundedRectangle(cornerRadius: 8)
@@ -52,8 +53,11 @@ struct LogsView: View {
                         proxy.scrollTo(last.id, anchor: .bottom)
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
 

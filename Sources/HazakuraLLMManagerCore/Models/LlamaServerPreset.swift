@@ -1,11 +1,9 @@
 import Foundation
 
 public enum LlamaServerPresetIntent: String, CaseIterable, Codable, Equatable, Hashable, Sendable {
-    case conservative
-    case balancedLocal
-    case longContext
-    case lowMemory
-    case mtpCapable
+    case standard
+    case qwenRecommended
+    case gemmaRecommended
 }
 
 public struct LlamaServerPreset: Equatable, Sendable {
@@ -33,67 +31,45 @@ public struct LlamaServerPreset: Equatable, Sendable {
     }
 
     public static let all: [LlamaServerPreset] = [
-        conservative,
-        balancedLocal,
-        longContext,
-        lowMemory,
-        mtpCapable
+        standard,
+        qwenRecommended,
+        gemmaRecommended
     ]
 
-    public static let conservative = LlamaServerPreset(
-        intent: .conservative,
-        displayName: "Conservative",
-        contextSize: 4096,
+    public static let standard = LlamaServerPreset(
+        intent: .standard,
+        displayName: "Standard",
+        contextSize: 32768,
         threads: "auto",
         gpuLayers: "auto"
     )
 
-    public static let balancedLocal = LlamaServerPreset(
-        intent: .balancedLocal,
-        displayName: "Balanced Local",
-        contextSize: 8192,
+    public static let qwenRecommended = LlamaServerPreset(
+        intent: .qwenRecommended,
+        displayName: "Qwen Recommended",
+        contextSize: 131072,
         threads: "auto",
-        gpuLayers: "auto"
+        gpuLayers: "auto",
+        additionalArguments: ["--flash-attn", "auto", "--cache-type-k", "q8_0", "--cache-type-v", "q8_0"]
     )
 
-    public static let longContext = LlamaServerPreset(
-        intent: .longContext,
-        displayName: "Long Context",
+    public static let gemmaRecommended = LlamaServerPreset(
+        intent: .gemmaRecommended,
+        displayName: "Gemma Recommended",
         contextSize: 32768,
         threads: "auto",
         gpuLayers: "auto",
-        additionalArguments: ["--cache-type-k", "q8_0", "--cache-type-v", "q8_0"]
-    )
-
-    public static let lowMemory = LlamaServerPreset(
-        intent: .lowMemory,
-        displayName: "Low Memory",
-        contextSize: 4096,
-        threads: "auto",
-        gpuLayers: "0"
-    )
-
-    public static let mtpCapable = LlamaServerPreset(
-        intent: .mtpCapable,
-        displayName: "MTP Capable",
-        contextSize: 8192,
-        threads: "auto",
-        gpuLayers: "auto",
-        additionalArguments: ["--spec-type", "draft-mtp", "--spec-draft-n-max", "16"]
+        additionalArguments: ["--flash-attn", "auto", "--cache-type-k", "q8_0", "--cache-type-v", "q8_0"]
     )
 
     public static func preset(for intent: LlamaServerPresetIntent) -> LlamaServerPreset {
         switch intent {
-        case .conservative:
-            return conservative
-        case .balancedLocal:
-            return balancedLocal
-        case .longContext:
-            return longContext
-        case .lowMemory:
-            return lowMemory
-        case .mtpCapable:
-            return mtpCapable
+        case .standard:
+            return standard
+        case .qwenRecommended:
+            return qwenRecommended
+        case .gemmaRecommended:
+            return gemmaRecommended
         }
     }
 

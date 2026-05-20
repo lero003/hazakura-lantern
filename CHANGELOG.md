@@ -79,6 +79,16 @@ All notable changes to Hazakura Lantern will be documented in this file.
   implement guarded update UX but not to mutate real runtimes unattended.
 - Improved log-row accessibility so each runtime log entry is announced with
   its stream and message together.
+- Updated the preset vocabulary to Standard, Qwen Recommended, and Gemma
+  Recommended, keeping generated `llama-server` options visible while leaving
+  speculative decoding out of the default presets.
+- Kept Configuration path rows compact by removing the Recent menus from the
+  runtime/model picker surface while preserving stored recent-path data.
+- Made Advanced Settings and Advanced Connection Details full-row clickable
+  disclosure headers, raised the context slider ceiling, and clarified that
+  thread/GPU auto values are delegated to `llama-server`.
+- Expanded the Logs destination so empty and populated log content top-aligns
+  inside the available view space.
 
 ## v0.5.0-alpha.1 - 2026-05-20
 

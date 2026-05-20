@@ -66,6 +66,7 @@ struct ContentView: View {
                         case .logs:
                             LogsView(controller: controller)
                                 .padding(24)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         }
                     } else {
                         ContentUnavailableView("Select an item", systemImage: "sidebar.left")

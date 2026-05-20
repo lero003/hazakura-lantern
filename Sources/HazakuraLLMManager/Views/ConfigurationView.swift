@@ -4,7 +4,7 @@ import HazakuraLLMManagerCore
 
 struct ConfigurationView: View {
     @ObservedObject var controller: ServerController
-    @State private var selectedPresetIntent: LlamaServerPresetIntent = .balancedLocal
+    @State private var selectedPresetIntent: LlamaServerPresetIntent = .standard
     @State private var isAdvancedExpanded = false
 
     private var selectedPreset: LlamaServerPreset {
@@ -77,7 +77,6 @@ struct ConfigurationView: View {
                         buttonTitle: "Choose Runtime",
                         allowedExtensions: nil,
                         detectedPaths: controller.detectedRuntimeExecutablePaths,
-                        recentPaths: controller.recentPaths.runtimeExecutablePaths,
                         isHighlighted: controller.configuration.runtimeExecutablePath.isEmpty,
                         stepLabel: "Step 1",
                         selectPath: controller.selectRuntimeExecutablePath
@@ -90,7 +89,6 @@ struct ConfigurationView: View {
                         buttonTitle: "Choose GGUF",
                         allowedExtensions: ["gguf"],
                         detectedPaths: [],
-                        recentPaths: controller.recentPaths.modelPaths,
                         isHighlighted: controller.configuration.modelPath.isEmpty,
                         stepLabel: "Step 2",
                         selectPath: controller.selectModelPath
@@ -197,107 +195,111 @@ struct ConfigurationView: View {
                 Divider()
                     .padding(.vertical, 4)
 
-                DisclosureGroup("Advanced Settings", isExpanded: $isAdvancedExpanded) {
-                    Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 12) {
-                        GridRow {
-                            HStack(spacing: 4) {
-                                Text("Port")
-                                    .foregroundStyle(.secondary)
-                                HelpTooltip.port()
-                            }
-                            TextField("1234", value: binding(\.port), format: .number)
-                                .glassTextFieldStyle()
-                                .frame(width: 110)
-                        }
+                VStack(alignment: .leading, spacing: 0) {
+                    DisclosureSectionHeader(title: "Advanced Settings", isExpanded: $isAdvancedExpanded)
 
-                        GridRow {
-                            HStack(spacing: 4) {
-                                Text("Context")
-                                    .foregroundStyle(.secondary)
-                                HelpTooltip.contextSize()
-                            }
-
-                            HStack(spacing: 12) {
-                                Slider(value: contextSizeBinding, in: 1024...32768, step: 1024)
-                                    .tint(.orange)
-
-                                TextField("32768", value: binding(\.contextSize), format: .number)
+                    if isAdvancedExpanded {
+                        Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 12) {
+                            GridRow {
+                                HStack(spacing: 4) {
+                                    Text("Port")
+                                        .foregroundStyle(.secondary)
+                                    HelpTooltip.port()
+                                }
+                                TextField("1234", value: binding(\.port), format: .number)
                                     .glassTextFieldStyle()
-                                    .frame(width: 80)
-                            }
-                        }
-
-                        GridRow {
-                            HStack(spacing: 4) {
-                                Text("Threads")
-                                    .foregroundStyle(.secondary)
-                                HelpTooltip.threads()
+                                    .frame(width: 110)
                             }
 
-                            HStack(spacing: 12) {
-                                Toggle("auto", isOn: threadsAutoBinding)
-                                    .toggleStyle(.checkbox)
+                            GridRow {
+                                HStack(spacing: 4) {
+                                    Text("Context")
+                                        .foregroundStyle(.secondary)
+                                    HelpTooltip.contextSize()
+                                }
 
-                                if controller.configuration.threads != "auto" {
-                                    Slider(value: threadsValueBinding, in: 1...32, step: 1)
+                                HStack(spacing: 12) {
+                                    Slider(value: contextSizeBinding, in: 1_024...1_048_576, step: 1024)
                                         .tint(.orange)
 
-                                    TextField("4", text: binding(\.threads))
+                                    TextField("32768", value: binding(\.contextSize), format: .number)
                                         .glassTextFieldStyle()
-                                        .frame(width: 50)
-                                } else {
-                                    Text("auto")
-                                        .foregroundStyle(.secondary)
-                                        .font(.system(.body, design: .monospaced))
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 6)
-                                        .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
-                                        .frame(width: 50)
+                                        .frame(width: 96)
                                 }
                             }
-                        }
 
-                        GridRow {
-                            HStack(spacing: 4) {
-                                Text("GPU Layers")
-                                    .foregroundStyle(.secondary)
-                                HelpTooltip.gpuLayers()
-                            }
-
-                            HStack(spacing: 12) {
-                                Toggle("auto", isOn: gpuLayersAutoBinding)
-                                    .toggleStyle(.checkbox)
-
-                                if controller.configuration.gpuLayers != "auto" {
-                                    Slider(value: gpuLayersValueBinding, in: 0...128, step: 1)
-                                        .tint(.orange)
-
-                                    TextField("0", text: binding(\.gpuLayers))
-                                        .glassTextFieldStyle()
-                                        .frame(width: 50)
-                                } else {
-                                    Text("auto")
+                            GridRow {
+                                HStack(spacing: 4) {
+                                    Text("Threads")
                                         .foregroundStyle(.secondary)
-                                        .font(.system(.body, design: .monospaced))
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 6)
-                                        .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
-                                        .frame(width: 50)
+                                    HelpTooltip.threads()
+                                }
+
+                                HStack(spacing: 12) {
+                                    Toggle("auto", isOn: threadsAutoBinding)
+                                        .toggleStyle(.checkbox)
+
+                                    if controller.configuration.threads != "auto" {
+                                        Slider(value: threadsValueBinding, in: 1...32, step: 1)
+                                            .tint(.orange)
+
+                                        TextField("4", text: binding(\.threads))
+                                            .glassTextFieldStyle()
+                                            .frame(width: 50)
+                                    } else {
+                                        Text("auto")
+                                            .foregroundStyle(.secondary)
+                                            .font(.system(.body, design: .monospaced))
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 6)
+                                            .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
+                                            .frame(width: 50)
+                                    }
                                 }
                             }
-                        }
 
-                        GridRow {
-                            HStack(spacing: 4) {
-                                Text("Additional Args")
-                                    .foregroundStyle(.secondary)
-                                HelpTooltip.additionalArguments()
+                            GridRow {
+                                HStack(spacing: 4) {
+                                    Text("GPU Layers")
+                                        .foregroundStyle(.secondary)
+                                    HelpTooltip.gpuLayers()
+                                }
+
+                                HStack(spacing: 12) {
+                                    Toggle("auto", isOn: gpuLayersAutoBinding)
+                                        .toggleStyle(.checkbox)
+
+                                    if controller.configuration.gpuLayers != "auto" {
+                                        Slider(value: gpuLayersValueBinding, in: 0...128, step: 1)
+                                            .tint(.orange)
+
+                                        TextField("0", text: binding(\.gpuLayers))
+                                            .glassTextFieldStyle()
+                                            .frame(width: 50)
+                                    } else {
+                                        Text("auto")
+                                            .foregroundStyle(.secondary)
+                                            .font(.system(.body, design: .monospaced))
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 6)
+                                            .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
+                                            .frame(width: 50)
+                                    }
+                                }
                             }
-                            TextField("--verbose", text: binding(\.additionalArguments))
-                                .glassTextFieldStyle()
+
+                            GridRow {
+                                HStack(spacing: 4) {
+                                    Text("Additional Args")
+                                        .foregroundStyle(.secondary)
+                                    HelpTooltip.additionalArguments()
+                                }
+                                TextField("--verbose", text: binding(\.additionalArguments))
+                                    .glassTextFieldStyle()
+                            }
                         }
+                        .padding(.top, 10)
                     }
-                    .padding(.top, 10)
                 }
                 .accentColor(.orange)
             }
@@ -311,7 +313,6 @@ struct ConfigurationView: View {
         buttonTitle: String,
         allowedExtensions: [String]?,
         detectedPaths: [String],
-        recentPaths: [String],
         isHighlighted: Bool,
         stepLabel: String?,
         selectPath: @escaping (String) -> Void
@@ -354,7 +355,7 @@ struct ConfigurationView: View {
                             Button {
                                 selectPath(path)
                             } label: {
-                                Text(recentPathLabel(path))
+                                Text(pathMenuLabel(path))
                             }
                         }
                     } label: {
@@ -363,20 +364,6 @@ struct ConfigurationView: View {
                     .buttonStyle(SecondaryButtonStyle())
                 }
 
-                if !recentPaths.isEmpty {
-                    Menu {
-                        ForEach(recentPaths, id: \.self) { path in
-                            Button {
-                                selectPath(path)
-                            } label: {
-                                Text(recentPathLabel(path))
-                            }
-                        }
-                    } label: {
-                        Label("Recent", systemImage: "clock")
-                    }
-                    .buttonStyle(SecondaryButtonStyle())
-                }
             }
         }
     }
@@ -392,7 +379,7 @@ struct ConfigurationView: View {
         )
     }
 
-    private func recentPathLabel(_ path: String) -> String {
+    private func pathMenuLabel(_ path: String) -> String {
         let name = URL(fileURLWithPath: path).lastPathComponent
         guard !name.isEmpty else {
             return path
@@ -403,16 +390,12 @@ struct ConfigurationView: View {
 
     private func presetDescriptionJP(for intent: LlamaServerPresetIntent) -> String {
         switch intent {
-        case .conservative:
-            return "【推奨：入門・控えめ設定】メモリ消費が最も少なく、古いMacやバックグラウンド動作に最適です。"
-        case .balancedLocal:
-            return "【推奨：迷ったらこれ！】速度とメモリ消費のバランスが良く、M1以降のMacで標準的に動作します。"
-        case .longContext:
-            return "【推奨：長文読解用】多くの会話履歴やドキュメントを処理できますが、メモリ消費が大幅に増加します。"
-        case .lowMemory:
-            return "【推奨：メモリ8GB等の環境】GPUを使用せずCPUのみで動作させ、メモリ不足による強制終了を防ぎます。"
-        case .mtpCapable:
-            return "【推奨：高速推論】ドラフトモデルを使用した並列推論向けの設定です。対応するランタイムが必要です。"
+        case .standard:
+            return "【標準】モデルとランタイムに任せる設定です。まずはここから始め、必要な項目だけ調整します。"
+        case .qwenRecommended:
+            return "【Qwen向け】長めの文脈とKVキャッシュ圧縮を試す設定です。メモリ使用量と速度はモデルサイズに依存します。"
+        case .gemmaRecommended:
+            return "【Gemma向け】標準より控えめな文脈でKVキャッシュ圧縮を試す設定です。必要に応じて手動で伸ばします。"
         }
     }
 

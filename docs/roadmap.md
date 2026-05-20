@@ -172,8 +172,7 @@ Already done or mostly done:
 - healthy endpoint status detail makes the manual, snapshot-only check explicit
   without adding automatic polling
 - `UserDefaults` configuration persistence
-- recent executable/model path menus stored outside exported runtime
-  configuration
+- compact runtime/model path rows without recent-path menus in Configuration
 - app bundle launch helper
 - bounded log buffering and clear-log behavior covered by focused tests
 - focused core unit tests
@@ -268,9 +267,9 @@ Already done or mostly done:
   added
 - adapter contract documentation for responsibilities, lifecycle boundaries,
   and future adapter no-go lines before runtime breadth is added
-- core `llama-server` preset model for conservative, balanced local,
-  long-context, low-memory, and MTP-capable settings, with generated options
-  kept visible in the launch command
+- core `llama-server` preset model for Standard, Qwen Recommended, and Gemma
+  Recommended settings, with generated options kept visible in the launch
+  command
 - compact preset picker and apply action in the server configuration view, with
   a visible settings summary before launch
 - timeout-bounded, read-only `llama-server --version` and `--help` capability
@@ -295,8 +294,8 @@ Already done or mostly done:
 Remaining before a packaged app release:
 
 - fix or externally verify the app-bundle launch smoke path
-- resolve the pre-release UI blockers for the recent menu bar, toolbar, and
-  Setup Guide additions:
+- resolve the pre-release UI blockers for the menu bar, toolbar, and Setup
+  Guide additions:
   - verify menu bar daily-use behavior on a normal macOS desktop
   - decide the toolbar's role after the menu bar becomes the resident surface
   - confirm the Setup Guide inspector helps onboarding without crowding the
@@ -543,22 +542,22 @@ settings before adding runtime breadth.
 Candidate work:
 
 - maintain `docs/llama_server_presets.md`
-- define a small preset vocabulary: conservative, balanced local, long context,
-  low memory, and MTP capable (core model done)
+- define a small preset vocabulary: Standard, Qwen Recommended, and Gemma
+  Recommended (core model done)
 - map presets to visible configuration values and additional arguments
 - preview and apply presets from the server configuration view
 - keep launch command preview as the source of truth for what will run
 - add focused tests for preset-to-configuration behavior
-- treat `--spec-type draft-mtp` and `--spec-draft-n-max` as MTP-capable preset
-  suggestions, not global defaults
+- keep speculative decoding arguments out of the default preset vocabulary
+  until there is an explicit model/preset contract for them
 - keep unsupported or unknown options visible and editable instead of hiding or
   silently rewriting them
 
 Completion criteria:
 
 - presets are advisory and user-reviewable
-- MTP stays off unless a preset or user explicitly marks the selected model as
-  MTP-capable
+- speculative decoding stays off unless a future preset or user explicitly
+  marks the selected model as compatible
 - no model download, conversion, catalog, benchmark UI, runtime install/update,
   endpoint auto-polling, multiple-profile management, or adapter expansion is
   introduced

@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-20
+Last reviewed: 2026-05-21
 
 ## Project State
 
@@ -16,8 +16,9 @@ Implemented scope:
 - SwiftPM package with macOS 14 minimum.
 - SwiftUI app target plus a small core library target.
 - Runtime configuration stored in `UserDefaults`.
-- Recent runtime executable and model path lists stored separately from the
-  active runtime configuration.
+- Runtime executable and model selections are stored in the active runtime
+  configuration; the Configuration view keeps path rows compact by omitting
+  recent-path menus.
 - Installed `llama-server` discovery observes executable files from PATH plus
   common Homebrew and MacPorts binary locations, surfacing them as selectable UI
   choices without running package-manager commands.
@@ -221,10 +222,9 @@ Implemented scope:
 - llama-server preset guidance now defines v0.6/v0.7 as model-family
   recommendation, option compatibility, and runtime capability advisory work
   before any second runtime adapter.
-- Core `llama-server` presets now model conservative, balanced local,
-  long-context, low-memory, and MTP-capable settings as visible configuration
-  values and additional launch arguments, with MTP arguments added only by the
-  explicit MTP-capable preset.
+- Core `llama-server` presets now model Standard, Qwen Recommended, and Gemma
+  Recommended settings as visible configuration values and additional launch
+  arguments, keeping model-family guesses small and reviewable.
 - The server configuration view now lets users choose a `llama-server` preset,
   review its context/thread/GPU/additional-argument summary, and apply it to
   the active configuration while preserving the selected runtime, model, host,
@@ -236,6 +236,15 @@ Implemented scope:
 - The server configuration view now offers a manual runtime capability check
   that displays the selected `llama-server` version when available and shows
   supported, unsupported, or unknown preset-option advisory text before launch.
+- Advanced Settings and Advanced Connection Details now use full-row clickable
+  disclosure headers, so the text label and surrounding row open the section.
+- Advanced Settings accepts context sizes up to 1,048,576 tokens through the
+  slider and direct field, while help text now makes clear that threads and GPU
+  layers are delegated to `llama-server` when set to auto rather than measured
+  from the Mac by Lantern.
+- The Logs destination now stretches its log area vertically and top-aligns
+  empty and populated log content, making the view behave like a working log
+  surface instead of a short centered panel.
 - The main window now has a native toolbar shell for the existing start, stop,
   restart, and manual endpoint health-check actions, with availability derived
   from the same controller state as the in-page controls.
