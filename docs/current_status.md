@@ -254,7 +254,9 @@ Implemented scope:
   dashboard command preview without changing runtime behavior.
 - A menu bar control surface now mirrors the existing server lifecycle, health,
   copy, active-profile import/export, log clear, open-window, and quit actions
-  while keeping the app as a regular Dock/windowed app.
+  while keeping the app as a regular Dock/windowed app. Menu bar copy action
+  labels now match the toolbar wording for environment, health-check, and
+  AI Mobile smoke snippets.
 - The server configuration view now shows non-mutating install-source advice for
   selected `llama-server` paths that look Homebrew-managed, MacPorts-managed,
   source-checkout-built, or manual, while keeping update execution outside

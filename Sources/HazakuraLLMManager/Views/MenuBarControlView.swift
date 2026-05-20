@@ -59,18 +59,18 @@ struct MenuBarControlView: View {
         }
 
         if let endpoint = controller.runtimeEndpoint {
-            Button("Copy Env") {
+            Button("Copy Environment") {
                 PasteboardWriter.copy(endpoint.environmentSnippet)
             }
 
-            Button("Copy Health Curl") {
+            Button("Copy Health Check") {
                 if let healthCurlCommand = endpoint.endpointHealthCurlCommand {
                     PasteboardWriter.copy(healthCurlCommand)
                 }
             }
             .disabled(endpoint.endpointHealthCurlCommand == nil)
 
-            Button("Copy Client Smoke") {
+            Button("Copy AI Mobile Test") {
                 PasteboardWriter.copy(endpoint.aiMobileSmokeCurlCommand)
             }
         }

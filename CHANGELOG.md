@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Aligned menu bar copy action labels with the toolbar copy menu so endpoint,
+  environment, health-check, and AI Mobile smoke snippets use the same visible
+  wording.
 - Improved the process status badge accessibility value so assistive reading
   exposes the localized server state instead of the decorative indicator.
 - Improved Setup Guide step-card accessibility so each step reports
