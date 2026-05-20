@@ -4,14 +4,36 @@ import HazakuraLLMManagerCore
 
 struct ContentView: View {
     @ObservedObject var controller: ServerController
-    @AppStorage("showSetupGuide") private var showSetupGuide = false
+    @State private var selectedItem: SidebarItem? = .dashboard
 
-    private enum ContentSection: Hashable {
-        case commandPreview
+    private enum SidebarItem: String, CaseIterable, Identifiable {
+        case dashboard = "Dashboard"
+        case configuration = "Configuration"
+        case logs = "Logs"
+        case setupGuide = "Setup Guide"
+
+        var id: String { self.rawValue }
+
+        var systemImage: String {
+            switch self {
+            case .dashboard: return "square.grid.2x2"
+            case .configuration: return "slider.horizontal.3"
+            case .logs: return "doc.text"
+            case .setupGuide: return "laurel.leading"
+            }
+        }
     }
 
     var body: some View {
-        ScrollViewReader { scrollProxy in
+        NavigationSplitView {
+            List(SidebarItem.allCases, selection: $selectedItem) { item in
+                NavigationLink(value: item) {
+                    Label(item.rawValue, systemImage: item.systemImage)
+                }
+            }
+            .navigationTitle("Lantern")
+            .frame(minWidth: 160)
+        } detail: {
             ZStack {
                 AuroraBackgroundView(status: controller.status)
 
@@ -29,16 +51,29 @@ struct ContentView: View {
                             }
                         )
 
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 20) {
-                            ProfileView(controller: controller)
-                            ConfigurationView(controller: controller)
-                            EndpointView(controller: controller)
-                            CommandPreviewView(controller: controller)
-                                .id(ContentSection.commandPreview)
+                    if let selectedItem {
+                        switch selectedItem {
+                        case .dashboard:
+                            DashboardView(controller: controller)
+                        case .configuration:
+                            ScrollView {
+                                VStack(alignment: .leading, spacing: 20) {
+                                    ProfileView(controller: controller)
+                                    ConfigurationView(controller: controller)
+                                }
+                                .padding(24)
+                            }
+                        case .logs:
                             LogsView(controller: controller)
+                                .padding(24)
+                        case .setupGuide:
+                            ScrollView {
+                                SetupGuideView(controller: controller)
+                                    .padding(24)
+                            }
                         }
-                        .padding(24)
+                    } else {
+                        ContentUnavailableView("Select an item", systemImage: "sidebar.left")
                     }
                 }
             }
@@ -77,22 +112,20 @@ struct ContentView: View {
 
                 ToolbarItem {
                     Button {
-                        withAnimation {
-                            scrollProxy.scrollTo(ContentSection.commandPreview, anchor: .center)
-                        }
+                        selectedItem = .dashboard
                     } label: {
                         Label("Show Command", systemImage: "terminal")
                     }
-                    .help("Show the existing launch command preview")
+                    .help("Show the dashboard command preview")
                 }
 
                 ToolbarItem {
                     Button {
-                        showSetupGuide.toggle()
+                        selectedItem = .setupGuide
                     } label: {
                         Label("Setup Guide", systemImage: "laurel.leading")
                     }
-                    .help("Toggle Setup Guide")
+                    .help("Show Setup Guide")
                 }
 
                 ToolbarItem {
@@ -170,10 +203,7 @@ struct ContentView: View {
             }
         }
         .groupBoxStyle(GlassGroupBoxStyle())
-        .frame(minWidth: 640, minHeight: 700)
-        .inspector(isPresented: $showSetupGuide) {
-            SetupGuideView(controller: controller)
-        }
+        .frame(minWidth: 800, minHeight: 600)
     }
 
     private func copy(_ value: String) {

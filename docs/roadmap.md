@@ -601,6 +601,9 @@ Candidate work:
 - add a `MenuBarExtra` for existing start, stop, restart, health-check, copy,
   profile import/export, log clear, open-window, and quit actions while keeping
   the regular main window intact (initial menu bar surface done)
+- organize the main window into native sidebar destinations for dashboard,
+  configuration, logs, and setup guidance while preserving existing runtime
+  actions (initial sidebar dashboard done)
 - keep toolbar state derived from the same controller state as the main views
 - keep menu bar state derived from the same controller state as the main views
 - add focused tests or view-model checks for toolbar action availability where

@@ -237,8 +237,8 @@ Implemented scope:
   adding multiple-profile management.
 - The main window toolbar now exposes clear-log behavior using the existing
   in-memory log reset path, disabled when there are no logs.
-- The main window toolbar now exposes a command-preview action that scrolls to
-  the existing launch command audit surface without changing runtime behavior.
+- The main window toolbar now exposes a command-preview action that opens the
+  dashboard command preview without changing runtime behavior.
 - A menu bar control surface now mirrors the existing server lifecycle, health,
   copy, active-profile import/export, log clear, open-window, and quit actions
   while keeping the app as a regular Dock/windowed app.
@@ -252,6 +252,13 @@ Implemented scope:
 - Incomplete update-readiness dry-run guidance now names the missing local
   `--version` or `--help` evidence, so a guarded update plan is not prepared
   from a generic "capability incomplete" state.
+- The main window now uses a sidebar-based layout with Dashboard,
+  Configuration, Logs, and Setup Guide destinations. Dashboard keeps existing
+  lifecycle controls, endpoint details, and launch command preview visible
+  without changing runtime behavior.
+- Advanced configuration fields are now grouped behind disclosure controls, with
+  context, thread, and GPU-layer sliders supplementing the existing editable
+  values.
 - menu bar/toolbar/navigation guidance now restores v0.8 as a native Mac
   control-surface lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`

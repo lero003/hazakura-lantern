@@ -6,6 +6,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added a sidebar-based main window layout with a dashboard for server controls,
+  endpoint details, and launch command preview while keeping runtime behavior
+  unchanged.
+- Folded advanced configuration fields behind disclosure controls and adjusted
+  the visual treatment toward a warmer lantern palette.
 - Documented the pre-release UI blockers for the recent menu bar, toolbar, and
   Setup Guide additions before a user-facing packaged release.
 - Added a native toolbar shell for existing start, stop, restart, and manual
@@ -16,7 +21,7 @@ All notable changes to Hazakura Lantern will be documented in this file.
   active-profile file flow without adding multiple-profile management.
 - Added a toolbar clear-log action that reuses the existing in-memory log reset
   behavior and disables itself when there are no logs.
-- Added a toolbar command-preview action that scrolls to the existing launch
+- Added a toolbar command-preview action that reveals the existing launch
   command audit surface without changing runtime behavior.
 - Added a menu bar control surface for the existing server actions, copy
   helpers, profile import/export, log clearing, window opening, and quitting

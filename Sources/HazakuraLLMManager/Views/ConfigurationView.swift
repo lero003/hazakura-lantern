@@ -5,235 +5,299 @@ import HazakuraLLMManagerCore
 struct ConfigurationView: View {
     @ObservedObject var controller: ServerController
     @State private var selectedPresetIntent: LlamaServerPresetIntent = .balancedLocal
+    @State private var isAdvancedExpanded = false
 
     private var selectedPreset: LlamaServerPreset {
         LlamaServerPreset.preset(for: selectedPresetIntent)
     }
 
+    private var contextSizeBinding: Binding<Double> {
+        Binding(
+            get: { Double(controller.configuration.contextSize) },
+            set: { val in
+                controller.updateConfiguration { config in
+                    config.contextSize = Int(val)
+                }
+            }
+        )
+    }
+
+    private var threadsAutoBinding: Binding<Bool> {
+        Binding(
+            get: { controller.configuration.threads == "auto" },
+            set: { isAuto in
+                controller.updateConfiguration { config in
+                    config.threads = isAuto ? "auto" : "4"
+                }
+            }
+        )
+    }
+
+    private var threadsValueBinding: Binding<Double> {
+        Binding(
+            get: { Double(Int(controller.configuration.threads) ?? 4) },
+            set: { val in
+                controller.updateConfiguration { config in
+                    config.threads = String(Int(val))
+                }
+            }
+        )
+    }
+
+    private var gpuLayersAutoBinding: Binding<Bool> {
+        Binding(
+            get: { controller.configuration.gpuLayers == "auto" },
+            set: { isAuto in
+                controller.updateConfiguration { config in
+                    config.gpuLayers = isAuto ? "auto" : "0"
+                }
+            }
+        )
+    }
+
+    private var gpuLayersValueBinding: Binding<Double> {
+        Binding(
+            get: { Double(Int(controller.configuration.gpuLayers) ?? 0) },
+            set: { val in
+                controller.updateConfiguration { config in
+                    config.gpuLayers = String(Int(val))
+                }
+            }
+        )
+    }
+
     var body: some View {
         GroupBox("Server Configuration") {
-            Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 12) {
-                pathRow(
-                    title: "Runtime",
-                    helpTooltip: HelpTooltip.runtime(),
-                    text: binding(\.runtimeExecutablePath),
-                    buttonTitle: "Choose Runtime",
-                    allowedExtensions: nil,
-                    recentPaths: controller.recentPaths.runtimeExecutablePaths,
-                    isHighlighted: controller.configuration.runtimeExecutablePath.isEmpty,
-                    stepLabel: "Step 1",
-                    selectPath: controller.selectRuntimeExecutablePath
-                )
+            VStack(alignment: .leading, spacing: 16) {
+                Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 12) {
+                    pathRow(
+                        title: "Runtime",
+                        helpTooltip: HelpTooltip.runtime(),
+                        text: binding(\.runtimeExecutablePath),
+                        buttonTitle: "Choose Runtime",
+                        allowedExtensions: nil,
+                        recentPaths: controller.recentPaths.runtimeExecutablePaths,
+                        isHighlighted: controller.configuration.runtimeExecutablePath.isEmpty,
+                        stepLabel: "Step 1",
+                        selectPath: controller.selectRuntimeExecutablePath
+                    )
 
-                pathRow(
-                    title: "Model",
-                    helpTooltip: HelpTooltip.model(),
-                    text: binding(\.modelPath),
-                    buttonTitle: "Choose GGUF",
-                    allowedExtensions: ["gguf"],
-                    recentPaths: controller.recentPaths.modelPaths,
-                    isHighlighted: controller.configuration.modelPath.isEmpty,
-                    stepLabel: "Step 2",
-                    selectPath: controller.selectModelPath
-                )
+                    pathRow(
+                        title: "Model",
+                        helpTooltip: HelpTooltip.model(),
+                        text: binding(\.modelPath),
+                        buttonTitle: "Choose GGUF",
+                        allowedExtensions: ["gguf"],
+                        recentPaths: controller.recentPaths.modelPaths,
+                        isHighlighted: controller.configuration.modelPath.isEmpty,
+                        stepLabel: "Step 2",
+                        selectPath: controller.selectModelPath
+                    )
 
-                GridRow {
-                    Text("Preset")
-                        .foregroundStyle(.secondary)
-
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 8) {
-                            Picker("Preset", selection: $selectedPresetIntent) {
-                                ForEach(LlamaServerPreset.all, id: \.intent) { preset in
-                                    Text(preset.displayName)
-                                        .tag(preset.intent)
-                                }
-                            }
-                            .labelsHidden()
-                            .pickerStyle(.menu)
-                            .frame(width: 180)
-
-                            Button {
-                                controller.applyPreset(selectedPreset)
-                            } label: {
-                                Label("Apply Preset", systemImage: "slider.horizontal.3")
-                            }
-                            .buttonStyle(SecondaryButtonStyle())
-                        }
-
-                        Text(selectedPreset.previewSummary)
-                            .font(.caption)
+                    GridRow {
+                        Text("Preset")
                             .foregroundStyle(.secondary)
-                            .lineLimit(2)
 
-                        Text(presetDescriptionJP(for: selectedPresetIntent))
-                            .font(.caption)
-                            .foregroundStyle(Color.accentColor)
-                            .lineLimit(2)
-                            .padding(.top, 2)
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack(spacing: 8) {
+                                Picker("Preset", selection: $selectedPresetIntent) {
+                                    ForEach(LlamaServerPreset.all, id: \.intent) { preset in
+                                        Text(preset.displayName)
+                                            .tag(preset.intent)
+                                    }
+                                }
+                                .labelsHidden()
+                                .pickerStyle(.menu)
+                                .frame(width: 180)
 
-                        HStack(spacing: 8) {
-                            Button {
-                                controller.checkRuntimeCapabilities()
-                            } label: {
-                                Label("Check Runtime", systemImage: "checkmark.shield")
+                                Button {
+                                    controller.applyPreset(selectedPreset)
+                                } label: {
+                                    Label("Apply Preset", systemImage: "slider.horizontal.3")
+                                }
+                                .buttonStyle(SecondaryButtonStyle())
                             }
-                            .buttonStyle(SecondaryButtonStyle())
-                            .disabled(controller.isRuntimeCapabilityProbeRunning)
 
-                            if controller.isRuntimeCapabilityProbeRunning {
-                                ProgressView()
-                                    .controlSize(.small)
-                            }
-                        }
-
-                        if let message = controller.runtimeCapabilityProbeMessage {
-                            Label(message, systemImage: "info.circle")
+                            Text(selectedPreset.previewSummary)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                                .lineLimit(2)
+
+                            Text(presetDescriptionJP(for: selectedPresetIntent))
+                                .font(.caption)
+                                .foregroundStyle(Color.accentColor)
+                                .lineLimit(2)
+                                .padding(.top, 2)
+
+                            HStack(spacing: 8) {
+                                Button {
+                                    controller.checkRuntimeCapabilities()
+                                } label: {
+                                    Label("Check Runtime", systemImage: "checkmark.shield")
+                                }
+                                .buttonStyle(SecondaryButtonStyle())
+                                .disabled(controller.isRuntimeCapabilityProbeRunning)
+
+                                if controller.isRuntimeCapabilityProbeRunning {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                }
+                            }
+
+                            if let message = controller.runtimeCapabilityProbeMessage {
+                                Label(message, systemImage: "info.circle")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            if let advice = controller.runtimeInstallSourceAdvice {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Label(advice.title, systemImage: "arrow.triangle.2.circlepath.circle")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+
+                                    Text(advice.detail)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(2)
+                                }
+                            }
+
+                            if let advice = controller.runtimeUpdateReadinessAdvice {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Label(advice.title, systemImage: "checklist")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+
+                                    Text(advice.detail)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(3)
+                                }
+                            }
+
+                            if let note = controller.runtimeCapabilityProbeResult?.presetCompatibilityNote(for: selectedPreset) {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Label(note.title, systemImage: compatibilitySystemImage(for: note.severity))
+                                        .font(.caption)
+                                        .foregroundStyle(compatibilityForegroundStyle(for: note.severity))
+
+                                    Text(note.detail)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(2)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Divider()
+                    .padding(.vertical, 4)
+
+                DisclosureGroup("Advanced Settings", isExpanded: $isAdvancedExpanded) {
+                    Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 12) {
+                        GridRow {
+                            HStack(spacing: 4) {
+                                Text("Port")
+                                    .foregroundStyle(.secondary)
+                                HelpTooltip.port()
+                            }
+                            TextField("1234", value: binding(\.port), format: .number)
+                                .glassTextFieldStyle()
+                                .frame(width: 110)
                         }
 
-                        if let advice = controller.runtimeInstallSourceAdvice {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Label(advice.title, systemImage: "arrow.triangle.2.circlepath.circle")
-                                    .font(.caption)
+                        GridRow {
+                            HStack(spacing: 4) {
+                                Text("Context")
                                     .foregroundStyle(.secondary)
+                                HelpTooltip.contextSize()
+                            }
 
-                                Text(advice.detail)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(2)
+                            HStack(spacing: 12) {
+                                Slider(value: contextSizeBinding, in: 1024...32768, step: 1024)
+                                    .tint(.orange)
+
+                                TextField("32768", value: binding(\.contextSize), format: .number)
+                                    .glassTextFieldStyle()
+                                    .frame(width: 80)
                             }
                         }
 
-                        if let advice = controller.runtimeUpdateReadinessAdvice {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Label(advice.title, systemImage: "checklist")
-                                    .font(.caption)
+                        GridRow {
+                            HStack(spacing: 4) {
+                                Text("Threads")
                                     .foregroundStyle(.secondary)
+                                HelpTooltip.threads()
+                            }
 
-                                Text(advice.detail)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(3)
+                            HStack(spacing: 12) {
+                                Toggle("auto", isOn: threadsAutoBinding)
+                                    .toggleStyle(.checkbox)
+
+                                if controller.configuration.threads != "auto" {
+                                    Slider(value: threadsValueBinding, in: 1...32, step: 1)
+                                        .tint(.orange)
+
+                                    TextField("4", text: binding(\.threads))
+                                        .glassTextFieldStyle()
+                                        .frame(width: 50)
+                                } else {
+                                    Text("auto")
+                                        .foregroundStyle(.secondary)
+                                        .font(.system(.body, design: .monospaced))
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
+                                        .frame(width: 50)
+                                }
                             }
                         }
 
-                        if let note = controller.runtimeCapabilityProbeResult?.presetCompatibilityNote(for: selectedPreset) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Label(note.title, systemImage: compatibilitySystemImage(for: note.severity))
-                                    .font(.caption)
-                                    .foregroundStyle(compatibilityForegroundStyle(for: note.severity))
-
-                                Text(note.detail)
-                                    .font(.caption)
+                        GridRow {
+                            HStack(spacing: 4) {
+                                Text("GPU Layers")
                                     .foregroundStyle(.secondary)
-                                    .lineLimit(2)
+                                HelpTooltip.gpuLayers()
+                            }
+
+                            HStack(spacing: 12) {
+                                Toggle("auto", isOn: gpuLayersAutoBinding)
+                                    .toggleStyle(.checkbox)
+
+                                if controller.configuration.gpuLayers != "auto" {
+                                    Slider(value: gpuLayersValueBinding, in: 0...128, step: 1)
+                                        .tint(.orange)
+
+                                    TextField("0", text: binding(\.gpuLayers))
+                                        .glassTextFieldStyle()
+                                        .frame(width: 50)
+                                } else {
+                                    Text("auto")
+                                        .foregroundStyle(.secondary)
+                                        .font(.system(.body, design: .monospaced))
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
+                                        .frame(width: 50)
+                                }
                             }
                         }
+
+                        GridRow {
+                            HStack(spacing: 4) {
+                                Text("Additional Args")
+                                    .foregroundStyle(.secondary)
+                                HelpTooltip.additionalArguments()
+                            }
+                            TextField("--verbose", text: binding(\.additionalArguments))
+                                .glassTextFieldStyle()
+                        }
                     }
+                    .padding(.top, 10)
                 }
-
-                GridRow {
-                    HStack(spacing: 4) {
-                        Text("Port")
-                            .foregroundStyle(.secondary)
-                        HelpTooltip.port()
-                    }
-                    TextField("1234", value: binding(\.port), format: .number)
-                        .glassTextFieldStyle()
-                        .frame(width: 110)
-                }
-
-                GridRow {
-                    HStack(spacing: 4) {
-                        Text("Context")
-                            .foregroundStyle(.secondary)
-                        HelpTooltip.contextSize()
-                    }
-                    TextField("32768", value: binding(\.contextSize), format: .number)
-                        .glassTextFieldStyle()
-                        .frame(width: 110)
-                }
-
-                GridRow {
-                    HStack(spacing: 4) {
-                        Text("Threads")
-                            .foregroundStyle(.secondary)
-                        HelpTooltip.threads()
-                    }
-                    TextField("auto", text: binding(\.threads))
-                        .glassTextFieldStyle()
-                        .frame(width: 110)
-                }
-
-                GridRow {
-                    HStack(spacing: 4) {
-                        Text("GPU Layers")
-                            .foregroundStyle(.secondary)
-                        HelpTooltip.gpuLayers()
-                    }
-                    TextField("auto", text: binding(\.gpuLayers))
-                        .glassTextFieldStyle()
-                        .frame(width: 110)
-                }
-
-                GridRow {
-                    HStack(spacing: 4) {
-                        Text("Additional Args")
-                            .foregroundStyle(.secondary)
-                        HelpTooltip.additionalArguments()
-                    }
-                    TextField("--verbose", text: binding(\.additionalArguments))
-                        .glassTextFieldStyle()
-                }
-            }
-            .padding(.vertical, 4)
-
-            Divider()
-                .padding(.vertical, 8)
-
-            if let launchSetupHint = controller.launchSetupHint {
-                Label(launchSetupHint, systemImage: "info.circle")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.bottom, 4)
-            }
-
-            HStack(spacing: 12) {
-                Button {
-                    controller.start()
-                } label: {
-                    Label("Start", systemImage: "play.fill")
-                }
-                .buttonStyle(PrimaryButtonStyle())
-                .keyboardShortcut(.defaultAction)
-                .disabled(!controller.canStart)
-
-                Button {
-                    controller.stop()
-                } label: {
-                    Label("Stop", systemImage: "stop.fill")
-                }
-                .buttonStyle(SecondaryButtonStyle())
-                .disabled(!controller.canStop)
-
-                Button {
-                    controller.restart()
-                } label: {
-                    Label("Restart", systemImage: "arrow.clockwise")
-                }
-                .buttonStyle(SecondaryButtonStyle())
-                .disabled(!controller.canRestart)
-
-                Spacer()
-
-                if let message = controller.lastErrorMessage {
-                    Label(message, systemImage: "exclamationmark.triangle")
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                        .lineLimit(2)
-                }
+                .accentColor(.orange)
             }
         }
     }

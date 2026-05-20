@@ -71,13 +71,17 @@ private struct AuroraBackgroundLayer: View {
     private func currentColors(for status: ServerStatus) -> (orb1: Color, orb2: Color, orb3: Color) {
         switch status {
         case .running:
-            return (orb1: .mint, orb2: .cyan, orb3: .yellow)
+            return (orb1: .yellow, orb2: .orange, orb3: Color(red: 0.95, green: 0.75, blue: 0.2))
         case .starting, .restarting, .stopping:
-            return (orb1: .orange, orb2: .yellow, orb3: .pink)
+            return (orb1: .orange, orb2: .yellow, orb3: Color(red: 0.9, green: 0.4, blue: 0.1))
         case .error:
-            return (orb1: .red, orb2: .orange, orb3: .purple)
+            return (orb1: .red, orb2: Color(red: 0.7, green: 0.1, blue: 0.1), orb3: .orange)
         case .stopped:
-            return (orb1: .cyan, orb2: .purple, orb3: .pink)
+            return (
+                orb1: Color(red: 0.85, green: 0.5, blue: 0.15),
+                orb2: Color(red: 0.5, green: 0.25, blue: 0.05),
+                orb3: Color(red: 0.3, green: 0.15, blue: 0.0)
+            )
         }
     }
 }

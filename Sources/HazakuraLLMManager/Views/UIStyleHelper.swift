@@ -13,9 +13,9 @@ struct PrimaryButtonStyle: ButtonStyle {
             .background(
                 LinearGradient(
                     colors: [
-                        Color.cyan.opacity(isHovered ? 0.95 : 0.85),
-                        Color.purple.opacity(isHovered ? 0.9 : 0.8),
-                        Color.pink.opacity(isHovered ? 0.85 : 0.75)
+                        Color.orange.opacity(isHovered ? 0.95 : 0.85),
+                        Color(red: 0.95, green: 0.65, blue: 0.15).opacity(isHovered ? 0.9 : 0.8),
+                        Color.yellow.opacity(isHovered ? 0.85 : 0.75)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -23,7 +23,7 @@ struct PrimaryButtonStyle: ButtonStyle {
             )
             .cornerRadius(8)
             .shadow(
-                color: Color.purple.opacity(isHovered ? 0.25 : 0.15),
+                color: Color.orange.opacity(isHovered ? 0.25 : 0.15),
                 radius: isHovered ? 8 : 4,
                 x: 0,
                 y: isHovered ? 4 : 2
@@ -86,7 +86,7 @@ struct GlassTextFieldModifier: ViewModifier {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
                         LinearGradient(
-                            colors: isFocused ? [Color.cyan, Color.purple] : [Color.white.opacity(0.1)],
+                            colors: isFocused ? [Color.orange, Color(red: 0.95, green: 0.65, blue: 0.15)] : [Color.white.opacity(0.1)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
@@ -94,7 +94,7 @@ struct GlassTextFieldModifier: ViewModifier {
                     )
             )
             .shadow(
-                color: isFocused ? Color.purple.opacity(0.15) : Color.clear,
+                color: isFocused ? Color.orange.opacity(0.15) : Color.clear,
                 radius: 4,
                 x: 0,
                 y: 2

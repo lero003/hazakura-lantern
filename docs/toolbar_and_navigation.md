@@ -44,11 +44,14 @@ slice.
    management. Done.
 4. Add a log clear toolbar action that reuses the existing clear-log behavior.
    Done.
-5. Add command-preview focus affordances if they stay local. Done.
+5. Add command-preview focus affordances if they stay local. Done; the toolbar
+   command opens the Dashboard command preview after the sidebar redesign.
 6. Add a menu bar control surface for existing lifecycle, health, copy, profile,
    log, open-window, and quit actions while keeping the normal window intact.
    Done.
-7. Add keyboard shortcuts only for actions whose state is already well-defined.
+7. Add a sidebar dashboard that keeps existing lifecycle, endpoint, and command
+   preview actions reachable without changing runtime behavior. Done.
+8. Add keyboard shortcuts only for actions whose state is already well-defined.
 
 ## Pre-Release UI Blockers
 
@@ -62,8 +65,9 @@ ready until these are checked or explicitly deferred:
   surface: keep it as secondary, reduce it, or remove it
 - Setup Guide onboarding is reviewed against the main configuration flow so it
   helps first-run setup without crowding normal daily use
-- a manual UI smoke pass covers main-window launch, Setup Guide toggling, menu
-  bar commands, toolbar commands, and clean quit behavior
+- a manual UI smoke pass covers main-window launch, Setup Guide navigation, menu
+  bar commands, toolbar commands, sidebar navigation, Dashboard controls, and
+  clean quit behavior
 
 ## Non-Goals
 
