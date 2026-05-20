@@ -253,9 +253,9 @@ Implemented scope:
   `--version` or `--help` evidence, so a guarded update plan is not prepared
   from a generic "capability incomplete" state.
 - The main window now uses a sidebar-based layout with Dashboard,
-  Configuration, Logs, and Setup Guide destinations. Dashboard keeps existing
-  lifecycle controls, endpoint details, and launch command preview visible
-  without changing runtime behavior.
+  Configuration, and Logs destinations. Setup Guide is a toolbar-toggled
+  inspector that opens automatically when runtime or model selection is empty,
+  and the Dashboard setup hint can reveal it without changing runtime behavior.
 - Advanced configuration fields are now grouped behind disclosure controls, with
   context, thread, and GPU-layer sliders supplementing the existing editable
   values.
@@ -347,10 +347,11 @@ Formal-release UI blockers:
   behavior from hidden or backgrounded window states
 - decide whether the toolbar remains a secondary power-user surface, is reduced,
   or is removed after the menu bar becomes the primary resident control surface
-- review the Setup Guide against the normal configuration flow so onboarding
-  help does not duplicate or obscure the main window controls
+- review the Setup Guide inspector against the normal configuration flow so
+  onboarding help does not duplicate or obscure the main window controls
 - perform one manual UI smoke pass that covers main-window launch, Setup Guide
-  toggling, menu bar commands, toolbar commands, and clean quit behavior
+  inspector toggling, menu bar commands, toolbar commands, and clean quit
+  behavior
 - keep menu-bar-only lifecycle, launch-at-login, and automatic restart policy
   out of the release unless a later explicit product decision reopens them
 

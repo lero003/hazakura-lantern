@@ -5,12 +5,12 @@ import HazakuraLLMManagerCore
 struct ContentView: View {
     @ObservedObject var controller: ServerController
     @State private var selectedItem: SidebarItem? = .dashboard
+    @State private var showSetupGuide = false
 
     private enum SidebarItem: String, CaseIterable, Identifiable {
         case dashboard = "Dashboard"
         case configuration = "Configuration"
         case logs = "Logs"
-        case setupGuide = "Setup Guide"
 
         var id: String { self.rawValue }
 
@@ -19,7 +19,6 @@ struct ContentView: View {
             case .dashboard: return "square.grid.2x2"
             case .configuration: return "slider.horizontal.3"
             case .logs: return "doc.text"
-            case .setupGuide: return "laurel.leading"
             }
         }
     }
@@ -54,7 +53,9 @@ struct ContentView: View {
                     if let selectedItem {
                         switch selectedItem {
                         case .dashboard:
-                            DashboardView(controller: controller)
+                            DashboardView(controller: controller, onOpenSetupGuide: {
+                                showSetupGuide = true
+                            })
                         case .configuration:
                             ScrollView {
                                 VStack(alignment: .leading, spacing: 20) {
@@ -66,11 +67,6 @@ struct ContentView: View {
                         case .logs:
                             LogsView(controller: controller)
                                 .padding(24)
-                        case .setupGuide:
-                            ScrollView {
-                                SetupGuideView(controller: controller)
-                                    .padding(24)
-                            }
                         }
                     } else {
                         ContentUnavailableView("Select an item", systemImage: "sidebar.left")
@@ -120,11 +116,10 @@ struct ContentView: View {
                 }
 
                 ToolbarItem {
-                    Button {
-                        selectedItem = .setupGuide
-                    } label: {
+                    Toggle(isOn: $showSetupGuide) {
                         Label("Setup Guide", systemImage: "laurel.leading")
                     }
+                    .toggleStyle(.button)
                     .help("Show Setup Guide")
                 }
 
@@ -203,7 +198,17 @@ struct ContentView: View {
             }
         }
         .groupBoxStyle(GlassGroupBoxStyle())
-        .frame(minWidth: 800, minHeight: 600)
+        .inspector(isPresented: $showSetupGuide) {
+            SetupGuideView(controller: controller)
+                .inspectorColumnWidth(min: 260, ideal: 300, max: 360)
+        }
+        .onAppear {
+            if controller.configuration.runtimeExecutablePath.isEmpty ||
+               controller.configuration.modelPath.isEmpty {
+                showSetupGuide = true
+            }
+        }
+        .frame(minWidth: 860, minHeight: 640)
     }
 
     private func copy(_ value: String) {

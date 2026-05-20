@@ -288,6 +288,9 @@ Already done or mostly done:
   update plan can be prepared
 - incomplete update-readiness evidence wording that names whether local
   `--version` or `--help` evidence is missing before any guarded update plan
+- Setup Guide inspector access from the toolbar and Dashboard setup hint, so
+  first-run onboarding is available without remaining a primary sidebar
+  destination
 
 Remaining before a packaged app release:
 
@@ -296,9 +299,10 @@ Remaining before a packaged app release:
   Setup Guide additions:
   - verify menu bar daily-use behavior on a normal macOS desktop
   - decide the toolbar's role after the menu bar becomes the resident surface
-  - confirm the Setup Guide helps onboarding without crowding the main flow
-  - run a manual UI smoke pass across main window, Setup Guide, menu bar,
-    toolbar, and quit behavior
+  - confirm the Setup Guide inspector helps onboarding without crowding the
+    main flow
+  - run a manual UI smoke pass across main window, Setup Guide inspector, menu
+    bar, toolbar, and quit behavior
 - keep README, current status, development loop, and roadmap in agreement
 
 v0 exit criteria:
@@ -602,8 +606,9 @@ Candidate work:
   profile import/export, log clear, open-window, and quit actions while keeping
   the regular main window intact (initial menu bar surface done)
 - organize the main window into native sidebar destinations for dashboard,
-  configuration, logs, and setup guidance while preserving existing runtime
-  actions (initial sidebar dashboard done)
+  configuration, and logs, with setup guidance available as an inspector while
+  preserving existing runtime actions (initial sidebar dashboard and Setup
+  Guide inspector done)
 - keep toolbar state derived from the same controller state as the main views
 - keep menu bar state derived from the same controller state as the main views
 - add focused tests or view-model checks for toolbar action availability where

@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Moved Setup Guide out of the primary sidebar and into a toolbar-toggled
+  inspector, with the Dashboard setup hint opening the same onboarding surface.
 - Added a sidebar-based main window layout with a dashboard for server controls,
   endpoint details, and launch command preview while keeping runtime behavior
   unchanged.

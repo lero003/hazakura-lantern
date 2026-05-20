@@ -51,7 +51,9 @@ slice.
    Done.
 7. Add a sidebar dashboard that keeps existing lifecycle, endpoint, and command
    preview actions reachable without changing runtime behavior. Done.
-8. Add keyboard shortcuts only for actions whose state is already well-defined.
+8. Move Setup Guide out of the primary sidebar when it can stay available as a
+   toolbar-toggled inspector and first-run setup aid. Done.
+9. Add keyboard shortcuts only for actions whose state is already well-defined.
 
 ## Pre-Release UI Blockers
 
@@ -63,11 +65,11 @@ ready until these are checked or explicitly deferred:
   hidden or backgrounded states
 - the toolbar's role is decided after the menu bar becomes the resident control
   surface: keep it as secondary, reduce it, or remove it
-- Setup Guide onboarding is reviewed against the main configuration flow so it
-  helps first-run setup without crowding normal daily use
-- a manual UI smoke pass covers main-window launch, Setup Guide navigation, menu
-  bar commands, toolbar commands, sidebar navigation, Dashboard controls, and
-  clean quit behavior
+- Setup Guide inspector onboarding is reviewed against the main configuration
+  flow so it helps first-run setup without crowding normal daily use
+- a manual UI smoke pass covers main-window launch, Setup Guide inspector
+  toggling, menu bar commands, toolbar commands, sidebar navigation, Dashboard
+  controls, and clean quit behavior
 
 ## Non-Goals
 

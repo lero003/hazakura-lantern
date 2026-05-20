@@ -87,29 +87,19 @@ struct SetupGuideView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
 
-                            HStack {
-                                Text("brew install llama.cpp")
-                                    .font(.system(.caption, design: .monospaced))
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(Color.black.opacity(0.3), in: RoundedRectangle(cornerRadius: 6))
+                            ViewThatFits(in: .horizontal) {
+                                HStack {
+                                    homebrewCommandLabel
 
-                                Spacer()
+                                    Spacer()
 
-                                Button {
-                                    copyToPasteboard("brew install llama.cpp")
-                                    isHomebrewCopied = true
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        isHomebrewCopied = false
-                                    }
-                                } label: {
-                                    Label(
-                                        isHomebrewCopied ? "Copied!" : "Copy",
-                                        systemImage: isHomebrewCopied ? "checkmark" : "doc.on.doc"
-                                    )
-                                    .font(.caption)
+                                    copyHomebrewButton
                                 }
-                                .buttonStyle(SecondaryButtonStyle())
+
+                                VStack(alignment: .leading, spacing: 8) {
+                                    homebrewCommandLabel
+                                    copyHomebrewButton
+                                }
                             }
 
                             Divider()
@@ -213,30 +203,16 @@ struct SetupGuideView: View {
                         isCompleted: isStep4Completed
                     ) {
                         VStack(alignment: .leading, spacing: 10) {
-                            HStack(spacing: 12) {
-                                Button {
-                                    if controller.status == .running {
-                                        controller.stop()
-                                    } else {
-                                        controller.start()
-                                    }
-                                } label: {
-                                    Label(
-                                        controller.status == .running ? "Stop Server" : "Start Server",
-                                        systemImage: controller.status == .running ? "stop.fill" : "play.fill"
-                                    )
+                            ViewThatFits(in: .horizontal) {
+                                HStack(spacing: 12) {
+                                    launchToggleButton
+                                    checkHealthButton
                                 }
-                                .buttonStyle(controller.status == .running ? AnyButtonStyle(SecondaryButtonStyle()) : AnyButtonStyle(PrimaryButtonStyle()))
-                                .disabled((controller.status != .running && !controller.canStart) || (controller.status == .running && !controller.canStop))
 
-                                Button {
-                                    controller.checkEndpointHealth()
-                                } label: {
-                                    Label("Check Health", systemImage: "waveform.path.ecg")
-                                        .font(.caption)
+                                VStack(alignment: .leading, spacing: 8) {
+                                    launchToggleButton
+                                    checkHealthButton
                                 }
-                                .buttonStyle(SecondaryButtonStyle())
-                                .disabled(controller.status != .running || controller.endpointHealthStatus == .checking)
                             }
 
                             HStack(spacing: 8) {
@@ -288,8 +264,6 @@ struct SetupGuideView: View {
                 .padding(20)
             }
         }
-        .frame(minWidth: 280, idealWidth: 320, maxWidth: 350)
-        .background(.ultraThinMaterial.opacity(0.1))
     }
 
     // カードの共通UIコンポーネント
@@ -365,6 +339,61 @@ struct SetupGuideView: View {
                 .help(path)
         }
         .padding(.top, 4)
+    }
+
+    private var homebrewCommandLabel: some View {
+        Text("brew install llama.cpp")
+            .font(.system(.caption, design: .monospaced))
+            .lineLimit(1)
+            .minimumScaleFactor(0.85)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Color.black.opacity(0.3), in: RoundedRectangle(cornerRadius: 6))
+    }
+
+    private var copyHomebrewButton: some View {
+        Button {
+            copyToPasteboard("brew install llama.cpp")
+            isHomebrewCopied = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                isHomebrewCopied = false
+            }
+        } label: {
+            Label(
+                isHomebrewCopied ? "Copied!" : "Copy",
+                systemImage: isHomebrewCopied ? "checkmark" : "doc.on.doc"
+            )
+            .font(.caption)
+        }
+        .buttonStyle(SecondaryButtonStyle())
+    }
+
+    private var launchToggleButton: some View {
+        Button {
+            if controller.status == .running {
+                controller.stop()
+            } else {
+                controller.start()
+            }
+        } label: {
+            Label(
+                controller.status == .running ? "Stop Server" : "Start Server",
+                systemImage: controller.status == .running ? "stop.fill" : "play.fill"
+            )
+        }
+        .buttonStyle(controller.status == .running ? AnyButtonStyle(SecondaryButtonStyle()) : AnyButtonStyle(PrimaryButtonStyle()))
+        .disabled((controller.status != .running && !controller.canStart) || (controller.status == .running && !controller.canStop))
+    }
+
+    private var checkHealthButton: some View {
+        Button {
+            controller.checkEndpointHealth()
+        } label: {
+            Label("Check Health", systemImage: "waveform.path.ecg")
+                .font(.caption)
+        }
+        .buttonStyle(SecondaryButtonStyle())
+        .disabled(controller.status != .running || controller.endpointHealthStatus == .checking)
     }
 
     private func statusColor(_ status: ServerStatus) -> Color {
