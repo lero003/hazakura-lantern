@@ -35,6 +35,19 @@ final class LlamaServerUpdateReadinessAdviceTests: XCTestCase {
 
         XCTAssertEqual(advice.readiness, .manualOnly)
         XCTAssertTrue(advice.detail.contains("cannot infer a safe updater"))
+        XCTAssertTrue(advice.detail.contains("No update plan should be prepared inside Lantern"))
+    }
+
+    func testEvaluateKeepsManualPathsManualOnlyBeforeCapabilityCheck() throws {
+        let advice = try XCTUnwrap(
+            LlamaServerUpdateReadinessAdvice.evaluate(
+                executablePath: "/Users/kei/bin/llama-server",
+                capabilityResult: nil
+            )
+        )
+
+        XCTAssertEqual(advice.readiness, .manualOnly)
+        XCTAssertTrue(advice.detail.contains("replace it manually"))
     }
 
     func testEvaluateRequiresCompleteCapabilityEvidence() throws {
@@ -74,6 +87,20 @@ final class LlamaServerUpdateReadinessAdviceTests: XCTestCase {
         XCTAssertEqual(advice.readiness, .planningEvidenceReady)
         XCTAssertTrue(advice.detail.contains("llama-server version b4600"))
         XCTAssertTrue(advice.detail.contains("exact Homebrew command"))
+        XCTAssertTrue(advice.detail.contains("require confirmation"))
+    }
+
+    func testEvaluateReportsPlanningEvidenceForMacPortsStyleSource() throws {
+        let advice = try XCTUnwrap(
+            LlamaServerUpdateReadinessAdvice.evaluate(
+                executablePath: "/opt/local/bin/llama-server",
+                capabilityResult: completeProbeResult()
+            )
+        )
+
+        XCTAssertEqual(advice.readiness, .planningEvidenceReady)
+        XCTAssertTrue(advice.detail.contains("llama-server version b4600"))
+        XCTAssertTrue(advice.detail.contains("exact MacPorts command"))
         XCTAssertTrue(advice.detail.contains("require confirmation"))
     }
 

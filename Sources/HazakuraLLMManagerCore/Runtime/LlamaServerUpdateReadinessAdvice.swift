@@ -30,7 +30,7 @@ public struct LlamaServerUpdateReadinessAdvice: Equatable, Sendable {
             return LlamaServerUpdateReadinessAdvice(
                 readiness: .manualOnly,
                 title: "Update dry-run: manual path",
-                detail: "Lantern cannot infer a safe updater for this binary. Keep replacement manual, then re-check version and options before launch."
+                detail: "Lantern cannot infer a safe updater for this binary. No update plan should be prepared inside Lantern; replace it manually, then re-check version and options before launch."
             )
         }
 

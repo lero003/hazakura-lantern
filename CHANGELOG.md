@@ -44,6 +44,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added non-mutating update-readiness dry-run guidance that explains whether
   Lantern still needs runtime capability evidence before any guarded update
   plan can be prepared.
+- Clarified manual-path update-readiness wording so unsupported update sources
+  do not look eligible for an in-app guarded update plan.
 - Refined update-readiness dry-run wording so incomplete evidence names the
   missing `--version` or `--help` signal before any guarded update plan.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,

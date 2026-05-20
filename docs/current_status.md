@@ -255,6 +255,8 @@ Implemented scope:
 - The server configuration view now shows non-mutating update-readiness dry-run
   guidance that combines selected runtime source with local version/help
   capability evidence before any future guarded update plan can be prepared.
+- Manual-path update-readiness guidance now explicitly keeps unsupported update
+  sources outside Lantern's future guarded update planning, with focused tests.
 - Incomplete update-readiness dry-run guidance now names the missing local
   `--version` or `--help` evidence, so a guarded update plan is not prepared
   from a generic "capability incomplete" state.
