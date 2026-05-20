@@ -89,6 +89,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   thread/GPU auto values are delegated to `llama-server`.
 - Expanded the Logs destination so empty and populated log content top-aligns
   inside the available view space.
+- Reframed automation guidance around unfinished release-quality gates rather
+  than advancing through version-numbered lanes.
 
 ## v0.5.0-alpha.1 - 2026-05-20
 

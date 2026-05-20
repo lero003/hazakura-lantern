@@ -751,17 +751,16 @@ Do not use this project for:
 
 ## Automation Guidance
 
-Automated development should pick one small slice from the current lane. After
-`v0.5.0-alpha.1`, automation may continue through v0.7 without another human
-prompt as long as it stays on the existing `llama-server` path, and may
-continue through v0.8 for menu bar, toolbar, and navigation work. The default
-order is v0.5 post-public triage, then v0.6 model presets and option
-compatibility, v0.7 runtime capability advisories, and v0.8 menu
-bar/toolbar/navigation. v0.9 update-readiness work may also proceed
-automatically only while it remains non-mutating and advisory.
-v0.4 `llama-server` reliability work remains valid only when a concrete,
-testable daily-use ambiguity is visible; do not force v0.4 work just to fill
-the lane.
+Automated development should pick one small release-quality slice. Version
+sections below are historical context and backlog shape, not the default work
+selector. Prefer work that makes Lantern closer to a user-facing release over
+work that merely advances from one v0.x label to the next.
+
+The open release-quality gates are the menu bar daily-use verification, toolbar
+role decision, Setup Guide inspector review, app launch/clean-quit smoke, and
+one manual UI smoke pass that covers the main window, Setup Guide, menu bar,
+toolbar, logs, and quit behavior.
+
 For pre-release rough-edge discovery that does not fit a single roadmap lane,
 use `docs/automation_smoke_backlog.md`; it is the allowed source for one small
 automatable UI, localization, menu bar, setup-flow, health/copy/log, profile,
@@ -775,29 +774,15 @@ Good next slices:
 - expose or fix one concrete rough edge from `docs/automation_smoke_backlog.md`
   when it can be verified without broad restyling, runtime mutation, packaging
   publication, or GitHub mutation
+- verify one open release-quality gate and record the result in
+  `docs/current_status.md` when it changes the next action
 - classify public issues or external review notes using
   `docs/post_public_operations.md`, then update docs, tests, or small
   `llama-server` behavior only when the classification identifies a safe local
   slice
-- tighten post-public issue categories, label proposals, or draft-response
-  guidance only when a concrete public-feedback case is not covered by the
-  current operations guide
-- add or refine `llama-server` preset vocabulary and option compatibility in
-  `docs/llama_server_presets.md`
-- implement one command-visible preset behavior at a time, with focused tests
-  for the resulting configuration and launch command
-- add MTP-capable preset handling only as an explicit model/preset choice, with
-  visible `--spec-type draft-mtp` and `--spec-draft-n-max` arguments
-- add v0.7 runtime capability checks only when they are timeout-bounded,
-  read-only, adapter-scoped, and used for preset compatibility warnings
-- add v0.8 menu bar/toolbar/navigation slices only when actions mirror existing
-  behavior and do not introduce hidden runtime work; after the initial menu bar
-  control surface, prefer daily-use verification or toolbar demotion decisions
-  over new control surfaces
-- add v0.9 update-readiness slices only when they identify source (path-only
-  advice covered), version, compatibility, or dry-run requirements (initial
-  source plus capability-evidence guidance covered) without executing real
-  updates
+- refine `llama-server` presets, runtime capability checks, or update-readiness
+  wording only when it reduces a concrete release-quality risk and remains
+  visible, timeout-bounded, read-only, and non-mutating
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
   focused tests before adding runtime breadth; validation already has an
   initial explicit contract, and profile command preview already has a generic
@@ -860,10 +845,9 @@ Rules for automated work:
 - do not change runtime ownership assumptions casually
 - update tests and docs with each meaningful behavior change
 - if no change is justified by current evidence, a verified no-op is acceptable
-  only after checking v0.5 triage/docs candidates, v0.6 preset candidates,
-  v0.7 runtime-advisory candidates, v0.8 menu bar/toolbar/navigation
-  candidates, non-mutating v0.9 update-readiness candidates, and any concrete
-  v0.4 reliability signal that is actually visible
+  only after checking open release-quality gates, concrete smoke-backlog
+  candidates, current public-feedback/docs ambiguity, and any concrete
+  `llama-server` reliability signal that is actually visible
 
 ## Issue Triage Checklist
 

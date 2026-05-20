@@ -355,20 +355,16 @@ or cache-context issue, not proof that the Mach-O executable is actually absent.
   auto restart, model downloads, chat, RAG, or proxy behavior.
 - LAN exposure and authentication are intentionally outside v0.
 
-## Automation Lane
+## Automation Focus
 
-The automation should treat the project as having a public source-only
-`v0.5.0-alpha.1` checkpoint for post-public issue triage and automation
-discipline, while the Launch Services helper smoke remains a documented
-packaged-app blocker. Do not spend every hourly run retrying the same
-`kLSNoExecutableErr` path unless there is a new hypothesis. It is acceptable to
-carry that blocker as risk and continue with safe source work that does not
-depend on app-bundle launch verification.
+The automation should treat version checkpoints as history, not as the work
+queue. The useful question is whether the next slice moves Lantern closer to
+release-quality daily use while preserving the current `llama-server` boundary.
 
-No user-facing app-bundle release should be cut until app launch verification
-succeeds on a normal macOS environment.
+No user-facing packaged release should be cut until the remaining release
+quality gates below are resolved or explicitly deferred by a human.
 
-Formal-release UI blockers:
+Open release-quality gates:
 
 - verify the menu bar daily-use path on a normal macOS desktop, including
   status visibility, lifecycle actions, copy actions, and `Open Window`
@@ -383,26 +379,18 @@ Formal-release UI blockers:
 - keep menu-bar-only lifecycle, launch-at-login, and automatic restart policy
   out of the release unless a later explicit product decision reopens them
 
-The v0.3 adapter-boundary checkpoint is closed unless a new concrete ambiguity
-or regression is named. The v0.4 reliability lane is allowed to stay quiet when
-there is no concrete safe `llama-server` reliability slice; do not force v0.4
-work just to fill the lane. The current source lane is v0.5 post-public issue
-triage and automation discipline, with automation allowed to continue through
-v0.8 on the existing `llama-server` path when each slice is concrete and
-verified. Automation may also prepare v0.9 update-readiness work when it stays
-non-mutating and advisory.
-
-Use `docs/post_public_operations.md` for public issue triage, automation-safe
-work, and human approval gates. Treat post-public triage as the v0.5 lane, while
-its guardrails apply immediately. Keep `docs/public_opening_preflight.md` as a
-pre-open and release-handoff reference rather than the normal work queue.
 Use `docs/automation_smoke_backlog.md` for pre-release rough-edge discovery and
-small automatable polish. It names safe smoke checks, good automation slices,
-and release boundaries for UI, localization, menu bar, setup-flow,
-health/copy/log, profile, update-readiness, and packaging-prep work.
-The backlog also classifies the 2026-05-20 external improvement proposal into
-automatable candidates, human-decision items, low-priority polish, and explicit
-scope boundaries.
+small automatable polish. Use `docs/post_public_operations.md` for public issue
+triage, automation-safe work, and human approval gates. Keep
+`docs/public_opening_preflight.md` as a pre-open and release-handoff reference,
+not as the normal work queue.
+
+Closed source-work areas should stay closed unless a concrete regression or
+release-quality ambiguity appears: adapter boundary documentation, core
+`llama-server` launch/health validation, profile schema version `1`, the core
+preset model and picker, the initial runtime capability advisory, and the
+initial menu bar/toolbar/setup-guide surfaces.
+
 Automation must not change GitHub visibility, settings, tags, releases, release
 assets, repository packages, public issue state, automation cadence, a new
 adapter, custom command implementation, profile schema version, dependencies,
@@ -417,35 +405,17 @@ Good next automated candidates:
   pre-release rough edge in UI labels, localization, menu bar/toolbar behavior,
   Setup Guide inspector flow, runtime setup, endpoint/health/copy/logs,
   profiles, packaging-prep, or non-mutating update-readiness
-- when using the external improvement proposal, prefer automatable P0/P1
-  candidates such as accessibility, any newly discovered app-UI force unwrap,
-  copy feedback beyond the shared pasteboard helper already covered, error
-  visibility, focused localization gaps, fake-driven controller tests, and
-  stopped-state animation performance before low-priority polish
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
   docs confusion, or current-lane daily-use ambiguity
-- tighten v0.5 issue-triage docs only when the taxonomy, label proposals, or
-  draft-response guidance miss a concrete public-feedback case
-- add or refine `llama-server` model-family preset guidance in
-  `docs/llama_server_presets.md`, keeping presets advisory and command-visible
-- implement one tested v0.6 preset slice beyond the core preset model and
-  initial picker/apply UI, such as preset compatibility notes or safer
-  option-family warnings
-- implement one tested v0.7 runtime capability slice beyond the core probe and
-  initial manual UI advisory, such as refining unknown-capability wording or
-  documenting a concrete runtime-version compatibility case
-- implement one v0.8 menu bar/toolbar/navigation slice only if a new
-  existing-action affordance remains concrete; the start/stop/restart/health
-  toolbar shell, copy menu, profile import/export, clear-log, command-preview
-  reveal, and initial menu bar control surface are now covered. Prefer
-  verifying menu bar daily-use gaps or deciding toolbar demotion before adding
-  new control surfaces; menu-bar-only lifecycle and launch-at-login behavior
-  need an explicit human handoff
-- implement one non-mutating v0.9 update-readiness slice beyond the path-only
-  install-source advice, dry-run requirements, and missing-evidence wording now
-  covered, such as documenting a concrete update-readiness case
+- verify menu bar daily-use gaps or decide toolbar demotion before adding any
+  new control surfaces
+- review the Setup Guide inspector against the normal Configuration flow and
+  remove duplication or crowding if it is visible
+- refine `llama-server` presets, runtime capability advisories, or
+  update-readiness wording only when it reduces a concrete release-quality risk
+  and remains advisory, visible, and non-mutating
 - improve one `llama-server` reliability or daily-use path when the confusing
   behavior is concrete and testable: launch validation, launch failure wording,
   missing runtime/model file empty states beyond the blank or non-`.gguf`
@@ -494,5 +464,5 @@ Do not begin endpoint auto-polling, multiple-profile management, adapter
 expansion, custom command implementation, MLX implementation, model management,
 unattended runtime installation/update, model download, automatic benchmarking,
 or chat features during this handoff. Runtime version and option checks are
-allowed only as local, timeout-bounded, read-only advisory work for v0.7/v0.9.
-Guarded v1.0 update execution must be opt-in and user-confirmed.
+allowed only as local, timeout-bounded, read-only advisory work that improves
+release quality. Guarded update execution must be opt-in and user-confirmed.
