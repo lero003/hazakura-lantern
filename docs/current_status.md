@@ -226,6 +226,9 @@ Implemented scope:
 - The server configuration view now offers a manual runtime capability check
   that displays the selected `llama-server` version when available and shows
   supported, unsupported, or unknown preset-option advisory text before launch.
+- The main window now has a native toolbar shell for the existing start, stop,
+  restart, and manual endpoint health-check actions, with availability derived
+  from the same controller state as the in-page controls.
 - toolbar/navigation guidance now restores v0.8 as a native Mac control-surface
   lane before any second runtime adapter.
 - update-readiness guidance now places v0.9/v1.0 on guarded `llama-server`
@@ -346,7 +349,9 @@ Good next automated candidates:
   documenting a concrete runtime-version compatibility case
 - implement one v0.8 toolbar/navigation slice that mirrors existing start,
   stop, restart, health, copy, profile import/export, clear-log, or command
-  preview behavior
+  preview behavior; the initial start/stop/restart/health toolbar shell is
+  covered, so the next toolbar slice should focus on copy, profile, logs, or
+  command-preview affordances
 - implement one non-mutating v0.9 update-readiness slice, such as install-source
   classification, version/capability summary, or dry-run update requirements
 - improve one `llama-server` reliability or daily-use path when the confusing

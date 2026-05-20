@@ -36,5 +36,38 @@ struct ContentView: View {
         }
         .groupBoxStyle(GlassGroupBoxStyle())
         .frame(minWidth: 640, minHeight: 700)
+        .toolbar {
+            ToolbarItemGroup {
+                Button {
+                    controller.start()
+                } label: {
+                    Label("Start", systemImage: "play.fill")
+                }
+                .disabled(!controller.canStart)
+
+                Button {
+                    controller.stop()
+                } label: {
+                    Label("Stop", systemImage: "stop.fill")
+                }
+                .disabled(!controller.canStop)
+
+                Button {
+                    controller.restart()
+                } label: {
+                    Label("Restart", systemImage: "arrow.clockwise")
+                }
+                .disabled(!controller.canRestart)
+            }
+
+            ToolbarItem {
+                Button {
+                    controller.checkEndpointHealth()
+                } label: {
+                    Label("Check Health", systemImage: "waveform.path.ecg")
+                }
+                .disabled(controller.endpointHealthStatus == .checking)
+            }
+        }
     }
 }
