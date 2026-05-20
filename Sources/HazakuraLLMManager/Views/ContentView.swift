@@ -73,6 +73,25 @@ struct ContentView: View {
             ToolbarItem {
                 Menu {
                     Button {
+                        exportRuntimeProfile()
+                    } label: {
+                        Label("Export Active Profile", systemImage: "square.and.arrow.up")
+                    }
+
+                    Button {
+                        importRuntimeProfile()
+                    } label: {
+                        Label("Import Profile", systemImage: "square.and.arrow.down")
+                    }
+                } label: {
+                    Label("Profile", systemImage: "doc.text")
+                }
+                .help("Import or export the active runtime profile")
+            }
+
+            ToolbarItem {
+                Menu {
+                    Button {
                         copy(controller.launchCommandPreview)
                     } label: {
                         Label("Copy Launch Command", systemImage: "terminal")
@@ -119,5 +138,19 @@ struct ContentView: View {
     private func copy(_ value: String) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(value, forType: .string)
+    }
+
+    private func exportRuntimeProfile() {
+        if let url = FilePanel.chooseProfileExportFile(
+            suggestedFileName: controller.runtimeProfileDocument.suggestedExportFileName
+        ) {
+            controller.exportRuntimeProfile(to: url)
+        }
+    }
+
+    private func importRuntimeProfile() {
+        if let url = FilePanel.chooseProfileImportFile() {
+            controller.importRuntimeProfile(from: url)
+        }
     }
 }

@@ -577,7 +577,7 @@ Candidate work:
 - maintain `docs/toolbar_and_navigation.md`
 - add a native macOS toolbar for existing start, stop, restart, health-check,
   copy, profile import/export, log clear, and command-preview actions (initial
-  start, stop, restart, and health-check shell done)
+  start, stop, restart, health-check, copy, and profile entries done)
 - keep toolbar state derived from the same controller state as the main views
 - add focused tests or view-model checks for toolbar action availability where
   practical

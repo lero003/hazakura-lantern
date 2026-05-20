@@ -14,19 +14,13 @@ struct ProfileView: View {
                     Spacer()
 
                     Button {
-                        if let url = FilePanel.chooseProfileExportFile(
-                            suggestedFileName: controller.runtimeProfileDocument.suggestedExportFileName
-                        ) {
-                            controller.exportRuntimeProfile(to: url)
-                        }
+                        exportRuntimeProfile()
                     } label: {
                         Label("Export", systemImage: "square.and.arrow.up")
                     }
 
                     Button {
-                        if let url = FilePanel.chooseProfileImportFile() {
-                            controller.importRuntimeProfile(from: url)
-                        }
+                        importRuntimeProfile()
                     } label: {
                         Label("Import", systemImage: "square.and.arrow.down")
                     }
@@ -40,6 +34,20 @@ struct ProfileView: View {
                 }
             }
             .padding(.vertical, 4)
+        }
+    }
+
+    private func exportRuntimeProfile() {
+        if let url = FilePanel.chooseProfileExportFile(
+            suggestedFileName: controller.runtimeProfileDocument.suggestedExportFileName
+        ) {
+            controller.exportRuntimeProfile(to: url)
+        }
+    }
+
+    private func importRuntimeProfile() {
+        if let url = FilePanel.chooseProfileImportFile() {
+            controller.importRuntimeProfile(from: url)
         }
     }
 }

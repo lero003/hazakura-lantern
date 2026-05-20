@@ -38,7 +38,7 @@ new behavior contract, that contract belongs in its own focused slice.
 2. Add copy actions that reuse existing endpoint and smoke-command behavior.
    Done.
 3. Add profile import/export entry points without adding multiple-profile
-   management.
+   management. Done.
 4. Add log clear and command-preview focus affordances if they stay local.
 5. Add keyboard shortcuts only for actions whose state is already well-defined.
 

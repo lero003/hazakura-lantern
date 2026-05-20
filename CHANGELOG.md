@@ -10,6 +10,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   endpoint health-check actions without adding new runtime behavior.
 - Added a toolbar copy menu for the existing launch command, endpoint,
   environment, health-check, and AI Mobile smoke snippets.
+- Added toolbar profile import/export entry points that reuse the existing
+  active-profile file flow without adding multiple-profile management.
 - Added post-public repository hygiene for CI action pinning, CODEOWNERS,
   Dependabot proposal configuration, and common local secret-ignore rules
   without changing remote GitHub settings or shipping packaged artifacts.
