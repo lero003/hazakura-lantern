@@ -68,6 +68,9 @@
 "Prepare GGUF Model" = "GGUFモデルを準備";
 "Prepare llama-server" = "llama-serverを準備";
 "Preset" = "プリセット";
+"preset.description.gemma" = "【Gemma向け】標準より控えめな文脈でKVキャッシュ圧縮を試す設定です。必要に応じて手動で伸ばします。";
+"preset.description.qwen" = "【Qwen向け】長めの文脈とKVキャッシュ圧縮を試す設定です。メモリ使用量と速度はモデルサイズに依存します。";
+"preset.description.standard" = "【標準】モデルとランタイムに任せる設定です。まずはここから始め、必要な項目だけ調整します。";
 "Process Status" = "プロセス状態";
 "Process Status:" = "プロセス状態:";
 "Profile" = "プロファイル";

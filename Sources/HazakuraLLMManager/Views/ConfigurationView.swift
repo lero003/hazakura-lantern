@@ -123,7 +123,7 @@ struct ConfigurationView: View {
                                 .foregroundStyle(.secondary)
                                 .lineLimit(2)
 
-                            Text(presetDescriptionJP(for: selectedPresetIntent))
+                            Text(LocalizedStringKey(presetDescriptionKey(for: selectedPresetIntent)))
                                 .font(.caption)
                                 .foregroundStyle(Color.accentColor)
                                 .lineLimit(2)
@@ -388,14 +388,14 @@ struct ConfigurationView: View {
         return "\(name) - \(path)"
     }
 
-    private func presetDescriptionJP(for intent: LlamaServerPresetIntent) -> String {
+    private func presetDescriptionKey(for intent: LlamaServerPresetIntent) -> String {
         switch intent {
         case .standard:
-            return "【標準】モデルとランタイムに任せる設定です。まずはここから始め、必要な項目だけ調整します。"
+            return "preset.description.standard"
         case .qwenRecommended:
-            return "【Qwen向け】長めの文脈とKVキャッシュ圧縮を試す設定です。メモリ使用量と速度はモデルサイズに依存します。"
+            return "preset.description.qwen"
         case .gemmaRecommended:
-            return "【Gemma向け】標準より控えめな文脈でKVキャッシュ圧縮を試す設定です。必要に応じて手動で伸ばします。"
+            return "preset.description.gemma"
         }
     }
 

@@ -68,6 +68,9 @@
 "Prepare GGUF Model" = "Prepare GGUF Model";
 "Prepare llama-server" = "Prepare llama-server";
 "Preset" = "Preset";
+"preset.description.gemma" = "Gemma: tries KV cache compression with a more conservative context than Qwen. Increase it manually only when needed.";
+"preset.description.qwen" = "Qwen: tries a longer context with KV cache compression. Memory use and speed still depend on model size.";
+"preset.description.standard" = "Standard: leaves core choices to the model and runtime. Start here, then adjust only what you need.";
 "Process Status" = "Process Status";
 "Process Status:" = "Process Status:";
 "Profile" = "Profile";

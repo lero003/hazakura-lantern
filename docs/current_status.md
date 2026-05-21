@@ -239,6 +239,8 @@ Implemented scope:
   review its context/thread/GPU/additional-argument summary, and apply it to
   the active configuration while preserving the selected runtime, model, host,
   and port.
+- Configuration preset guidance now uses English/Japanese app localization
+  resources instead of always showing the Japanese helper description.
 - Local `llama-server` capability probing can now run timeout-bounded
   `--version` and `--help` checks without model launch or runtime mutation,
   parse supported option names, and report preset options that appear

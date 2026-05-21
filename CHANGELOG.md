@@ -22,6 +22,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   slice and do not prevent unrelated safe release-polish work.
 - Removed duplicate `Process Status` localization entries and added focused
   tests for English/Japanese localization key parity.
+- Localized Configuration preset guidance so English UI no longer shows the
+  Japanese-only helper description.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 
