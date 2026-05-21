@@ -27,23 +27,26 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Automation Focus
 
-The project has a public source-only `v0.9.0-alpha.1` checkpoint for
-release-quality UI, menu bar, toolbar, localization, setup guidance, and
-non-mutating update-readiness work. Treat exact v0.x numbers as release
-history, not as the next work selector.
+The project has a public source-only `v1.0.0-rc.1` release candidate for
+personal/local use. It keeps the existing `llama-server` control boundary and
+does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
+binary distribution artifacts. Treat exact v0.x numbers as release history, not
+as the next work selector.
 
-Current human direction: defer the next public/opening or packaged-release
-judgment. Automation should keep progressing code-quality checks, focused
-quality improvements, and non-public v1 readiness evidence without cutting
-tags, GitHub Releases, packaged artifacts, or other public/release mutations.
+Current human direction: `v1.0.0-rc.1` is the selected source-only RC, while
+packaged app release work remains a separate future handoff. Automation should
+keep progressing code-quality checks, focused quality improvements, and
+release-readiness evidence without creating packaged artifacts, mutating runtime
+installs, changing GitHub settings, or deciding packaged-release readiness by
+itself.
 
 The default question for each automation run is:
 
 > Does this make Lantern closer to release-quality daily use without expanding
 > scope?
 
-Prefer failing quality checks, unfinished release-quality work, and non-public
-v1 readiness prep over advancing a release decision. The currently useful
+Prefer failing quality checks, unfinished release-quality work, and post-RC
+readiness prep over packaged-release work. The currently useful
 unfinished gates are:
 
 - fix failing `swift test`, `swift build --disable-sandbox`, localization lint,
@@ -63,9 +66,9 @@ unfinished gates are:
   toolbar, logs, and clean quit
 - concrete rough edges from `docs/automation_smoke_backlog.md` that can be
   fixed or exposed in one verified run
-- non-public v1 readiness prep such as release-gate clarity, deterministic
+- post-RC readiness prep such as release-gate clarity, deterministic
   smoke evidence, packaging-prep checks, update-workflow planning, or focused
-  tests that do not mutate runtime installs or public release state
+  tests that do not mutate runtime installs or packaged release state
 - external review preparation through `docs/external_review_flow.md` when the
   run needs release-readiness or future-direction feedback without making the
   release decision itself
@@ -121,8 +124,10 @@ wording, icon-only copy accessibility, logs retention wording, and
 source-checkpoint centralization. Health checks now follow the chosen rule:
 the action is disabled unless the server is running. Toolbar scope is also
 decided for now: keep only Setup Guide, profile import/export, and copy
-actions. Keep Hugging Face setup guidance, Homebrew copy placement, and v1
-release posture as human-decision items.
+actions. The v1 release posture is also decided for now: `v1.0.0-rc.1` is a
+source-only release candidate, while packaged release remains a later handoff.
+Keep Hugging Face setup guidance and Homebrew copy placement as human-decision
+items.
 
 For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
 Automation may fix one concrete UI, localization, smoke, setup-flow,
@@ -178,12 +183,12 @@ next.
 
 Release posture:
 
-- `v0.9.0-alpha.1` is acceptable as a source-only checkpoint when SwiftPM
+- `v1.0.0-rc.1` is acceptable as a source-only release candidate when SwiftPM
   verification passes and docs clearly state that no packaged `.app` artifact is
   attached.
-- The next public/opening or packaged-release decision is deferred to a future
-  human handoff. Automation may prepare evidence and close local quality gaps,
-  but should not decide readiness by itself.
+- Packaged-release readiness remains deferred to a future human handoff.
+  Automation may prepare evidence and close local quality gaps, but should not
+  decide packaged-release readiness by itself.
 - Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
   release until a normal desktop/manual launch and clean-quit pass is recorded.
   The 2026-05-21 helper smoke has mixed evidence and is not packaged release
@@ -223,13 +228,13 @@ Hourly posture:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.
-- Choose at most one small code-quality, release-quality, or non-public v1
-  readiness slice.
+- Choose at most one small code-quality, release-quality, or post-RC readiness
+  slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
   clear and verification passes.
 - Keep hourly runs quiet, but progress-biased. A verified no-op is valid when
   no failing quality check, unfinished release-quality gate, concrete rough
-  edge, or non-public v1 readiness prep is safely actionable in this run.
+  edge, or post-RC readiness prep is safely actionable in this run.
 
 Preferred order:
 
@@ -242,7 +247,7 @@ Preferred order:
    pre-release rough edge that can be verified in the same run.
 6. Add focused tests for observed `llama-server` launch, validation, health,
    endpoint, restart, copy-flow, or profile-warning behavior.
-7. Prepare non-public v1 evidence, such as packaging-prep checks, release-gate
+7. Prepare post-RC readiness evidence, such as packaging-prep checks, release-gate
    wording, deterministic smoke notes, guarded update-workflow planning, or
    test coverage that does not perform real runtime or release mutation.
 8. Prepare external review packets when outside judgment is needed, using

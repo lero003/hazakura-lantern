@@ -10,7 +10,7 @@ Use this after reading `docs/current_status.md`, `docs/roadmap.md`, and
 ## Purpose
 
 Automation should help expose and fix small product-quality issues while the app
-is still pre-1.0:
+is source-only and not yet packaged:
 
 - UI labels that are confusing, clipped, duplicated, or stale
 - menu bar, toolbar, and Setup Guide flows that mirror existing behavior poorly
@@ -108,10 +108,11 @@ were already covered on `main` after the reviewed snapshot: copy feedback,
 running-only health checks, Setup Guide no-runtime wording, endpoint copy
 accessibility, logs retention wording, source-checkpoint centralization,
 localized preset descriptions, duplicate localization key cleanup, and toolbar
-reduction. Keep the remaining current signals narrow: normal desktop/manual UI
-smoke is still missing, helper launch smoke is still not packaged-release
-proof, and Hugging Face setup guidance / v1.0 release posture / Homebrew
-command placement remain human-decision items.
+reduction. The v1.0 release posture is now decided: `v1.0.0-rc.1` is
+source-only, while packaged release remains a later handoff. Keep the remaining
+current signals narrow: normal desktop/manual UI smoke is still missing, helper
+launch smoke is still not packaged-release proof, and Hugging Face setup
+guidance / Homebrew command placement remain human-decision items.
 
 ### 2026-05-21 Gemini Intake
 
@@ -249,8 +250,6 @@ Human decision:
 
 - decide whether the in-app Hugging Face search link stays, is demoted to docs,
   or gets stronger no-download/no-catalog wording
-- decide whether v1.0 is allowed to be source-only, an RC, or only the first
-  packaged app release
 - decide whether the Homebrew command copy button remains in Setup Guide or
   moves to docs-only setup guidance
 

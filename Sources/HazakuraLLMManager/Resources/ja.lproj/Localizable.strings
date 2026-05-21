@@ -105,7 +105,7 @@
 "Show the dashboard command preview" = "ダッシュボードのコマンドプレビューを表示します";
 "Source Checkpoint" = "ソースチェックポイント";
 "Source checkpoint" = "ソースチェックポイント";
-"Source-only alpha; no packaged app artifact is included." = "ソースのみのアルファ版です。パッケージ済みアプリ成果物は含まれていません。";
+"Source-only release candidate; no packaged app artifact is included." = "ソースのみのリリース候補版です。パッケージ済みアプリ成果物は含まれていません。";
 "Start" = "開始";
 "Starting" = "起動中";
 "Start Server" = "サーバーを開始";

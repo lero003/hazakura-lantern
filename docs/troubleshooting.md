@@ -53,7 +53,8 @@ Checks:
 - Health state is intentionally manual; there is no automatic polling yet.
 
 The health check is a local smoke signal from this Mac. LAN exposure,
-authentication, and remote reachability remain outside v0 and v0.1.
+authentication, and remote reachability remain outside the current source
+release candidate.
 
 ## App Bundle Launch Smoke
 
@@ -95,7 +96,7 @@ a normal desktop/manual launch and clean-quit pass and update
 Allowed before a packaged-release smoke pass exists:
 
 - SwiftPM build/test verification.
-- Source-only alpha checkpoints.
+- Source-only release candidates and checkpoints.
 - Prerelease notes that clearly state no packaged `.app` artifact is attached.
 
 Not allowed yet:

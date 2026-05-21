@@ -4,8 +4,15 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+No changes yet.
+
+## v1.0.0-rc.1 - 2026-05-22
+
 ### Changed
 
+- Released a source-only release candidate for personal/local use, with no
+  packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
+  distribution artifact.
 - Added an external review flow for paste-ready release-readiness and
   future-direction feedback requests, including a bounded way to ask whether
   image or multimedia generation belongs in Lantern, a future design note, or a
@@ -29,9 +36,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   local runtime version evidence is available, and never executes an update.
 - Added a Setup Guide Homebrew update command copy affordance for manual
   `llama.cpp` upgrades.
-- Clarified the recurring automation posture so public/release judgment remains
-  deferred while automated runs continue code-quality checks, narrow
-  improvements, and non-public v1 readiness prep.
+- Clarified the recurring automation posture leading into the source-only RC,
+  keeping packaged-release judgment separate while automated runs continue
+  code-quality checks and narrow improvements.
 - Folded the 2026-05-21 Gemini v1 polish review into the automation smoke
   backlog, with bounded follow-up tasks for localization coverage,
   HelpTooltip copy, launch-helper hypotheses, toolbar evidence, and log-policy

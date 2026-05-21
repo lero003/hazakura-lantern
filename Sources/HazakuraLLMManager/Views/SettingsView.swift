@@ -30,7 +30,7 @@ struct SettingsView: View {
             Section("Source Checkpoint") {
                 LabeledContent("Source checkpoint", value: SourceCheckpointInfo.current.identifier)
 
-                Text("Source-only alpha; no packaged app artifact is included.")
+                Text("Source-only release candidate; no packaged app artifact is included.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

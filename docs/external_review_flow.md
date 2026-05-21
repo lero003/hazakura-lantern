@@ -9,7 +9,7 @@ the release decision.
 Keep release readiness and future product direction separate.
 
 1. Current release/readiness review
-   - Is the source-only alpha honest, useful, and understandable?
+   - Is the source-only release candidate honest, useful, and understandable?
    - Are the known release gates clear enough?
    - What should block a packaged app release?
 2. Future direction review
@@ -26,9 +26,9 @@ there is a human handoff for that exact action.
 
 Before asking for current release feedback, gather:
 
-- latest checkpoint: `v0.9.0-alpha.1`
+- latest checkpoint: `v1.0.0-rc.1`
 - branch and working-tree state: `git status --short --branch`
-- recent commits since the checkpoint: `git log --oneline v0.9.0-alpha.1..HEAD`
+- recent commits since the checkpoint: `git log --oneline v1.0.0-rc.1..HEAD`
 - verification results: `swift test`, `swift build --disable-sandbox`,
   localization lint if resources changed, and `git diff --check`
 - current release gates from `docs/current_status.md` and `docs/roadmap.md`
@@ -46,12 +46,12 @@ list alone.
 I want an external release-readiness review for Hazakura Lantern.
 
 Project state:
-- macOS SwiftUI source-only alpha
-- latest checkpoint: v0.9.0-alpha.1
+- macOS SwiftUI source-only release candidate
+- latest checkpoint: v1.0.0-rc.1
 - no packaged .app, zip, dmg, signing, notarization, checksum, or binary
   distribution claim
-- current lane: release-quality UI, menu bar, toolbar, localization, setup
-  guidance, and non-mutating llama.cpp update-readiness
+- current lane: source-only RC polish, manual desktop smoke evidence, and
+  packaged-release readiness separation
 
 Product boundary:
 - Lantern supervises an existing local llama-server process.
@@ -69,7 +69,7 @@ Known evidence:
   packaged app release.
 
 Please review:
-1. Are the source-only alpha claims honest and understandable?
+1. Are the source-only release-candidate claims honest and understandable?
 2. What, if anything, must be fixed before another source checkpoint?
 3. What must block a packaged app release?
 4. Are any docs or UI claims stronger than the implementation evidence?
@@ -102,7 +102,7 @@ Please review:
 2. If it belongs near Lantern, is the shared concept "local runtime control" or
    "creative generation workspace"?
 3. What boundary would prevent image/video/audio generation from confusing the
-   current source-only alpha?
+   current source-only release candidate?
 4. Which first experiment would be smallest: supervising an existing local
    image-generation server, documenting a separate project thesis, or doing
    nothing until Lantern reaches packaged-release confidence?

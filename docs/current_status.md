@@ -7,10 +7,9 @@ Last reviewed: 2026-05-22
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v0.9.0-alpha.1` is a public source-only alpha for
-release-quality UI, menu bar, toolbar, localization, setup guidance, and
-non-mutating `llama-server` update-readiness work. It is not a packaged app
-release.
+Current release checkpoint: `v1.0.0-rc.1` is a public source-only release
+candidate for personal/local use. It keeps the existing `llama-server` control
+boundary and is not a packaged app release.
 
 Implemented scope:
 
@@ -216,7 +215,7 @@ Implemented scope:
 - Public bug-report guidance now asks for reproduction steps, runtime adapter
   id, profile schema version, command previews, and redacted logs while keeping
   chat, model download, proxy, LAN exposure, authentication, runtime installer,
-  and packaged-app requests outside the current source-only alpha boundary.
+  and packaged-app requests outside the current source-only RC boundary.
 - Local/static public-opening review has checked workflow, issue-template,
   manifest, script, README, changelog, and docs guidance for surprising CI
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
@@ -230,7 +229,7 @@ Implemented scope:
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
 - Compact troubleshooting guide for setup, endpoint health, app-bundle smoke,
-  and source-only alpha release boundaries.
+  and source-only release boundaries.
 - Troubleshooting now includes local file checks for confirming the selected
   `llama-server` executable and `.gguf` model before widening runtime scope.
 - Post-public operations guidance for issue triage, automation-safe work,
@@ -425,7 +424,8 @@ matched.
 - Runtime update availability checks are advisory and networked only when the
   user presses Check for Updates. Lantern does not run package-manager, Git,
   download, or binary replacement commands.
-- LAN exposure and authentication are intentionally outside v0.
+- LAN exposure and authentication are intentionally outside the current source
+  release candidate.
 
 ## Automation Focus
 
@@ -433,11 +433,11 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: keep the next public/opening or packaged-release
-judgment deferred. Automation should continue code-quality checks, narrow
-verified improvements, and non-public v1 readiness prep, but should not cut
-tags, publish releases, change GitHub public state, create packaged artifacts,
-or decide release readiness by itself.
+Current human direction: `v1.0.0-rc.1` is the source-only RC for personal/local
+use. Packaged app release remains separate: automation should continue
+code-quality checks, narrow verified improvements, and packaged-release
+readiness evidence, but should not create packaged artifacts, change GitHub
+settings, mutate public issues, or decide packaged-release readiness by itself.
 
 No user-facing packaged release should be cut until the remaining release
 quality gates below are resolved or explicitly deferred by a human.
@@ -455,8 +455,8 @@ Open release-quality gates:
 - verify profile file-flow feedback on a normal macOS desktop, especially
   toolbar and menu bar import/export actions when the Profile panel is not
   visible
-- resolve the most visible UI-localization mismatches, with preset descriptions
-  and HelpTooltip policy as the first review targets
+- verify the most visible UI-localization surfaces after the recent preset,
+  Endpoint, and HelpTooltip cleanup; fix one concrete mismatch at a time
 - verify the menu bar daily-use path on a normal macOS desktop, including
   status visibility, lifecycle actions, copy actions, and `Open Window`
   behavior from hidden or backgrounded window states
@@ -522,7 +522,7 @@ Good next automated candidates:
   by build/tests
 - review the Setup Guide inspector against the normal Configuration flow and
   remove duplication or crowding if it is visible
-- prepare non-public v1 readiness evidence, such as release-gate clarity,
+- prepare post-RC readiness evidence, such as release-gate clarity,
   deterministic smoke notes, packaging-prep checks, guarded update-workflow
   planning, or focused tests, without executing runtime updates or public
   release mutations

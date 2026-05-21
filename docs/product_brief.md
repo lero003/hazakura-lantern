@@ -28,7 +28,8 @@ The first implementation proves the core loop:
 ## Adapter Boundary
 
 The app keeps runtime-specific command construction behind `RuntimeAdapter`.
-Only `LlamaServerAdapter` is implemented for v0.
+Only `LlamaServerAdapter` is implemented for the current source release
+candidate.
 
 Near-term work should keep improving the existing `llama-server` path before
 adding runtime breadth. The next product value is model-family guidance for

@@ -81,7 +81,8 @@ Before asking a human to make the repository public, confirm:
 - README states the current source-only checkpoint and does not imply a packaged
   app artifact exists
 - CHANGELOG has an `Unreleased` section and latest source checkpoint entry
-- docs clearly separate source-only alpha checkpoints from packaged releases
+- docs clearly separate source-only checkpoints or release candidates from
+  packaged releases
 - `.github/workflows/` does not use surprising privileged triggers or broad
   permissions for the current project shape
 - no committed docs or scripts ask users to pipe remote scripts into a shell

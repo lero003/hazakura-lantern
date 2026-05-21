@@ -47,10 +47,14 @@ review_after:
 - Added an external review flow so current-release feedback and future product
   direction feedback can be requested without treating outside comments as
   release approval or immediate scope expansion.
+- Advanced the source-only release framing to `v1.0.0-rc.1` for personal/local
+  use, while keeping packaged app distribution on a separate manual-smoke and
+  packaging handoff path.
 
 ## Reason
 
-Hazakura Lantern now has source-only prerelease checkpoints and recurring
+Hazakura Lantern now has source-only prerelease checkpoints and a source-only
+release candidate, plus recurring
 automation that should treat v0.3 adapter-boundary and v0.4 `llama-server`
 reliability as prior lanes unless a concrete ambiguity or regression is visible.
 The current default lane is v0.5 post-public issue triage and automation
@@ -67,8 +71,8 @@ breadth.
 ## Expected Behavior
 
 - Future runs use Nenrin for release/automation/scope judgment evidence, keep
-  `v0.5.0-alpha.1` as a public source-only checkpoint, treat Launch Services
-  as a packaged-app release blocker, and skip records for ordinary
+  `v1.0.0-rc.1` as the current source-only RC, treat Launch Services and normal
+  desktop/manual smoke as packaged-app release blockers, and skip records for ordinary
   implementation logs.
 - Future review feedback is pruned against the current lane: keep concrete
   v0.5 public-feedback classification, automation-safe triage, docs hygiene,
@@ -105,8 +109,9 @@ breadth.
 
 - Future automation runs `nenrin brief` before release, lane-handoff, or
   recurring workflow decisions where prior judgment could change the next step.
-- `v0.5.0-alpha.1` remains framed as source-only, with no packaged `.app`
-  artifact or release claim.
+- `v1.0.0-rc.1` remains framed as source-only, with no packaged `.app`
+  artifact, binary distribution, signing, notarization, checksum, or packaged
+  release claim.
 - Post-public stewardship classifies public feedback before implementation and
   keeps public-opening preflight as a historical/release-handoff checklist.
 - If v0.5 triage is quiet, automation can progress into v0.6 presets and v0.7

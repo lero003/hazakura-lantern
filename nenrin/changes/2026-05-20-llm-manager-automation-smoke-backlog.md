@@ -28,7 +28,13 @@ review_after:
 - Clarified that human-decision items block only their exact slice, not unrelated safe automation work.
 - Recorded the 2026-05-22 human decisions that health checks are running-server-only and the main toolbar should stay reduced to Setup Guide, profile import/export, and copy actions.
 - Recorded the 2026-05-22 human decision that `llama.cpp` may have an explicit, user-triggered, non-mutating Check for Updates action, while other runtime update checks remain future human decisions.
-- Recorded the 2026-05-22 human direction that public/release judgment stays deferred while automation continues code-quality checks, narrow verified improvements, and non-public v1 readiness prep.
+- Recorded the earlier 2026-05-22 direction that public/release judgment stayed
+  deferred while automation continued code-quality checks, narrow verified
+  improvements, and non-public v1 readiness prep; this is now superseded by the
+  source-only RC decision below.
+- Recorded the 2026-05-22 human decision to release `v1.0.0-rc.1` as a
+  source-only RC for personal/local use, while keeping packaged app release work
+  separate and blocked on manual desktop evidence.
 
 ## Reason
 
@@ -47,7 +53,10 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 - Future runs should not re-add lifecycle, health, command-reveal, or log-clear actions to the toolbar unless a human explicitly reopens toolbar scope.
 - Future runs should keep manual health-check controls disabled until the server is running.
 - Future runs may polish or test the `llama.cpp` update check while it remains advisory and non-mutating, but should not add other runtime targets or execute package-manager/Git/download/binary-replacement updates without explicit approval.
-- Future runs should fix failing quality checks first, then choose one narrow code-quality, release-quality, or non-public v1 readiness slice; they should not cut tags, publish releases, create packaged artifacts, mutate runtime installs, or decide readiness without an explicit human handoff.
+- Future runs should fix failing quality checks first, then choose one narrow
+  code-quality, release-quality, or post-RC readiness slice; they should not
+  create packaged artifacts, mutate runtime installs, or decide packaged-release
+  readiness without an explicit human handoff.
 
 ## Review After
 

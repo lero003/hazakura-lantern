@@ -12,12 +12,12 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v0.9.0-alpha.1` is a public source-only alpha focused on
-release-quality UI, menu bar, toolbar, localization, setup guidance, and
-non-mutating `llama-server` update-readiness work. It does not include a
-packaged `.app`, zip, dmg, signing, or notarization artifact.
+Current checkpoint: `v1.0.0-rc.1` is a public source-only release candidate
+for personal/local use. It keeps the existing `llama-server` control boundary
+and does not include a packaged `.app`, zip, dmg, signing, notarization,
+checksum, or binary distribution artifact.
 
-## v0 Scope
+## Current Source Scope
 
 - Select a `llama-server` executable.
 - Select a local `.gguf` model.
@@ -37,7 +37,7 @@ packaged `.app`, zip, dmg, signing, or notarization artifact.
 - No chat UI.
 - No proxy layer or OpenAI API compatibility shim.
 - No LAN exposure by default.
-- No API key/authentication gate in v0.
+- No API key/authentication gate in the current source release candidate.
 
 ## Local Development
 
