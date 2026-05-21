@@ -49,7 +49,7 @@ struct LogsView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.white.opacity(0.08), lineWidth: 1)
                     }
-                    .onChange(of: controller.logEntries.count) {
+                    .onChange(of: controller.logEntries.count) { _, _ in
                         guard let last = controller.logEntries.last else {
                             return
                         }

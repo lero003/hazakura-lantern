@@ -16,7 +16,7 @@ struct StatusHeaderView: View {
                 .onAppear {
                     startLanternPulse()
                 }
-                .onChange(of: controller.status) {
+                .onChange(of: controller.status) { _, _ in
                     startLanternPulse()
                 }
 
@@ -85,7 +85,7 @@ private struct StatusBadge: View {
                 .onAppear {
                     startPulseIfNeeded()
                 }
-                .onChange(of: status) {
+                .onChange(of: status) { _, _ in
                     startPulseIfNeeded()
                 }
 
