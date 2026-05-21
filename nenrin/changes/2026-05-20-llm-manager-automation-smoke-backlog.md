@@ -26,6 +26,9 @@ review_after:
 - Folded the 2026-05-21 DeepSeek v1 polish review into the backlog as bounded copy-feedback, preset-localization, localization-key cleanup, menu-bar accessibility, disabled-button, and stopped-background follow-up input.
 - Folded the 2026-05-21 Chika v1 polish review into the backlog as bounded release-evidence, manual-smoke, health-check policy, Setup Guide empty-state, copy-accessibility, logs-retention, and source-checkpoint follow-up input.
 - Clarified that human-decision items block only their exact slice, not unrelated safe automation work.
+- Recorded the 2026-05-22 human decisions that health checks are running-server-only and the main toolbar should stay reduced to Setup Guide, profile import/export, and copy actions.
+- Recorded the 2026-05-22 human decision that `llama.cpp` may have an explicit, user-triggered, non-mutating Check for Updates action, while other runtime update checks remain future human decisions.
+- Recorded the 2026-05-22 human direction that public/release judgment stays deferred while automation continues code-quality checks, narrow verified improvements, and non-public v1 readiness prep.
 
 ## Reason
 
@@ -41,6 +44,10 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 - Future runs should prefer one repo-grounded daily-use rough edge at a time, especially copy feedback consistency, visible localization mismatches, menu bar accessibility, disabled button visibility, or stopped-state animation behavior.
 - Future runs should keep helper-smoke documentation internally consistent before using it for release judgment, and should record normal desktop/manual smoke only from a real app session.
 - Future runs should not treat toolbar, release-posture, packaging, or product-policy decisions as global blockers when another safe P0/P1 polish slice is available.
+- Future runs should not re-add lifecycle, health, command-reveal, or log-clear actions to the toolbar unless a human explicitly reopens toolbar scope.
+- Future runs should keep manual health-check controls disabled until the server is running.
+- Future runs may polish or test the `llama.cpp` update check while it remains advisory and non-mutating, but should not add other runtime targets or execute package-manager/Git/download/binary-replacement updates without explicit approval.
+- Future runs should fix failing quality checks first, then choose one narrow code-quality, release-quality, or non-public v1 readiness slice; they should not cut tags, publish releases, create packaged artifacts, mutate runtime installs, or decide readiness without an explicit human handoff.
 
 ## Review After
 

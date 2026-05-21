@@ -12,6 +12,10 @@ final class ServerController: ObservableObject {
     @Published private(set) var runtimeCapabilityProbeResult: LlamaServerCapabilityProbeResult?
     @Published private(set) var runtimeCapabilityProbeMessage: String?
     @Published private(set) var isRuntimeCapabilityProbeRunning = false
+    @Published var runtimeUpdateCheckTarget: RuntimeUpdateCheckTarget = .llamaCpp
+    @Published private(set) var runtimeUpdateAvailability: RuntimeUpdateAvailability?
+    @Published private(set) var runtimeUpdateAvailabilityMessage: String?
+    @Published private(set) var isRuntimeUpdateCheckRunning = false
     @Published private(set) var recentPaths: RecentRuntimePaths
     @Published private(set) var detectedRuntimeExecutablePaths: [String]
     @Published var configuration: RuntimeConfiguration
@@ -58,6 +62,10 @@ final class ServerController: ObservableObject {
         status == .running || status == .error
     }
 
+    var canCheckEndpointHealth: Bool {
+        status == .running && endpointHealthStatus != .checking
+    }
+
     var launchCommandPreview: String {
         do {
             return try adapter.buildLaunchCommand(config: configuration).displayString
@@ -96,6 +104,14 @@ final class ServerController: ObservableObject {
             executablePath: configuration.runtimeExecutablePath,
             capabilityResult: runtimeCapabilityProbeResult
         )
+    }
+
+    var runtimeUpdateDisplayMessage: String? {
+        if let runtimeUpdateAvailability {
+            return "\(runtimeUpdateAvailability.title). \(runtimeUpdateAvailability.detail)"
+        }
+
+        return runtimeUpdateAvailabilityMessage
     }
 
     func updateConfiguration(_ update: (inout RuntimeConfiguration) -> Void) {
@@ -178,6 +194,52 @@ final class ServerController: ObservableObject {
                 self.runtimeCapabilityProbeMessage = result.capabilities.versionSummary.map {
                     "Runtime: \($0)"
                 } ?? "Runtime version unavailable."
+                self.runtimeUpdateAvailability = nil
+                self.runtimeUpdateAvailabilityMessage = nil
+            }
+        }
+    }
+
+    func checkRuntimeUpdates() {
+        guard !isRuntimeUpdateCheckRunning else {
+            return
+        }
+
+        isRuntimeUpdateCheckRunning = true
+        runtimeUpdateAvailability = nil
+        runtimeUpdateAvailabilityMessage = nil
+
+        let target = runtimeUpdateCheckTarget
+        let localVersionSummary = runtimeCapabilityProbeResult?.capabilities.versionSummary
+
+        Task { [weak self] in
+            do {
+                let availability = try await RuntimeUpdateAvailabilityChecker().check(
+                    target: target,
+                    localVersionSummary: localVersionSummary
+                )
+                await MainActor.run { [weak self] in
+                    guard let self else {
+                        return
+                    }
+
+                    self.isRuntimeUpdateCheckRunning = false
+                    guard self.runtimeUpdateCheckTarget == target else {
+                        self.runtimeUpdateAvailabilityMessage = "Runtime update target changed; check for updates again."
+                        return
+                    }
+
+                    self.runtimeUpdateAvailability = availability
+                }
+            } catch {
+                await MainActor.run { [weak self] in
+                    guard let self else {
+                        return
+                    }
+
+                    self.isRuntimeUpdateCheckRunning = false
+                    self.runtimeUpdateAvailabilityMessage = "Update check failed: \(error.localizedDescription)"
+                }
             }
         }
     }
@@ -320,6 +382,11 @@ final class ServerController: ObservableObject {
     }
 
     func checkEndpointHealth() {
+        guard status == .running else {
+            endpointHealthStatus = .unchecked
+            return
+        }
+
         let endpoint: RuntimeEndpoint
         do {
             endpoint = try adapter.endpoint(config: configuration)
@@ -419,5 +486,7 @@ final class ServerController: ObservableObject {
     private func clearRuntimeCapabilityProbe() {
         runtimeCapabilityProbeResult = nil
         runtimeCapabilityProbeMessage = nil
+        runtimeUpdateAvailability = nil
+        runtimeUpdateAvailabilityMessage = nil
     }
 }

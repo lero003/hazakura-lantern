@@ -66,8 +66,8 @@ visual rough edge, prefer these targets:
 - Japanese and English Settings language changes
 - menu bar status, Start, Stop, Restart, Check Health, copy actions, Open Window,
   and Quit
-- toolbar Start, Stop, Restart, Check Health, Setup Guide, Clear Logs, Profile,
-  and Copy menus
+- reduced toolbar state: Setup Guide, profile import/export, and Copy remain
+  reachable while lifecycle, health, command reveal, and log clear are absent
 - Dashboard launch command preview and endpoint copy controls
 - Logs empty state, append state, and clear action
 
@@ -136,8 +136,9 @@ Conditionally accepted:
 
 Deferred or human decision:
 
-- toolbar demotion remains a product decision; automation may document evidence
-  or polish labels, but must not remove broad toolbar controls without approval
+- toolbar removal beyond the current reduced utility strip remains a product
+  decision; automation may polish Setup Guide, profile import/export, and copy
+  controls, but must not add broad toolbar controls without approval
 - log persistence is post-v1 unless the user explicitly reopens it; keep
   in-memory logs and clear-log behavior simple
 - signing, notarization, packaging, zip/dmg/checksum creation, and official
@@ -189,8 +190,10 @@ Human decision:
 - choose whether HelpTooltip technical copy should be fully localized, English
   only, or kept as mixed bilingual copy. Automation may prepare evidence and
   localize one small group only after the intended policy is clear.
-- toolbar simplification remains a product decision; automation may gather
-  daily-use evidence, but should not remove actions broadly.
+- toolbar simplification is decided for the current lane: keep Setup Guide,
+  profile import/export, and copy actions only. Automation may polish those
+  controls or record smoke evidence, but should not add lifecycle, health,
+  command-reveal, or log-clear actions back without approval.
 - log persistence remains deferred; keep the v1 path on bounded in-memory logs
   unless the user explicitly changes the product requirement.
 
@@ -204,8 +207,8 @@ Accepted for automation:
   plus clean quit remain required before packaged release
 - add a dated manual-smoke record when a normal macOS desktop pass is actually
   performed; do not infer UI smoke from SwiftPM or helper-script evidence
-- align health-check enabled states across toolbar, menu bar, Endpoint, and
-  Setup Guide after the product rule is explicit
+- keep health-check enabled states aligned with the chosen product rule:
+  manual checks are disabled until the server is running
 - keep the Setup Guide no-installed-runtime empty state covered: it now states
   that no installed `llama-server` was detected while keeping manual Choose
   available and avoiding package-manager execution
@@ -218,8 +221,6 @@ Accepted for automation:
 
 Human decision:
 
-- decide whether health checks should be disabled until the server is running
-  or remain available as a raw configured-endpoint check
 - decide whether the in-app Hugging Face search link stays, is demoted to docs,
   or gets stronger no-download/no-catalog wording
 - decide whether v1.0 is allowed to be source-only, an RC, or only the first
@@ -291,7 +292,8 @@ slice:
 - custom app icon or brand asset creation
 - first-run Welcome screen that changes onboarding flow beyond the existing
   Setup Guide inspector
-- toolbar removal, toolbar demotion, or menu-bar-only lifecycle
+- toolbar removal beyond the current reduced utility strip, or menu-bar-only
+  lifecycle
 - launch-at-login, automatic restart policy, endpoint auto-polling, multiple
   profiles, or window-close education dialogs
 - log persistence or automatic log-file writing
@@ -350,8 +352,8 @@ exists.
   runtime logs, copied commands, profile JSON, or adapter-owned diagnostic text.
 - Tighten Setup Guide inspector spacing only when a concrete overflow or
   crowding case is visible.
-- Reduce toolbar density only when a specific repeated-use problem is visible;
-  do not remove the toolbar without a human decision.
+- Keep the toolbar reduced to Setup Guide, profile import/export, and copy
+  actions unless a human explicitly reopens toolbar scope.
 
 ### Menu Bar And Toolbar
 
@@ -432,6 +434,9 @@ exists.
 
 - Add or refine a non-mutating source/readiness explanation for Homebrew,
   MacPorts, source builds, manual binaries, or unknown sources.
+- Keep `llama.cpp` Check for Updates advisory: it may fetch official latest
+  release metadata only after the user presses the button, compare `bNNNN`
+  build numbers when possible, and must not execute updates.
 - Add fake-driven tests for update-readiness planning or unsupported-source
   messaging.
 - Keep all update-readiness work advisory. Do not execute package-manager,

@@ -4,6 +4,7 @@
 "Apply Preset" = "Apply Preset";
 "Apply to Configuration" = "Apply to Configuration";
 "Check Health" = "Check Health";
+"Check for Updates" = "Check for Updates";
 "Check Runtime" = "Check Runtime";
 "Choose GGUF" = "Choose GGUF";
 "Choose GGUF Model" = "Choose GGUF Model";
@@ -91,11 +92,13 @@
 "Running" = "Running";
 "Runtime logs stay in memory and are not saved automatically." = "Runtime logs stay in memory and are not saved automatically.";
 "Runtime Profile" = "Runtime Profile";
+"Runtime Update Target" = "Runtime Update Target";
 "Scan Installed" = "Scan Installed";
 "Select an item" = "Select an item";
 "Server" = "Server";
 "Server Configuration" = "Server Configuration";
 "Server Controls" = "Server Controls";
+"Settings" = "Settings";
 "Setup Guide" = "Setup Guide";
 "Show Command" = "Show Command";
 "Show Setup Guide" = "Show Setup Guide";
@@ -114,6 +117,7 @@
 "System" = "System";
 "This setup step is complete." = "This setup step is complete.";
 "Threads" = "Threads";
+"To update an existing Homebrew runtime, run this command manually:" = "To update an existing Homebrew runtime, run this command manually:";
 "Additional Args" = "Additional Args";
 "Use Installed Runtime" = "Use Installed Runtime";
 "llama-server binary is required to host local model processes." = "llama-server binary is required to host local model processes.";

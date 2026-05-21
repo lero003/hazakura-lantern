@@ -15,9 +15,10 @@ struct HazakuraLLMManagerApp: App {
     var body: some Scene {
         WindowGroup(localized("Hazakura Lantern"), id: "main") {
             ContentView(controller: controller)
-                .frame(minWidth: 860, minHeight: 680)
+                .frame(minWidth: 980, minHeight: 680)
                 .environment(\.locale, appLanguage.locale)
         }
+        .windowStyle(.hiddenTitleBar)
         .commands {
             CommandMenu(localized("Server")) {
                 Button(localized("Start")) {

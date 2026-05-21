@@ -176,6 +176,40 @@ struct ConfigurationView: View {
                                 }
                             }
 
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack(spacing: 8) {
+                                    Picker("Runtime Update Target", selection: $controller.runtimeUpdateCheckTarget) {
+                                        ForEach(RuntimeUpdateCheckTarget.allCases) { target in
+                                            Text(target.displayName)
+                                                .tag(target)
+                                        }
+                                    }
+                                    .labelsHidden()
+                                    .pickerStyle(.menu)
+                                    .frame(width: 150)
+
+                                    Button {
+                                        controller.checkRuntimeUpdates()
+                                    } label: {
+                                        Label("Check for Updates", systemImage: "arrow.down.circle")
+                                    }
+                                    .buttonStyle(SecondaryButtonStyle())
+                                    .disabled(controller.isRuntimeUpdateCheckRunning)
+
+                                    if controller.isRuntimeUpdateCheckRunning {
+                                        ProgressView()
+                                            .controlSize(.small)
+                                    }
+                                }
+
+                                if let message = controller.runtimeUpdateDisplayMessage {
+                                    Label(message, systemImage: "arrow.down.circle")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+
                             if let note = controller.runtimeCapabilityProbeResult?.presetCompatibilityNote(for: selectedPreset) {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Label(note.title, systemImage: compatibilitySystemImage(for: note.severity))
@@ -250,10 +284,11 @@ struct ConfigurationView: View {
                                         Text("auto")
                                             .foregroundStyle(.secondary)
                                             .font(.system(.body, design: .monospaced))
+                                            .lineLimit(1)
                                             .padding(.horizontal, 10)
                                             .padding(.vertical, 6)
                                             .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
-                                            .frame(width: 50)
+                                            .frame(width: 64)
                                     }
                                 }
                             }
@@ -280,10 +315,11 @@ struct ConfigurationView: View {
                                         Text("auto")
                                             .foregroundStyle(.secondary)
                                             .font(.system(.body, design: .monospaced))
+                                            .lineLimit(1)
                                             .padding(.horizontal, 10)
                                             .padding(.vertical, 6)
                                             .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.2)))
-                                            .frame(width: 50)
+                                            .frame(width: 64)
                                     }
                                 }
                             }

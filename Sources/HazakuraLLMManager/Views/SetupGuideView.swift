@@ -5,6 +5,7 @@ struct SetupGuideView: View {
     @ObservedObject var controller: ServerController
     @State private var selectedPresetIntent: LlamaServerPresetIntent = .standard
     @State private var isHomebrewCopied = false
+    @State private var isUpdateCommandCopied = false
 
     private static let ggufModelSearchURL = URL(string: "https://huggingface.co/models?search=gguf")
 
@@ -101,6 +102,25 @@ struct SetupGuideView: View {
                                 VStack(alignment: .leading, spacing: 8) {
                                     homebrewCommandLabel
                                     copyHomebrewButton
+                                }
+                            }
+
+                            Text("To update an existing Homebrew runtime, run this command manually:")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+
+                            ViewThatFits(in: .horizontal) {
+                                HStack {
+                                    updateCommandLabel
+
+                                    Spacer()
+
+                                    copyUpdateCommandButton
+                                }
+
+                                VStack(alignment: .leading, spacing: 8) {
+                                    updateCommandLabel
+                                    copyUpdateCommandButton
                                 }
                             }
 
@@ -448,6 +468,33 @@ struct SetupGuideView: View {
         .buttonStyle(SecondaryButtonStyle())
     }
 
+    private var updateCommandLabel: some View {
+        Text("brew upgrade llama.cpp")
+            .font(.system(.caption, design: .monospaced))
+            .lineLimit(1)
+            .minimumScaleFactor(0.85)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Color.black.opacity(0.3), in: RoundedRectangle(cornerRadius: 6))
+    }
+
+    private var copyUpdateCommandButton: some View {
+        Button {
+            PasteboardWriter.copy("brew upgrade llama.cpp")
+            isUpdateCommandCopied = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                isUpdateCommandCopied = false
+            }
+        } label: {
+            Label(
+                isUpdateCommandCopied ? "Copied!" : "Copy",
+                systemImage: isUpdateCommandCopied ? "checkmark" : "doc.on.doc"
+            )
+            .font(.caption)
+        }
+        .buttonStyle(SecondaryButtonStyle())
+    }
+
     private var launchToggleButton: some View {
         Button {
             if controller.status == .running {
@@ -473,7 +520,7 @@ struct SetupGuideView: View {
                 .font(.caption)
         }
         .buttonStyle(SecondaryButtonStyle())
-        .disabled(controller.status != .running || controller.endpointHealthStatus == .checking)
+        .disabled(!controller.canCheckEndpointHealth)
     }
 
     private func statusColor(_ status: ServerStatus) -> Color {

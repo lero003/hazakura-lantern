@@ -4,6 +4,7 @@
 "Apply Preset" = "プリセットを適用";
 "Apply to Configuration" = "設定に適用";
 "Check Health" = "接続確認";
+"Check for Updates" = "アップデート確認";
 "Check Runtime" = "ランタイム確認";
 "Choose GGUF" = "GGUFを選択";
 "Choose GGUF Model" = "GGUFモデルを選択";
@@ -91,11 +92,13 @@
 "Running" = "実行中";
 "Runtime logs stay in memory and are not saved automatically." = "ランタイムログはメモリ上に保持され、自動保存されません。";
 "Runtime Profile" = "ランタイムプロファイル";
+"Runtime Update Target" = "アップデート確認対象";
 "Scan Installed" = "インストール済みを再検出";
 "Select an item" = "項目を選択";
 "Server" = "サーバー";
 "Server Configuration" = "サーバー設定";
 "Server Controls" = "サーバー操作";
+"Settings" = "設定";
 "Setup Guide" = "セットアップガイド";
 "Show Command" = "コマンドを表示";
 "Show Setup Guide" = "セットアップガイドを表示";
@@ -114,6 +117,7 @@
 "System" = "システム";
 "This setup step is complete." = "このセットアップ手順は完了しています。";
 "Threads" = "スレッド";
+"To update an existing Homebrew runtime, run this command manually:" = "既存のHomebrewランタイムを更新する場合は、次を手動で実行してください:";
 "Additional Args" = "追加引数";
 "Use Installed Runtime" = "インストール済みを使用";
 "llama-server binary is required to host local model processes." = "ローカルモデルプロセスを起動するには llama-server バイナリが必要です。";

@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-21
+Last reviewed: 2026-05-22
 
 ## Project State
 
@@ -26,6 +26,9 @@ Implemented scope:
 - Settings now includes a System / Japanese / English language toggle for UI
   labels and controls only; runtime logs, command text, profile data, and
   adapter-owned messages remain outside the localization scope.
+- The same language toggle is reachable inside the main window through the
+  sidebar Settings destination, so changing app UI language does not require
+  opening the separate macOS Settings scene.
 - Settings now shows the current source checkpoint and makes the source-only,
   no-packaged-app boundary visible inside the app without adding release assets.
 - The in-app source checkpoint identifier now comes from a tested core metadata
@@ -154,6 +157,9 @@ Implemented scope:
 - Manual endpoint health checks now honor the adapter-scoped health-check
   timeout, keeping the actual request aligned with the copied curl smoke
   command.
+- Manual endpoint health checks are disabled unless the server is running, so
+  Lantern no longer treats stopped-state checks as raw configured-endpoint
+  probes.
 - Adapter-owned environment snippets shell-quote adapter-scoped base URL and API
   key values when needed, while keeping the default local snippet readable.
 - Runtime adapter validation is now an explicit adapter contract that can be
@@ -299,6 +305,9 @@ Implemented scope:
   in-memory log reset path, disabled when there are no logs.
 - The main window toolbar now exposes a command-preview action that opens the
   dashboard command preview without changing runtime behavior.
+- The main window toolbar has since been reduced to Setup Guide visibility,
+  active profile import/export, and copy actions; server lifecycle, health,
+  command reveal, and log clearing remain in the page content or menu bar.
 - A menu bar control surface now mirrors the existing server lifecycle, health,
   copy, active-profile import/export, log clear, open-window, and quit actions
   while keeping the app as a regular Dock/windowed app.
@@ -314,6 +323,13 @@ Implemented scope:
 - The server configuration view now shows non-mutating update-readiness dry-run
   guidance that combines selected runtime source with local version/help
   capability evidence before any future guarded update plan can be prepared.
+- The server configuration view now includes a selectable runtime update-check
+  target, currently only `llama.cpp`, and a non-mutating Check for Updates
+  action that reads the latest official GitHub release metadata and compares
+  `bNNNN` build numbers when local version evidence is available.
+- The Setup Guide now includes a manual Homebrew update command copy affordance
+  for `llama.cpp`, matching the existing install-command style without running
+  package-manager commands.
 - Manual-path update-readiness guidance now explicitly keeps unsupported update
   sources outside Lantern's future guarded update planning, with focused tests.
 - Incomplete update-readiness dry-run guidance now names the missing local
@@ -412,6 +428,9 @@ matched.
   command construction or infer unsupported options silently.
 - The app does not manage multiple profiles, launch-at-login, YAML import/export,
   auto restart, model downloads, chat, RAG, or proxy behavior.
+- Runtime update availability checks are advisory and networked only when the
+  user presses Check for Updates. Lantern does not run package-manager, Git,
+  download, or binary replacement commands.
 - LAN exposure and authentication are intentionally outside v0.
 
 ## Automation Focus
@@ -419,6 +438,12 @@ matched.
 The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
+
+Current human direction: keep the next public/opening or packaged-release
+judgment deferred. Automation should continue code-quality checks, narrow
+verified improvements, and non-public v1 readiness prep, but should not cut
+tags, publish releases, change GitHub public state, create packaged artifacts,
+or decide release readiness by itself.
 
 No user-facing packaged release should be cut until the remaining release
 quality gates below are resolved or explicitly deferred by a human.
@@ -441,8 +466,8 @@ Open release-quality gates:
 - verify the menu bar daily-use path on a normal macOS desktop, including
   status visibility, lifecycle actions, copy actions, and `Open Window`
   behavior from hidden or backgrounded window states
-- decide whether the toolbar remains a secondary power-user surface, is reduced,
-  or is removed after the menu bar becomes the primary resident control surface
+- verify the reduced toolbar on a normal macOS desktop, especially Setup Guide,
+  profile import/export, copy actions, and title-bar crowding
 - review the Setup Guide inspector against the normal configuration flow so
   onboarding help does not duplicate or obscure the main window controls
 - perform one manual UI smoke pass that covers main-window launch, Setup Guide
@@ -473,6 +498,10 @@ without an explicit human handoff.
 
 Good next automated candidates:
 
+- fix any failing `swift test`, `swift build --disable-sandbox`, localization
+  lint, or `git diff --check` result before picking a polish slice
+- make one small code-quality improvement inside the current `llama-server`
+  boundary, with tests or build verification in the same run
 - use `docs/automation_smoke_backlog.md` to expose or fix one concrete
   pre-release rough edge in UI labels, localization, menu bar/toolbar behavior,
   Setup Guide inspector flow, runtime setup, endpoint/health/copy/logs,
@@ -499,6 +528,10 @@ Good next automated candidates:
   by build/tests
 - review the Setup Guide inspector against the normal Configuration flow and
   remove duplication or crowding if it is visible
+- prepare non-public v1 readiness evidence, such as release-gate clarity,
+  deterministic smoke notes, packaging-prep checks, guarded update-workflow
+  planning, or focused tests, without executing runtime updates or public
+  release mutations
 - refine `llama-server` presets, runtime capability advisories, or
   update-readiness wording only when it reduces a concrete release-quality risk
   and remains advisory, visible, and non-mutating

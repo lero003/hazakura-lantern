@@ -12,6 +12,7 @@ struct ContentView: View {
         case dashboard = "Dashboard"
         case configuration = "Configuration"
         case logs = "Logs"
+        case settings = "Settings"
 
         var id: String { self.rawValue }
 
@@ -20,6 +21,7 @@ struct ContentView: View {
             case .dashboard: return "square.grid.2x2"
             case .configuration: return "slider.horizontal.3"
             case .logs: return "doc.text"
+            case .settings: return "gearshape"
             }
         }
     }
@@ -28,10 +30,9 @@ struct ContentView: View {
         NavigationSplitView {
             List(SidebarItem.allCases, selection: $selectedItem) { item in
                 NavigationLink(value: item) {
-                    Label(item.rawValue, systemImage: item.systemImage)
+                    Label(LocalizedStringKey(item.rawValue), systemImage: item.systemImage)
                 }
             }
-            .navigationTitle("Lantern")
             .frame(minWidth: 160)
         } detail: {
             ZStack {
@@ -69,6 +70,10 @@ struct ContentView: View {
                             LogsView(controller: controller)
                                 .padding(24)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        case .settings:
+                            SettingsView()
+                                .padding(24)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         }
                     } else {
                         ContentUnavailableView("Select an item", systemImage: "sidebar.left")
@@ -76,87 +81,31 @@ struct ContentView: View {
                 }
             }
             .toolbar {
-                ToolbarItemGroup {
-                    Button {
-                        controller.start()
-                    } label: {
-                        Label("Start", systemImage: "play.fill")
-                    }
-                    .disabled(!controller.canStart)
-
-                    Button {
-                        controller.stop()
-                    } label: {
-                        Label("Stop", systemImage: "stop.fill")
-                    }
-                    .disabled(!controller.canStop)
-
-                    Button {
-                        controller.restart()
-                    } label: {
-                        Label("Restart", systemImage: "arrow.clockwise")
-                    }
-                    .disabled(!controller.canRestart)
-                }
-
-                ToolbarItem {
-                    Button {
-                        controller.checkEndpointHealth()
-                    } label: {
-                        Label("Check Health", systemImage: "waveform.path.ecg")
-                    }
-                    .disabled(controller.endpointHealthStatus == .checking)
-                }
-
-                ToolbarItem {
-                    Button {
-                        selectedItem = .dashboard
-                    } label: {
-                        Label("Show Command", systemImage: "terminal")
-                    }
-                    .help("Show the dashboard command preview")
-                }
-
                 ToolbarItem {
                     Toggle(isOn: $showSetupGuide) {
                         Label("Setup Guide", systemImage: "laurel.leading")
                     }
                     .toggleStyle(.button)
+                    .labelStyle(.iconOnly)
                     .help("Show Setup Guide")
                 }
 
-                ToolbarItem {
+                ToolbarItemGroup {
                     Button {
-                        controller.clearLogs()
+                        exportRuntimeProfile()
                     } label: {
-                        Label("Clear Logs", systemImage: "trash")
+                        Label("Export Active Profile", systemImage: "square.and.arrow.up")
                     }
-                    .disabled(controller.logEntries.isEmpty)
-                    .help("Clear the in-memory runtime logs")
-                }
+                    .labelStyle(.iconOnly)
+                    .help("Export Active Profile")
 
-                ToolbarItem {
-                    Menu {
-                        Button {
-                            exportRuntimeProfile()
-                        } label: {
-                            Label("Export Active Profile", systemImage: "square.and.arrow.up")
-                        }
-
-                        Button {
-                            importRuntimeProfile()
-                        } label: {
-                            Label("Import Profile", systemImage: "square.and.arrow.down")
-                        }
-
-                        if let profileFileMessage = controller.profileFileMessage {
-                            Divider()
-                            Label(profileFileMessage, systemImage: "info.circle")
-                        }
+                    Button {
+                        importRuntimeProfile()
                     } label: {
-                        Label("Profile", systemImage: "doc.text")
+                        Label("Import Profile", systemImage: "square.and.arrow.down")
                     }
-                    .help("Import or export the active runtime profile")
+                    .labelStyle(.iconOnly)
+                    .help("Import Profile")
                 }
 
                 ToolbarItem {
@@ -204,6 +153,7 @@ struct ContentView: View {
                             Image(systemName: didCopyFromToolbar ? "checkmark.circle" : "doc.on.doc")
                         }
                     }
+                    .labelStyle(.iconOnly)
                     .help("Copy existing command, endpoint, and client snippets")
                 }
             }
@@ -211,7 +161,7 @@ struct ContentView: View {
         .groupBoxStyle(GlassGroupBoxStyle())
         .inspector(isPresented: $showSetupGuide) {
             SetupGuideView(controller: controller)
-                .inspectorColumnWidth(min: 260, ideal: 300, max: 360)
+                .inspectorColumnWidth(min: 300, ideal: 340, max: 400)
         }
         .onAppear {
             if controller.configuration.runtimeExecutablePath.isEmpty ||
@@ -219,7 +169,7 @@ struct ContentView: View {
                 showSetupGuide = true
             }
         }
-        .frame(minWidth: 860, minHeight: 640)
+        .frame(minWidth: 980, minHeight: 640)
     }
 
     private func exportRuntimeProfile() {

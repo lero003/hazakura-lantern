@@ -104,7 +104,7 @@ not silently invent behavior.
 - selected runtime executable version when it can be checked safely
 - user-declared install source, such as Homebrew, source build, or manual binary
 - latest available version metadata from an official source when network access
-  is explicit and adapter-scoped
+  is explicit and adapter-scoped; the current implemented target is `llama.cpp`
 - advisory "update available" status for registered runtimes
 - setup guidance that points users toward official runtime installation docs
 
@@ -112,7 +112,7 @@ Observation is not management. Lantern may tell users that a runtime appears
 old, missing, or installed in an unusual way. It should not run installers,
 upgrade runtimes, mutate package managers, or hide where a runtime came from.
 
-## Current Source Lane: v0.9 Release-Quality Polish
+## Current Source Lane: v0.9 Release-Quality Polish And v1 Readiness
 
 The project has reached a source-only `v0.9.0-alpha.1` checkpoint for
 release-quality UI, menu bar, toolbar, localization, setup guidance, and
@@ -121,11 +121,19 @@ app-bundle helper smoke has mixed evidence and currently regresses with
 `kLSNoExecutableErr`, so a normal desktop/manual UI pass is still required
 before any packaged app release.
 
+The next public/opening or packaged-release judgment is intentionally deferred.
+Until that human handoff, automation should keep code quality boring, close
+small verified `llama-server` daily-use gaps, and prepare non-public v1 evidence
+such as release gates, deterministic smoke paths, packaging-prep checks, and
+guarded update-workflow planning. This preparation must not create tags,
+GitHub Releases, packaged artifacts, runtime updates, or public-state changes.
+
 Use v0 through v0.4 notes below as foundation and backlog context, not as a
 reason to reopen closed work without a concrete ambiguity. The next useful
-source work should classify post-public feedback, tighten automation-safe
-triage, or address a specific `llama-server` reliability issue only when it is
-concrete and testable.
+source work should fix failing checks, improve one narrow code-quality issue,
+classify post-public feedback, tighten automation-safe triage, prepare v1
+evidence without release mutation, or address a specific `llama-server`
+reliability issue only when it is concrete and testable.
 
 Do not loop on historical `kLSNoExecutableErr` diagnostics without a fresh
 Launch Services hypothesis. Continue with release-quality source work that can
@@ -278,16 +286,18 @@ Already done or mostly done:
 - timeout-bounded, read-only `llama-server --version` and `--help` capability
   probing in the core layer, with a manual server-configuration UI check for
   runtime version display and preset option advisories
-- native toolbar shell for existing start, stop, restart, and manual endpoint
-  health-check actions, with state derived from the existing controller
-- toolbar copy, profile import/export, clear-log, and command-preview reveal
-  affordances that mirror existing behavior without changing runtime ownership
+- reduced native toolbar utility strip for Setup Guide visibility, profile
+  import/export, and copy actions, while lifecycle, health, command reveal, and
+  log clear stay in the page content or menu bar
 - path-only install-source advice for selected `llama-server` runtimes that look
   Homebrew-managed, MacPorts-managed, source-checkout-built, or manual, without
   executing any runtime update
 - non-mutating update-readiness dry-run guidance that combines selected runtime
   source with local version/help capability evidence before any future guarded
   update plan can be prepared
+- non-mutating `llama.cpp` update availability check against official GitHub
+  release metadata, with build-number comparison only when local version
+  evidence is comparable
 - incomplete update-readiness evidence wording that names whether local
   `--version` or `--help` evidence is missing before any guarded update plan
 - Setup Guide inspector access from the toolbar and Dashboard setup hint, so
@@ -301,7 +311,7 @@ Remaining before a packaged app release:
 - resolve the pre-release UI blockers for the menu bar, toolbar, and Setup
   Guide additions:
   - verify menu bar daily-use behavior on a normal macOS desktop
-  - decide the toolbar's role after the menu bar becomes the resident surface
+  - verify the reduced toolbar after the menu bar becomes the resident surface
   - confirm the Setup Guide inspector helps onboarding without crowding the
     main flow
   - run a manual UI smoke pass across main window, Setup Guide inspector, menu
@@ -609,10 +619,9 @@ surface.
 Candidate work:
 
 - maintain `docs/toolbar_and_navigation.md`
-- add a native macOS toolbar for existing start, stop, restart, health-check,
-  copy, profile import/export, log clear, and command-preview actions (initial
-  start, stop, restart, health-check, copy, profile, log-clear, and
-  command-preview reveal entries done)
+- keep a reduced native macOS toolbar for Setup Guide visibility, profile
+  import/export, and copy actions. Lifecycle, health, command reveal, and log
+  clear remain outside the toolbar unless a later human decision reopens scope
 - add a `MenuBarExtra` for existing start, stop, restart, health-check, copy,
   profile import/export, log clear, open-window, and quit actions while keeping
   the regular main window intact (initial menu bar surface done)
@@ -620,7 +629,8 @@ Candidate work:
   configuration, and logs, with setup guidance available as an inspector while
   preserving existing runtime actions (initial sidebar dashboard and Setup
   Guide inspector done)
-- keep toolbar state derived from the same controller state as the main views
+- keep toolbar state narrow and derived from the same controller state as the
+  main views
 - keep menu bar state derived from the same controller state as the main views
 - add focused tests or view-model checks for toolbar action availability where
   practical
@@ -629,7 +639,8 @@ Candidate work:
 
 Completion criteria:
 
-- toolbar actions mirror existing behavior and do not add hidden side effects
+- toolbar actions remain limited to Setup Guide, profile import/export, and
+  copy behavior without adding hidden side effects
 - menu bar actions mirror existing behavior and do not add hidden side effects
 - no endpoint auto-polling, launch-at-login, automatic restart, model download,
   runtime install/update, menu-bar-only lifecycle change, multiple-profile
@@ -648,6 +659,8 @@ Candidate work:
 
 - detect and display the selected runtime path source (path-only advice done),
   version, and option capability summary from v0.7
+- fetch official latest-release metadata for the selected update-check target
+  (`llama.cpp` only for now) without executing updates
 - let the user record an install source such as Homebrew, source build, manual
   binary, or unknown
 - document update implications for each source without executing updates
@@ -658,6 +671,8 @@ Candidate work:
 Completion criteria:
 
 - Lantern can explain the selected runtime source and update readiness
+- Lantern can show advisory `llama.cpp` update availability when latest release
+  metadata and local build-number evidence are comparable
 - no package manager, git checkout, download, file replacement, or install
   command is executed
 - update work remains separate from model downloads and packaged app release
@@ -762,10 +777,10 @@ sections below are historical context and backlog shape, not the default work
 selector. Prefer work that makes Lantern closer to a user-facing release over
 work that merely advances from one v0.x label to the next.
 
-The open release-quality gates are the menu bar daily-use verification, toolbar
-role decision, Setup Guide inspector review, app launch/clean-quit smoke, and
-one manual UI smoke pass that covers the main window, Setup Guide, menu bar,
-toolbar, logs, and quit behavior.
+The open release-quality gates are the menu bar daily-use verification, reduced
+toolbar verification, Setup Guide inspector review, app launch/clean-quit
+smoke, and one manual UI smoke pass that covers the main window, Setup Guide,
+menu bar, toolbar, logs, and quit behavior.
 
 For pre-release rough-edge discovery that does not fit a single roadmap lane,
 use `docs/automation_smoke_backlog.md`; it is the allowed source for one small

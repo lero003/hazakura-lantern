@@ -6,6 +6,22 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Reduced the main-window toolbar to Setup Guide, profile import/export, and
+  copy actions; server lifecycle, health, command reveal, and log clearing stay
+  in the main UI or menu bar.
+- Moved the language selector into the main window sidebar Settings destination
+  while keeping the existing macOS Settings scene available.
+- Disabled manual endpoint health checks unless the server is running.
+- Widened the minimum main-window and Setup Guide inspector layout, and kept
+  advanced Settings auto value pills on one line.
+- Added a non-mutating `llama.cpp` update availability check that fetches the
+  latest official GitHub release metadata, compares `bNNNN` build numbers when
+  local runtime version evidence is available, and never executes an update.
+- Added a Setup Guide Homebrew update command copy affordance for manual
+  `llama.cpp` upgrades.
+- Clarified the recurring automation posture so public/release judgment remains
+  deferred while automated runs continue code-quality checks, narrow
+  improvements, and non-public v1 readiness prep.
 - Folded the 2026-05-21 Gemini v1 polish review into the automation smoke
   backlog, with bounded follow-up tasks for localization coverage,
   HelpTooltip copy, launch-helper hypotheses, toolbar evidence, and log-policy

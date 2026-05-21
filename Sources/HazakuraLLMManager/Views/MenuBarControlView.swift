@@ -45,7 +45,7 @@ struct MenuBarControlView: View {
         Button("Check Health") {
             controller.checkEndpointHealth()
         }
-        .disabled(controller.endpointHealthStatus == .checking)
+        .disabled(!controller.canCheckEndpointHealth)
 
         Divider()
 

@@ -32,27 +32,40 @@ release-quality UI, menu bar, toolbar, localization, setup guidance, and
 non-mutating update-readiness work. Treat exact v0.x numbers as release
 history, not as the next work selector.
 
+Current human direction: defer the next public/opening or packaged-release
+judgment. Automation should keep progressing code-quality checks, focused
+quality improvements, and non-public v1 readiness evidence without cutting
+tags, GitHub Releases, packaged artifacts, or other public/release mutations.
+
 The default question for each automation run is:
 
 > Does this make Lantern closer to release-quality daily use without expanding
 > scope?
 
-Prefer unfinished release-quality work over advancing a version lane. The
-currently useful unfinished gates are:
+Prefer failing quality checks, unfinished release-quality work, and non-public
+v1 readiness prep over advancing a release decision. The currently useful
+unfinished gates are:
 
+- fix failing `swift test`, `swift build --disable-sandbox`, localization lint,
+  or `git diff --check` results before choosing polish
+- make one small code-quality improvement inside the current `llama-server`
+  boundary when it is covered by the same run's verification
 - restore or externally verify the app-bundle helper launch path, then complete
   normal desktop/manual launch and clean quit smoke
 - app-language switching verification for high-traffic surfaces such as menu
   bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip copy
 - menu bar daily-use verification for status, lifecycle, copy, and Open Window
   behavior
-- a product decision on whether the toolbar remains, shrinks, or is removed
-  after the menu bar becomes the resident control surface
+- normal-desktop verification of the reduced toolbar: Setup Guide,
+  import/export, and copy actions only, with no title-bar crowding
 - Setup Guide inspector review against the normal Configuration flow
 - one manual UI smoke pass covering main window, Setup Guide, menu bar,
   toolbar, logs, and clean quit
 - concrete rough edges from `docs/automation_smoke_backlog.md` that can be
   fixed or exposed in one verified run
+- non-public v1 readiness prep such as release-gate clarity, deterministic
+  smoke evidence, packaging-prep checks, update-workflow planning, or focused
+  tests that do not mutate runtime installs or public release state
 - docs or issue-triage clarity only when current guidance would steer the next
   run incorrectly
 
@@ -63,6 +76,8 @@ risk is visible and testable.
 
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 bundled inference, second-runtime work, or real runtime installation/update.
+The current networked update check is limited to explicit user-triggered
+`llama.cpp` latest-release metadata and must remain advisory.
 
 Human-decision items are boundaries, not global blockers. When a run encounters
 one, record the decision needed briefly and choose a different safe backlog
@@ -95,11 +110,13 @@ The 2026-05-21 Chika v1 polish review has also been folded into the backlog.
 Treat release-evidence consistency as a first-class docs target: README,
 current status, troubleshooting, automation backlog, and roadmap must not
 contradict each other about helper smoke, `kLSNoExecutableErr`, or manual
-desktop smoke. Its safe automation candidates include health-check availability
-alignment after a rule is chosen, Setup Guide no-runtime wording, icon-only copy
-accessibility, logs retention wording, and source-checkpoint centralization.
-Keep Hugging Face setup guidance, Homebrew copy placement, toolbar scope, and
-v1 release posture as human-decision items.
+desktop smoke. Its safe automation candidates include Setup Guide no-runtime
+wording, icon-only copy accessibility, logs retention wording, and
+source-checkpoint centralization. Health checks now follow the chosen rule:
+the action is disabled unless the server is running. Toolbar scope is also
+decided for now: keep only Setup Guide, profile import/export, and copy
+actions. Keep Hugging Face setup guidance, Homebrew copy placement, and v1
+release posture as human-decision items.
 
 For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
 Automation may fix one concrete UI, localization, smoke, setup-flow,
@@ -158,6 +175,9 @@ Release posture:
 - `v0.9.0-alpha.1` is acceptable as a source-only checkpoint when SwiftPM
   verification passes and docs clearly state that no packaged `.app` artifact is
   attached.
+- The next public/opening or packaged-release decision is deferred to a future
+  human handoff. Automation may prepare evidence and close local quality gaps,
+  but should not decide readiness by itself.
 - Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
   release until a normal desktop/manual launch and clean-quit pass is recorded.
   The 2026-05-21 helper smoke has mixed evidence and is not packaged release
@@ -194,31 +214,39 @@ Hourly posture:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.
-- Choose at most one small release-quality slice.
+- Choose at most one small code-quality, release-quality, or non-public v1
+  readiness slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
   clear and verification passes.
 - Keep hourly runs quiet, but progress-biased. A verified no-op is valid when
-  no unfinished release-quality gate or concrete rough edge is safely actionable
-  in this run.
+  no failing quality check, unfinished release-quality gate, concrete rough
+  edge, or non-public v1 readiness prep is safely actionable in this run.
 
 Preferred order:
 
 1. Fix a failing test or build.
-2. Close one unfinished release-quality gate from `docs/current_status.md`.
-3. Use `docs/automation_smoke_backlog.md` to expose or fix one concrete
+2. Fix a failing localization lint or `git diff --check` result.
+3. Make one small verified code-quality improvement inside the current
+   `llama-server` boundary.
+4. Close one unfinished release-quality gate from `docs/current_status.md`.
+5. Use `docs/automation_smoke_backlog.md` to expose or fix one concrete
    pre-release rough edge that can be verified in the same run.
-4. Add focused tests for observed `llama-server` launch, validation, health,
+6. Add focused tests for observed `llama-server` launch, validation, health,
    endpoint, restart, copy-flow, or profile-warning behavior.
-5. Tighten docs when they would otherwise steer the next run incorrectly or
+7. Prepare non-public v1 evidence, such as packaging-prep checks, release-gate
+   wording, deterministic smoke notes, guarded update-workflow planning, or
+   test coverage that does not perform real runtime or release mutation.
+8. Tighten docs when they would otherwise steer the next run incorrectly or
    confuse a `llama-server` setup path.
-6. Classify public feedback or review notes with
+9. Classify public feedback or review notes with
    `docs/post_public_operations.md`, then make one safe local change only if the
    classification identifies a source-quality issue.
-7. Refine presets, runtime capability advisories, or update-readiness wording
+10. Refine presets, runtime capability advisories, or update-readiness wording
    only when it reduces a concrete release-quality risk and remains
    non-mutating.
-8. End as a verified no-op only when no safe release-quality, smoke-backlog,
-   feedback-triage, test, or automation-doc slice is justified.
+11. End as a verified no-op only when no safe quality, release-quality,
+   smoke-backlog, feedback-triage, v1-readiness, test, or automation-doc slice
+   is justified.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.
@@ -229,7 +257,8 @@ artifact, GitHub settings or release mutation, public issue mutation, automation
 cadence change, dependency or lockfile mutation, endpoint auto-polling,
 real runtime install/update execution, model download,
 automatic benchmark/optimization, multiple-profile management, launch-at-login,
-or automatic restart policy.
+automatic restart policy, or update checks for runtimes beyond the current
+`llama.cpp` target.
 
 ## Verification
 

@@ -56,7 +56,7 @@ struct EndpointView: View {
                             Label("Check Health", systemImage: "waveform.path.ecg")
                         }
                         .buttonStyle(SecondaryButtonStyle())
-                        .disabled(controller.endpointHealthStatus == .checking)
+                        .disabled(!controller.canCheckEndpointHealth)
                     }
 
                     Divider()

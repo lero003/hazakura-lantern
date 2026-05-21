@@ -46,7 +46,8 @@ Classify incoming issues or review notes before choosing work:
 - E. `packaged app blocker`: app-bundle launch, `.app`, zip, dmg, signing,
   notarization, checksums, GitHub Release assets, or installer expectations.
 - F. `runtime-breadth request`: MLX, Ollama, custom command profiles, runtime
-  catalogs, networked runtime version checks, endpoint polling, or
+  catalogs, networked runtime version checks beyond the current explicit
+  `llama.cpp` release-metadata check, endpoint polling, or
   second-runtime support.
 - G. `out-of-scope request`: chat, model downloads, model conversion, RAG,
   tools, proxy behavior, LAN exposure, authentication, runtime installation,
@@ -186,7 +187,8 @@ Require explicit human handoff before:
 - automatically replying to, labeling, closing, or otherwise mutating public
   GitHub issues
 - changing the saved automation cadence
-- adding networked runtime version checks or runtime update checks
+- adding networked runtime version checks or runtime update checks beyond the
+  current explicit `llama.cpp` release-metadata check
 - adding unattended runtime install/update execution, model download, model
   catalog, proxy, LAN exposure, authentication, multiple-profile management,
   launch-at-login, or automatic restart behavior
