@@ -33,6 +33,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   base URL, environment snippet, health-check curl, and AI Mobile smoke curl.
 - Added transient copied feedback to the Dashboard launch command preview copy
   button.
+- Added transient copied feedback to the main window toolbar Copy menu after
+  copying the launch command, endpoint, environment snippet, health-check curl,
+  or AI Mobile smoke curl.
 - Added localized accessibility hints to menu bar copy actions for the launch
   command, endpoint, environment snippet, health-check curl, and AI Mobile
   smoke curl.

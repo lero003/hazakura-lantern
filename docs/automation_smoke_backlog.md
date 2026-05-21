@@ -150,8 +150,10 @@ Accepted for automation:
 - make copy feedback consistent for one copy-action family at a time. The
   Setup Guide Homebrew command and Endpoint destination copy controls now show
   copied feedback, and the Dashboard Command Preview now confirms launch-command
-  copies. Toolbar, menu bar, and profile-related copy flows mostly rely on
-  silent `PasteboardWriter.copy` calls.
+  copies. The main window toolbar Copy menu now confirms command, endpoint,
+  environment, health-check, and AI Mobile smoke copies. Menu bar and
+  profile-related copy flows mostly rely on silent `PasteboardWriter.copy`
+  calls.
 - add or tighten accessibility labels and hints for the menu bar control
   surface, one action group at a time. The menu bar copy-action group now has
   localized hints for launch command, endpoint, environment, health-check curl,
@@ -242,8 +244,8 @@ behavior, or one testable controller boundary:
   notarization, packaging, or release-asset claims (covered for the current
   source-only checkpoint and no-packaged-app boundary)
 - copy feedback consistency for one family of copy controls at a time,
-  prioritizing remaining high-frequency surfaces such as profile and
-  toolbar/menu bar copy actions
+  prioritizing remaining high-frequency surfaces such as profile and menu bar
+  copy actions
 - shared pasteboard-copy helper extraction when it reduces real duplicated UI
   code without changing behavior (covered for the current toolbar, menu bar,
   endpoint, command-preview, and Setup Guide copy surfaces)

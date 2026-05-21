@@ -5,6 +5,8 @@ struct ContentView: View {
     @ObservedObject var controller: ServerController
     @State private var selectedItem: SidebarItem? = .dashboard
     @State private var showSetupGuide = false
+    @State private var didCopyFromToolbar = false
+    @State private var toolbarCopyGeneration = 0
 
     private enum SidebarItem: String, CaseIterable, Identifiable {
         case dashboard = "Dashboard"
@@ -155,7 +157,7 @@ struct ContentView: View {
                 ToolbarItem {
                     Menu {
                         Button {
-                            PasteboardWriter.copy(controller.launchCommandPreview)
+                            copyFromToolbar(controller.launchCommandPreview)
                         } label: {
                             Label("Copy Launch Command", systemImage: "terminal")
                         }
@@ -164,20 +166,20 @@ struct ContentView: View {
                             Divider()
 
                             Button {
-                                PasteboardWriter.copy(endpoint.apiBaseURLString)
+                                copyFromToolbar(endpoint.apiBaseURLString)
                             } label: {
                                 Label("Copy Endpoint", systemImage: "link")
                             }
 
                             Button {
-                                PasteboardWriter.copy(endpoint.environmentSnippet)
+                                copyFromToolbar(endpoint.environmentSnippet)
                             } label: {
                                 Label("Copy Environment", systemImage: "terminal")
                             }
 
                             Button {
                                 if let healthCurlCommand = endpoint.endpointHealthCurlCommand {
-                                    PasteboardWriter.copy(healthCurlCommand)
+                                    copyFromToolbar(healthCurlCommand)
                                 }
                             } label: {
                                 Label("Copy Health Check", systemImage: "cross.case")
@@ -185,13 +187,17 @@ struct ContentView: View {
                             .disabled(endpoint.endpointHealthCurlCommand == nil)
 
                             Button {
-                                PasteboardWriter.copy(endpoint.aiMobileSmokeCurlCommand)
+                                copyFromToolbar(endpoint.aiMobileSmokeCurlCommand)
                             } label: {
                                 Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
                             }
                         }
                     } label: {
-                        Label("Copy", systemImage: "doc.on.doc")
+                        Label {
+                            Text(LocalizedStringKey(didCopyFromToolbar ? "Copied!" : "Copy"))
+                        } icon: {
+                            Image(systemName: didCopyFromToolbar ? "checkmark.circle" : "doc.on.doc")
+                        }
                     }
                     .help("Copy existing command, endpoint, and client snippets")
                 }
@@ -222,6 +228,26 @@ struct ContentView: View {
     private func importRuntimeProfile() {
         if let url = FilePanel.chooseProfileImportFile() {
             controller.importRuntimeProfile(from: url)
+        }
+    }
+
+    private func copyFromToolbar(_ value: String) {
+        PasteboardWriter.copy(value)
+        toolbarCopyGeneration += 1
+        let generation = toolbarCopyGeneration
+
+        withAnimation(.easeInOut(duration: 0.15)) {
+            didCopyFromToolbar = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+            guard toolbarCopyGeneration == generation else {
+                return
+            }
+
+            withAnimation(.easeInOut(duration: 0.2)) {
+                didCopyFromToolbar = false
+            }
         }
     }
 }
