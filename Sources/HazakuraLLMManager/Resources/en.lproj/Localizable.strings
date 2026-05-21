@@ -31,6 +31,7 @@
 "Copy Launch Command" = "Copy Launch Command";
 "Dashboard" = "Dashboard";
 "Endpoint" = "Endpoint";
+"Endpoint Health" = "Endpoint Health";
 "Endpoint is not available for the current configuration." = "Endpoint is not available for the current configuration.";
 "English" = "English";
 "Environment Variables" = "Environment Variables";
@@ -69,6 +70,7 @@
 "Prepare llama-server" = "Prepare llama-server";
 "Preset" = "Preset";
 "Process Status:" = "Process Status:";
+"Process Status" = "Process Status";
 "Profile" = "Profile";
 "Quit" = "Quit";
 "Recent" = "Recent";

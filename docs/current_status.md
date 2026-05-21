@@ -285,6 +285,9 @@ Implemented scope:
   removing the known app-UI crash edge from the automation smoke backlog.
 - Setup Guide step headers now expose complete/incomplete accessibility values
   and hints while keeping decorative step indicators out of the reading order.
+- Process status and endpoint health indicators now expose explicit
+  accessibility labels and values while keeping decorative status artwork out of
+  the reading order.
 - Advanced configuration fields are now grouped behind disclosure controls, with
   context, thread, and GPU-layer sliders supplementing the existing editable
   values.

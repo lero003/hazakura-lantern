@@ -45,6 +45,9 @@ struct EndpointView: View {
                             Image(systemName: controller.endpointHealthStatus.systemImageName)
                                 .foregroundStyle(healthColor)
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text("Endpoint Health"))
+                        .accessibilityValue(Text(healthAccessibilityValue))
 
                         Spacer()
 
@@ -176,6 +179,14 @@ struct EndpointView: View {
             .green
         case .failure:
             .red
+        }
+    }
+
+    private var healthAccessibilityValue: String {
+        if let detail = controller.endpointHealthStatus.detail {
+            "\(controller.endpointHealthStatus.title). \(detail)"
+        } else {
+            controller.endpointHealthStatus.title
         }
     }
 }

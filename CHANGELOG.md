@@ -12,6 +12,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   stability as release gates.
 - Improved Setup Guide step-card accessibility so each step reports
   complete/incomplete state with localized hints.
+- Improved process status and endpoint health accessibility so status
+  indicators report explicit labels and values without reading decorative
+  artwork.
 - Moved Setup Guide out of the primary sidebar and into a toolbar-toggled
   inspector, with the Dashboard setup hint opening the same onboarding surface.
 - Added non-mutating installed `llama-server` discovery for PATH, Homebrew, and

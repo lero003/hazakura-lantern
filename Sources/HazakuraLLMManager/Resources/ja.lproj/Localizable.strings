@@ -31,6 +31,7 @@
 "Copy Launch Command" = "起動コマンドをコピー";
 "Dashboard" = "ダッシュボード";
 "Endpoint" = "エンドポイント";
+"Endpoint Health" = "エンドポイント状態";
 "Endpoint is not available for the current configuration." = "現在の設定ではエンドポイントを表示できません。";
 "English" = "英語";
 "Environment Variables" = "環境変数";
@@ -69,6 +70,7 @@
 "Prepare llama-server" = "llama-serverを準備";
 "Preset" = "プリセット";
 "Process Status:" = "プロセス状態:";
+"Process Status" = "プロセス状態";
 "Profile" = "プロファイル";
 "Quit" = "終了";
 "Recent" = "最近使った項目";
