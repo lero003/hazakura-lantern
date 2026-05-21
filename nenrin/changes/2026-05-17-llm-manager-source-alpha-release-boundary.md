@@ -14,6 +14,7 @@ related_files:
   - docs/troubleshooting.md
   - docs/post_public_operations.md
   - docs/public_opening_preflight.md
+  - docs/external_review_flow.md
   - docs/runtime_adapters.md
   - docs/runtime_profiles.md
   - docs/llama_server_presets.md
@@ -43,6 +44,9 @@ review_after:
 - Restored v0.8 as menu bar/toolbar/navigation work for existing actions,
   placed v0.9 on non-mutating `llama-server` update readiness, and reserved
   v1.0 for a guarded, user-confirmed `llama-server` update workflow.
+- Added an external review flow so current-release feedback and future product
+  direction feedback can be requested without treating outside comments as
+  release approval or immediate scope expansion.
 
 ## Reason
 
@@ -87,6 +91,10 @@ breadth.
 - Future automation may propose issue labels and draft responses locally, but
   does not apply labels, post replies, close issues, or otherwise mutate public
   issue state without explicit human approval.
+- Future external review intake should separate source-readiness judgment from
+  product-direction judgment, and should classify image/audio/video generation
+  ideas as adjacent-product direction unless a design note proves they fit
+  Lantern's local-runtime supervision contract.
 
 ## Review After
 
@@ -127,6 +135,8 @@ breadth.
   command profiles, Ollama, broad adapter expansion, or packaged release work
   are either narrowed to one testable current-lane `llama-server` slice or
   dropped.
+- External review requests produce concrete release-readiness questions and
+  product-boundary questions before implementation work starts.
 - Ordinary implementation work reports Nenrin no-op instead of creating log
   records.
 
@@ -145,6 +155,9 @@ breadth.
   are useful.
 - v1.0 update workflow work executes real package-manager, git, download, or
   binary replacement commands without explicit human confirmation for that run.
+- Image, audio, video, or multimedia generation ideas are implemented directly
+  in Lantern before being classified as adjacent product direction or accepted
+  through a focused design note.
 
 ## Result
 

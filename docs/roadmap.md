@@ -87,6 +87,8 @@ quiet and a design note fixes the next runtime boundary.
 - benchmarking as a product feature
 - full environment inventory
 - remote deployment management
+- image, video, audio, or other multimedia generation workflows unless a future
+  design note proves they fit the same local-runtime supervision contract
 
 ### Lantern may pass through
 
@@ -111,6 +113,24 @@ not silently invent behavior.
 Observation is not management. Lantern may tell users that a runtime appears
 old, missing, or installed in an unusual way. It should not run installers,
 upgrade runtimes, mutate package managers, or hide where a runtime came from.
+
+## Adjacent Product Question: Multimedia Generation
+
+Image, audio, video, and other multimedia generation may be valuable in the
+broader Hazakura ecosystem, but the default assumption is that they belong in a
+separate sibling project or a future design note, not in Lantern's current
+release-quality lane.
+
+The only plausible bridge into Lantern is the existing product thesis:
+supervise an already-installed local runtime, make its command or endpoint
+visible, keep logs bounded, and avoid hidden install/update/model-management
+behavior. A creative generation workspace, prompt library, asset browser,
+model downloader, or media pipeline would be a different product and should be
+reviewed separately before any Lantern implementation work starts.
+
+Use `docs/external_review_flow.md` when asking outside reviewers whether this
+multimedia direction should stay separate, become a sibling project, or later
+share a local-runtime control contract with Lantern.
 
 ## Current Source Lane: v0.9 Release-Quality Polish And v1 Readiness
 
@@ -540,8 +560,8 @@ Completion criteria:
 
 - issue categories cover source-build blockers, `llama-server`
   launch/configuration bugs, profile import/export bugs, docs confusion,
-  packaged app blockers, runtime-breadth requests, out-of-scope requests, and
-  security-sensitive reports
+  packaged app blockers, runtime-breadth requests, adjacent-product requests,
+  out-of-scope requests, and security-sensitive reports
 - automation can propose labels, docs fixes, and focused tests without
   promising feature support or mutating GitHub issue state
 - roadmap and current status stay aligned with public feedback

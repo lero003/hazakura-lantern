@@ -66,6 +66,9 @@ unfinished gates are:
 - non-public v1 readiness prep such as release-gate clarity, deterministic
   smoke evidence, packaging-prep checks, update-workflow planning, or focused
   tests that do not mutate runtime installs or public release state
+- external review preparation through `docs/external_review_flow.md` when the
+  run needs release-readiness or future-direction feedback without making the
+  release decision itself
 - docs or issue-triage clarity only when current guidance would steer the next
   run incorrectly
 
@@ -191,6 +194,9 @@ Post-public posture:
 - Use `docs/post_public_operations.md` for issue triage, external review notes,
   automation-safe work, and human approval gates. Formal post-public triage is
   the v0.5 lane, but these guardrails apply immediately.
+- Use `docs/external_review_flow.md` to prepare current-release and
+  future-direction review requests. Keep reviewer input advisory until a human
+  chooses the next release or product-boundary action.
 - Keep `docs/public_opening_preflight.md` as the pre-open and release-handoff
   checklist, not as the default post-public work queue.
 - Do not change GitHub repository visibility, branch protection, collaborators,
@@ -236,15 +242,18 @@ Preferred order:
 7. Prepare non-public v1 evidence, such as packaging-prep checks, release-gate
    wording, deterministic smoke notes, guarded update-workflow planning, or
    test coverage that does not perform real runtime or release mutation.
-8. Tighten docs when they would otherwise steer the next run incorrectly or
+8. Prepare external review packets when outside judgment is needed, using
+   `docs/external_review_flow.md` and keeping release/product decisions human
+   owned.
+9. Tighten docs when they would otherwise steer the next run incorrectly or
    confuse a `llama-server` setup path.
-9. Classify public feedback or review notes with
+10. Classify public feedback or review notes with
    `docs/post_public_operations.md`, then make one safe local change only if the
    classification identifies a source-quality issue.
-10. Refine presets, runtime capability advisories, or update-readiness wording
+11. Refine presets, runtime capability advisories, or update-readiness wording
    only when it reduces a concrete release-quality risk and remains
    non-mutating.
-11. End as a verified no-op only when no safe quality, release-quality,
+12. End as a verified no-op only when no safe quality, release-quality,
    smoke-backlog, feedback-triage, v1-readiness, test, or automation-doc slice
    is justified.
 

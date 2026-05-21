@@ -6,6 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added an external review flow for paste-ready release-readiness and
+  future-direction feedback requests, including a bounded way to ask whether
+  image or multimedia generation belongs in Lantern, a future design note, or a
+  separate sibling project.
 - Reduced the main-window toolbar to Setup Guide, profile import/export, and
   copy actions; server lifecycle, health, command reveal, and log clearing stay
   in the main UI or menu bar.

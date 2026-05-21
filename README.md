@@ -87,6 +87,7 @@ Project planning and automation docs:
 - `docs/toolbar_and_navigation.md`
 - `docs/post_public_operations.md`
 - `docs/public_opening_preflight.md`
+- `docs/external_review_flow.md`
 
 ## Runtime Contract
 

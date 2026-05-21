@@ -7,6 +7,8 @@ artifacts, change GitHub settings, or widen runtime scope.
 Use `docs/public_opening_preflight.md` for historical pre-open checks and
 future visibility or release handoffs. Use this document for ongoing public
 feedback, automation triage, and post-public docs hygiene.
+Use `docs/external_review_flow.md` when preparing paste-ready requests for
+outside release-readiness or future-direction review.
 
 ## Operating Posture
 
@@ -49,11 +51,14 @@ Classify incoming issues or review notes before choosing work:
   catalogs, networked runtime version checks beyond the current explicit
   `llama.cpp` release-metadata check, endpoint polling, or
   second-runtime support.
-- G. `out-of-scope request`: chat, model downloads, model conversion, RAG,
+- G. `adjacent-product request`: image, audio, video, or other multimedia
+  generation workflows that may fit the broader Hazakura ecosystem but do not
+  yet fit Lantern's current local-runtime supervision boundary.
+- H. `out-of-scope request`: chat, model downloads, model conversion, RAG,
   tools, proxy behavior, LAN exposure, authentication, runtime installation,
   automatic updates, package-manager mutation, marketplace behavior, multiple
   profile management, launch-at-login, or automatic restart policy.
-- H. `security-sensitive report`: secrets, credentials, private paths,
+- I. `security-sensitive report`: secrets, credentials, private paths,
   network exposure, authentication, supply chain, or host privacy concerns.
 
 For B-class reports, separate Lantern-owned behavior from runtime-owned
@@ -98,8 +103,10 @@ public label set:
   installer expectation issues.
 - `type:runtime-breadth-request` for F. second-runtime, custom command,
   runtime catalog, version-check, or endpoint-polling requests.
-- `type:out-of-scope` for G. requests outside Lantern's current boundary.
-- `security-sensitive` for H. reports involving secrets, credentials, private
+- `type:adjacent-product-request` for G. multimedia-generation ideas that
+  should be evaluated as future ecosystem direction before Lantern scope.
+- `type:out-of-scope` for H. requests outside Lantern's current boundary.
+- `security-sensitive` for I. reports involving secrets, credentials, private
   paths, network exposure, authentication, supply chain, or host privacy.
 
 Prefer one area label plus one type label only when both add signal. For
@@ -138,6 +145,16 @@ Lantern is staying focused on the existing `llama-server` path before new
 runtimes, chat, model management, proxy behavior, LAN exposure, or installers.
 ```
 
+For adjacent-product requests:
+
+```text
+Thanks for the idea. I would classify this as adjacent-product direction rather
+than current Lantern scope.
+The useful next step is a short design note or external product-direction
+review: should this stay separate, become a sibling project, or share Lantern's
+local-runtime supervision contract later?
+```
+
 For security-sensitive reports:
 
 ```text
@@ -159,6 +176,8 @@ Automation may do one small, verifiable slice per run:
   adapter docs, or this operations guide
 - classify public issues or review notes and propose labels or next actions
 - prepare draft issue responses without posting them
+- prepare external release-readiness or future-direction review requests with
+  `docs/external_review_flow.md`
 - maintain local repository hygiene files such as CODEOWNERS, pinned CI action
   references, Dependabot proposal configuration, and local secret-ignore rules
   when they reduce review or supply-chain ambiguity without changing remote
@@ -190,8 +209,8 @@ Require explicit human handoff before:
 - adding networked runtime version checks or runtime update checks beyond the
   current explicit `llama.cpp` release-metadata check
 - adding unattended runtime install/update execution, model download, model
-  catalog, proxy, LAN exposure, authentication, multiple-profile management,
-  launch-at-login, or automatic restart behavior
+  catalog, multimedia generation workflow, proxy, LAN exposure, authentication,
+  multiple-profile management, launch-at-login, or automatic restart behavior
 - mutating dependencies, lockfiles, package managers, or version-manager files
 
 ## Packaged-Release Boundary
