@@ -282,6 +282,9 @@ Implemented scope:
 - The main window toolbar Copy menu now shows transient copied feedback after
   writing the launch command, endpoint, environment snippet, health-check curl,
   or AI Mobile smoke curl to the pasteboard.
+- Menu bar copy actions now show transient copied feedback after writing the
+  launch command, endpoint, environment snippet, health-check curl, or AI Mobile
+  smoke curl to the pasteboard.
 - The main window toolbar now exposes active runtime profile import/export
   actions that reuse the existing `.lantern-profile.json` file flow without
   adding multiple-profile management.
@@ -423,9 +426,9 @@ Open release-quality gates:
 - verify app-language switching on the highest-traffic UI surfaces, especially
   menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
   copy; fix one concrete mismatch at a time
-- continue copy success feedback across remaining high-frequency copy paths,
-  especially menu bar copy actions and profile flows, so
-  users do not have to paste elsewhere to confirm success
+- continue profile file-flow feedback across remaining high-frequency profile
+  entry points, especially toolbar and menu bar import/export actions when the
+  Profile panel is not visible
 - resolve the most visible UI-localization mismatches, with preset descriptions
   and HelpTooltip policy as the first review targets
 - verify the menu bar daily-use path on a normal macOS desktop, including
@@ -471,8 +474,9 @@ Good next automated candidates:
   UI surface under Japanese and English language settings before fixing a
   concrete mismatch
 - improve one shared daily-use affordance from the DeepSeek review, such as
-  remaining copy feedback, menu bar accessibility labels, or stopped-state
-  Aurora rendering; the shared button disabled-state visibility slice is covered
+  profile file-flow feedback or stopped-state Aurora rendering; the menu bar
+  copy feedback, menu bar copy accessibility, and shared button disabled-state
+  visibility slices are covered
 - improve one focused Chika-review daily-use gap, such as icon-only copy
   accessibility, logs retention wording, or helper-smoke docs consistency
 - classify public feedback or review notes with

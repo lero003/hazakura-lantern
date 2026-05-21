@@ -5,6 +5,8 @@ import HazakuraLLMManagerCore
 struct MenuBarControlView: View {
     @ObservedObject var controller: ServerController
     @Environment(\.openWindow) private var openWindow
+    @State private var didCopyFromMenuBar = false
+    @State private var menuBarCopyGeneration = 0
 
     var body: some View {
         Label {
@@ -47,35 +49,39 @@ struct MenuBarControlView: View {
 
         Divider()
 
+        if didCopyFromMenuBar {
+            Label("Copied!", systemImage: "checkmark.circle")
+        }
+
         Button("Copy Endpoint") {
             if let endpoint = controller.runtimeEndpoint {
-                PasteboardWriter.copy(endpoint.apiBaseURLString)
+                copyFromMenuBar(endpoint.apiBaseURLString)
             }
         }
         .disabled(controller.runtimeEndpoint == nil)
         .accessibilityHint(Text("Copy the client connection URL to the clipboard."))
 
         Button("Copy Launch Command") {
-            PasteboardWriter.copy(controller.launchCommandPreview)
+            copyFromMenuBar(controller.launchCommandPreview)
         }
         .accessibilityHint(Text("Copy the generated launch command to the clipboard."))
 
         if let endpoint = controller.runtimeEndpoint {
             Button("Copy Environment") {
-                PasteboardWriter.copy(endpoint.environmentSnippet)
+                copyFromMenuBar(endpoint.environmentSnippet)
             }
             .accessibilityHint(Text("Copy OpenAI-compatible environment variables to the clipboard."))
 
             Button("Copy Health Check") {
                 if let healthCurlCommand = endpoint.endpointHealthCurlCommand {
-                    PasteboardWriter.copy(healthCurlCommand)
+                    copyFromMenuBar(healthCurlCommand)
                 }
             }
             .disabled(endpoint.endpointHealthCurlCommand == nil)
             .accessibilityHint(Text("Copy the timeout-bounded health-check curl command to the clipboard."))
 
             Button("Copy AI Mobile Test") {
-                PasteboardWriter.copy(endpoint.aiMobileSmokeCurlCommand)
+                copyFromMenuBar(endpoint.aiMobileSmokeCurlCommand)
             }
             .accessibilityHint(Text("Copy the timeout-bounded AI Mobile smoke curl command to the clipboard."))
         }
@@ -141,6 +147,22 @@ struct MenuBarControlView: View {
     private func importRuntimeProfile() {
         if let url = FilePanel.chooseProfileImportFile() {
             controller.importRuntimeProfile(from: url)
+        }
+    }
+
+    private func copyFromMenuBar(_ value: String) {
+        PasteboardWriter.copy(value)
+        menuBarCopyGeneration += 1
+        let generation = menuBarCopyGeneration
+
+        didCopyFromMenuBar = true
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+            guard menuBarCopyGeneration == generation else {
+                return
+            }
+
+            didCopyFromMenuBar = false
         }
     }
 }
