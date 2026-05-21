@@ -269,6 +269,8 @@ Implemented scope:
 - Existing UI copy actions now write to the pasteboard through one shared app
   helper, keeping toolbar, menu bar, endpoint, command-preview, and Setup Guide
   copy behavior aligned without changing copied values.
+- Endpoint destination copy controls now show transient copied feedback for the
+  base URL, environment snippet, health-check curl, and AI Mobile smoke curl.
 - The main window toolbar now exposes active runtime profile import/export
   actions that reuse the existing `.lantern-profile.json` file flow without
   adding multiple-profile management.
@@ -401,7 +403,8 @@ Open release-quality gates:
 - verify app-language switching on the highest-traffic UI surfaces, especially
   menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
   copy; fix one concrete mismatch at a time
-- make copy success feedback consistent across high-frequency copy paths so
+- continue copy success feedback across remaining high-frequency copy paths,
+  especially toolbar/menu bar copy menus and command-preview/profile flows, so
   users do not have to paste elsewhere to confirm success
 - resolve the most visible UI-localization mismatches, with preset descriptions
   and HelpTooltip policy as the first review targets

@@ -26,6 +26,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   Japanese-only helper description.
 - Added a localized Logs caption that clarifies runtime logs stay in memory and
   are not saved automatically.
+- Added transient copied feedback to Endpoint destination copy controls for the
+  base URL, environment snippet, health-check curl, and AI Mobile smoke curl.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 

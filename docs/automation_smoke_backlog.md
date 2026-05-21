@@ -148,9 +148,10 @@ Deferred or human decision:
 Accepted for automation:
 
 - make copy feedback consistent for one copy-action family at a time. The
-  Setup Guide Homebrew command currently shows `Copied!`, while toolbar, menu
-  bar, Endpoint, Command Preview, Dashboard, and profile-related copy flows
-  mostly rely on silent `PasteboardWriter.copy` calls.
+  Setup Guide Homebrew command and Endpoint destination copy controls now show
+  copied feedback, while toolbar, menu bar, Command Preview, Dashboard, and
+  profile-related copy flows mostly rely on silent `PasteboardWriter.copy`
+  calls.
 - localize preset description copy in `ConfigurationView` instead of keeping
   `presetDescriptionJP` Japanese-only when the app language is English.
 - remove duplicate English/Japanese `Localizable.strings` keys such as the
@@ -237,8 +238,8 @@ behavior, or one testable controller boundary:
   notarization, packaging, or release-asset claims (covered for the current
   source-only checkpoint and no-packaged-app boundary)
 - copy feedback consistency for one family of copy controls at a time,
-  prioritizing high-frequency surfaces such as endpoint, command preview, and
-  toolbar/menu bar copy actions
+  prioritizing remaining high-frequency surfaces such as command preview,
+  Dashboard, profile, and toolbar/menu bar copy actions
 - shared pasteboard-copy helper extraction when it reduces real duplicated UI
   code without changing behavior (covered for the current toolbar, menu bar,
   endpoint, command-preview, and Setup Guide copy surfaces)

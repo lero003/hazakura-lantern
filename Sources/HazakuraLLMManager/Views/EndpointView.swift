@@ -23,12 +23,11 @@ struct EndpointView: View {
                                     .stroke(Color.white.opacity(0.06), lineWidth: 1)
                             )
 
-                        Button {
-                            PasteboardWriter.copy(endpoint.apiBaseURLString)
-                        } label: {
-                            Label("Copy Endpoint", systemImage: "doc.on.doc")
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
+                        EndpointCopyButton(
+                            title: "Copy Endpoint",
+                            systemImage: "doc.on.doc",
+                            value: endpoint.apiBaseURLString
+                        )
                     }
 
                     HStack(alignment: .top, spacing: 12) {
@@ -88,12 +87,11 @@ struct EndpointView: View {
                                                     .stroke(Color.white.opacity(0.06), lineWidth: 1)
                                             )
 
-                                        Button {
-                                            PasteboardWriter.copy(endpoint.environmentSnippet)
-                                        } label: {
-                                            Label("Copy Environment", systemImage: "terminal")
-                                        }
-                                        .buttonStyle(SecondaryButtonStyle())
+                                        EndpointCopyButton(
+                                            title: "Copy Environment",
+                                            systemImage: "terminal",
+                                            value: endpoint.environmentSnippet
+                                        )
                                     }
                                 }
 
@@ -115,15 +113,11 @@ struct EndpointView: View {
                                                     .stroke(Color.white.opacity(0.06), lineWidth: 1)
                                             )
 
-                                        Button {
-                                            if let healthCurlCommand {
-                                                PasteboardWriter.copy(healthCurlCommand)
-                                            }
-                                        } label: {
-                                            Label("Copy Health Check", systemImage: "cross.case")
-                                        }
-                                        .buttonStyle(SecondaryButtonStyle())
-                                        .disabled(healthCurlCommand == nil)
+                                        EndpointCopyButton(
+                                            title: "Copy Health Check",
+                                            systemImage: "cross.case",
+                                            value: healthCurlCommand
+                                        )
                                     }
                                 }
 
@@ -145,12 +139,11 @@ struct EndpointView: View {
                                                     .stroke(Color.white.opacity(0.06), lineWidth: 1)
                                             )
 
-                                        Button {
-                                            PasteboardWriter.copy(endpoint.aiMobileSmokeCurlCommand)
-                                        } label: {
-                                            Label("Copy AI Mobile Test", systemImage: "checkmark.circle")
-                                        }
-                                        .buttonStyle(SecondaryButtonStyle())
+                                        EndpointCopyButton(
+                                            title: "Copy AI Mobile Test",
+                                            systemImage: "checkmark.circle",
+                                            value: endpoint.aiMobileSmokeCurlCommand
+                                        )
                                     }
                                 }
                             }
@@ -187,6 +180,58 @@ struct EndpointView: View {
             "\(controller.endpointHealthStatus.title). \(detail)"
         } else {
             controller.endpointHealthStatus.title
+        }
+    }
+}
+
+private struct EndpointCopyButton: View {
+    let title: LocalizedStringKey
+    let systemImage: String
+    let value: String?
+
+    @State private var didCopy = false
+    @State private var copyGeneration = 0
+
+    var body: some View {
+        VStack(alignment: .trailing, spacing: 3) {
+            Button {
+                copyValue()
+            } label: {
+                Label(title, systemImage: systemImage)
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            .disabled(value == nil)
+
+            Text("Copied!")
+                .font(.caption2)
+                .foregroundStyle(.green)
+                .opacity(didCopy ? 1 : 0)
+                .accessibilityHidden(!didCopy)
+                .frame(height: 12, alignment: .trailing)
+        }
+    }
+
+    private func copyValue() {
+        guard let value else {
+            return
+        }
+
+        PasteboardWriter.copy(value)
+        copyGeneration += 1
+        let generation = copyGeneration
+
+        withAnimation(.easeInOut(duration: 0.15)) {
+            didCopy = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+            guard copyGeneration == generation else {
+                return
+            }
+
+            withAnimation(.easeInOut(duration: 0.2)) {
+                didCopy = false
+            }
         }
     }
 }
