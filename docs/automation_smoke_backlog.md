@@ -167,9 +167,9 @@ Accepted for automation:
 - keep disabled-state visibility for shared button styles covered: inactive
   `PrimaryButtonStyle` / `SecondaryButtonStyle` controls now retain readable
   labels and outlines without changing behavior.
-- pause, throttle, or render a static Aurora/background state when the server
-  is stopped, provided the result is verified by build and a focused manual
-  smoke note.
+- keep stopped-state Aurora/background rendering covered: the decorative
+  background timeline now pauses while the server is stopped, keeping the idle
+  window calmer without changing lifecycle behavior.
 - modernize deprecated SwiftUI APIs such as `onChange` when the current
   toolchain reports a warning or the change is purely mechanical.
 
@@ -270,8 +270,9 @@ behavior, or one testable controller boundary:
   stop, restart, early-crash, or port-conflict-like behavior
 - lightweight `Logger` instrumentation for app lifecycle or controller events
   when it is useful for debugging and does not replace the visible `LogBuffer`
-- Aurora/background animation throttling or stopped-state static rendering when
-  verified by code review, build, and a focused manual smoke
+- Aurora/background animation throttling or stopped-state static rendering is
+  covered for the current stopped-state timeline; revisit only if manual smoke
+  shows the idle surface is still visually noisy
 - shared button disabled-state visibility is covered for the current
   `PrimaryButtonStyle` / `SecondaryButtonStyle` surfaces
 - logs retention wording is covered for the current Logs destination; revisit
@@ -406,8 +407,8 @@ exists.
 
 ### Performance
 
-- Throttle or pause decorative animation when the server is stopped, provided
-  the app still builds and the visual result is acceptable in manual smoke.
+- Keep decorative animation paused when the server is stopped; revisit only if
+  manual smoke shows the idle background remains visually noisy.
 - Improve log rendering only when a concrete high-volume output issue is
   observed or a focused test can prove the behavior.
 - Keep performance work local; do not add benchmarking dashboards or automatic

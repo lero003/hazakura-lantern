@@ -5,7 +5,7 @@ struct AuroraBackgroundView: View {
     let status: ServerStatus
 
     var body: some View {
-        TimelineView(.animation) { timeline in
+        TimelineView(.animation(paused: !status.animatesAuroraBackground)) { timeline in
             AuroraBackgroundLayer(date: timeline.date, status: status)
         }
         .ignoresSafeArea()
@@ -108,5 +108,16 @@ private struct AuroraOrb: View {
             .frame(width: diameter)
             .position(x: x, y: y)
             .scaleEffect(scale)
+    }
+}
+
+private extension ServerStatus {
+    var animatesAuroraBackground: Bool {
+        switch self {
+        case .stopped:
+            false
+        case .starting, .running, .stopping, .restarting, .error:
+            true
+        }
     }
 }

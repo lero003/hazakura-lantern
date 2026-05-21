@@ -260,6 +260,8 @@ Implemented scope:
 - Shared primary and secondary button styles now keep disabled labels and
   outlines visible, so inactive controls read as unavailable without vanishing
   into the glass surface.
+- The decorative Aurora background pauses while the server is stopped, keeping
+  the idle main window calmer without changing lifecycle behavior.
 - The Logs destination now stretches its log area vertically and top-aligns
   empty and populated log content, making the view behave like a working log
   surface instead of a short centered panel.
@@ -476,10 +478,10 @@ Good next automated candidates:
 - add English/Japanese localization key parity coverage, or verify one named
   UI surface under Japanese and English language settings before fixing a
   concrete mismatch
-- improve one shared daily-use affordance from the DeepSeek review, such as
-  stopped-state Aurora rendering; the profile file-flow message mirror, menu
-  bar copy feedback, menu bar copy accessibility, and shared button
-  disabled-state visibility slices are covered
+- improve one shared daily-use affordance from the DeepSeek review; the
+  stopped-state Aurora rendering, profile file-flow message mirror, menu bar
+  copy feedback, menu bar copy accessibility, and shared button disabled-state
+  visibility slices are covered
 - improve one focused Chika-review daily-use gap, such as helper-smoke docs
   consistency when new drift appears, or another concrete rough edge that is not
   already covered by the Setup Guide copy accessibility and Logs retention
