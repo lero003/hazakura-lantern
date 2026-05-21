@@ -210,8 +210,8 @@ Accepted for automation:
   available and avoiding package-manager execution
 - add an explicit accessibility label/hint or visible `Label` for icon-only
   copy controls such as the Setup Guide endpoint copy action
-- add a small Logs caption that states logs are kept in memory and are not saved
-  automatically
+- keep the Logs retention caption covered: it now states that logs are kept in
+  memory and are not saved automatically
 - keep source-checkpoint display centralized in app code without build-script,
   `Info.plist`, or packaged-artifact claims
 
@@ -274,7 +274,8 @@ behavior, or one testable controller boundary:
   verified by code review, build, and a focused manual smoke
 - shared button disabled-state visibility is covered for the current
   `PrimaryButtonStyle` / `SecondaryButtonStyle` surfaces
-- logs retention wording that clarifies current in-memory-only behavior
+- logs retention wording is covered for the current Logs destination; revisit
+  only if manual smoke shows the caption is hidden, clipped, or misleading
 
 ### Needs Human Decision First
 

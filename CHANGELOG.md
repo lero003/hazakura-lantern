@@ -18,6 +18,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   backlog, clarifying helper-smoke evidence consistency, manual desktop smoke,
   health-check policy, Setup Guide empty states, copy accessibility, logs
   retention wording, and source-checkpoint centralization.
+- Marked the Logs retention wording slice as covered in automation guidance so
+  future polish runs do not repeat the completed in-memory-only caption work.
 - Clarified automation guidance so human-decision items block only their exact
   slice and do not prevent unrelated safe release-polish work.
 - Removed duplicate `Process Status` localization entries and added focused

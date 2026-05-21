@@ -480,8 +480,10 @@ Good next automated candidates:
   stopped-state Aurora rendering; the profile file-flow message mirror, menu
   bar copy feedback, menu bar copy accessibility, and shared button
   disabled-state visibility slices are covered
-- improve one focused Chika-review daily-use gap, such as icon-only copy
-  accessibility, logs retention wording, or helper-smoke docs consistency
+- improve one focused Chika-review daily-use gap, such as helper-smoke docs
+  consistency when new drift appears, or another concrete rough edge that is not
+  already covered by the Setup Guide copy accessibility and Logs retention
+  caption slices
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
