@@ -276,9 +276,6 @@ Implemented scope:
 - The Logs destination now states that runtime logs stay in memory and are not
   saved automatically, keeping log-retention behavior visible without adding
   persistence.
-- The main window now has a native toolbar shell for the existing start, stop,
-  restart, and manual endpoint health-check actions, with availability derived
-  from the same controller state as the in-page controls.
 - The main window toolbar now exposes copy actions for the existing launch
   command, endpoint, environment, health-check, and AI Mobile smoke snippets
   without changing runtime behavior.
@@ -301,13 +298,9 @@ Implemented scope:
 - The toolbar Profile menu and menu bar controls now mirror active profile
   import/export file-flow messages, so export, import, and profile-warning
   results remain visible outside the Configuration profile panel.
-- The main window toolbar now exposes clear-log behavior using the existing
-  in-memory log reset path, disabled when there are no logs.
-- The main window toolbar now exposes a command-preview action that opens the
-  dashboard command preview without changing runtime behavior.
-- The main window toolbar has since been reduced to Setup Guide visibility,
-  active profile import/export, and copy actions; server lifecycle, health,
-  command reveal, and log clearing remain in the page content or menu bar.
+- The main window toolbar is reduced to Setup Guide visibility, active profile
+  import/export, and copy actions; server lifecycle, health, command reveal,
+  and log clearing remain in the page content or menu bar.
 - A menu bar control surface now mirrors the existing server lifecycle, health,
   copy, active-profile import/export, log clear, open-window, and quit actions
   while keeping the app as a regular Dock/windowed app.

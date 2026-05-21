@@ -102,6 +102,18 @@ small daily-use candidates for health-check availability, Setup Guide empty
 states, endpoint-copy accessibility, logs retention wording, and checkpoint
 string centralization.
 
+The 2026-05-22 Chika release-readiness follow-up was reviewed as external
+release judgment, not as permission to broaden scope. Several concrete findings
+were already covered on `main` after the reviewed snapshot: copy feedback,
+running-only health checks, Setup Guide no-runtime wording, endpoint copy
+accessibility, logs retention wording, source-checkpoint centralization,
+localized preset descriptions, duplicate localization key cleanup, and toolbar
+reduction. Keep the remaining current signals narrow: normal desktop/manual UI
+smoke is still missing, helper launch smoke is still not packaged-release
+proof, HelpTooltip localization policy remains a human decision, and Hugging
+Face setup guidance / v1.0 release posture / Homebrew command placement remain
+human-decision items.
+
 ### 2026-05-21 Gemini Intake
 
 Accepted for automation:
@@ -218,6 +230,19 @@ Accepted for automation:
   memory and are not saved automatically
 - keep source-checkpoint display centralized in app code without build-script,
   `Info.plist`, or packaged-artifact claims
+
+Already covered on current `main`:
+
+- copy feedback consistency across Endpoint, Dashboard command preview, toolbar
+  copy menu, menu bar copy actions, and Setup Guide Homebrew command copy
+- running-only health-check availability through the shared controller rule
+- Setup Guide no-installed-runtime empty-state wording
+- Setup Guide endpoint copy accessibility
+- Logs memory-only retention caption
+- source-checkpoint display centralized in app code
+- preset description localization and duplicate localization key cleanup
+- reduced toolbar scope: Setup Guide, profile import/export, and copy actions
+  only
 
 Human decision:
 

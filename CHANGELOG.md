@@ -10,6 +10,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   future-direction feedback requests, including a bounded way to ask whether
   image or multimedia generation belongs in Lantern, a future design note, or a
   separate sibling project.
+- Folded the 2026-05-22 Chika release-readiness follow-up into automation
+  guidance, marking already-covered polish separately from remaining manual
+  smoke and human-decision items.
 - Reduced the main-window toolbar to Setup Guide, profile import/export, and
   copy actions; server lifecycle, health, command reveal, and log clearing stay
   in the main UI or menu bar.
