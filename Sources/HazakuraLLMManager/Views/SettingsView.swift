@@ -1,4 +1,5 @@
 import SwiftUI
+import HazakuraLLMManagerCore
 
 struct SettingsView: View {
     @AppStorage(AppLanguage.storageKey) private var languageRawValue = AppLanguage.system.rawValue
@@ -27,7 +28,7 @@ struct SettingsView: View {
             }
 
             Section("Source Checkpoint") {
-                LabeledContent("Source checkpoint", value: "v0.9.0-alpha.1")
+                LabeledContent("Source checkpoint", value: SourceCheckpointInfo.current.identifier)
 
                 Text("Source-only alpha; no packaged app artifact is included.")
                     .font(.caption)

@@ -36,6 +36,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added localized accessibility hints to menu bar copy actions for the launch
   command, endpoint, environment snippet, health-check curl, and AI Mobile
   smoke curl.
+- Centralized the in-app source checkpoint metadata so Settings reads the
+  source-only checkpoint from one tested value without implying packaged app
+  artifacts.
 - Improved the Setup Guide endpoint copy button so its icon-only control exposes
   localized accessibility text for the copied client connection URL.
 - Improved shared primary and secondary button disabled states so inactive

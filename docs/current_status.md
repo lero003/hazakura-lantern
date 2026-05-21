@@ -28,6 +28,9 @@ Implemented scope:
   adapter-owned messages remain outside the localization scope.
 - Settings now shows the current source checkpoint and makes the source-only,
   no-packaged-app boundary visible inside the app without adding release assets.
+- The in-app source checkpoint identifier now comes from a tested core metadata
+  value, keeping the source-only Settings display centralized without implying
+  packaged artifacts.
 - English/Japanese localization resources are covered by focused tests for
   duplicate keys and key parity, keeping app UI resource cleanup visible before
   broader localization work.

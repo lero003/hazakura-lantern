@@ -174,8 +174,9 @@ Conditionally accepted:
 
 - source checkpoint/version display may be centralized only if it stays within
   source-checkpoint messaging and does not imply packaged artifact metadata.
-  Build-script injection or `Info.plist` version plumbing needs a narrow design
-  before automation changes it.
+  The in-app Settings source checkpoint now reads from one tested core metadata
+  value; build-script injection or `Info.plist` version plumbing still needs a
+  narrow design before automation changes it.
 - `Show Command` toolbar behavior may be clarified only after evidence shows
   the current Dashboard reveal action is confusing in normal use.
 
@@ -208,8 +209,8 @@ Accepted for automation:
   copy controls such as the Setup Guide endpoint copy action
 - add a small Logs caption that states logs are kept in memory and are not saved
   automatically
-- centralize the source checkpoint string in app code when the change stays
-  source-checkpoint-only and does not imply packaged artifact metadata
+- keep source-checkpoint display centralized in app code without build-script,
+  `Info.plist`, or packaged-artifact claims
 
 Human decision:
 
