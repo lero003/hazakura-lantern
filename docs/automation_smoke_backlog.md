@@ -109,8 +109,9 @@ Accepted for automation:
 - verify language switching across one visible surface at a time, especially
   sidebar labels, menu bar actions, toolbar labels, Settings text, Setup Guide
   copy, Endpoint headings, and HelpTooltip popovers
-- add a focused localization key parity check for English and Japanese
-  `Localizable.strings`
+- keep the focused localization resource checks current for English and
+  Japanese `Localizable.strings`; duplicate keys, key parity, and
+  format-placeholder parity are covered
 - replace one visible hard-coded app UI string group with explicit localized
   keys when the string is not runtime log text, copied shell text, profile JSON,
   or adapter-owned diagnostic payload
@@ -265,7 +266,9 @@ behavior, or one testable controller boundary:
   current Advanced Settings and Advanced Connection Details controls
 - one focused language-switching verification note for a named view or control
   surface, followed by a small fix only when the mismatch is observed
-- localization key parity coverage for English and Japanese app UI resources
+- localization key and format-placeholder parity coverage for English and
+  Japanese app UI resources is covered; revisit only when a new localization
+  resource class appears
 - endpoint-use guidance that stays local and does not introduce chat, proxy,
   model download, or remote exposure behavior
 - fake-driven `ServerController` state-transition tests for existing start,

@@ -32,8 +32,8 @@ Implemented scope:
   value, keeping the source-only Settings display centralized without implying
   packaged artifacts.
 - English/Japanese localization resources are covered by focused tests for
-  duplicate keys and key parity, keeping app UI resource cleanup visible before
-  broader localization work.
+  duplicate keys, key parity, and format-placeholder parity, keeping app UI
+  resource cleanup visible before broader localization work.
 - HelpTooltip explanation button accessibility and help text now follows the
   selected app UI language while leaving adapter-owned diagnostics unchanged.
 - `llama-server` launch command construction without shell interpolation.
