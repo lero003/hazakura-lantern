@@ -280,10 +280,13 @@ struct SetupGuideView: View {
                                     Button {
                                         PasteboardWriter.copy(endpoint.apiBaseURLString)
                                     } label: {
-                                        Image(systemName: "doc.on.doc")
+                                        Label("Copy Endpoint", systemImage: "doc.on.doc")
+                                            .labelStyle(.iconOnly)
                                             .font(.caption)
                                     }
                                     .buttonStyle(.plain)
+                                    .accessibilityHint(Text("Copy the client connection URL to the clipboard."))
+                                    .help("Copy Endpoint")
                                 }
                             }
                         }

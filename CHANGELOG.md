@@ -28,6 +28,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   are not saved automatically.
 - Added transient copied feedback to Endpoint destination copy controls for the
   base URL, environment snippet, health-check curl, and AI Mobile smoke curl.
+- Improved the Setup Guide endpoint copy button so its icon-only control exposes
+  localized accessibility text for the copied client connection URL.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 

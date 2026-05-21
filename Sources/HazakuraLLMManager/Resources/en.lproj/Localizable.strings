@@ -26,6 +26,7 @@
 "Copy existing command, endpoint, and client snippets" = "Copy existing command, endpoint, and client snippets";
 "Copy Health Check" = "Copy Health Check";
 "Copy Launch Command" = "Copy Launch Command";
+"Copy the client connection URL to the clipboard." = "Copy the client connection URL to the clipboard.";
 "Dashboard" = "Dashboard";
 "Endpoint" = "Endpoint";
 "Endpoint Health" = "Endpoint Health";

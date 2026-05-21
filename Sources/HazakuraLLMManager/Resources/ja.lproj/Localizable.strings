@@ -26,6 +26,7 @@
 "Copy existing command, endpoint, and client snippets" = "既存のコマンド、エンドポイント、クライアント用スニペットをコピーします";
 "Copy Health Check" = "ヘルスチェックをコピー";
 "Copy Launch Command" = "起動コマンドをコピー";
+"Copy the client connection URL to the clipboard." = "クライアント接続URLをクリップボードへコピーします。";
 "Dashboard" = "ダッシュボード";
 "Endpoint" = "エンドポイント";
 "Endpoint Health" = "エンドポイント状態";

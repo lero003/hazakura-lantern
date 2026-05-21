@@ -303,6 +303,9 @@ Implemented scope:
   removing the known app-UI crash edge from the automation smoke backlog.
 - Setup Guide step headers now expose complete/incomplete accessibility values
   and hints while keeping decorative step indicators out of the reading order.
+- The Setup Guide endpoint copy action now keeps its icon-only visual treatment
+  while exposing a localized accessibility label and hint for the copied client
+  connection URL.
 - Process status and endpoint health indicators now expose explicit
   accessibility labels and values while keeping decorative status artwork out of
   the reading order.
