@@ -2,67 +2,88 @@ import SwiftUI
 
 // MARK: - Primary Button Style
 struct PrimaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
     @State private var isHovered = false
 
     func makeBody(configuration: Configuration) -> some View {
+        let isInteractive = isEnabled
+        let isActiveHover = isInteractive && isHovered
+        let gradientColors = isInteractive ? [
+            Color.orange.opacity(isActiveHover ? 0.95 : 0.85),
+            Color(red: 0.95, green: 0.65, blue: 0.15).opacity(isActiveHover ? 0.9 : 0.8),
+            Color.yellow.opacity(isActiveHover ? 0.85 : 0.75)
+        ] : [
+            Color.white.opacity(0.12),
+            Color.white.opacity(0.08)
+        ]
+
         configuration.label
             .font(.callout.weight(.semibold))
-            .foregroundStyle(.white)
+            .foregroundStyle(isInteractive ? .white : .white.opacity(0.62))
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .background(
                 LinearGradient(
-                    colors: [
-                        Color.orange.opacity(isHovered ? 0.95 : 0.85),
-                        Color(red: 0.95, green: 0.65, blue: 0.15).opacity(isHovered ? 0.9 : 0.8),
-                        Color.yellow.opacity(isHovered ? 0.85 : 0.75)
-                    ],
+                    colors: gradientColors,
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.white.opacity(isInteractive ? 0.08 : 0.18), lineWidth: 1)
+            )
             .cornerRadius(8)
             .shadow(
-                color: Color.orange.opacity(isHovered ? 0.25 : 0.15),
-                radius: isHovered ? 8 : 4,
+                color: Color.orange.opacity(isActiveHover ? 0.25 : (isInteractive ? 0.15 : 0)),
+                radius: isActiveHover ? 8 : 4,
                 x: 0,
-                y: isHovered ? 4 : 2
+                y: isActiveHover ? 4 : 2
             )
-            .scaleEffect(configuration.isPressed ? 0.96 : (isHovered ? 1.02 : 1.0))
+            .scaleEffect(
+                isInteractive
+                    ? (configuration.isPressed ? 0.96 : (isActiveHover ? 1.02 : 1.0))
+                    : 1.0
+            )
+            .saturation(isInteractive ? 1.0 : 0.45)
             .animation(.smooth(duration: 0.2), value: isHovered)
             .animation(.smooth(duration: 0.1), value: configuration.isPressed)
             .onHover { hovering in
-                isHovered = hovering
+                isHovered = isInteractive && hovering
             }
     }
 }
 
 // MARK: - Secondary Button Style
 struct SecondaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
     @State private var isHovered = false
 
     func makeBody(configuration: Configuration) -> some View {
+        let isInteractive = isEnabled
+        let isActiveHover = isInteractive && isHovered
+
         configuration.label
             .font(.callout.weight(.medium))
-            .foregroundStyle(.primary.opacity(0.85))
+            .foregroundStyle(.primary.opacity(isInteractive ? 0.85 : 0.52))
             .padding(.horizontal, 14)
             .padding(.vertical, 7)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(.white.opacity(isHovered ? 0.08 : 0.04))
+                    .fill(.white.opacity(isActiveHover ? 0.08 : (isInteractive ? 0.04 : 0.025)))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        Color.white.opacity(isHovered ? 0.2 : 0.08),
+                        Color.white.opacity(isActiveHover ? 0.2 : (isInteractive ? 0.08 : 0.16)),
                         lineWidth: 1
                     )
             )
-            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .scaleEffect(isInteractive && configuration.isPressed ? 0.97 : 1.0)
             .animation(.smooth(duration: 0.18), value: isHovered)
             .animation(.smooth(duration: 0.1), value: configuration.isPressed)
             .onHover { hovering in
-                isHovered = hovering
+                isHovered = isInteractive && hovering
             }
     }
 }

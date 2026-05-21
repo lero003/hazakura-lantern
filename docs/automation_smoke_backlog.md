@@ -161,9 +161,9 @@ Accepted for automation:
 - remove duplicate English/Japanese `Localizable.strings` keys such as the
   repeated `Process Status` entries, then keep parity coverage in tests or a
   focused validation helper.
-- improve disabled-state visibility for shared button styles when the change
-  stays local to `PrimaryButtonStyle` / `SecondaryButtonStyle` and is verified
-  by build plus a focused visual note.
+- keep disabled-state visibility for shared button styles covered: inactive
+  `PrimaryButtonStyle` / `SecondaryButtonStyle` controls now retain readable
+  labels and outlines without changing behavior.
 - pause, throttle, or render a static Aurora/background state when the server
   is stopped, provided the result is verified by build and a focused manual
   smoke note.
@@ -266,8 +266,8 @@ behavior, or one testable controller boundary:
   when it is useful for debugging and does not replace the visible `LogBuffer`
 - Aurora/background animation throttling or stopped-state static rendering when
   verified by code review, build, and a focused manual smoke
-- shared button disabled-state visibility improvements when they stay local to
-  app button styles
+- shared button disabled-state visibility is covered for the current
+  `PrimaryButtonStyle` / `SecondaryButtonStyle` surfaces
 - logs retention wording that clarifies current in-memory-only behavior
 
 ### Needs Human Decision First

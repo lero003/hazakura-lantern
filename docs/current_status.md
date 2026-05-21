@@ -254,6 +254,9 @@ Implemented scope:
   slider and direct field, while help text now makes clear that threads and GPU
   layers are delegated to `llama-server` when set to auto rather than measured
   from the Mac by Lantern.
+- Shared primary and secondary button styles now keep disabled labels and
+  outlines visible, so inactive controls read as unavailable without vanishing
+  into the glass surface.
 - The Logs destination now stretches its log area vertically and top-aligns
   empty and populated log content, making the view behave like a working log
   surface instead of a short centered panel.
@@ -462,8 +465,8 @@ Good next automated candidates:
   UI surface under Japanese and English language settings before fixing a
   concrete mismatch
 - improve one shared daily-use affordance from the DeepSeek review, such as
-  remaining copy feedback, disabled button visibility, menu bar accessibility
-  labels, or stopped-state Aurora rendering
+  remaining copy feedback, menu bar accessibility labels, or stopped-state
+  Aurora rendering; the shared button disabled-state visibility slice is covered
 - improve one focused Chika-review daily-use gap, such as icon-only copy
   accessibility, logs retention wording, or helper-smoke docs consistency
 - classify public feedback or review notes with

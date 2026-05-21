@@ -38,6 +38,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   smoke curl.
 - Improved the Setup Guide endpoint copy button so its icon-only control exposes
   localized accessibility text for the copied client connection URL.
+- Improved shared primary and secondary button disabled states so inactive
+  controls keep visible labels and outlines without changing their actions.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 
