@@ -20,14 +20,11 @@
 "Complete" = "Complete";
 "Complete this setup step to continue." = "Complete this setup step to continue.";
 "Copy AI Mobile Test" = "Copy AI Mobile Test";
-"Copy Client Smoke" = "Copy Client Smoke";
 "Copy Command" = "Copy Command";
 "Copy Endpoint" = "Copy Endpoint";
-"Copy Env" = "Copy Env";
 "Copy Environment" = "Copy Environment";
 "Copy existing command, endpoint, and client snippets" = "Copy existing command, endpoint, and client snippets";
 "Copy Health Check" = "Copy Health Check";
-"Copy Health Curl" = "Copy Health Curl";
 "Copy Launch Command" = "Copy Launch Command";
 "Dashboard" = "Dashboard";
 "Endpoint" = "Endpoint";

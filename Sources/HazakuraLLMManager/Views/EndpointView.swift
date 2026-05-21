@@ -91,7 +91,7 @@ struct EndpointView: View {
                                         Button {
                                             PasteboardWriter.copy(endpoint.environmentSnippet)
                                         } label: {
-                                            Label("Copy Env", systemImage: "terminal")
+                                            Label("Copy Environment", systemImage: "terminal")
                                         }
                                         .buttonStyle(SecondaryButtonStyle())
                                     }

@@ -20,14 +20,11 @@
 "Complete" = "完了";
 "Complete this setup step to continue." = "次へ進むには、このセットアップ手順を完了してください。";
 "Copy AI Mobile Test" = "AI Mobileテストをコピー";
-"Copy Client Smoke" = "クライアント疎通をコピー";
 "Copy Command" = "コマンドをコピー";
 "Copy Endpoint" = "エンドポイントをコピー";
-"Copy Env" = "環境変数をコピー";
 "Copy Environment" = "環境変数をコピー";
 "Copy existing command, endpoint, and client snippets" = "既存のコマンド、エンドポイント、クライアント用スニペットをコピーします";
 "Copy Health Check" = "ヘルスチェックをコピー";
-"Copy Health Curl" = "Health curlをコピー";
 "Copy Launch Command" = "起動コマンドをコピー";
 "Dashboard" = "ダッシュボード";
 "Endpoint" = "エンドポイント";

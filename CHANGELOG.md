@@ -12,6 +12,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   stability as release gates.
 - Improved Setup Guide step-card accessibility so each step reports
   complete/incomplete state with localized hints.
+- Aligned menu bar copy action labels with the toolbar copy menu for
+  environment, health-check, and AI Mobile smoke snippets.
 - Improved process status and endpoint health accessibility so status
   indicators report explicit labels and values without reading decorative
   artwork.
