@@ -10,6 +10,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
   backlog, with bounded follow-up tasks for localization coverage,
   HelpTooltip copy, launch-helper hypotheses, toolbar evidence, and log-policy
   decisions.
+- Folded the 2026-05-21 DeepSeek v1 polish review into the automation smoke
+  backlog, prioritizing copy feedback, preset localization, localization-key
+  cleanup, menu bar accessibility, disabled button styling, and stopped-state
+  background rendering as small release-polish candidates.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 

@@ -390,6 +390,10 @@ Open release-quality gates:
 - verify app-language switching on the highest-traffic UI surfaces, especially
   menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
   copy; fix one concrete mismatch at a time
+- make copy success feedback consistent across high-frequency copy paths so
+  users do not have to paste elsewhere to confirm success
+- resolve the most visible UI-localization mismatches, with preset descriptions
+  and HelpTooltip policy as the first review targets
 - verify the menu bar daily-use path on a normal macOS desktop, including
   status visibility, lifecycle actions, copy actions, and `Open Window`
   behavior from hidden or backgrounded window states
@@ -432,6 +436,11 @@ Good next automated candidates:
 - add English/Japanese localization key parity coverage, or verify one named
   UI surface under Japanese and English language settings before fixing a
   concrete mismatch
+- remove duplicate localization keys such as repeated `Process Status` entries
+  before adding broader localization coverage
+- improve one shared daily-use affordance from the DeepSeek review, such as
+  copy feedback, disabled button visibility, menu bar accessibility labels, or
+  stopped-state Aurora rendering
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,

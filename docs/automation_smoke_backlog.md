@@ -87,6 +87,13 @@ automation must keep the existing source-only and UI-localization boundaries.
 Treat repo evidence as the deciding source when a proposal names a likely
 cause.
 
+The 2026-05-21 DeepSeek v1.0 polish review is accepted as a second backlog
+input. Its strongest repo-grounded findings are copy feedback inconsistency,
+localized UI gaps in preset and tooltip copy, duplicate localization keys,
+disabled button styling, and stopped-state background animation behavior.
+Automation should use these as small smoke-polish candidates, not as permission
+for broad redesign.
+
 ### 2026-05-21 Gemini Intake
 
 Accepted for automation:
@@ -128,6 +135,49 @@ Deferred or human decision:
   binary distribution remain outside automation unless there is a release
   handoff for that exact work
 
+### 2026-05-21 DeepSeek Intake
+
+Accepted for automation:
+
+- make copy feedback consistent for one copy-action family at a time. The
+  Setup Guide Homebrew command currently shows `Copied!`, while toolbar, menu
+  bar, Endpoint, Command Preview, Dashboard, and profile-related copy flows
+  mostly rely on silent `PasteboardWriter.copy` calls.
+- localize preset description copy in `ConfigurationView` instead of keeping
+  `presetDescriptionJP` Japanese-only when the app language is English.
+- remove duplicate English/Japanese `Localizable.strings` keys such as the
+  repeated `Process Status` entries, then keep parity coverage in tests or a
+  focused validation helper.
+- add or tighten accessibility labels and hints for the menu bar control
+  surface, one action group at a time.
+- improve disabled-state visibility for shared button styles when the change
+  stays local to `PrimaryButtonStyle` / `SecondaryButtonStyle` and is verified
+  by build plus a focused visual note.
+- pause, throttle, or render a static Aurora/background state when the server
+  is stopped, provided the result is verified by build and a focused manual
+  smoke note.
+- modernize deprecated SwiftUI APIs such as `onChange` when the current
+  toolchain reports a warning or the change is purely mechanical.
+
+Conditionally accepted:
+
+- source checkpoint/version display may be centralized only if it stays within
+  source-checkpoint messaging and does not imply packaged artifact metadata.
+  Build-script injection or `Info.plist` version plumbing needs a narrow design
+  before automation changes it.
+- `Show Command` toolbar behavior may be clarified only after evidence shows
+  the current Dashboard reveal action is confusing in normal use.
+
+Human decision:
+
+- choose whether HelpTooltip technical copy should be fully localized, English
+  only, or kept as mixed bilingual copy. Automation may prepare evidence and
+  localize one small group only after the intended policy is clear.
+- toolbar simplification remains a product decision; automation may gather
+  daily-use evidence, but should not remove actions broadly.
+- log persistence remains deferred; keep the v1 path on bounded in-memory logs
+  unless the user explicitly changes the product requirement.
+
 ### Automatable P0/P1 Candidates
 
 These can be selected by automation when they are narrowed to one view, one
@@ -146,7 +196,9 @@ behavior, or one testable controller boundary:
 - About/settings version information if it can be implemented without signing,
   notarization, packaging, or release-asset claims (covered for the current
   source-only checkpoint and no-packaged-app boundary)
-- copy feedback consistency for one family of copy controls at a time
+- copy feedback consistency for one family of copy controls at a time,
+  prioritizing high-frequency surfaces such as endpoint, command preview, and
+  toolbar/menu bar copy actions
 - shared pasteboard-copy helper extraction when it reduces real duplicated UI
   code without changing behavior (covered for the current toolbar, menu bar,
   endpoint, command-preview, and Setup Guide copy surfaces)
@@ -154,6 +206,8 @@ behavior, or one testable controller boundary:
   errors or profile import/export messages
 - one explicit localization gap in app UI, such as sidebar labels, preset
   helper text, HelpTooltip text, or endpoint section headings
+- preset description localization when the selected app language is English or
+  Japanese
 - one focused language-switching verification note for a named view or control
   surface, followed by a small fix only when the mismatch is observed
 - localization key parity coverage for English and Japanese app UI resources
@@ -165,6 +219,8 @@ behavior, or one testable controller boundary:
   when it is useful for debugging and does not replace the visible `LogBuffer`
 - Aurora/background animation throttling or stopped-state static rendering when
   verified by code review, build, and a focused manual smoke
+- shared button disabled-state visibility improvements when they stay local to
+  app button styles
 
 ### Needs Human Decision First
 

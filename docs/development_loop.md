@@ -77,6 +77,14 @@ coverage, HelpTooltip copy, launch-helper hypotheses, toolbar evidence, and
 log-policy decisions; do not treat it as approval for broad Core diagnostic
 localization, default signing/notarization work, or log persistence.
 
+The 2026-05-21 DeepSeek v1 polish review has also been folded into the backlog.
+Prefer its repo-grounded small candidates when smoke is otherwise quiet: copy
+feedback consistency, preset-description localization, duplicate localization
+key cleanup, menu bar accessibility labels, disabled button visibility, and
+stopped-state background rendering. Keep HelpTooltip language policy,
+checkpoint-version plumbing, toolbar simplification, and log persistence as
+human-decision items unless the user narrows one explicitly.
+
 For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
 Automation may fix one concrete UI, localization, smoke, setup-flow,
 menu-bar/toolbar, profile-warning, health/copy, packaging-prep, or
