@@ -28,8 +28,10 @@ release, or automation work. Read its `agent_context.md` first, and consult
 ## Current Lane
 
 The project has a public source-only `v0.5.0-alpha.1` checkpoint for
-post-public issue triage and automation discipline. The app-bundle launch smoke
-remains a packaged-release blocker.
+post-public issue triage and automation discipline. The 2026-05-21
+`./script/build_and_run.sh --verify` run already passed as automated helper
+smoke, while normal desktop/manual launch and clean quit remains a
+packaged-release gate.
 
 Treat v0.3 close-out and v0.4 reliability as prior lanes unless there is a
 concrete adapter-boundary or `llama-server` reliability ambiguity:
@@ -75,10 +77,11 @@ observable and verifiable.
 
 The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
 human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
-previous lane is sufficiently closed. Do not keep re-running the same launch
-smoke diagnostics after the blocker is already documented. If a blocker appears
-environment-specific and the core SwiftPM tests still pass, carry it as a known
-risk and choose the next safe lane item that does not depend on that blocker.
+previous lane is sufficiently closed. Do not keep re-running historical Launch
+Services diagnostics unless helper smoke regresses or a fresh hypothesis
+appears. If a blocker appears environment-specific and the core SwiftPM tests
+still pass, carry it as a known risk and choose the next safe lane item that
+does not depend on that blocker.
 
 Lane handoff rules:
 
@@ -128,8 +131,9 @@ Release posture:
   verification passes and docs clearly state that no packaged `.app` artifact is
   attached.
 - Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
-  release until the app-bundle launch smoke is verified on a normal macOS
-  environment.
+  release until a normal desktop/manual launch and clean-quit pass is recorded.
+  The 2026-05-21 helper smoke is useful automation evidence, not packaged
+  release proof.
 - Do not cut a user-facing packaged release until the menu bar, toolbar, and
   Setup Guide release blockers in `docs/current_status.md` and `docs/roadmap.md`
   are resolved or explicitly deferred from the release scope.

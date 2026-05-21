@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Recorded the 2026-05-21 automated smoke pass for SwiftPM tests, localization
+  lint, local app-bundle helper launch, and cleanup, while keeping manual
+  desktop UI smoke as a packaged-release gate.
 - Aligned menu bar copy action labels with the toolbar copy menu so endpoint,
   environment, health-check, and AI Mobile smoke snippets use the same visible
   wording.

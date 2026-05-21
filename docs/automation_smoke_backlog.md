@@ -37,6 +37,21 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
+Latest automated smoke result (2026-05-21):
+
+- `git diff --check` passed.
+- `plutil -lint` passed for English and Japanese `Localizable.strings`.
+- `swift test` passed: 180 XCTest tests, 0 failures.
+- `swift build --disable-sandbox` passed.
+- `./script/build_and_run.sh --verify` built the local bundle and completed the
+  launch request.
+- `./script/build_and_run.sh --stop` completed, and `pgrep -fl
+  HazakuraLLMManager` found no leftover app process.
+
+This clears the previously tracked automation-level helper launch failure for
+now. It is not a manual UI smoke pass and should not be treated as packaged
+release evidence.
+
 ## Manual UI Smoke Targets
 
 When automation has access to a normal app launch, or when the user reports a
@@ -250,7 +265,8 @@ exists.
 
 - Keep `script/build_and_run.sh` aligned with SwiftPM resources and app-bundle
   layout.
-- Improve local launch-smoke cleanup when the app is left running.
+- Improve local launch-smoke cleanup only if a new leftover-process or failed
+  cleanup case is observed.
 - Document normal-desktop packaged-release evidence when the user supplies it.
 - Do not create zip, dmg, signing, notarization, checksums, tags, or GitHub
   Releases without an explicit release handoff.

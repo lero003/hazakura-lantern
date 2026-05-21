@@ -66,9 +66,11 @@ Verify launch:
 ./script/build_and_run.sh --verify
 ```
 
-The app-bundle smoke is a known packaged-release blocker in the Codex
-environment; source verification is currently `swift test` plus
-`swift build --disable-sandbox`.
+As of 2026-05-21, this helper smoke passes in the Codex environment and cleans
+up the launched app. Treat it as automation-level launch evidence only, not as
+proof that a user-facing packaged `.app` release is ready. A normal
+desktop/manual launch and clean-quit pass is still required before app-bundle,
+zip, dmg, signing, or notarization release work.
 
 Project planning and automation docs:
 

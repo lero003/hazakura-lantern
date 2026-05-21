@@ -65,10 +65,15 @@ Symptoms:
 
 Current status:
 
-- Treat this as a packaged-app release blocker.
-- Do not treat it as a blocker for v0.2 profile-contract work.
-- Do not keep retrying the same Codex-environment smoke path without a fresh
-  hypothesis.
+- The 2026-05-21 Codex helper smoke passes and cleanup leaves no
+  `HazakuraLLMManager` process behind.
+- Treat the 2026-05-17 `kLSNoExecutableErr` diagnostics as regression history,
+  not as the active hourly-work blocker.
+- Do not treat helper smoke as packaged-release proof. A normal desktop/manual
+  launch and clean-quit pass is still required before app-bundle distribution
+  work.
+- Do not keep retrying historical Launch Services diagnostics without a fresh
+  regression or hypothesis.
 
 Useful fresh hypotheses:
 
@@ -78,13 +83,13 @@ Useful fresh hypotheses:
   cache reset on a normal macOS environment. Treat cache reset commands as
   environment-mutating diagnostics, not as an hourly automation default.
 
-Before a user-facing `.app`, zip, dmg, signing, or notarization release, verify
-the app-bundle launch path on a normal macOS environment and update
+Before a user-facing `.app`, zip, dmg, signing, or notarization release, record
+a normal desktop/manual launch and clean-quit pass and update
 `docs/current_status.md`.
 
 ## Release Boundary
 
-Allowed before the app-bundle smoke is fixed:
+Allowed before a packaged-release smoke pass exists:
 
 - SwiftPM build/test verification.
 - Source-only alpha checkpoints.
