@@ -22,6 +22,7 @@ review_after:
 - Folded the 2026-05-20 external general-distribution improvement proposal into the backlog as triaged automation candidates, human-decision items, low-priority polish, and scope boundaries.
 - Reframed the recurring automation runbook so unfinished release-quality gates outrank version-numbered lane progression.
 - Recorded the 2026-05-21 automated smoke regression so future runs treat `./script/build_and_run.sh --verify` as mixed helper-level evidence, while keeping source-only SwiftPM verification separate from packaged-release proof.
+- Folded the 2026-05-21 Gemini v1 polish review into the backlog as bounded localization, HelpTooltip, launch-helper, toolbar, and log-policy follow-up input.
 
 ## Reason
 
@@ -33,6 +34,7 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 - External proposal items should be used as bounded rough-edge discovery input, not as permission for broad redesign, new tools, runtime mutation, or release packaging.
 - Future runs should treat exact v0.x labels as history and choose from unfinished release-quality gates first: normal desktop/manual launch and quit smoke, menu bar daily-use verification, toolbar role decision, Setup Guide review, manual UI smoke, or a concrete backlog rough edge.
 - Future runs should not loop on historical `kLSNoExecutableErr` unless a fresh Launch Services hypothesis appears; the current helper smoke is again a release-quality gate rather than source-build proof.
+- Future runs should verify one visible localization surface at a time and preserve the UI-only localization boundary unless the user explicitly broadens it.
 
 ## Review After
 

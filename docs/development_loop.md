@@ -42,6 +42,8 @@ currently useful unfinished gates are:
 
 - restore or externally verify the app-bundle helper launch path, then complete
   normal desktop/manual launch and clean quit smoke
+- app-language switching verification for high-traffic surfaces such as menu
+  bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip copy
 - menu bar daily-use verification for status, lifecycle, copy, and Open Window
   behavior
 - a product decision on whether the toolbar remains, shrinks, or is removed
@@ -68,6 +70,12 @@ as future backlog unless it can be narrowed to one testable `llama-server`
 reliability, restart-state, copy-flow, empty-state, health wording,
 profile-warning, setup-hint, preset, read-only runtime capability,
 menu-bar/toolbar, or update-readiness ambiguity.
+
+The 2026-05-21 Gemini v1 polish review has been folded into
+`docs/automation_smoke_backlog.md`. Use it as bounded input for localization
+coverage, HelpTooltip copy, launch-helper hypotheses, toolbar evidence, and
+log-policy decisions; do not treat it as approval for broad Core diagnostic
+localization, default signing/notarization work, or log persistence.
 
 For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
 Automation may fix one concrete UI, localization, smoke, setup-flow,

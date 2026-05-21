@@ -387,6 +387,9 @@ Open release-quality gates:
 
 - restore or externally verify the local app-bundle helper launch path, then
   complete a normal desktop/manual launch and clean-quit pass
+- verify app-language switching on the highest-traffic UI surfaces, especially
+  menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
+  copy; fix one concrete mismatch at a time
 - verify the menu bar daily-use path on a normal macOS desktop, including
   status visibility, lifecycle actions, copy actions, and `Open Window`
   behavior from hidden or backgrounded window states
@@ -426,12 +429,18 @@ Good next automated candidates:
   pre-release rough edge in UI labels, localization, menu bar/toolbar behavior,
   Setup Guide inspector flow, runtime setup, endpoint/health/copy/logs,
   profiles, packaging-prep, or non-mutating update-readiness
+- add English/Japanese localization key parity coverage, or verify one named
+  UI surface under Japanese and English language settings before fixing a
+  concrete mismatch
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
   docs confusion, or current-lane daily-use ambiguity
 - verify menu bar daily-use gaps or decide toolbar demotion before adding any
   new control surfaces
+- modernize a small SwiftUI API warning, such as `onChange`, only when the
+  current toolchain reports it or the change is purely mechanical and covered
+  by build/tests
 - review the Setup Guide inspector against the normal Configuration flow and
   remove duplication or crowding if it is visible
 - refine `llama-server` presets, runtime capability advisories, or

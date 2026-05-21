@@ -4,7 +4,12 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-No unreleased changes.
+### Changed
+
+- Folded the 2026-05-21 Gemini v1 polish review into the automation smoke
+  backlog, with bounded follow-up tasks for localization coverage,
+  HelpTooltip copy, launch-helper hypotheses, toolbar evidence, and log-policy
+  decisions.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 

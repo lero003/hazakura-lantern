@@ -81,6 +81,53 @@ pre-release rough-edge discovery, not as an automatic mandate to implement every
 item. Automation should classify each item into one of the buckets below before
 acting.
 
+The 2026-05-21 Gemini v1.0 polish review is also accepted as backlog input.
+Its localization, launch-helper, and toolbar/log-policy notes are useful, but
+automation must keep the existing source-only and UI-localization boundaries.
+Treat repo evidence as the deciding source when a proposal names a likely
+cause.
+
+### 2026-05-21 Gemini Intake
+
+Accepted for automation:
+
+- verify language switching across one visible surface at a time, especially
+  sidebar labels, menu bar actions, toolbar labels, Settings text, Setup Guide
+  copy, Endpoint headings, and HelpTooltip popovers
+- add a focused localization key parity check for English and Japanese
+  `Localizable.strings`
+- replace one visible hard-coded app UI string group with explicit localized
+  keys when the string is not runtime log text, copied shell text, profile JSON,
+  or adapter-owned diagnostic payload
+- localize one HelpTooltip content group at a time, replacing mixed
+  Japanese/English headings such as `説明 / Description` only when the English
+  and Japanese copy can stay reviewable
+- modernize deprecated SwiftUI APIs such as `onChange` only when the current
+  toolchain emits a warning or the change stays mechanical and verified by
+  build/tests
+- investigate `kLSNoExecutableErr` only through a fresh, bounded hypothesis,
+  such as comparing absolute-path `open` with the current helper invocation or
+  checking bundle metadata after rebuild
+
+Conditionally accepted:
+
+- ad-hoc codesigning may be used only as a local diagnostic for the helper
+  smoke. Do not present it as signing/notarization readiness, and do not add it
+  to the default script unless it is proven necessary and harmless.
+- install-source and update-readiness advisory text may gain localized
+  presentation only if the app keeps adapter diagnostics and copied command
+  text outside the localization scope.
+
+Deferred or human decision:
+
+- toolbar demotion remains a product decision; automation may document evidence
+  or polish labels, but must not remove broad toolbar controls without approval
+- log persistence is post-v1 unless the user explicitly reopens it; keep
+  in-memory logs and clear-log behavior simple
+- signing, notarization, packaging, zip/dmg/checksum creation, and official
+  binary distribution remain outside automation unless there is a release
+  handoff for that exact work
+
 ### Automatable P0/P1 Candidates
 
 These can be selected by automation when they are narrowed to one view, one
@@ -107,6 +154,9 @@ behavior, or one testable controller boundary:
   errors or profile import/export messages
 - one explicit localization gap in app UI, such as sidebar labels, preset
   helper text, HelpTooltip text, or endpoint section headings
+- one focused language-switching verification note for a named view or control
+  surface, followed by a small fix only when the mismatch is observed
+- localization key parity coverage for English and Japanese app UI resources
 - endpoint-use guidance that stays local and does not introduce chat, proxy,
   model download, or remote exposure behavior
 - fake-driven `ServerController` state-transition tests for existing start,
@@ -127,6 +177,7 @@ slice:
 - toolbar removal, toolbar demotion, or menu-bar-only lifecycle
 - launch-at-login, automatic restart policy, endpoint auto-polling, multiple
   profiles, or window-close education dialogs
+- log persistence or automatic log-file writing
 - SwiftLint, SwiftFormat, or any new tool that changes developer workflow,
   dependency behavior, CI requirements, or formatting churn
 - entitlements, hardened runtime, signing, notarization, zip, dmg, checksums,
