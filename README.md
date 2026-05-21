@@ -12,8 +12,9 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v0.5.0-alpha.1` is a public source-only alpha focused on
-post-public issue triage and automation discipline. It does not include a
+Current checkpoint: `v0.9.0-alpha.1` is a public source-only alpha focused on
+release-quality UI, menu bar, toolbar, localization, setup guidance, and
+non-mutating `llama-server` update-readiness work. It does not include a
 packaged `.app`, zip, dmg, signing, or notarization artifact.
 
 ## v0 Scope
@@ -66,11 +67,12 @@ Verify launch:
 ./script/build_and_run.sh --verify
 ```
 
-As of 2026-05-21, this helper smoke passes in the Codex environment and cleans
-up the launched app. Treat it as automation-level launch evidence only, not as
-proof that a user-facing packaged `.app` release is ready. A normal
-desktop/manual launch and clean-quit pass is still required before app-bundle,
-zip, dmg, signing, or notarization release work.
+As of the current 2026-05-21 automation run, this helper smoke has mixed
+evidence and can return Launch Services `kLSNoExecutableErr` in the Codex
+environment. Treat it as automation-level launch evidence only, not as proof
+that a user-facing packaged `.app` release is ready. A normal desktop/manual
+launch and clean-quit pass is still required before app-bundle, zip, dmg,
+signing, or notarization release work.
 
 Project planning and automation docs:
 

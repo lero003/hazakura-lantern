@@ -25,42 +25,42 @@ Run Hazakura Habitat before choosing commands for code, dependencies, Git,
 release, or automation work. Read its `agent_context.md` first, and consult
 `command_policy.md` before risky or mutating commands.
 
-## Current Lane
+## Current Automation Focus
 
-The project has a public source-only `v0.5.0-alpha.1` checkpoint for
-post-public issue triage and automation discipline. The 2026-05-21
-`./script/build_and_run.sh --verify` run already passed as automated helper
-smoke, while normal desktop/manual launch and clean quit remains a
-packaged-release gate.
+The project has a public source-only `v0.9.0-alpha.1` checkpoint for
+release-quality UI, menu bar, toolbar, localization, setup guidance, and
+non-mutating update-readiness work. Treat exact v0.x numbers as release
+history, not as the next work selector.
 
-Treat v0.3 close-out and v0.4 reliability as prior lanes unless there is a
-concrete adapter-boundary or `llama-server` reliability ambiguity:
+The default question for each automation run is:
 
-- launch command preview correctness
-- adapter-owned command construction
-- adapter-owned endpoint and health contracts
-- validation and error mapping
-- source-only profile compatibility checks
-- app launch/build reliability when there is a fresh hypothesis
+> Does this make Lantern closer to release-quality daily use without expanding
+> scope?
 
-The current default lane is v0.5 post-public issue triage and automation
-discipline. A verified no-op is still valid, but only after v0.5 triage/docs
-candidates and any concrete v0.4 reliability signal have been checked.
+Prefer unfinished release-quality work over advancing a version lane. The
+currently useful unfinished gates are:
 
-After v0.5, automation may continue through v0.8 without another human prompt
-as long as it stays on the existing `llama-server` adapter and existing app
-behavior:
+- restore or externally verify the app-bundle helper launch path, then complete
+  normal desktop/manual launch and clean quit smoke
+- menu bar daily-use verification for status, lifecycle, copy, and Open Window
+  behavior
+- a product decision on whether the toolbar remains, shrinks, or is removed
+  after the menu bar becomes the resident control surface
+- Setup Guide inspector review against the normal Configuration flow
+- one manual UI smoke pass covering main window, Setup Guide, menu bar,
+  toolbar, logs, and clean quit
+- concrete rough edges from `docs/automation_smoke_backlog.md` that can be
+  fixed or exposed in one verified run
+- docs or issue-triage clarity only when current guidance would steer the next
+  run incorrectly
 
-- v0.6: model-family presets and option compatibility
-- v0.7: read-only runtime/version capability checks for preset guidance
-- v0.8: menu bar, toolbar, and navigation for existing actions
-
-Automation may also prepare v0.9 update-readiness work without another human
-prompt only while it remains non-mutating and advisory. Any real runtime update
-execution belongs to the guarded v1.0 workflow and must be user-confirmed.
+Treat v0.3 adapter-boundary, v0.4 reliability, v0.5 post-public triage, v0.6
+preset, v0.7 capability, v0.8 toolbar/navigation, and v0.9 update-readiness
+notes as background context. Reopen one only when a concrete, release-quality
+risk is visible and testable.
 
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
-or bundled inference.
+bundled inference, second-runtime work, or real runtime installation/update.
 
 Recent review feedback that suggests custom command profiles, Ollama, endpoint
 auto-polling, multiple-profile management, or broad UI polish should be treated
@@ -75,15 +75,11 @@ menu-bar/toolbar, profile-warning, health/copy, packaging-prep, or
 non-mutating update-readiness issue from that document per run when the issue is
 observable and verifiable.
 
-The recurring automation may move from v0 to v0.1, v0.2, and v0.3 without a new
-human prompt when `docs/current_status.md` and `docs/roadmap.md` agree that the
-previous lane is sufficiently closed. Do not keep re-running historical Launch
-Services diagnostics unless helper smoke regresses or a fresh hypothesis
-appears. If a blocker appears environment-specific and the core SwiftPM tests
-still pass, carry it as a known risk and choose the next safe lane item that
-does not depend on that blocker.
+Historical lane handoff rules:
 
-Lane handoff rules:
+Use these only to interpret old roadmap notes. They are not the active work
+queue, and automation should not chase them just because a version number is
+next.
 
 - v0 -> v0.1: allowed when command construction, process control, endpoint
   display, configuration persistence, and SwiftPM verification are stable, even
@@ -127,13 +123,13 @@ Lane handoff rules:
 
 Release posture:
 
-- `v0.5.0-alpha.1` is acceptable as a source-only checkpoint when SwiftPM
+- `v0.9.0-alpha.1` is acceptable as a source-only checkpoint when SwiftPM
   verification passes and docs clearly state that no packaged `.app` artifact is
   attached.
 - Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
   release until a normal desktop/manual launch and clean-quit pass is recorded.
-  The 2026-05-21 helper smoke is useful automation evidence, not packaged
-  release proof.
+  The 2026-05-21 helper smoke has mixed evidence and is not packaged release
+  proof.
 - Do not cut a user-facing packaged release until the menu bar, toolbar, and
   Setup Guide release blockers in `docs/current_status.md` and `docs/roadmap.md`
   are resolved or explicitly deferred from the release scope.
@@ -166,46 +162,31 @@ Hourly posture:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.
-- Choose at most one small slice. Do not stop after inspection only when the
-  tree is clean, verification is available, and `docs/current_status.md` lists
-  a small next slice.
+- Choose at most one small release-quality slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
   clear and verification passes.
-- Keep hourly runs quiet, but progress-biased. A verified no-op is valid only
-  after checking current-status candidates and finding no safe implementation,
-  test, or automation-doc slice for this run.
+- Keep hourly runs quiet, but progress-biased. A verified no-op is valid when
+  no unfinished release-quality gate or concrete rough edge is safely actionable
+  in this run.
 
 Preferred order:
 
 1. Fix a failing test or build.
-2. Close a small correctness gap in the current roadmap lane.
-3. If the current lane is blocked only by a documented environment-specific
-   smoke issue, advance to the next lane's smallest safe item.
+2. Close one unfinished release-quality gate from `docs/current_status.md`.
+3. Use `docs/automation_smoke_backlog.md` to expose or fix one concrete
+   pre-release rough edge that can be verified in the same run.
 4. Add focused tests for observed `llama-server` launch, validation, health,
    endpoint, restart, copy-flow, or profile-warning behavior.
 5. Tighten docs when they would otherwise steer the next run incorrectly or
    confuse a `llama-server` setup path.
-6. If no v0.4 reliability slice is justified, advance into v0.5 and classify
-   public feedback or external review notes using
+6. Classify public feedback or review notes with
    `docs/post_public_operations.md`, then make one safe local change only if the
-   classification justifies it.
-7. If v0.5 triage is quiet, advance into v0.6 preset work using
-   `docs/llama_server_presets.md`: one command-visible preset, option-family,
-   or MTP-capable configuration slice at a time.
-8. If v0.6 preset work is quiet or needs compatibility evidence, advance into
-   v0.7 read-only runtime capability checks such as timeout-bounded
-   `llama-server --version` or `--help` parsing for preset warnings.
-9. If v0.7 capability work is quiet, advance into v0.8 menu bar/toolbar/navigation work
-   using `docs/toolbar_and_navigation.md`, mirroring existing actions only.
-10. If v0.8 menu bar/toolbar work is quiet, advance into v0.9 update-readiness work:
-   source detection, version/capability summary, or dry-run guidance, without
-   mutating a real runtime.
-11. If no lane-specific slice is justified, check
-   `docs/automation_smoke_backlog.md` for one concrete pre-release rough edge
-   that can be verified in the same run.
-12. End as a verified no-op only when no safe v0.5, v0.6, v0.7, v0.8,
-   non-mutating v0.9, or smoke-backlog slice is justified after the checks
-   above.
+   classification identifies a source-quality issue.
+7. Refine presets, runtime capability advisories, or update-readiness wording
+   only when it reduces a concrete release-quality risk and remains
+   non-mutating.
+8. End as a verified no-op only when no safe release-quality, smoke-backlog,
+   feedback-triage, test, or automation-doc slice is justified.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.

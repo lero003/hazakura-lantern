@@ -1,14 +1,15 @@
 # Current Status
 
-Last reviewed: 2026-05-20
+Last reviewed: 2026-05-21
 
 ## Project State
 
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v0.5.0-alpha.1` is a public source-only alpha for
-post-public issue triage and automation discipline. It is not a packaged app
+Current release checkpoint: `v0.9.0-alpha.1` is a public source-only alpha for
+release-quality UI, menu bar, toolbar, localization, setup guidance, and
+non-mutating `llama-server` update-readiness work. It is not a packaged app
 release.
 
 Implemented scope:
@@ -16,8 +17,9 @@ Implemented scope:
 - SwiftPM package with macOS 14 minimum.
 - SwiftUI app target plus a small core library target.
 - Runtime configuration stored in `UserDefaults`.
-- Recent runtime executable and model path lists stored separately from the
-  active runtime configuration.
+- Runtime executable and model selections are stored in the active runtime
+  configuration; the Configuration view keeps path rows compact by omitting
+  recent-path menus.
 - Installed `llama-server` discovery observes executable files from PATH plus
   common Homebrew and MacPorts binary locations, surfacing them as selectable UI
   choices without running package-manager commands.
@@ -133,6 +135,9 @@ Implemented scope:
 - The app loads the active runtime profile into the editable configuration and
   provides minimal `.lantern-profile.json` import/export UI for that active
   profile without adding multiple-profile management.
+- Runtime Profile import/export buttons now expose explicit accessibility
+  labels and hints that name the active `.lantern-profile.json` file flow
+  without changing profile behavior.
 - Endpoint display, environment snippets, timeout-bounded health-check curl,
   and AI Mobile smoke commands now flow through an adapter-owned
   `RuntimeEndpoint` contract, with focused tests preserving the `llama-server`
@@ -205,8 +210,9 @@ Implemented scope:
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
 - Local verification baseline has run `swift test` and
-  `swift build --disable-sandbox` successfully; the 2026-05-21 local app-bundle
-  helper smoke also passed in this Codex environment.
+  `swift build --disable-sandbox` successfully; the current 2026-05-21 local
+  app-bundle helper smoke regressed with `kLSNoExecutableErr` in this Codex
+  environment.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -223,10 +229,9 @@ Implemented scope:
 - llama-server preset guidance now defines v0.6/v0.7 as model-family
   recommendation, option compatibility, and runtime capability advisory work
   before any second runtime adapter.
-- Core `llama-server` presets now model conservative, balanced local,
-  long-context, low-memory, and MTP-capable settings as visible configuration
-  values and additional launch arguments, with MTP arguments added only by the
-  explicit MTP-capable preset.
+- Core `llama-server` presets now model Standard, Qwen Recommended, and Gemma
+  Recommended settings as visible configuration values and additional launch
+  arguments, keeping model-family guesses small and reviewable.
 - The server configuration view now lets users choose a `llama-server` preset,
   review its context/thread/GPU/additional-argument summary, and apply it to
   the active configuration while preserving the selected runtime, model, host,
@@ -238,6 +243,15 @@ Implemented scope:
 - The server configuration view now offers a manual runtime capability check
   that displays the selected `llama-server` version when available and shows
   supported, unsupported, or unknown preset-option advisory text before launch.
+- Advanced Settings and Advanced Connection Details now use full-row clickable
+  disclosure headers, so the text label and surrounding row open the section.
+- Advanced Settings accepts context sizes up to 1,048,576 tokens through the
+  slider and direct field, while help text now makes clear that threads and GPU
+  layers are delegated to `llama-server` when set to auto rather than measured
+  from the Mac by Lantern.
+- The Logs destination now stretches its log area vertically and top-aligns
+  empty and populated log content, making the view behave like a working log
+  surface instead of a short centered panel.
 - The main window now has a native toolbar shell for the existing start, stop,
   restart, and manual endpoint health-check actions, with availability derived
   from the same controller state as the in-page controls.
@@ -256,9 +270,9 @@ Implemented scope:
   dashboard command preview without changing runtime behavior.
 - A menu bar control surface now mirrors the existing server lifecycle, health,
   copy, active-profile import/export, log clear, open-window, and quit actions
-  while keeping the app as a regular Dock/windowed app. Menu bar copy action
-  labels now match the toolbar wording for environment, health-check, and
-  AI Mobile smoke snippets.
+  while keeping the app as a regular Dock/windowed app.
+- Menu bar copy action labels now match the toolbar copy menu for environment,
+  health-check, and AI Mobile smoke snippets without changing copied values.
 - The server configuration view now shows non-mutating install-source advice for
   selected `llama-server` paths that look Homebrew-managed, MacPorts-managed,
   source-checkout-built, or manual, while keeping update execution outside
@@ -279,8 +293,9 @@ Implemented scope:
   removing the known app-UI crash edge from the automation smoke backlog.
 - Setup Guide step headers now expose complete/incomplete accessibility values
   and hints while keeping decorative step indicators out of the reading order.
-- The process status badge now exposes a localized accessibility label and
-  value while hiding the decorative lantern icon from assistive reading.
+- Process status and endpoint health indicators now expose explicit
+  accessibility labels and values while keeping decorative status artwork out of
+  the reading order.
 - Advanced configuration fields are now grouped behind disclosure controls, with
   context, thread, and GPU-layer sliders supplementing the existing editable
   values.
@@ -313,16 +328,18 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current Codex launch-smoke status (2026-05-21): `./script/build_and_run.sh
---verify` builds the bundle and reports `Hazakura Lantern launch request
-completed`; `./script/build_and_run.sh --stop` completes afterward, with no
-leftover `HazakuraLLMManager` process found by `pgrep`. The generated bundle
-contains the executable, `Info.plist`, and English/Japanese localization
-resources under `dist/Hazakura Lantern.app/Contents`.
+Current Codex launch-smoke status (2026-05-21 current run):
+`./script/build_and_run.sh --verify` builds the bundle, but Launch Services
+returns `kLSNoExecutableErr`. `./script/build_and_run.sh --stop` completes
+afterward; a follow-up `pgrep -fl HazakuraLLMManager` check could not read the
+process list because `sysmond` was unavailable in this environment. The
+generated bundle contains `Info.plist`, the `HazakuraLLMManager` executable,
+and English/Japanese localization resources under
+`dist/Hazakura Lantern.app/Contents`.
 
-Treat this as automation-level launch and cleanup smoke only. It does not prove
-packaged-release readiness by itself because no normal desktop/manual UI pass
-was observed in this run.
+Treat this as an automation-level launch-smoke regression, not a source-build
+failure. It does not prove packaged-release readiness, and it should not block
+source-only work that is verified through SwiftPM.
 
 Historical 2026-05-17 diagnostics: re-signing the generated bundle with
 `codesign --force --sign -`, adding standard bundle metadata, adding
@@ -335,9 +352,10 @@ bundle rather than a blanket inability to call Launch Services.
 Additional historical 2026-05-17 diagnostics: signing the completed bundle can make
 `codesign --verify --deep --strict` pass, and a top-level
 `open -n /absolute/path/to/Hazakura Lantern.app` launch request can be accepted.
-However, the helper still failed when `open` was invoked from inside the shell
-script after rebuilding the bundle. The 2026-05-21 helper smoke did not
-reproduce that failure; keep the history only for regression triage.
+However, the helper can still fail when `open` is invoked from inside the shell
+script after rebuilding the bundle. The 2026-05-21 current run reproduced that
+failure even though the bundle executable and `CFBundleExecutable` value
+matched.
 
 ## Known Constraints
 
@@ -356,22 +374,19 @@ reproduce that failure; keep the history only for regression triage.
   auto restart, model downloads, chat, RAG, or proxy behavior.
 - LAN exposure and authentication are intentionally outside v0.
 
-## Automation Lane
+## Automation Focus
 
-The automation should treat the project as having a public source-only
-`v0.5.0-alpha.1` checkpoint for post-public issue triage and automation
-discipline. The 2026-05-21 helper smoke is passing automation evidence, while
-normal desktop/manual launch and clean quit remains the packaged-release gate.
-Do not spend hourly runs retrying historical `kLSNoExecutableErr` diagnostics
-unless the helper smoke regresses or a fresh Launch Services hypothesis appears.
+The automation should treat version checkpoints as history, not as the work
+queue. The useful question is whether the next slice moves Lantern closer to
+release-quality daily use while preserving the current `llama-server` boundary.
 
-No user-facing app-bundle release should be cut until a normal desktop/manual
-launch and clean-quit pass is recorded.
+No user-facing packaged release should be cut until the remaining release
+quality gates below are resolved or explicitly deferred by a human.
 
-Formal-release UI blockers:
+Open release-quality gates:
 
-- complete a normal desktop/manual launch and clean-quit pass; the 2026-05-21
-  helper smoke proves only local automated launch and cleanup
+- restore or externally verify the local app-bundle helper launch path, then
+  complete a normal desktop/manual launch and clean-quit pass
 - verify the menu bar daily-use path on a normal macOS desktop, including
   status visibility, lifecycle actions, copy actions, and `Open Window`
   behavior from hidden or backgrounded window states
@@ -385,26 +400,18 @@ Formal-release UI blockers:
 - keep menu-bar-only lifecycle, launch-at-login, and automatic restart policy
   out of the release unless a later explicit product decision reopens them
 
-The v0.3 adapter-boundary checkpoint is closed unless a new concrete ambiguity
-or regression is named. The v0.4 reliability lane is allowed to stay quiet when
-there is no concrete safe `llama-server` reliability slice; do not force v0.4
-work just to fill the lane. The current source lane is v0.5 post-public issue
-triage and automation discipline, with automation allowed to continue through
-v0.8 on the existing `llama-server` path when each slice is concrete and
-verified. Automation may also prepare v0.9 update-readiness work when it stays
-non-mutating and advisory.
-
-Use `docs/post_public_operations.md` for public issue triage, automation-safe
-work, and human approval gates. Treat post-public triage as the v0.5 lane, while
-its guardrails apply immediately. Keep `docs/public_opening_preflight.md` as a
-pre-open and release-handoff reference rather than the normal work queue.
 Use `docs/automation_smoke_backlog.md` for pre-release rough-edge discovery and
-small automatable polish. It names safe smoke checks, good automation slices,
-and release boundaries for UI, localization, menu bar, setup-flow,
-health/copy/log, profile, update-readiness, and packaging-prep work.
-The backlog also classifies the 2026-05-20 external improvement proposal into
-automatable candidates, human-decision items, low-priority polish, and explicit
-scope boundaries.
+small automatable polish. Use `docs/post_public_operations.md` for public issue
+triage, automation-safe work, and human approval gates. Keep
+`docs/public_opening_preflight.md` as a pre-open and release-handoff reference,
+not as the normal work queue.
+
+Closed source-work areas should stay closed unless a concrete regression or
+release-quality ambiguity appears: adapter boundary documentation, core
+`llama-server` launch/health validation, profile schema version `1`, the core
+preset model and picker, the initial runtime capability advisory, and the
+initial menu bar/toolbar/setup-guide surfaces.
+
 Automation must not change GitHub visibility, settings, tags, releases, release
 assets, repository packages, public issue state, automation cadence, a new
 adapter, custom command implementation, profile schema version, dependencies,
@@ -419,35 +426,17 @@ Good next automated candidates:
   pre-release rough edge in UI labels, localization, menu bar/toolbar behavior,
   Setup Guide inspector flow, runtime setup, endpoint/health/copy/logs,
   profiles, packaging-prep, or non-mutating update-readiness
-- when using the external improvement proposal, prefer automatable P0/P1
-  candidates such as accessibility, any newly discovered app-UI force unwrap,
-  copy feedback beyond the shared pasteboard helper already covered, error
-  visibility, focused localization gaps, fake-driven controller tests, and
-  stopped-state animation performance before low-priority polish
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
   docs confusion, or current-lane daily-use ambiguity
-- tighten v0.5 issue-triage docs only when the taxonomy, label proposals, or
-  draft-response guidance miss a concrete public-feedback case
-- add or refine `llama-server` model-family preset guidance in
-  `docs/llama_server_presets.md`, keeping presets advisory and command-visible
-- implement one tested v0.6 preset slice beyond the core preset model and
-  initial picker/apply UI, such as preset compatibility notes or safer
-  option-family warnings
-- implement one tested v0.7 runtime capability slice beyond the core probe and
-  initial manual UI advisory, such as refining unknown-capability wording or
-  documenting a concrete runtime-version compatibility case
-- implement one v0.8 menu bar/toolbar/navigation slice only if a new
-  existing-action affordance remains concrete; the start/stop/restart/health
-  toolbar shell, copy menu, profile import/export, clear-log, command-preview
-  reveal, and initial menu bar control surface are now covered. Prefer
-  verifying menu bar daily-use gaps or deciding toolbar demotion before adding
-  new control surfaces; menu-bar-only lifecycle and launch-at-login behavior
-  need an explicit human handoff
-- implement one non-mutating v0.9 update-readiness slice beyond the path-only
-  install-source advice, dry-run requirements, and missing-evidence wording now
-  covered, such as documenting a concrete update-readiness case
+- verify menu bar daily-use gaps or decide toolbar demotion before adding any
+  new control surfaces
+- review the Setup Guide inspector against the normal Configuration flow and
+  remove duplication or crowding if it is visible
+- refine `llama-server` presets, runtime capability advisories, or
+  update-readiness wording only when it reduces a concrete release-quality risk
+  and remains advisory, visible, and non-mutating
 - improve one `llama-server` reliability or daily-use path when the confusing
   behavior is concrete and testable: launch validation, launch failure wording,
   missing runtime/model file empty states beyond the blank or non-`.gguf`
@@ -493,5 +482,5 @@ Do not begin endpoint auto-polling, multiple-profile management, adapter
 expansion, custom command implementation, MLX implementation, model management,
 unattended runtime installation/update, model download, automatic benchmarking,
 or chat features during this handoff. Runtime version and option checks are
-allowed only as local, timeout-bounded, read-only advisory work for v0.7/v0.9.
-Guarded v1.0 update execution must be opt-in and user-confirmed.
+allowed only as local, timeout-bounded, read-only advisory work that improves
+release quality. Guarded update execution must be opt-in and user-confirmed.

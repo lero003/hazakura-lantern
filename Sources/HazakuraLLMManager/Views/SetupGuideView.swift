@@ -3,7 +3,7 @@ import HazakuraLLMManagerCore
 
 struct SetupGuideView: View {
     @ObservedObject var controller: ServerController
-    @State private var selectedPresetIntent: LlamaServerPresetIntent = .balancedLocal
+    @State private var selectedPresetIntent: LlamaServerPresetIntent = .standard
     @State private var isHomebrewCopied = false
 
     private static let ggufModelSearchURL = URL(string: "https://huggingface.co/models?search=gguf")

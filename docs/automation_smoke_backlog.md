@@ -37,20 +37,23 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest automated smoke result (2026-05-21):
+Latest automated smoke result (2026-05-21 current run):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
 - `swift test` passed: 180 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
-- `./script/build_and_run.sh --verify` built the local bundle and completed the
-  launch request.
-- `./script/build_and_run.sh --stop` completed, and `pgrep -fl
-  HazakuraLLMManager` found no leftover app process.
+- `./script/build_and_run.sh --verify` built the local bundle but Launch
+  Services returned `kLSNoExecutableErr`.
+- `./script/build_and_run.sh --stop` completed afterward. A follow-up
+  `pgrep -fl HazakuraLLMManager` check could not read the process list because
+  `sysmond` was unavailable in this environment.
 
-This clears the previously tracked automation-level helper launch failure for
-now. It is not a manual UI smoke pass and should not be treated as packaged
-release evidence.
+Treat the helper launch path as a current automation-level regression again.
+The generated bundle still contains `Info.plist`, the `HazakuraLLMManager`
+executable, and English/Japanese localization resources, so this remains a
+Launch Services smoke issue rather than source-build proof. It is not a manual
+UI smoke pass and should not be treated as packaged release evidence.
 
 ## Manual UI Smoke Targets
 
@@ -59,7 +62,7 @@ visual rough edge, prefer these targets:
 
 - first launch with no runtime or model selected
 - Setup Guide inspector open, close, and reopen from toolbar and Dashboard
-- Runtime row with Installed, Recent, and manual Choose controls present
+- Runtime row with Installed and manual Choose controls present
 - Japanese and English Settings language changes
 - menu bar status, Start, Stop, Restart, Check Health, copy actions, Open Window,
   and Quit
@@ -191,8 +194,8 @@ exists.
 ### Runtime Setup
 
 - Improve the Installed Runtime empty state when `llama-server` is not found.
-- Deduplicate or clarify Installed and Recent runtime path presentation if a
-  concrete duplicate case appears.
+- Keep runtime/model path rows compact; do not reintroduce a Recent menu unless
+  a concrete daily-use path-switching need outweighs the width cost.
 - Improve runtime/model selection hints only when the existing blank,
   non-`.gguf`, directory, missing-file, or non-executable-file guidance leaves a
   concrete gap.

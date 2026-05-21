@@ -100,7 +100,7 @@ extension HelpTooltip {
         HelpTooltip(
             title: "コンテキストサイズ / Context Size",
             description: "モデルが一度に処理・記憶できる最大トークン数（文脈の長さ / Context Window Size）です。",
-            tips: "長い会話や大きなドキュメントを処理するには大きい値が必要ですが、その分メモリ (RAM / VRAM) を多く消費します。モデル自体の仕様（例: Llama 3 は 8192）に合わせるのが推奨されます。"
+            tips: "llama-server では 0 を指定するとモデルから読み込まれますが、Lantern では明示値だけを扱います。近年のモデルは 128K 以上の文脈を持つものもあります。大きい値ほどRAM / VRAMを使うため、選択したモデルとマシンに合わせて調整してください。"
         )
     }
 
@@ -108,7 +108,7 @@ extension HelpTooltip {
         HelpTooltip(
             title: "CPUスレッド数 / CPU Threads",
             description: "演算処理に使用するCPUのスレッド数です。",
-            tips: "auto に設定するとマシンの最適なスレッド数が自動選択されます。手動で設定する場合は、マシンの物理コア数（特にApple Siliconの高性能コア数 / Performance Cores）に合わせると最も効率的です。物理コア数を超えて指定するとかえって遅くなります。"
+            tips: "auto の場合、Lantern は -t を渡さず llama-server 側の既定に任せます。Lantern はまだCPUコア数を自動測定していません。手動指定は実機で速度と安定性を見ながら調整してください。"
         )
     }
 
@@ -116,7 +116,7 @@ extension HelpTooltip {
         HelpTooltip(
             title: "GPUレイヤー数 / GPU Layers",
             description: "ニューラルネットワークのレイヤーのうち、いくつをGPUに処理させる（オフロード / Offloading する）かを指定します。",
-            tips: "auto にするとGPUが最大限活用されます。Apple Silicon Macでは、全レイヤーをGPU (Unified Memory / 統一メモリ) に載せることで劇的に高速化します。メモリ不足でクラッシュする場合は、レイヤー数を減らすか、より小さい（軽量な）モデルを選択してください。0 を指定すると完全にCPUのみで処理します。"
+            tips: "auto の場合、Lantern は -ngl を渡さず llama-server 側の既定に任せます。Lantern はまだGPU容量やモデル層数を自動測定していません。0 はCPUのみ、手動値は選択したモデルとメモリ量に合わせて調整してください。"
         )
     }
 

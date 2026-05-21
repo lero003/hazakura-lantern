@@ -12,8 +12,8 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
               -m, --model FNAME
               --ctx-size N
               --cache-type-k TYPE
-              --spec-type=TYPE
-              --spec-draft-n-max N
+              --cache-type-v TYPE
+              --flash-attn [on|off|auto]
             """
         )
 
@@ -21,8 +21,8 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
         XCTAssertTrue(capabilities.supports(option: "--model"))
         XCTAssertTrue(capabilities.supports(option: "--ctx-size"))
         XCTAssertTrue(capabilities.supports(option: "--cache-type-k"))
-        XCTAssertTrue(capabilities.supports(option: "--spec-type"))
-        XCTAssertTrue(capabilities.supports(option: "--spec-draft-n-max"))
+        XCTAssertTrue(capabilities.supports(option: "--cache-type-v"))
+        XCTAssertTrue(capabilities.supports(option: "--flash-attn"))
     }
 
     func testUnsupportedPresetOptionsStayVisibleForWarnings() {
@@ -31,13 +31,14 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
             helpOutput: """
               --model FNAME
               --ctx-size N
-              --spec-type TYPE
+              --flash-attn [on|off|auto]
+              --cache-type-k TYPE
             """
         )
 
         XCTAssertEqual(
-            capabilities.unsupportedOptions(for: .mtpCapable),
-            ["--spec-draft-n-max"]
+            capabilities.unsupportedOptions(for: .qwenRecommended),
+            ["--cache-type-v"]
         )
     }
 
@@ -50,18 +51,18 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
                 errorDescription: nil
             ),
             helpCheck: .init(
-                output: "--spec-type TYPE\n--spec-draft-n-max N",
+                output: "--flash-attn [on|off|auto]\n--cache-type-k TYPE\n--cache-type-v TYPE",
                 terminationStatus: 0,
                 didTimeOut: false,
                 errorDescription: nil
             ),
             capabilities: .parse(
                 versionOutput: "llama-server fake b1",
-                helpOutput: "--spec-type TYPE\n--spec-draft-n-max N"
+                helpOutput: "--flash-attn [on|off|auto]\n--cache-type-k TYPE\n--cache-type-v TYPE"
             )
         )
 
-        let note = result.presetCompatibilityNote(for: .mtpCapable)
+        let note = result.presetCompatibilityNote(for: .qwenRecommended)
 
         XCTAssertEqual(note.severity, .supported)
         XCTAssertEqual(note.title, "Preset options are listed by this runtime")
@@ -76,21 +77,21 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
                 errorDescription: nil
             ),
             helpCheck: .init(
-                output: "--spec-type TYPE",
+                output: "--flash-attn [on|off|auto]\n--cache-type-k TYPE",
                 terminationStatus: 0,
                 didTimeOut: false,
                 errorDescription: nil
             ),
             capabilities: .parse(
                 versionOutput: nil,
-                helpOutput: "--spec-type TYPE"
+                helpOutput: "--flash-attn [on|off|auto]\n--cache-type-k TYPE"
             )
         )
 
-        let note = result.presetCompatibilityNote(for: .mtpCapable)
+        let note = result.presetCompatibilityNote(for: .qwenRecommended)
 
         XCTAssertEqual(note.severity, .warning)
-        XCTAssertTrue(note.detail.contains("--spec-draft-n-max"))
+        XCTAssertTrue(note.detail.contains("--cache-type-v"))
     }
 
     func testPresetCompatibilityNoteKeepsTimeoutUnknown() {
@@ -110,7 +111,7 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
             capabilities: .parse(versionOutput: nil, helpOutput: nil)
         )
 
-        let note = result.presetCompatibilityNote(for: .mtpCapable)
+        let note = result.presetCompatibilityNote(for: .qwenRecommended)
 
         XCTAssertEqual(note.severity, .unknown)
         XCTAssertTrue(note.detail.contains("--help check did not finish"))
@@ -130,8 +131,9 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
         XCTAssertEqual(result.versionCheck.terminationStatus, 0)
         XCTAssertEqual(result.helpCheck.terminationStatus, 0)
         XCTAssertEqual(result.capabilities.versionSummary, "llama-server fake b1")
-        XCTAssertTrue(result.capabilities.supports(option: "--spec-type"))
-        XCTAssertTrue(result.capabilities.supports(option: "--spec-draft-n-max"))
+        XCTAssertTrue(result.capabilities.supports(option: "--flash-attn"))
+        XCTAssertTrue(result.capabilities.supports(option: "--cache-type-k"))
+        XCTAssertTrue(result.capabilities.supports(option: "--cache-type-v"))
     }
 
     func testProbeTimesOutReadOnlyChecks() throws {
@@ -164,8 +166,9 @@ final class LlamaServerCapabilityProbeTests: XCTestCase {
           --help)
             printf '%s\\n' '--model FNAME'
             printf '%s\\n' '--ctx-size N'
-            printf '%s\\n' '--spec-type TYPE'
-            printf '%s\\n' '--spec-draft-n-max N'
+            printf '%s\\n' '--flash-attn [on|off|auto]'
+            printf '%s\\n' '--cache-type-k TYPE'
+            printf '%s\\n' '--cache-type-v TYPE'
             ;;
           *)
             exit 64

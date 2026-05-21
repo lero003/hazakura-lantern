@@ -18,12 +18,16 @@ struct ProfileView: View {
                     } label: {
                         Label("Export", systemImage: "square.and.arrow.up")
                     }
+                    .accessibilityLabel(Text("Export Profile"))
+                    .accessibilityHint(Text("Export the active runtime profile as a .lantern-profile.json file."))
 
                     Button {
                         importRuntimeProfile()
                     } label: {
                         Label("Import", systemImage: "square.and.arrow.down")
                     }
+                    .accessibilityLabel(Text("Import Profile"))
+                    .accessibilityHint(Text("Import a .lantern-profile.json file into the active configuration."))
                 }
 
                 if let message = controller.profileFileMessage {

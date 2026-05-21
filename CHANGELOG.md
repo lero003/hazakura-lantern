@@ -4,16 +4,29 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+No unreleased changes.
+
+## v0.9.0-alpha.1 - 2026-05-21
+
+Source-only alpha checkpoint for release-quality UI, menu bar, toolbar,
+localization, setup guidance, and non-mutating `llama-server` update-readiness
+work. This checkpoint does not include a packaged `.app`, zip, dmg, signing,
+notarization, checksum, or binary distribution artifact.
+
 ### Changed
 
-- Recorded the 2026-05-21 automated smoke pass for SwiftPM tests, localization
-  lint, local app-bundle helper launch, and cleanup, while keeping manual
-  desktop UI smoke as a packaged-release gate.
+- Improved Runtime Profile import/export accessibility so the buttons announce
+  the active `.lantern-profile.json` file flow.
+- Recorded the 2026-05-21 automated smoke regression where SwiftPM tests,
+  localization lint, and source build passed but the app-bundle helper launch
+  returned `kLSNoExecutableErr`, keeping manual desktop UI smoke and helper
+  stability as release gates.
 - Aligned menu bar copy action labels with the toolbar copy menu so endpoint,
   environment, health-check, and AI Mobile smoke snippets use the same visible
   wording.
-- Improved the process status badge accessibility value so assistive reading
-  exposes the localized server state instead of the decorative indicator.
+- Improved process status and endpoint health accessibility so status
+  indicators report explicit labels and values without reading decorative
+  artwork.
 - Improved Setup Guide step-card accessibility so each step reports
   complete/incomplete state with localized hints.
 - Moved Setup Guide out of the primary sidebar and into a toolbar-toggled
@@ -89,6 +102,18 @@ All notable changes to Hazakura Lantern will be documented in this file.
   implement guarded update UX but not to mutate real runtimes unattended.
 - Improved log-row accessibility so each runtime log entry is announced with
   its stream and message together.
+- Updated the preset vocabulary to Standard, Qwen Recommended, and Gemma
+  Recommended, keeping generated `llama-server` options visible while leaving
+  speculative decoding out of the default presets.
+- Kept Configuration path rows compact by removing the Recent menus from the
+  runtime/model picker surface while preserving stored recent-path data.
+- Made Advanced Settings and Advanced Connection Details full-row clickable
+  disclosure headers, raised the context slider ceiling, and clarified that
+  thread/GPU auto values are delegated to `llama-server`.
+- Expanded the Logs destination so empty and populated log content top-aligns
+  inside the available view space.
+- Reframed automation guidance around unfinished release-quality gates rather
+  than advancing through version-numbered lanes.
 
 ## v0.5.0-alpha.1 - 2026-05-20
 

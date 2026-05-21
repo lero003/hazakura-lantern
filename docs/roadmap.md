@@ -112,12 +112,14 @@ Observation is not management. Lantern may tell users that a runtime appears
 old, missing, or installed in an unusual way. It should not run installers,
 upgrade runtimes, mutate package managers, or hide where a runtime came from.
 
-## Current Source Lane: v0.5 Post-Public Issue Triage And Automation Discipline
+## Current Source Lane: v0.9 Release-Quality Polish
 
-The project has reached a source-only `v0.5.0-alpha.1` checkpoint for
-post-public issue triage and automation discipline. The 2026-05-21 automated
-app-bundle helper smoke passes locally, but a normal desktop/manual UI pass is
-still required before any packaged app release.
+The project has reached a source-only `v0.9.0-alpha.1` checkpoint for
+release-quality UI, menu bar, toolbar, localization, setup guidance, and
+non-mutating `llama-server` update-readiness work. The 2026-05-21 automated
+app-bundle helper smoke has mixed evidence and currently regresses with
+`kLSNoExecutableErr`, so a normal desktop/manual UI pass is still required
+before any packaged app release.
 
 Use v0 through v0.4 notes below as foundation and backlog context, not as a
 reason to reopen closed work without a concrete ambiguity. The next useful
@@ -125,10 +127,9 @@ source work should classify post-public feedback, tighten automation-safe
 triage, or address a specific `llama-server` reliability issue only when it is
 concrete and testable.
 
-Do not retry historical `kLSNoExecutableErr` diagnostics unless the helper
-smoke regresses or there is a fresh Launch Services hypothesis. Continue with
-release-quality source work that can be verified through SwiftPM or focused
-manual smoke.
+Do not loop on historical `kLSNoExecutableErr` diagnostics without a fresh
+Launch Services hypothesis. Continue with release-quality source work that can
+be verified through SwiftPM or focused manual smoke.
 
 ## v0 Foundation - Make One Runtime Boring
 
@@ -174,8 +175,7 @@ Already done or mostly done:
 - healthy endpoint status detail makes the manual, snapshot-only check explicit
   without adding automatic polling
 - `UserDefaults` configuration persistence
-- recent executable/model path menus stored outside exported runtime
-  configuration
+- compact runtime/model path rows without recent-path menus in Configuration
 - app bundle launch helper
 - bounded log buffering and clear-log behavior covered by focused tests
 - focused core unit tests
@@ -270,9 +270,9 @@ Already done or mostly done:
   added
 - adapter contract documentation for responsibilities, lifecycle boundaries,
   and future adapter no-go lines before runtime breadth is added
-- core `llama-server` preset model for conservative, balanced local,
-  long-context, low-memory, and MTP-capable settings, with generated options
-  kept visible in the launch command
+- core `llama-server` preset model for Standard, Qwen Recommended, and Gemma
+  Recommended settings, with generated options kept visible in the launch
+  command
 - compact preset picker and apply action in the server configuration view, with
   a visible settings summary before launch
 - timeout-bounded, read-only `llama-server --version` and `--help` capability
@@ -296,10 +296,10 @@ Already done or mostly done:
 
 Remaining before a packaged app release:
 
-- record a normal desktop/manual launch and clean-quit pass; the 2026-05-21
-  helper smoke is automation evidence, not packaged-release proof
-- resolve the pre-release UI blockers for the recent menu bar, toolbar, and
-  Setup Guide additions:
+- restore or externally verify the app-bundle helper launch path, then record a
+  normal desktop/manual launch and clean-quit pass
+- resolve the pre-release UI blockers for the menu bar, toolbar, and Setup
+  Guide additions:
   - verify menu bar daily-use behavior on a normal macOS desktop
   - decide the toolbar's role after the menu bar becomes the resident surface
   - confirm the Setup Guide inspector helps onboarding without crowding the
@@ -546,22 +546,22 @@ settings before adding runtime breadth.
 Candidate work:
 
 - maintain `docs/llama_server_presets.md`
-- define a small preset vocabulary: conservative, balanced local, long context,
-  low memory, and MTP capable (core model done)
+- define a small preset vocabulary: Standard, Qwen Recommended, and Gemma
+  Recommended (core model done)
 - map presets to visible configuration values and additional arguments
 - preview and apply presets from the server configuration view
 - keep launch command preview as the source of truth for what will run
 - add focused tests for preset-to-configuration behavior
-- treat `--spec-type draft-mtp` and `--spec-draft-n-max` as MTP-capable preset
-  suggestions, not global defaults
+- keep speculative decoding arguments out of the default preset vocabulary
+  until there is an explicit model/preset contract for them
 - keep unsupported or unknown options visible and editable instead of hiding or
   silently rewriting them
 
 Completion criteria:
 
 - presets are advisory and user-reviewable
-- MTP stays off unless a preset or user explicitly marks the selected model as
-  MTP-capable
+- speculative decoding stays off unless a future preset or user explicitly
+  marks the selected model as compatible
 - no model download, conversion, catalog, benchmark UI, runtime install/update,
   endpoint auto-polling, multiple-profile management, or adapter expansion is
   introduced
@@ -757,17 +757,16 @@ Do not use this project for:
 
 ## Automation Guidance
 
-Automated development should pick one small slice from the current lane. After
-`v0.5.0-alpha.1`, automation may continue through v0.7 without another human
-prompt as long as it stays on the existing `llama-server` path, and may
-continue through v0.8 for menu bar, toolbar, and navigation work. The default
-order is v0.5 post-public triage, then v0.6 model presets and option
-compatibility, v0.7 runtime capability advisories, and v0.8 menu
-bar/toolbar/navigation. v0.9 update-readiness work may also proceed
-automatically only while it remains non-mutating and advisory.
-v0.4 `llama-server` reliability work remains valid only when a concrete,
-testable daily-use ambiguity is visible; do not force v0.4 work just to fill
-the lane.
+Automated development should pick one small release-quality slice. Version
+sections below are historical context and backlog shape, not the default work
+selector. Prefer work that makes Lantern closer to a user-facing release over
+work that merely advances from one v0.x label to the next.
+
+The open release-quality gates are the menu bar daily-use verification, toolbar
+role decision, Setup Guide inspector review, app launch/clean-quit smoke, and
+one manual UI smoke pass that covers the main window, Setup Guide, menu bar,
+toolbar, logs, and quit behavior.
+
 For pre-release rough-edge discovery that does not fit a single roadmap lane,
 use `docs/automation_smoke_backlog.md`; it is the allowed source for one small
 automatable UI, localization, menu bar, setup-flow, health/copy/log, profile,
@@ -781,29 +780,15 @@ Good next slices:
 - expose or fix one concrete rough edge from `docs/automation_smoke_backlog.md`
   when it can be verified without broad restyling, runtime mutation, packaging
   publication, or GitHub mutation
+- verify one open release-quality gate and record the result in
+  `docs/current_status.md` when it changes the next action
 - classify public issues or external review notes using
   `docs/post_public_operations.md`, then update docs, tests, or small
   `llama-server` behavior only when the classification identifies a safe local
   slice
-- tighten post-public issue categories, label proposals, or draft-response
-  guidance only when a concrete public-feedback case is not covered by the
-  current operations guide
-- add or refine `llama-server` preset vocabulary and option compatibility in
-  `docs/llama_server_presets.md`
-- implement one command-visible preset behavior at a time, with focused tests
-  for the resulting configuration and launch command
-- add MTP-capable preset handling only as an explicit model/preset choice, with
-  visible `--spec-type draft-mtp` and `--spec-draft-n-max` arguments
-- add v0.7 runtime capability checks only when they are timeout-bounded,
-  read-only, adapter-scoped, and used for preset compatibility warnings
-- add v0.8 menu bar/toolbar/navigation slices only when actions mirror existing
-  behavior and do not introduce hidden runtime work; after the initial menu bar
-  control surface, prefer daily-use verification or toolbar demotion decisions
-  over new control surfaces
-- add v0.9 update-readiness slices only when they identify source (path-only
-  advice covered), version, compatibility, or dry-run requirements (initial
-  source plus capability-evidence guidance covered) without executing real
-  updates
+- refine `llama-server` presets, runtime capability checks, or update-readiness
+  wording only when it reduces a concrete release-quality risk and remains
+  visible, timeout-bounded, read-only, and non-mutating
 - tighten adapter-owned lifecycle, error-mapping, or protocol boundaries with
   focused tests before adding runtime breadth; validation already has an
   initial explicit contract, and profile command preview already has a generic
@@ -866,10 +851,9 @@ Rules for automated work:
 - do not change runtime ownership assumptions casually
 - update tests and docs with each meaningful behavior change
 - if no change is justified by current evidence, a verified no-op is acceptable
-  only after checking v0.5 triage/docs candidates, v0.6 preset candidates,
-  v0.7 runtime-advisory candidates, v0.8 menu bar/toolbar/navigation
-  candidates, non-mutating v0.9 update-readiness candidates, and any concrete
-  v0.4 reliability signal that is actually visible
+  only after checking open release-quality gates, concrete smoke-backlog
+  candidates, current public-feedback/docs ambiguity, and any concrete
+  `llama-server` reliability signal that is actually visible
 
 ## Issue Triage Checklist
 
