@@ -285,6 +285,9 @@ Implemented scope:
   while keeping the app as a regular Dock/windowed app.
 - Menu bar copy action labels now match the toolbar copy menu for environment,
   health-check, and AI Mobile smoke snippets without changing copied values.
+- Menu bar copy actions now expose localized accessibility hints for the launch
+  command, endpoint, environment snippet, health-check curl, and AI Mobile
+  smoke curl.
 - The server configuration view now shows non-mutating install-source advice for
   selected `llama-server` paths that look Homebrew-managed, MacPorts-managed,
   source-checkout-built, or manual, while keeping update execution outside

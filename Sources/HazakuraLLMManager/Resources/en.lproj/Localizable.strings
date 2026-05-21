@@ -24,9 +24,13 @@
 "Copy Endpoint" = "Copy Endpoint";
 "Copy Environment" = "Copy Environment";
 "Copy existing command, endpoint, and client snippets" = "Copy existing command, endpoint, and client snippets";
+"Copy OpenAI-compatible environment variables to the clipboard." = "Copy OpenAI-compatible environment variables to the clipboard.";
+"Copy the generated launch command to the clipboard." = "Copy the generated launch command to the clipboard.";
 "Copy Health Check" = "Copy Health Check";
 "Copy Launch Command" = "Copy Launch Command";
 "Copy the client connection URL to the clipboard." = "Copy the client connection URL to the clipboard.";
+"Copy the timeout-bounded AI Mobile smoke curl command to the clipboard." = "Copy the timeout-bounded AI Mobile smoke curl command to the clipboard.";
+"Copy the timeout-bounded health-check curl command to the clipboard." = "Copy the timeout-bounded health-check curl command to the clipboard.";
 "Dashboard" = "Dashboard";
 "Endpoint" = "Endpoint";
 "Endpoint Health" = "Endpoint Health";

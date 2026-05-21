@@ -24,9 +24,13 @@
 "Copy Endpoint" = "エンドポイントをコピー";
 "Copy Environment" = "環境変数をコピー";
 "Copy existing command, endpoint, and client snippets" = "既存のコマンド、エンドポイント、クライアント用スニペットをコピーします";
+"Copy OpenAI-compatible environment variables to the clipboard." = "OpenAI互換の環境変数をクリップボードへコピーします。";
+"Copy the generated launch command to the clipboard." = "生成された起動コマンドをクリップボードへコピーします。";
 "Copy Health Check" = "ヘルスチェックをコピー";
 "Copy Launch Command" = "起動コマンドをコピー";
 "Copy the client connection URL to the clipboard." = "クライアント接続URLをクリップボードへコピーします。";
+"Copy the timeout-bounded AI Mobile smoke curl command to the clipboard." = "タイムアウト付きのAI Mobile動作確認curlコマンドをクリップボードへコピーします。";
+"Copy the timeout-bounded health-check curl command to the clipboard." = "タイムアウト付きのヘルスチェックcurlコマンドをクリップボードへコピーします。";
 "Dashboard" = "ダッシュボード";
 "Endpoint" = "エンドポイント";
 "Endpoint Health" = "エンドポイント状態";

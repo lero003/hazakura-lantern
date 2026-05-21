@@ -152,13 +152,15 @@ Accepted for automation:
   copied feedback, and the Dashboard Command Preview now confirms launch-command
   copies. Toolbar, menu bar, and profile-related copy flows mostly rely on
   silent `PasteboardWriter.copy` calls.
+- add or tighten accessibility labels and hints for the menu bar control
+  surface, one action group at a time. The menu bar copy-action group now has
+  localized hints for launch command, endpoint, environment, health-check curl,
+  and AI Mobile smoke curl copy actions.
 - localize preset description copy in `ConfigurationView` instead of keeping
   `presetDescriptionJP` Japanese-only when the app language is English.
 - remove duplicate English/Japanese `Localizable.strings` keys such as the
   repeated `Process Status` entries, then keep parity coverage in tests or a
   focused validation helper.
-- add or tighten accessibility labels and hints for the menu bar control
-  surface, one action group at a time.
 - improve disabled-state visibility for shared button styles when the change
   stays local to `PrimaryButtonStyle` / `SecondaryButtonStyle` and is verified
   by build plus a focused visual note.
