@@ -64,6 +64,12 @@ risk is visible and testable.
 Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
 bundled inference, second-runtime work, or real runtime installation/update.
 
+Human-decision items are boundaries, not global blockers. When a run encounters
+one, record the decision needed briefly and choose a different safe backlog
+candidate if one exists. Use a verified no-op only when no build/test failure,
+release-quality gate, or automatable rough edge can be advanced without that
+decision.
+
 Recent review feedback that suggests custom command profiles, Ollama, endpoint
 auto-polling, multiple-profile management, or broad UI polish should be treated
 as future backlog unless it can be narrowed to one testable `llama-server`

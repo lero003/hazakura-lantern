@@ -25,6 +25,7 @@ review_after:
 - Folded the 2026-05-21 Gemini v1 polish review into the backlog as bounded localization, HelpTooltip, launch-helper, toolbar, and log-policy follow-up input.
 - Folded the 2026-05-21 DeepSeek v1 polish review into the backlog as bounded copy-feedback, preset-localization, localization-key cleanup, menu-bar accessibility, disabled-button, and stopped-background follow-up input.
 - Folded the 2026-05-21 Chika v1 polish review into the backlog as bounded release-evidence, manual-smoke, health-check policy, Setup Guide empty-state, copy-accessibility, logs-retention, and source-checkpoint follow-up input.
+- Clarified that human-decision items block only their exact slice, not unrelated safe automation work.
 
 ## Reason
 
@@ -39,6 +40,7 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 - Future runs should verify one visible localization surface at a time and preserve the UI-only localization boundary unless the user explicitly broadens it.
 - Future runs should prefer one repo-grounded daily-use rough edge at a time, especially copy feedback consistency, visible localization mismatches, menu bar accessibility, disabled button visibility, or stopped-state animation behavior.
 - Future runs should keep helper-smoke documentation internally consistent before using it for release judgment, and should record normal desktop/manual smoke only from a real app session.
+- Future runs should not treat toolbar, release-posture, packaging, or product-policy decisions as global blockers when another safe P0/P1 polish slice is available.
 
 ## Review After
 

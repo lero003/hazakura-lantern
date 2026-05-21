@@ -285,6 +285,10 @@ slice:
   commands, profile JSON, or error payloads; the current localization boundary
   is UI labels and controls only
 
+These items block only the exact slice that needs the decision. They should not
+stop automation from choosing an unrelated P0/P1 candidate, improving docs
+consistency, or recording focused smoke evidence.
+
 ### Useful But Low Priority
 
 These are valid polish only after P0/P1 candidates are quiet or a concrete user
