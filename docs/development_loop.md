@@ -85,6 +85,16 @@ stopped-state background rendering. Keep HelpTooltip language policy,
 checkpoint-version plumbing, toolbar simplification, and log persistence as
 human-decision items unless the user narrows one explicitly.
 
+The 2026-05-21 Chika v1 polish review has also been folded into the backlog.
+Treat release-evidence consistency as a first-class docs target: README,
+current status, troubleshooting, automation backlog, and roadmap must not
+contradict each other about helper smoke, `kLSNoExecutableErr`, or manual
+desktop smoke. Its safe automation candidates include health-check availability
+alignment after a rule is chosen, Setup Guide no-runtime wording, icon-only copy
+accessibility, logs retention wording, and source-checkpoint centralization.
+Keep Hugging Face setup guidance, Homebrew copy placement, toolbar scope, and
+v1 release posture as human-decision items.
+
 For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
 Automation may fix one concrete UI, localization, smoke, setup-flow,
 menu-bar/toolbar, profile-warning, health/copy, packaging-prep, or

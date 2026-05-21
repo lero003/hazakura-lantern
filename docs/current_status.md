@@ -387,6 +387,9 @@ Open release-quality gates:
 
 - restore or externally verify the local app-bundle helper launch path, then
   complete a normal desktop/manual launch and clean-quit pass
+- keep release-evidence docs aligned so README, current status,
+  troubleshooting, automation backlog, and roadmap all describe the same
+  helper-smoke/manual-smoke boundary
 - verify app-language switching on the highest-traffic UI surfaces, especially
   menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
   copy; fix one concrete mismatch at a time
@@ -441,6 +444,9 @@ Good next automated candidates:
 - improve one shared daily-use affordance from the DeepSeek review, such as
   copy feedback, disabled button visibility, menu bar accessibility labels, or
   stopped-state Aurora rendering
+- improve one focused Chika-review daily-use gap, such as Setup Guide
+  no-runtime-detected wording, icon-only copy accessibility, logs retention
+  wording, or helper-smoke docs consistency
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,

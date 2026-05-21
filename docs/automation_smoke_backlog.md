@@ -94,6 +94,14 @@ disabled button styling, and stopped-state background animation behavior.
 Automation should use these as small smoke-polish candidates, not as permission
 for broad redesign.
 
+The 2026-05-21 Chika v1.0 polish review is accepted as a third backlog input.
+Its highest-value contribution is release-evidence hygiene: docs must agree
+that SwiftPM verification passes while helper launch smoke is mixed/failing and
+normal desktop manual smoke remains the packaged-release gate. It also adds
+small daily-use candidates for health-check availability, Setup Guide empty
+states, endpoint-copy accessibility, logs retention wording, and checkpoint
+string centralization.
+
 ### 2026-05-21 Gemini Intake
 
 Accepted for automation:
@@ -178,6 +186,38 @@ Human decision:
 - log persistence remains deferred; keep the v1 path on bounded in-memory logs
   unless the user explicitly changes the product requirement.
 
+### 2026-05-21 Chika Intake
+
+Accepted for automation:
+
+- keep README, current status, troubleshooting, automation backlog, and roadmap
+  aligned on helper-smoke status: SwiftPM tests/build pass, helper launch smoke
+  has mixed/failing Launch Services evidence, and normal desktop/manual launch
+  plus clean quit remain required before packaged release
+- add a dated manual-smoke record when a normal macOS desktop pass is actually
+  performed; do not infer UI smoke from SwiftPM or helper-script evidence
+- align health-check enabled states across toolbar, menu bar, Endpoint, and
+  Setup Guide after the product rule is explicit
+- add a Setup Guide empty state when no installed `llama-server` is detected,
+  while keeping manual Choose available and avoiding package-manager execution
+- add an explicit accessibility label/hint or visible `Label` for icon-only
+  copy controls such as the Setup Guide endpoint copy action
+- add a small Logs caption that states logs are kept in memory and are not saved
+  automatically
+- centralize the source checkpoint string in app code when the change stays
+  source-checkpoint-only and does not imply packaged artifact metadata
+
+Human decision:
+
+- decide whether health checks should be disabled until the server is running
+  or remain available as a raw configured-endpoint check
+- decide whether the in-app Hugging Face search link stays, is demoted to docs,
+  or gets stronger no-download/no-catalog wording
+- decide whether v1.0 is allowed to be source-only, an RC, or only the first
+  packaged app release
+- decide whether the Homebrew command copy button remains in Setup Guide or
+  moves to docs-only setup guidance
+
 ### Automatable P0/P1 Candidates
 
 These can be selected by automation when they are narrowed to one view, one
@@ -208,6 +248,8 @@ behavior, or one testable controller boundary:
   helper text, HelpTooltip text, or endpoint section headings
 - preset description localization when the selected app language is English or
   Japanese
+- Setup Guide empty-state wording when no installed `llama-server` is detected
+- icon-only copy action accessibility labels and hints
 - one focused language-switching verification note for a named view or control
   surface, followed by a small fix only when the mismatch is observed
 - localization key parity coverage for English and Japanese app UI resources
@@ -221,6 +263,7 @@ behavior, or one testable controller boundary:
   verified by code review, build, and a focused manual smoke
 - shared button disabled-state visibility improvements when they stay local to
   app button styles
+- logs retention wording that clarifies current in-memory-only behavior
 
 ### Needs Human Decision First
 

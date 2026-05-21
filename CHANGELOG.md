@@ -14,6 +14,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
   backlog, prioritizing copy feedback, preset localization, localization-key
   cleanup, menu bar accessibility, disabled button styling, and stopped-state
   background rendering as small release-polish candidates.
+- Folded the 2026-05-21 Chika v1 polish review into the automation smoke
+  backlog, clarifying helper-smoke evidence consistency, manual desktop smoke,
+  health-check policy, Setup Guide empty states, copy accessibility, logs
+  retention wording, and source-checkpoint centralization.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 
