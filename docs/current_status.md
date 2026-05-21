@@ -37,8 +37,9 @@ Implemented scope:
 - English/Japanese localization resources are covered by focused tests for
   duplicate keys, key parity, and format-placeholder parity, keeping app UI
   resource cleanup visible before broader localization work.
-- HelpTooltip explanation button accessibility and help text now follows the
-  selected app UI language while leaving adapter-owned diagnostics unchanged.
+- HelpTooltip titles, descriptions, tips, and explanation-button accessibility
+  text now follow the selected app UI language while leaving adapter-owned
+  diagnostics unchanged.
 - `llama-server` launch command construction without shell interpolation.
 - Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.

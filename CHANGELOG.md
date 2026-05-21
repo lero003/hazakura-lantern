@@ -13,6 +13,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Folded the 2026-05-22 Chika release-readiness follow-up into automation
   guidance, marking already-covered polish separately from remaining manual
   smoke and human-decision items.
+- Localized HelpTooltip titles, descriptions, tips, and section headings, and
+  replaced Endpoint advanced-section bilingual literal keys with standard app
+  localization keys.
 - Reduced the main-window toolbar to Setup Guide, profile import/export, and
   copy actions; server lifecycle, health, command reveal, and log clearing stay
   in the main UI or menu bar.

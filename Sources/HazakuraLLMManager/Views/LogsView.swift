@@ -21,7 +21,7 @@ struct LogsView: View {
                     .disabled(controller.logEntries.isEmpty)
                 }
 
-                Text("Runtime logs stay in memory and are not saved automatically.")
+                Text("runtime_logs_in_memory_description")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 

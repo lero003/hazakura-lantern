@@ -110,9 +110,8 @@ accessibility, logs retention wording, source-checkpoint centralization,
 localized preset descriptions, duplicate localization key cleanup, and toolbar
 reduction. Keep the remaining current signals narrow: normal desktop/manual UI
 smoke is still missing, helper launch smoke is still not packaged-release
-proof, HelpTooltip localization policy remains a human decision, and Hugging
-Face setup guidance / v1.0 release posture / Homebrew command placement remain
-human-decision items.
+proof, and Hugging Face setup guidance / v1.0 release posture / Homebrew
+command placement remain human-decision items.
 
 ### 2026-05-21 Gemini Intake
 
@@ -127,9 +126,10 @@ Accepted for automation:
 - replace one visible hard-coded app UI string group with explicit localized
   keys when the string is not runtime log text, copied shell text, profile JSON,
   or adapter-owned diagnostic payload
-- localize one HelpTooltip content group at a time, replacing mixed
-  Japanese/English headings such as `説明 / Description` only when the English
-  and Japanese copy can stay reviewable
+- keep HelpTooltip titles, descriptions, tips, and section headings localized
+  through English/Japanese app UI resources while preserving the boundary that
+  runtime logs, copied shell text, profile JSON, and adapter diagnostics are not
+  localized
 - modernize deprecated SwiftUI APIs such as `onChange` only when the current
   toolchain emits a warning or the change stays mechanical and verified by
   build/tests
@@ -199,9 +199,6 @@ Conditionally accepted:
 
 Human decision:
 
-- choose whether HelpTooltip technical copy should be fully localized, English
-  only, or kept as mixed bilingual copy. Automation may prepare evidence and
-  localize one small group only after the intended policy is clear.
 - toolbar simplification is decided for the current lane: keep Setup Guide,
   profile import/export, and copy actions only. Automation may polish those
   controls or record smoke evidence, but should not add lifecycle, health,
@@ -241,6 +238,10 @@ Already covered on current `main`:
 - Logs memory-only retention caption
 - source-checkpoint display centralized in app code
 - preset description localization and duplicate localization key cleanup
+- HelpTooltip title, description, tips, and `Description` / `Tips` headings
+  localized through app UI resources
+- Endpoint advanced section headings use standard English localization keys
+  instead of bilingual literal keys
 - reduced toolbar scope: Setup Guide, profile import/export, and copy actions
   only
 

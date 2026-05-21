@@ -147,7 +147,7 @@ struct SetupGuideView: View {
                             } else {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Label(
-                                        "No installed llama-server runtime was detected. You can still choose an existing binary manually.",
+                                        "no_runtime_detected_guide",
                                         systemImage: "magnifyingglass"
                                     )
                                     .font(.caption)

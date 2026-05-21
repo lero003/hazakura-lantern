@@ -63,14 +63,14 @@ struct EndpointView: View {
 
                     VStack(alignment: .leading, spacing: 0) {
                         DisclosureSectionHeader(
-                            title: "詳細な接続情報 / Advanced Connection Details",
+                            title: "Advanced Connection Details",
                             isExpanded: $isAdvancedExpanded
                         )
 
                         if isAdvancedExpanded {
                             VStack(alignment: .leading, spacing: 10) {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("環境変数 / Environment Variables")
+                                    Text("Environment Variables")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                     HStack(spacing: 8) {
@@ -96,7 +96,7 @@ struct EndpointView: View {
                                 }
 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("ヘルスチェック / Health Check curl")
+                                    Text("Health Check curl")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                     HStack(spacing: 8) {
@@ -122,7 +122,7 @@ struct EndpointView: View {
                                 }
 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("外部クライアント接続テスト / Client Connection curl")
+                                    Text("Client Connection curl")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                     HStack(spacing: 8) {

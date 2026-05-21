@@ -105,9 +105,12 @@ The 2026-05-21 DeepSeek v1 polish review has also been folded into the backlog.
 Prefer its repo-grounded small candidates when smoke is otherwise quiet: copy
 feedback consistency, preset-description localization, duplicate localization
 key cleanup, menu bar accessibility labels, disabled button visibility, and
-stopped-state background rendering. Keep HelpTooltip language policy,
-checkpoint-version plumbing, toolbar simplification, and log persistence as
-human-decision items unless the user narrows one explicitly.
+stopped-state background rendering. HelpTooltip language policy is now resolved
+for app UI text: localized titles, descriptions, tips, and headings, while
+runtime logs, copied shell text, profile JSON, and adapter diagnostics stay
+outside localization scope. Keep checkpoint-version plumbing, toolbar
+simplification, and log persistence as human-decision items unless the user
+narrows one explicitly.
 
 The 2026-05-21 Chika v1 polish review has also been folded into the backlog.
 Treat release-evidence consistency as a first-class docs target: README,
