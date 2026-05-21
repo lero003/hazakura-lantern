@@ -38,7 +38,8 @@ The default question for each automation run is:
 Prefer unfinished release-quality work over advancing a version lane. The
 currently useful unfinished gates are:
 
-- app launch and clean quit smoke on a normal macOS desktop
+- restore or externally verify the app-bundle helper launch path, then complete
+  normal desktop/manual launch and clean quit smoke
 - menu bar daily-use verification for status, lifecycle, copy, and Open Window
   behavior
 - a product decision on whether the toolbar remains, shrinks, or is removed
@@ -124,8 +125,9 @@ Release posture:
   verification passes and docs clearly state that no packaged `.app` artifact is
   attached.
 - Do not cut a user-facing app-bundle, zip, dmg, signing, or notarization
-  release until the app-bundle launch smoke is verified on a normal macOS
-  environment.
+  release until a normal desktop/manual launch and clean-quit pass is recorded.
+  The 2026-05-21 helper smoke has mixed evidence and is not packaged release
+  proof.
 - Do not cut a user-facing packaged release until the menu bar, toolbar, and
   Setup Guide release blockers in `docs/current_status.md` and `docs/roadmap.md`
   are resolved or explicitly deferred from the release scope.

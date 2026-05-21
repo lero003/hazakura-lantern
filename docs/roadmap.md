@@ -115,8 +115,10 @@ upgrade runtimes, mutate package managers, or hide where a runtime came from.
 ## Current Source Lane: v0.5 Post-Public Issue Triage And Automation Discipline
 
 The project has reached a source-only `v0.5.0-alpha.1` checkpoint for
-post-public issue triage and automation discipline, while the app-bundle launch
-smoke remains a packaged-release blocker.
+post-public issue triage and automation discipline. The 2026-05-21 automated
+app-bundle helper smoke has mixed evidence and currently regresses with
+`kLSNoExecutableErr`, so a normal desktop/manual UI pass is still required
+before any packaged app release.
 
 Use v0 through v0.4 notes below as foundation and backlog context, not as a
 reason to reopen closed work without a concrete ambiguity. The next useful
@@ -124,9 +126,9 @@ source work should classify post-public feedback, tighten automation-safe
 triage, or address a specific `llama-server` reliability issue only when it is
 concrete and testable.
 
-Do not retry the known `kLSNoExecutableErr` app-bundle helper path unless there
-is a fresh Launch Services hypothesis. Carry it as a release risk and continue
-with source work that can be verified through SwiftPM.
+Do not loop on historical `kLSNoExecutableErr` diagnostics without a fresh
+Launch Services hypothesis. Continue with release-quality source work that can
+be verified through SwiftPM or focused manual smoke.
 
 ## v0 Foundation - Make One Runtime Boring
 
@@ -293,7 +295,8 @@ Already done or mostly done:
 
 Remaining before a packaged app release:
 
-- fix or externally verify the app-bundle launch smoke path
+- restore or externally verify the app-bundle helper launch path, then record a
+  normal desktop/manual launch and clean-quit pass
 - resolve the pre-release UI blockers for the menu bar, toolbar, and Setup
   Guide additions:
   - verify menu bar daily-use behavior on a normal macOS desktop
@@ -465,8 +468,8 @@ v0.3 is closed when:
   adapter lifecycle classes
 - `docs/current_status.md` names no concrete unresolved v0.3 adapter ambiguity
 - `swift test` and `swift build --disable-sandbox` pass
-- `kLSNoExecutableErr` remains classified as a packaged-release blocker rather
-  than a v0.3 source-work blocker
+- historical `kLSNoExecutableErr` helper failures remain regression context
+  rather than a v0.3 source-work blocker
 
 After close-out, automation should not add more adapter-boundary tests unless a
 new bug report, design note, or regression identifies a specific ambiguity.
@@ -704,9 +707,11 @@ boundaries before implementation.
 Packaging work should not block source-only roadmap progress unless a packaged
 release is being prepared.
 
-- P0: Codex-environment reproduction and diagnostics for `kLSNoExecutableErr`
-- P1: normal macOS verification outside the restricted Codex environment
-- P2: bundle metadata, signing, launch-path, or Launch Services fix
+- P0: keep the local helper smoke passing when launch script or bundle layout
+  changes
+- P1: normal desktop/manual launch and clean-quit verification
+- P2: bundle metadata, signing, launch-path, or Launch Services fix only if the
+  helper smoke regresses or manual verification exposes a blocker
 - P3: unsigned local app artifact
 - P4: signed and notarized distribution
 

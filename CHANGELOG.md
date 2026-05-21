@@ -6,6 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Recorded the 2026-05-21 automated smoke regression where SwiftPM tests,
+  localization lint, and source build passed but the app-bundle helper launch
+  returned `kLSNoExecutableErr`, keeping manual desktop UI smoke and helper
+  stability as release gates.
 - Improved Setup Guide step-card accessibility so each step reports
   complete/incomplete state with localized hints.
 - Moved Setup Guide out of the primary sidebar and into a toolbar-toggled

@@ -203,9 +203,10 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local public-opening verification baseline has run `swift test` and
-  `swift build --disable-sandbox` successfully while leaving the app-bundle
-  launch-smoke blocker unresolved.
+- Local verification baseline has run `swift test` and
+  `swift build --disable-sandbox` successfully; the current 2026-05-21 local
+  app-bundle helper smoke regressed with `kLSNoExecutableErr` in this Codex
+  environment.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -316,14 +317,20 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current Codex launch-smoke status: `./script/build_and_run.sh --verify`
-builds the bundle, but Launch Services reports `kLSNoExecutableErr` even though
-`dist/Hazakura Lantern.app/Contents/MacOS/HazakuraLLMManager` exists and is
-executable. Treat this as an unresolved launch-smoke blocker; do not count the
-v0 app-launch exit criterion as satisfied until this is fixed or verified
-outside the restricted Codex environment.
+Current Codex launch-smoke status (2026-05-21 current run):
+`./script/build_and_run.sh --verify` builds the bundle, but Launch Services
+returns `kLSNoExecutableErr`. `./script/build_and_run.sh --stop` completes
+afterward; a follow-up `pgrep -fl HazakuraLLMManager` check could not read the
+process list because `sysmond` was unavailable in this environment. The
+generated bundle contains `Info.plist`, the `HazakuraLLMManager` executable,
+and English/Japanese localization resources under
+`dist/Hazakura Lantern.app/Contents`.
 
-2026-05-17 follow-up diagnostics: re-signing the generated bundle with
+Treat this as an automation-level launch-smoke regression, not a source-build
+failure. It does not prove packaged-release readiness, and it should not block
+source-only work that is verified through SwiftPM.
+
+Historical 2026-05-17 diagnostics: re-signing the generated bundle with
 `codesign --force --sign -`, adding standard bundle metadata, adding
 `Contents/Resources`, and registering the app with `lsregister -f` did not
 clear the Launch Services failure. `lsregister` still fails to scan the bundle
@@ -331,12 +338,13 @@ with `-10822`, while `open -W -n /System/Applications/Calculator.app` works in
 the same environment. The blocker appears specific to the generated Lantern
 bundle rather than a blanket inability to call Launch Services.
 
-Additional 2026-05-17 diagnostics: signing the completed bundle can make
+Additional historical 2026-05-17 diagnostics: signing the completed bundle can make
 `codesign --verify --deep --strict` pass, and a top-level
 `open -n /absolute/path/to/Hazakura Lantern.app` launch request can be accepted.
-However, the helper still fails when `open` is invoked from inside the shell
-script after rebuilding the bundle. Treat this as a Launch Services invocation
-or cache-context issue, not proof that the Mach-O executable is actually absent.
+However, the helper can still fail when `open` is invoked from inside the shell
+script after rebuilding the bundle. The 2026-05-21 current run reproduced that
+failure even though the bundle executable and `CFBundleExecutable` value
+matched.
 
 ## Known Constraints
 
@@ -366,6 +374,8 @@ quality gates below are resolved or explicitly deferred by a human.
 
 Open release-quality gates:
 
+- restore or externally verify the local app-bundle helper launch path, then
+  complete a normal desktop/manual launch and clean-quit pass
 - verify the menu bar daily-use path on a normal macOS desktop, including
   status visibility, lifecycle actions, copy actions, and `Open Window`
   behavior from hidden or backgrounded window states
@@ -452,11 +462,8 @@ Good next automated candidates:
 - improve post-public docs hygiene when old pre-open or v0.3/v0.4 wording would
   steer automation toward already-completed visibility or reliability
   preparation
-- diagnose why Launch Services reports `kLSNoExecutableErr` for the generated
-  app bundle only if there is a fresh hypothesis beyond the attempts above,
-  such as proving `CFBundleExecutable` / `Contents/MacOS` consistency on the
-  newly generated bundle or testing Launch Services cache behavior outside the
-  normal hourly loop
+- re-diagnose historical `kLSNoExecutableErr` behavior only if helper smoke
+  regresses or a fresh Launch Services hypothesis appears
 - add profile migration transform tests only after a concrete schema version `2`
   shape exists
 
