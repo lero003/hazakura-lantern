@@ -261,6 +261,8 @@ behavior, or one testable controller boundary:
 - Setup Guide follow-up wording only if the no-installed-runtime empty state is
   observed as unclear in manual smoke
 - icon-only copy action accessibility labels and hints
+- disclosure header expanded/collapsed accessibility values are covered for the
+  current Advanced Settings and Advanced Connection Details controls
 - one focused language-switching verification note for a named view or control
   surface, followed by a small fix only when the mismatch is observed
 - localization key parity coverage for English and Japanese app UI resources

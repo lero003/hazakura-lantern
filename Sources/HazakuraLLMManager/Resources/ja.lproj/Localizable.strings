@@ -13,6 +13,7 @@
 "Clear the in-memory runtime logs" = "メモリ上のランタイムログを消去します";
 "Client Connection URL:" = "クライアント接続URL:";
 "Client Connection curl" = "クライアント接続 curl";
+"Collapsed" = "折りたたみ";
 "Configuration" = "設定";
 "Context" = "コンテキスト";
 "Copy" = "コピー";
@@ -41,6 +42,7 @@
 "Export Active Profile" = "現在のプロファイルを書き出し";
 "Export Profile" = "プロファイルを書き出し";
 "Export the active runtime profile as a .lantern-profile.json file." = "現在のランタイムプロファイルを .lantern-profile.json ファイルとして書き出します。";
+"Expanded" = "展開中";
 "Find on Hugging Face" = "Hugging Faceで探す";
 "Follow steps to light your lantern" = "手順に沿ってランタンを灯します";
 "GPU Layers" = "GPUレイヤー";

@@ -253,6 +253,8 @@ Implemented scope:
   supported, unsupported, or unknown preset-option advisory text before launch.
 - Advanced Settings and Advanced Connection Details now use full-row clickable
   disclosure headers, so the text label and surrounding row open the section.
+- Disclosure headers now expose localized expanded/collapsed accessibility
+  values for English and Japanese app UI.
 - Advanced Settings accepts context sizes up to 1,048,576 tokens through the
   slider and direct field, while help text now makes clear that threads and GPU
   layers are delegated to `llama-server` when set to auto rather than measured

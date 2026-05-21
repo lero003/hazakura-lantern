@@ -56,6 +56,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   controls keep visible labels and outlines without changing their actions.
 - Paused the decorative Aurora background animation while the server is
   stopped, keeping the idle window calmer without changing runtime behavior.
+- Added English/Japanese accessibility values for disclosure headers so
+  Advanced sections announce expanded and collapsed state in the selected app
+  language.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 
