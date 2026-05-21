@@ -28,6 +28,9 @@ Implemented scope:
   adapter-owned messages remain outside the localization scope.
 - Settings now shows the current source checkpoint and makes the source-only,
   no-packaged-app boundary visible inside the app without adding release assets.
+- English/Japanese localization resources are covered by focused tests for
+  duplicate keys and key parity, keeping app UI resource cleanup visible before
+  broader localization work.
 - HelpTooltip explanation button accessibility and help text now follows the
   selected app UI language while leaving adapter-owned diagnostics unchanged.
 - `llama-server` launch command construction without shell interpolation.
@@ -439,8 +442,6 @@ Good next automated candidates:
 - add English/Japanese localization key parity coverage, or verify one named
   UI surface under Japanese and English language settings before fixing a
   concrete mismatch
-- remove duplicate localization keys such as repeated `Process Status` entries
-  before adding broader localization coverage
 - improve one shared daily-use affordance from the DeepSeek review, such as
   copy feedback, disabled button visibility, menu bar accessibility labels, or
   stopped-state Aurora rendering

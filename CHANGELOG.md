@@ -20,6 +20,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   retention wording, and source-checkpoint centralization.
 - Clarified automation guidance so human-decision items block only their exact
   slice and do not prevent unrelated safe release-polish work.
+- Removed duplicate `Process Status` localization entries and added focused
+  tests for English/Japanese localization key parity.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 
