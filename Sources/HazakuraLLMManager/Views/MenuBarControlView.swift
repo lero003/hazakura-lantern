@@ -96,6 +96,10 @@ struct MenuBarControlView: View {
             importRuntimeProfile()
         }
 
+        if let profileFileMessage = controller.profileFileMessage {
+            Label(profileFileMessage, systemImage: "info.circle")
+        }
+
         Button("Clear Logs") {
             controller.clearLogs()
         }

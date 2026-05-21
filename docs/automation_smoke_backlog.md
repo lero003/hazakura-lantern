@@ -246,6 +246,9 @@ behavior, or one testable controller boundary:
   source-only checkpoint and no-packaged-app boundary)
 - copy feedback consistency for one family of copy controls at a time,
   prioritizing any newly surfaced profile-adjacent pasteboard action
+- profile import/export file-flow feedback is covered for the current toolbar
+  and menu bar entry points by mirroring the existing profile message outside
+  the Configuration profile panel
 - shared pasteboard-copy helper extraction when it reduces real duplicated UI
   code without changing behavior (covered for the current toolbar, menu bar,
   endpoint, command-preview, and Setup Guide copy surfaces)

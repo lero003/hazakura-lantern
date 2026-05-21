@@ -39,6 +39,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added transient copied feedback to the menu bar copy actions for the launch
   command, endpoint, environment snippet, health-check curl, and AI Mobile
   smoke curl.
+- Mirrored active profile import/export file-flow messages into the toolbar
+  Profile menu and menu bar controls, so the result remains visible outside the
+  Configuration profile panel.
 - Added localized accessibility hints to menu bar copy actions for the launch
   command, endpoint, environment snippet, health-check curl, and AI Mobile
   smoke curl.

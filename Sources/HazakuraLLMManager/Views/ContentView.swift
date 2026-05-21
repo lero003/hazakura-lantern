@@ -148,6 +148,11 @@ struct ContentView: View {
                         } label: {
                             Label("Import Profile", systemImage: "square.and.arrow.down")
                         }
+
+                        if let profileFileMessage = controller.profileFileMessage {
+                            Divider()
+                            Label(profileFileMessage, systemImage: "info.circle")
+                        }
                     } label: {
                         Label("Profile", systemImage: "doc.text")
                     }

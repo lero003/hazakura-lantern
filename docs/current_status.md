@@ -288,6 +288,9 @@ Implemented scope:
 - The main window toolbar now exposes active runtime profile import/export
   actions that reuse the existing `.lantern-profile.json` file flow without
   adding multiple-profile management.
+- The toolbar Profile menu and menu bar controls now mirror active profile
+  import/export file-flow messages, so export, import, and profile-warning
+  results remain visible outside the Configuration profile panel.
 - The main window toolbar now exposes clear-log behavior using the existing
   in-memory log reset path, disabled when there are no logs.
 - The main window toolbar now exposes a command-preview action that opens the
@@ -426,9 +429,9 @@ Open release-quality gates:
 - verify app-language switching on the highest-traffic UI surfaces, especially
   menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
   copy; fix one concrete mismatch at a time
-- continue profile file-flow feedback across remaining high-frequency profile
-  entry points, especially toolbar and menu bar import/export actions when the
-  Profile panel is not visible
+- verify profile file-flow feedback on a normal macOS desktop, especially
+  toolbar and menu bar import/export actions when the Profile panel is not
+  visible
 - resolve the most visible UI-localization mismatches, with preset descriptions
   and HelpTooltip policy as the first review targets
 - verify the menu bar daily-use path on a normal macOS desktop, including
@@ -474,9 +477,9 @@ Good next automated candidates:
   UI surface under Japanese and English language settings before fixing a
   concrete mismatch
 - improve one shared daily-use affordance from the DeepSeek review, such as
-  profile file-flow feedback or stopped-state Aurora rendering; the menu bar
-  copy feedback, menu bar copy accessibility, and shared button disabled-state
-  visibility slices are covered
+  stopped-state Aurora rendering; the profile file-flow message mirror, menu
+  bar copy feedback, menu bar copy accessibility, and shared button
+  disabled-state visibility slices are covered
 - improve one focused Chika-review daily-use gap, such as icon-only copy
   accessibility, logs retention wording, or helper-smoke docs consistency
 - classify public feedback or review notes with
