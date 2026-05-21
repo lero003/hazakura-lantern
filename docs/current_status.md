@@ -257,6 +257,9 @@ Implemented scope:
 - The Logs destination now stretches its log area vertically and top-aligns
   empty and populated log content, making the view behave like a working log
   surface instead of a short centered panel.
+- The Logs destination now states that runtime logs stay in memory and are not
+  saved automatically, keeping log-retention behavior visible without adding
+  persistence.
 - The main window now has a native toolbar shell for the existing start, stop,
   restart, and manual endpoint health-check actions, with availability derived
   from the same controller state as the in-page controls.

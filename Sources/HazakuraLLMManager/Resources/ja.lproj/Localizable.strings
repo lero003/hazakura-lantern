@@ -81,6 +81,7 @@
 "Restart Server" = "サーバーを再起動";
 "Runtime" = "ランタイム";
 "Running" = "実行中";
+"Runtime logs stay in memory and are not saved automatically." = "ランタイムログはメモリ上に保持され、自動保存されません。";
 "Runtime Profile" = "ランタイムプロファイル";
 "Scan Installed" = "インストール済みを再検出";
 "Select an item" = "項目を選択";

@@ -24,6 +24,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   tests for English/Japanese localization key parity.
 - Localized Configuration preset guidance so English UI no longer shows the
   Japanese-only helper description.
+- Added a localized Logs caption that clarifies runtime logs stay in memory and
+  are not saved automatically.
 
 ## v0.9.0-alpha.1 - 2026-05-21
 

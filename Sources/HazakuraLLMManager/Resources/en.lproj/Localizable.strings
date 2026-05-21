@@ -81,6 +81,7 @@
 "Restart Server" = "Restart Server";
 "Runtime" = "Runtime";
 "Running" = "Running";
+"Runtime logs stay in memory and are not saved automatically." = "Runtime logs stay in memory and are not saved automatically.";
 "Runtime Profile" = "Runtime Profile";
 "Scan Installed" = "Scan Installed";
 "Select an item" = "Select an item";

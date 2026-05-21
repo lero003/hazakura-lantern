@@ -21,6 +21,10 @@ struct LogsView: View {
                     .disabled(controller.logEntries.isEmpty)
                 }
 
+                Text("Runtime logs stay in memory and are not saved automatically.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
                 ScrollViewReader { proxy in
                     ScrollView {
                         LazyVStack(alignment: .leading, spacing: 4) {
