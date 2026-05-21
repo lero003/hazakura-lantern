@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CommandPreviewView: View {
     @ObservedObject var controller: ServerController
+    @State private var didCopy = false
+    @State private var copyGeneration = 0
 
     var body: some View {
         GroupBox("Launch Command") {
@@ -19,14 +21,43 @@ struct CommandPreviewView: View {
                             .stroke(Color.white.opacity(0.06), lineWidth: 1)
                     )
 
-                Button {
-                    PasteboardWriter.copy(controller.launchCommandPreview)
-                } label: {
-                    Label("Copy Command", systemImage: "doc.on.doc")
+                VStack(alignment: .trailing, spacing: 3) {
+                    Button {
+                        copyCommand()
+                    } label: {
+                        Label("Copy Command", systemImage: "doc.on.doc")
+                    }
+                    .buttonStyle(SecondaryButtonStyle())
+
+                    Text("Copied!")
+                        .font(.caption2)
+                        .foregroundStyle(.green)
+                        .opacity(didCopy ? 1 : 0)
+                        .accessibilityHidden(!didCopy)
+                        .frame(height: 12, alignment: .trailing)
                 }
-                .buttonStyle(SecondaryButtonStyle())
             }
             .padding(.vertical, 2)
+        }
+    }
+
+    private func copyCommand() {
+        PasteboardWriter.copy(controller.launchCommandPreview)
+        copyGeneration += 1
+        let generation = copyGeneration
+
+        withAnimation(.easeInOut(duration: 0.15)) {
+            didCopy = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+            guard copyGeneration == generation else {
+                return
+            }
+
+            withAnimation(.easeInOut(duration: 0.2)) {
+                didCopy = false
+            }
         }
     }
 }

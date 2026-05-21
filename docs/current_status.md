@@ -271,6 +271,8 @@ Implemented scope:
   copy behavior aligned without changing copied values.
 - Endpoint destination copy controls now show transient copied feedback for the
   base URL, environment snippet, health-check curl, and AI Mobile smoke curl.
+- The Dashboard launch command preview copy button now shows transient copied
+  feedback after writing the command to the pasteboard.
 - The main window toolbar now exposes active runtime profile import/export
   actions that reuse the existing `.lantern-profile.json` file flow without
   adding multiple-profile management.
@@ -407,7 +409,7 @@ Open release-quality gates:
   menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
   copy; fix one concrete mismatch at a time
 - continue copy success feedback across remaining high-frequency copy paths,
-  especially toolbar/menu bar copy menus and command-preview/profile flows, so
+  especially toolbar/menu bar copy menus and profile flows, so
   users do not have to paste elsewhere to confirm success
 - resolve the most visible UI-localization mismatches, with preset descriptions
   and HelpTooltip policy as the first review targets
@@ -454,8 +456,8 @@ Good next automated candidates:
   UI surface under Japanese and English language settings before fixing a
   concrete mismatch
 - improve one shared daily-use affordance from the DeepSeek review, such as
-  copy feedback, disabled button visibility, menu bar accessibility labels, or
-  stopped-state Aurora rendering
+  remaining copy feedback, disabled button visibility, menu bar accessibility
+  labels, or stopped-state Aurora rendering
 - improve one focused Chika-review daily-use gap, such as Setup Guide
   no-runtime-detected wording, icon-only copy accessibility, logs retention
   wording, or helper-smoke docs consistency
