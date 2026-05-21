@@ -62,6 +62,7 @@
 "Local light for llama-server" = "Local light for llama-server";
 "Logs" = "Logs";
 "Model" = "Model";
+"No installed llama-server runtime was detected. You can still choose an existing binary manually." = "No installed llama-server runtime was detected. You can still choose an existing binary manually.";
 "No logs yet." = "No logs yet.";
 "Open Setup Guide" = "Open Setup Guide";
 "Open Window" = "Open Window";

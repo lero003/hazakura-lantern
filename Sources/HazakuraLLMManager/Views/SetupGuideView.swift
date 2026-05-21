@@ -125,9 +125,19 @@ struct SetupGuideView: View {
                                     }
                                 }
                             } else {
-                                HStack {
-                                    refreshInstalledRuntimeButton
-                                    Spacer()
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Label(
+                                        "No installed llama-server runtime was detected. You can still choose an existing binary manually.",
+                                        systemImage: "magnifyingglass"
+                                    )
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+
+                                    HStack {
+                                        refreshInstalledRuntimeButton
+                                        Spacer()
+                                    }
                                 }
                             }
 

@@ -26,6 +26,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   Japanese-only helper description.
 - Added a localized Logs caption that clarifies runtime logs stay in memory and
   are not saved automatically.
+- Added Setup Guide empty-state wording for Macs where no installed
+  `llama-server` runtime is detected while keeping manual runtime selection
+  available.
 - Added transient copied feedback to Endpoint destination copy controls for the
   base URL, environment snippet, health-check curl, and AI Mobile smoke curl.
 - Added transient copied feedback to the Dashboard launch command preview copy

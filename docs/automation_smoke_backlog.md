@@ -199,8 +199,9 @@ Accepted for automation:
   performed; do not infer UI smoke from SwiftPM or helper-script evidence
 - align health-check enabled states across toolbar, menu bar, Endpoint, and
   Setup Guide after the product rule is explicit
-- add a Setup Guide empty state when no installed `llama-server` is detected,
-  while keeping manual Choose available and avoiding package-manager execution
+- keep the Setup Guide no-installed-runtime empty state covered: it now states
+  that no installed `llama-server` was detected while keeping manual Choose
+  available and avoiding package-manager execution
 - add an explicit accessibility label/hint or visible `Label` for icon-only
   copy controls such as the Setup Guide endpoint copy action
 - add a small Logs caption that states logs are kept in memory and are not saved
@@ -249,7 +250,8 @@ behavior, or one testable controller boundary:
   helper text, HelpTooltip text, or endpoint section headings
 - preset description localization when the selected app language is English or
   Japanese
-- Setup Guide empty-state wording when no installed `llama-server` is detected
+- Setup Guide follow-up wording only if the no-installed-runtime empty state is
+  observed as unclear in manual smoke
 - icon-only copy action accessibility labels and hints
 - one focused language-switching verification note for a named view or control
   surface, followed by a small fix only when the mismatch is observed
@@ -348,7 +350,8 @@ exists.
 
 ### Runtime Setup
 
-- Improve the Installed Runtime empty state when `llama-server` is not found.
+- Improve the Installed Runtime empty state further only if manual smoke shows
+  the current no-installed-runtime wording is unclear.
 - Keep runtime/model path rows compact; do not reintroduce a Recent menu unless
   a concrete daily-use path-switching need outweighs the width cost.
 - Improve runtime/model selection hints only when the existing blank,

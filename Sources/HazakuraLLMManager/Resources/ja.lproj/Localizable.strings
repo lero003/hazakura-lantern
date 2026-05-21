@@ -62,6 +62,7 @@
 "Local light for llama-server" = "llama-server のためのローカルランタン";
 "Logs" = "ログ";
 "Model" = "モデル";
+"No installed llama-server runtime was detected. You can still choose an existing binary manually." = "インストール済みの llama-server は見つかりませんでした。既存のバイナリを手動で選択することもできます。";
 "No logs yet." = "まだログはありません。";
 "Open Setup Guide" = "セットアップガイドを開く";
 "Open Window" = "ウィンドウを開く";

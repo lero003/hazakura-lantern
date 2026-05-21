@@ -308,6 +308,9 @@ Implemented scope:
 - The Setup Guide endpoint copy action now keeps its icon-only visual treatment
   while exposing a localized accessibility label and hint for the copied client
   connection URL.
+- The Setup Guide now shows an explicit empty state when installed
+  `llama-server` discovery finds no candidate, while keeping manual runtime
+  selection available.
 - Process status and endpoint health indicators now expose explicit
   accessibility labels and values while keeping decorative status artwork out of
   the reading order.
@@ -458,9 +461,8 @@ Good next automated candidates:
 - improve one shared daily-use affordance from the DeepSeek review, such as
   remaining copy feedback, disabled button visibility, menu bar accessibility
   labels, or stopped-state Aurora rendering
-- improve one focused Chika-review daily-use gap, such as Setup Guide
-  no-runtime-detected wording, icon-only copy accessibility, logs retention
-  wording, or helper-smoke docs consistency
+- improve one focused Chika-review daily-use gap, such as icon-only copy
+  accessibility, logs retention wording, or helper-smoke docs consistency
 - classify public feedback or review notes with
   `docs/post_public_operations.md`, then make one safe local change only when
   the classification identifies a `llama-server` bug, profile import/export bug,
