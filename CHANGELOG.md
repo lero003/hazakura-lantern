@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Improved Runtime Profile import/export accessibility so the buttons announce
+  the active `.lantern-profile.json` file flow.
 - Recorded the 2026-05-21 automated smoke regression where SwiftPM tests,
   localization lint, and source build passed but the app-bundle helper launch
   returned `kLSNoExecutableErr`, keeping manual desktop UI smoke and helper

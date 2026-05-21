@@ -35,6 +35,7 @@
 "Export" = "書き出し";
 "Export Active Profile" = "現在のプロファイルを書き出し";
 "Export Profile" = "プロファイルを書き出し";
+"Export the active runtime profile as a .lantern-profile.json file." = "現在のランタイムプロファイルを .lantern-profile.json ファイルとして書き出します。";
 "Find on Hugging Face" = "Hugging Faceで探す";
 "Follow steps to light your lantern" = "手順に沿ってランタンを灯します";
 "GPU Layers" = "GPUレイヤー";
@@ -45,6 +46,7 @@
 "If not installed, run this command via Terminal:" = "未インストールの場合は、ターミナルで次を実行してください:";
 "Import" = "読み込み";
 "Incomplete" = "未完了";
+"Import a .lantern-profile.json file into the active configuration." = ".lantern-profile.json ファイルを現在の設定へ読み込みます。";
 "Import or export the active runtime profile" = "現在のランタイムプロファイルを読み込み・書き出しします";
 "Import Profile" = "プロファイルを読み込み";
 "Installed" = "インストール済み";

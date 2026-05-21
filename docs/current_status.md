@@ -132,6 +132,9 @@ Implemented scope:
 - The app loads the active runtime profile into the editable configuration and
   provides minimal `.lantern-profile.json` import/export UI for that active
   profile without adding multiple-profile management.
+- Runtime Profile import/export buttons now expose explicit accessibility
+  labels and hints that name the active `.lantern-profile.json` file flow
+  without changing profile behavior.
 - Endpoint display, environment snippets, timeout-bounded health-check curl,
   and AI Mobile smoke commands now flow through an adapter-owned
   `RuntimeEndpoint` contract, with focused tests preserving the `llama-server`

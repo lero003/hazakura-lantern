@@ -35,6 +35,7 @@
 "Export" = "Export";
 "Export Active Profile" = "Export Active Profile";
 "Export Profile" = "Export Profile";
+"Export the active runtime profile as a .lantern-profile.json file." = "Export the active runtime profile as a .lantern-profile.json file.";
 "Find on Hugging Face" = "Find on Hugging Face";
 "Follow steps to light your lantern" = "Follow steps to light your lantern";
 "GPU Layers" = "GPU Layers";
@@ -45,6 +46,7 @@
 "If not installed, run this command via Terminal:" = "If not installed, run this command via Terminal:";
 "Import" = "Import";
 "Incomplete" = "Incomplete";
+"Import a .lantern-profile.json file into the active configuration." = "Import a .lantern-profile.json file into the active configuration.";
 "Import or export the active runtime profile" = "Import or export the active runtime profile";
 "Import Profile" = "Import Profile";
 "Installed" = "Installed";
