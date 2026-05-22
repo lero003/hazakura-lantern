@@ -221,11 +221,11 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-22 with `git diff --check`,
-  localization lint, `swift test` (194 XCTest tests, 0 failures), and
-  `swift build --disable-sandbox`; the current 2026-05-21 local app-bundle
-  helper smoke still stands as regressed with `kLSNoExecutableErr` in this
-  Codex environment.
+- Local source verification passed on 2026-05-22 17:49 JST with
+  `git diff --check`, localization lint, `swift test` (194 XCTest tests,
+  0 failures), and `swift build --disable-sandbox`; the current 2026-05-21
+  local app-bundle helper smoke still stands as regressed with
+  `kLSNoExecutableErr` in this Codex environment.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
