@@ -71,6 +71,39 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
         XCTAssertTrue(result.detail.contains("Run Check Runtime first"))
     }
 
+    func testCheckReportsUnknownLatestVersionWhenReleaseTagCannotBeCompared() async throws {
+        RuntimeUpdateURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"tag_name":"server-release","html_url":"https://github.com/ggml-org/llama.cpp/releases/tag/server-release","published_at":"2026-05-07T18:36:22Z"}"#
+        )
+
+        let checker = RuntimeUpdateAvailabilityChecker(session: makeSession())
+        let result = try await checker.check(
+            target: .llamaCpp,
+            localVersionSummary: "llama-server version b9060"
+        )
+
+        XCTAssertEqual(result.comparison, .unknownLatestVersion)
+        XCTAssertEqual(result.title, "Latest llama.cpp release found")
+        XCTAssertTrue(result.detail.contains("could not read a comparable release build number"))
+    }
+
+    func testCheckUsesExplicitLlamaCppLatestReleaseRequestMetadata() async throws {
+        RuntimeUpdateURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"tag_name":"b9060","html_url":"https://github.com/ggml-org/llama.cpp/releases/tag/b9060","published_at":"2026-05-07T18:36:22Z"}"#
+        )
+
+        let checker = RuntimeUpdateAvailabilityChecker(session: makeSession())
+        _ = try await checker.check(target: .llamaCpp, localVersionSummary: nil)
+
+        let request = try XCTUnwrap(RuntimeUpdateURLProtocol.observedRequest)
+        XCTAssertEqual(request.url?.absoluteString, "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest")
+        XCTAssertEqual(request.value(forHTTPHeaderField: "Accept"), "application/vnd.github+json")
+        XCTAssertEqual(request.value(forHTTPHeaderField: "User-Agent"), "Hazakura-Lantern")
+        XCTAssertEqual(request.timeoutInterval, 8)
+    }
+
     func testCheckThrowsForHTTPFailure() async {
         RuntimeUpdateURLProtocol.result = .success(statusCode: 503, body: "{}")
 
