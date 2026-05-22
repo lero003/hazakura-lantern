@@ -35,6 +35,10 @@ review_after:
 - Recorded the 2026-05-22 human decision to release `v1.0.0-rc.1` as a
   source-only RC for personal/local use, while keeping packaged app release work
   separate and blocked on manual desktop evidence.
+- Recorded the 2026-05-23 human decision to move the saved Lantern development
+  automation to a 30-minute cadence and aim it through `v1.1` Local Smoke
+  Console, `v1.2` Runtime Smoke Metrics, and immediate smoke-driven rough-edge
+  fixes before a possible `v1.3` source-stable checkpoint.
 
 ## Reason
 
@@ -57,6 +61,13 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
   code-quality, release-quality, or post-RC readiness slice; they should not
   create packaged artifacts, mutate runtime installs, or decide packaged-release
   readiness without an explicit human handoff.
+- Future runs should prefer the active smoke lane before generic polish:
+  implement v1.1 as explicit, user-triggered, non-persistent endpoint smoke
+  testing, then v1.2 as careful last-run smoke metrics with approximate wording,
+  then fix one smoke-observed rough edge at a time.
+- Future runs should not turn Smoke Console into chat, saved conversation
+  history, prompt libraries, RAG/tools, attachments, model catalog/download,
+  automatic endpoint polling, benchmark ranking, or runtime optimization.
 
 ## Review After
 
@@ -66,12 +77,16 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 ## Success Signals
 
 - Automation reports one concrete smoke/backlog slice with verification, or a clear no-op when no safe release-quality slice exists.
+- Automation reports one concrete v1.1/v1.2 smoke-lane slice with verification,
+  or a clear no-op when no safe smoke-lane or release-quality slice exists.
 - Source verification remains boring: `git diff --check`, localization lint, `swift test`, and `swift build --disable-sandbox` pass even when Launch Services helper smoke is blocked.
 
 ## Failure Signals
 
 - Automation treats any helper smoke result as packaged-release proof.
 - Automation loops on historical `kLSNoExecutableErr` without a fresh hypothesis or without keeping source work moving separately.
+- Automation builds chat history, benchmark dashboards, or runtime breadth while
+  claiming to implement smoke verification.
 
 ## Result
 

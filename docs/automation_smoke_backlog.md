@@ -12,6 +12,10 @@ Use this after reading `docs/current_status.md`, `docs/roadmap.md`, and
 Automation should help expose and fix small product-quality issues while the app
 is source-only and not yet packaged:
 
+- v1.1 Local Smoke Console slices that prove the selected endpoint can answer a
+  small explicit local test request without becoming chat
+- v1.2 Runtime Smoke Metrics slices that show honest last-run evidence without
+  becoming a benchmark suite
 - UI labels that are confusing, clipped, duplicated, or stale
 - menu bar, toolbar, and Setup Guide flows that mirror existing behavior poorly
 - setup, health, copy, profile, and localization rough edges
@@ -82,6 +86,22 @@ visual rough edge, prefer these targets:
 
 Do not claim a UI smoke target passed unless the run actually launched and
 observed the app or the user supplied specific visual evidence.
+
+## Smoke Console And Metrics Targets
+
+Use these targets for the v1.1/v1.2 automation lane:
+
+- core request and result model for explicit `/v1/chat/completions` smoke
+- timeout-bounded local client with focused error mapping
+- separate Smoke Console destination, not a chat page
+- prompt input, run state, response output, copy response, and clear result
+- last-run elapsed time, output character count, request mode, and timeout used
+- runtime-reported usage when available
+- explicitly approximate token count and decode rate when usage is unavailable
+
+Do not add saved conversations, multi-turn history, prompt libraries, RAG/tools,
+attachments, model catalog/search/download/conversion, cloud model support,
+automatic endpoint polling, benchmark ranking, or runtime optimization.
 
 ## External Proposal Intake
 

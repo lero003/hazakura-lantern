@@ -458,8 +458,10 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: `v1.0.0-rc.2` is the source-only RC for personal/local
-use. Packaged app release remains separate: automation should continue
+Current human direction: continue automated development every 30 minutes through
+`v1.1` Local Smoke Console and `v1.2` Runtime Smoke Metrics, then let the same
+loop fix smoke-observed rough edges before a later source-stable checkpoint
+around `v1.3`. Packaged app release remains separate: automation should continue
 code-quality checks, narrow verified improvements, and packaged-release
 readiness evidence, but should not create packaged artifacts, change GitHub
 settings, mutate public issues, or decide packaged-release readiness by itself.
@@ -508,10 +510,12 @@ preset model and picker, the initial runtime capability advisory, and the
 initial menu bar/toolbar/setup-guide surfaces.
 
 Automation must not change GitHub visibility, settings, tags, releases, release
-assets, repository packages, public issue state, automation cadence, a new
+assets, repository packages, public issue state, a new
 adapter, custom command implementation, profile schema version, dependencies,
 runtime installation/update, model download, or hidden auto-optimization
-without an explicit human handoff.
+without an explicit human handoff. The current human handoff explicitly allows
+the saved Lantern development automation to run every 30 minutes for the
+v1.1/v1.2 smoke lane and immediate smoke-driven polish afterward.
 
 ## Next Best Slice
 
@@ -519,6 +523,16 @@ Good next automated candidates:
 
 - fix any failing `swift test`, `swift build --disable-sandbox`, localization
   lint, or `git diff --check` result before picking a polish slice
+- add v1.1 Local Smoke Console in small steps: core request/result/error model,
+  timeout-bounded non-streaming `/v1/chat/completions` client, focused tests,
+  then a separate compact UI destination with prompt, run, response, copy, and
+  clear actions
+- add v1.2 Runtime Smoke Metrics after the console exists: elapsed time,
+  output character count, runtime-reported usage when available, explicitly
+  approximate fallback token count/rate, request mode, and timeout used
+- after v1.2, run smoke and fix one concrete rough edge at a time while keeping
+  conversation history, prompt libraries, RAG/tools, benchmark rankings, and
+  runtime optimization out of scope
 - make one small code-quality improvement inside the current `llama-server`
   boundary, with tests or build verification in the same run
 - use `docs/automation_smoke_backlog.md` to expose or fix one concrete

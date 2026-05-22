@@ -27,32 +27,41 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Automation Focus
 
-The project has a public source-only `v1.0.0-rc.1` release candidate for
+The project has a public source-only `v1.0.0-rc.2` release candidate for
 personal/local use. It keeps the existing `llama-server` control boundary and
 does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
 binary distribution artifacts. Treat exact v0.x numbers as release history, not
 as the next work selector.
 
-Current human direction: `v1.0.0-rc.1` is the selected source-only RC, while
-packaged app release work remains a separate future handoff. Automation should
-keep progressing code-quality checks, focused quality improvements, and
-release-readiness evidence without creating packaged artifacts, mutating runtime
-installs, changing GitHub settings, or deciding packaged-release readiness by
-itself.
+Current human direction: continue automated development every 30 minutes through
+`v1.1` and `v1.2`, then use the same loop for smoke-driven rough-edge fixes
+until a later source-stable checkpoint around `v1.3`. Packaged app release work
+remains a separate future handoff. Automation should keep progressing small
+verified slices without creating packaged artifacts, mutating runtime installs,
+changing GitHub settings, or deciding packaged-release readiness by itself.
 
 The default question for each automation run is:
 
 > Does this make Lantern closer to release-quality daily use without expanding
 > scope?
 
-Prefer failing quality checks, unfinished release-quality work, and post-RC
-readiness prep over packaged-release work. The currently useful
+Prefer failing quality checks, `v1.1`/`v1.2` runtime usability work, and
+post-RC smoke evidence over packaged-release work. The currently useful
 unfinished gates are:
 
 - fix failing `swift test`, `swift build --disable-sandbox`, localization lint,
   or `git diff --check` results before choosing polish
+- v1.1: add or harden a separate Smoke Console destination for explicit,
+  user-triggered local endpoint smoke requests against the selected
+  OpenAI-compatible endpoint/model contract
+- v1.2: add or harden honest smoke metrics such as elapsed time, output
+  character count, runtime-reported usage, approximate token count, approximate
+  decode rate, request mode, and timeout used
+- after v1.2: use smoke runs and manual evidence to fix one concrete rough edge
+  at a time before considering a source-stable checkpoint around v1.3
 - make one small code-quality improvement inside the current `llama-server`
-  boundary when it is covered by the same run's verification
+  boundary when it supports the smoke lane and is covered by the same run's
+  verification
 - restore or externally verify the app-bundle helper launch path, then complete
   normal desktop/manual launch and clean quit smoke
 - app-language switching verification for high-traffic surfaces such as menu
@@ -80,8 +89,10 @@ preset, v0.7 capability, v0.8 toolbar/navigation, and v0.9 update-readiness
 notes as background context. Reopen one only when a concrete, release-quality
 risk is visible and testable.
 
-Do not expand into chat, model download, RAG, proxy behavior, remote exposure,
-bundled inference, second-runtime work, or real runtime installation/update.
+Do not expand into chat, conversation history, prompt libraries, RAG, tools,
+attachments, model download, model catalog/search, model conversion, proxy
+behavior, remote exposure, bundled inference, second-runtime work, automatic
+benchmarking, benchmark leaderboards, or real runtime installation/update.
 The current networked update check is limited to explicit user-triggered
 `llama.cpp` latest-release metadata and must remain advisory.
 
@@ -124,10 +135,10 @@ wording, icon-only copy accessibility, logs retention wording, and
 source-checkpoint centralization. Health checks now follow the chosen rule:
 the action is disabled unless the server is running. Toolbar scope is also
 decided for now: keep only Setup Guide, profile import/export, and copy
-actions. The v1 release posture is also decided for now: `v1.0.0-rc.1` is a
-source-only release candidate, while packaged release remains a later handoff.
-Keep Hugging Face setup guidance and Homebrew copy placement as human-decision
-items.
+actions. The current source release posture is also decided for now:
+`v1.0.0-rc.2` is a source-only release candidate, while packaged release
+remains a later handoff. Keep Hugging Face setup guidance, Homebrew copy
+placement, runtime breadth, and packaged-release work as human-decision items.
 
 For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
 Automation may fix one concrete UI, localization, smoke, setup-flow,
@@ -221,49 +232,56 @@ Saved Codex automation:
 
 - name: Hazakura Lantern development loop
 - id: `hazakura-llm-manager`
-- cadence: hourly at minute 45 in the user's local timezone
+- cadence: every 30 minutes in the user's local timezone
 - environment: local execution in this project directory
 
-Hourly posture:
+30-minute posture:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.
-- Choose at most one small code-quality, release-quality, or post-RC readiness
-  slice.
+- Choose at most one small v1.1/v1.2 smoke-console, smoke-metrics,
+  code-quality, release-quality, or post-RC readiness slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
   clear and verification passes.
-- Keep hourly runs quiet, but progress-biased. A verified no-op is valid when
-  no failing quality check, unfinished release-quality gate, concrete rough
-  edge, or post-RC readiness prep is safely actionable in this run.
+- Keep runs quiet, but progress-biased. A verified no-op is valid when no
+  failing quality check, v1.1/v1.2 smoke-lane slice, concrete rough edge, or
+  post-RC readiness prep is safely actionable in this run.
 
 Preferred order:
 
 1. Fix a failing test or build.
 2. Fix a failing localization lint or `git diff --check` result.
-3. Make one small verified code-quality improvement inside the current
+3. Build v1.1 Smoke Console in small slices: core request/result/error models,
+   timeout-bounded client, focused tests, then compact Mac-native UI.
+4. Build v1.2 Smoke Metrics in small slices: elapsed time first, then
+   runtime-reported usage, explicitly approximate fallback counts/rates, and
+   streaming/first-token latency only if the slice remains small and safe.
+5. Fix smoke-observed rough edges after v1.2 without turning the surface into
+   chat, saved history, benchmark ranking, or runtime optimization.
+6. Make one small verified code-quality improvement inside the current
    `llama-server` boundary.
-4. Close one unfinished release-quality gate from `docs/current_status.md`.
-5. Use `docs/automation_smoke_backlog.md` to expose or fix one concrete
+7. Close one unfinished release-quality gate from `docs/current_status.md`.
+8. Use `docs/automation_smoke_backlog.md` to expose or fix one concrete
    pre-release rough edge that can be verified in the same run.
-6. Add focused tests for observed `llama-server` launch, validation, health,
+9. Add focused tests for observed `llama-server` launch, validation, health,
    endpoint, restart, copy-flow, or profile-warning behavior.
-7. Prepare post-RC readiness evidence, such as packaging-prep checks, release-gate
+10. Prepare post-RC readiness evidence, such as packaging-prep checks, release-gate
    wording, deterministic smoke notes, guarded update-workflow planning, or
    test coverage that does not perform real runtime or release mutation.
-8. Prepare external review packets when outside judgment is needed, using
+11. Prepare external review packets when outside judgment is needed, using
    `docs/external_review_flow.md` and keeping release/product decisions human
    owned.
-9. Tighten docs when they would otherwise steer the next run incorrectly or
+12. Tighten docs when they would otherwise steer the next run incorrectly or
    confuse a `llama-server` setup path.
-10. Classify public feedback or review notes with
+13. Classify public feedback or review notes with
    `docs/post_public_operations.md`, then make one safe local change only if the
    classification identifies a source-quality issue.
-11. Refine presets, runtime capability advisories, or update-readiness wording
+14. Refine presets, runtime capability advisories, or update-readiness wording
    only when it reduces a concrete release-quality risk and remains
    non-mutating.
-12. End as a verified no-op only when no safe quality, release-quality,
-   smoke-backlog, feedback-triage, v1-readiness, test, or automation-doc slice
-   is justified.
+15. End as a verified no-op only when no safe quality, v1.1/v1.2 smoke-lane,
+   release-quality, smoke-backlog, feedback-triage, test, or automation-doc
+   slice is justified.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.
@@ -272,10 +290,11 @@ Human approval is required before automation starts a new runtime adapter,
 custom command profile implementation, profile schema version change, packaged
 artifact, GitHub settings or release mutation, public issue mutation, automation
 cadence change, dependency or lockfile mutation, endpoint auto-polling,
-real runtime install/update execution, model download,
-automatic benchmark/optimization, multiple-profile management, launch-at-login,
-automatic restart policy, or update checks for runtimes beyond the current
-`llama.cpp` target.
+real runtime install/update execution, model download, model catalog/search,
+conversation history, prompt library, RAG/tools, attachment support, automatic
+benchmark/optimization, benchmark leaderboard, multiple-profile management,
+launch-at-login, automatic restart policy, or update checks for runtimes beyond
+the current `llama.cpp` target.
 
 ## Verification
 

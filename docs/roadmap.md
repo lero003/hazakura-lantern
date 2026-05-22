@@ -732,6 +732,82 @@ Completion criteria:
 - `llama-server` launch, presets, toolbar, capability checks, and update
   workflow form a coherent dedicated companion app
 
+## v1.1 - Local Smoke Console
+
+Purpose:
+
+Make Lantern useful after a server starts by giving users a small, explicit
+runtime usability check. This is a smoke/testing surface, not a chat product.
+
+Candidate work:
+
+- add a separate Smoke Console destination
+- use the selected adapter-owned endpoint/model contract already exposed by
+  copied client snippets
+- send a user-triggered, timeout-bounded non-streaming `/v1/chat/completions`
+  request first
+- show prompt input, request state, response text, copy response, clear result,
+  current base URL, current model id, and clear error messages
+- map connection failure, timeout, invalid endpoint, non-2xx response, and
+  malformed response into focused tested core errors
+- keep result state in memory only; do not persist conversation history
+- keep streaming as a future enhancement unless it remains small and safe
+
+Completion criteria:
+
+- local endpoint smoke testing is available without saved conversations,
+  multi-turn chat, prompt libraries, RAG/tools, attachments, cloud model
+  support, endpoint auto-polling, or benchmark ranking
+- request construction, timeout/error mapping, and response parsing have focused
+  core tests where practical
+- visible app-owned UI strings are localized
+- docs frame the page as endpoint smoke testing and runtime usability
+  verification, not as chat
+
+## v1.2 - Runtime Smoke Metrics
+
+Purpose:
+
+Add honest last-run evidence around the Smoke Console so users can tell whether
+the selected local runtime is usable and roughly how it behaved.
+
+Candidate work:
+
+- show started time, total elapsed time, output character count, request mode,
+  and timeout used for the last smoke run
+- prefer API-provided usage fields when present
+- when usage is missing, show explicitly approximate output token count and
+  approximate decode rate only when enough data exists
+- show first-response latency only if streaming is implemented safely
+- keep metrics in memory or in a small bounded non-persistent recent-results
+  list
+- use careful wording such as "Last local test", "Smoke metric", "Approx
+  output tokens", "Approx decode rate", and "Usage reported by runtime"
+
+Completion criteria:
+
+- metrics do not claim benchmark, official performance, optimization, or
+  tokenizer-accurate counts unless the implementation truly supports that
+- no saved benchmark history, charts, cross-model leaderboard, automatic
+  benchmark runs, or runtime optimizer is introduced
+- docs keep packaged-release readiness separate
+
+## v1.3 - Source-Stable Smoke Polish
+
+Purpose:
+
+Let v1.1/v1.2 settle through smoke-driven use, then prepare a source-stable
+checkpoint when the console, metrics wording, docs, and manual smoke evidence
+are quiet enough.
+
+Candidate work:
+
+- fix one smoke-observed rough edge at a time
+- record manual desktop smoke evidence when available
+- keep README, current status, roadmap, changelog, and automation guidance
+  aligned on source-only versus packaged-release status
+- avoid new feature breadth unless a later human handoff reopens scope
+
 ## v1.x - Second Runtime Design
 
 After v1.0, revisit whether a second runtime is still the next smallest risk.
@@ -794,18 +870,19 @@ Do not use this project for:
 
 ## Automation Guidance
 
-Automated development should pick one small release-quality slice. Version
-sections below are historical context and backlog shape, not the default work
-selector. Prefer work that makes Lantern closer to a user-facing release over
-work that merely advances from one v0.x label to the next.
+Automated development should pick one small verified slice. The active lane is
+`v1.1` Local Smoke Console, then `v1.2` Runtime Smoke Metrics, then
+smoke-driven rough-edge fixes toward a possible `v1.3` source-stable
+checkpoint. Prefer work that proves the selected local runtime is actually
+usable after launch over work that merely advances a version label.
 
 The open release-quality gates are the menu bar daily-use verification, reduced
 toolbar verification, Setup Guide inspector review, app launch/clean-quit
 smoke, and one manual UI smoke pass that covers the main window, Setup Guide,
 menu bar, toolbar, logs, and quit behavior.
 
-For pre-release rough-edge discovery that does not fit a single roadmap lane,
-use `docs/automation_smoke_backlog.md`; it is the allowed source for one small
+For pre-release rough-edge discovery that does not fit the smoke lane, use
+`docs/automation_smoke_backlog.md`; it is the allowed source for one small
 automatable UI, localization, menu bar, setup-flow, health/copy/log, profile,
 packaging-prep, or non-mutating update-readiness polish slice.
 The 2026-05-20 external improvement proposal has been folded into that backlog;
@@ -814,6 +891,12 @@ runtime mutation, or release packaging.
 
 Good next slices:
 
+- add or harden one v1.1 Smoke Console slice, starting with core request/result
+  models and timeout/error/response parsing tests before UI
+- add or harden one v1.2 Smoke Metrics slice with careful approximate wording
+  and no benchmark claims
+- after v1.2, use Smoke Console evidence or manual reports to fix one concrete
+  rough edge at a time
 - expose or fix one concrete rough edge from `docs/automation_smoke_backlog.md`
   when it can be verified without broad restyling, runtime mutation, packaging
   publication, or GitHub mutation

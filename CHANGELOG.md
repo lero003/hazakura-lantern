@@ -2,6 +2,15 @@
 
 All notable changes to Hazakura Lantern will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- Reoriented automated development after `v1.0.0-rc.2` toward a 30-minute
+  v1.1/v1.2 lane: non-persistent local endpoint smoke testing first, then
+  careful approximate smoke metrics, while keeping packaged releases and chat
+  product features out of scope.
+
 ## v1.0.0-rc.2 - 2026-05-23
 
 ### Changed
