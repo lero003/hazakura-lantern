@@ -2,6 +2,8 @@ import SwiftUI
 import HazakuraLLMManagerCore
 
 struct SettingsView: View {
+    var maxContentWidth: CGFloat = 520
+
     @AppStorage(AppLanguage.storageKey) private var languageRawValue = AppLanguage.system.rawValue
 
     private var languageSelection: Binding<AppLanguage> {
@@ -36,6 +38,6 @@ struct SettingsView: View {
             }
         }
         .padding(20)
-        .frame(minWidth: 420, maxWidth: 520, alignment: .leading)
+        .frame(minWidth: 320, maxWidth: maxContentWidth, alignment: .leading)
     }
 }

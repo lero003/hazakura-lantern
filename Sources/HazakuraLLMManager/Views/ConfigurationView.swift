@@ -4,6 +4,7 @@ import HazakuraLLMManagerCore
 
 struct ConfigurationView: View {
     @ObservedObject var controller: ServerController
+    @Environment(\.locale) private var locale
     @State private var selectedPresetIntent: LlamaServerPresetIntent = .standard
     @State private var isAdvancedExpanded = false
 
@@ -163,7 +164,7 @@ struct ConfigurationView: View {
                                 }
                             }
 
-                            if let advice = controller.runtimeUpdateReadinessAdvice {
+                            if let advice = localizedUpdateReadinessAdvice {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Label(advice.title, systemImage: "checklist")
                                         .font(.caption)
@@ -202,7 +203,7 @@ struct ConfigurationView: View {
                                     }
                                 }
 
-                                if let message = controller.runtimeUpdateDisplayMessage {
+                                if let message = localizedRuntimeUpdateDisplayMessage {
                                     Label(message, systemImage: "arrow.down.circle")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -455,5 +456,152 @@ struct ConfigurationView: View {
         case .unknown:
             return .secondary
         }
+    }
+
+    private var localizedRuntimeUpdateDisplayMessage: String? {
+        if let availability = controller.runtimeUpdateAvailability {
+            return "\(runtimeUpdateAvailabilityTitle(availability)). \(runtimeUpdateAvailabilityDetail(availability))"
+        }
+
+        guard let message = controller.runtimeUpdateAvailabilityMessage else {
+            return nil
+        }
+
+        switch message {
+        case .targetChanged:
+            return localized("runtime_update.target_changed")
+        case .failed(let errorDescription):
+            return localized("runtime_update.failed", errorDescription)
+        }
+    }
+
+    private var localizedUpdateReadinessAdvice: (title: String, detail: String)? {
+        guard let advice = controller.runtimeUpdateReadinessAdvice else {
+            return nil
+        }
+
+        switch advice.readiness {
+        case .needsCapabilityCheck:
+            return (
+                localized("runtime_update_readiness.needs_capability.title"),
+                localized("runtime_update_readiness.needs_capability.detail")
+            )
+        case .capabilityEvidenceIncomplete:
+            let gapSummary = controller.runtimeCapabilityProbeResult.map(localizedIncompleteUpdateEvidenceSummary) ?? localized("runtime_update_readiness.evidence.version_unavailable")
+            return (
+                localized("runtime_update_readiness.incomplete.title"),
+                localized("runtime_update_readiness.incomplete.detail", gapSummary)
+            )
+        case .planningEvidenceReady:
+            let versionSummary = controller.runtimeCapabilityProbeResult?.capabilities.versionSummary ?? localized("runtime_update_readiness.selected_runtime")
+            return (
+                localized("runtime_update_readiness.ready.title"),
+                localizedPlanningEvidenceReadyDetail(versionSummary: versionSummary)
+            )
+        case .manualOnly:
+            return (
+                localized("runtime_update_readiness.manual.title"),
+                localized("runtime_update_readiness.manual.detail")
+            )
+        }
+    }
+
+    private func localizedIncompleteUpdateEvidenceSummary(_ result: LlamaServerCapabilityProbeResult) -> String {
+        var missingEvidence: [String] = []
+
+        if !result.versionCheck.completedSuccessfully || result.capabilities.versionSummary == nil {
+            missingEvidence.append(localizedVersionEvidenceGap(result.versionCheck))
+        }
+
+        if !result.helpCheck.completedSuccessfully || result.capabilities.supportedOptions.isEmpty {
+            missingEvidence.append(localizedHelpEvidenceGap(result.helpCheck))
+        }
+
+        return missingEvidence.joined(separator: localized("runtime_update_readiness.evidence.separator"))
+    }
+
+    private func localizedVersionEvidenceGap(_ check: LlamaServerCapabilityCommandResult) -> String {
+        if check.didTimeOut {
+            return localized("runtime_update_readiness.evidence.version_timeout")
+        }
+
+        if let errorDescription = check.errorDescription {
+            return localized("runtime_update_readiness.evidence.version_failed", errorDescription)
+        }
+
+        if let terminationStatus = check.terminationStatus, terminationStatus != 0 {
+            return localized("runtime_update_readiness.evidence.version_status", Int(terminationStatus))
+        }
+
+        return localized("runtime_update_readiness.evidence.version_unavailable")
+    }
+
+    private func localizedHelpEvidenceGap(_ check: LlamaServerCapabilityCommandResult) -> String {
+        if check.didTimeOut {
+            return localized("runtime_update_readiness.evidence.help_timeout")
+        }
+
+        if let errorDescription = check.errorDescription {
+            return localized("runtime_update_readiness.evidence.help_failed", errorDescription)
+        }
+
+        if let terminationStatus = check.terminationStatus, terminationStatus != 0 {
+            return localized("runtime_update_readiness.evidence.help_status", Int(terminationStatus))
+        }
+
+        return localized("runtime_update_readiness.evidence.help_unavailable")
+    }
+
+    private func localizedPlanningEvidenceReadyDetail(versionSummary: String) -> String {
+        switch controller.runtimeInstallSourceAdvice?.source {
+        case .homebrew:
+            localized("runtime_update_readiness.ready.homebrew.detail", versionSummary)
+        case .macPorts:
+            localized("runtime_update_readiness.ready.macports.detail", versionSummary)
+        case .sourceCheckout:
+            localized("runtime_update_readiness.ready.source_checkout.detail", versionSummary)
+        case .manualPath, nil:
+            localized("runtime_update_readiness.ready.detail", versionSummary)
+        }
+    }
+
+    private func runtimeUpdateAvailabilityTitle(_ availability: RuntimeUpdateAvailability) -> String {
+        switch availability.comparison {
+        case .updateAvailable:
+            localized("runtime_update.available.title", availability.latestRelease.tagName)
+        case .currentOrNewer:
+            localized("runtime_update.current.title", availability.latestRelease.tagName)
+        case .unknownLocalVersion:
+            localized("runtime_update.unknown_local.title", availability.target.displayName, availability.latestRelease.tagName)
+        case .unknownLatestVersion:
+            localized("runtime_update.unknown_latest.title", availability.target.displayName)
+        }
+    }
+
+    private func runtimeUpdateAvailabilityDetail(_ availability: RuntimeUpdateAvailability) -> String {
+        switch availability.comparison {
+        case .updateAvailable:
+            localized("runtime_update.available.detail", availability.latestRelease.tagName)
+        case .currentOrNewer:
+            localized("runtime_update.current.detail")
+        case .unknownLocalVersion:
+            localized("runtime_update.unknown_local.detail")
+        case .unknownLatestVersion:
+            localized("runtime_update.unknown_latest.detail")
+        }
+    }
+
+    private func localized(_ key: String, _ arguments: CVarArg...) -> String {
+        let format = String(
+            localized: String.LocalizationValue(key),
+            bundle: .module,
+            locale: locale
+        )
+
+        guard !arguments.isEmpty else {
+            return format
+        }
+
+        return String(format: format, locale: locale, arguments: arguments)
     }
 }

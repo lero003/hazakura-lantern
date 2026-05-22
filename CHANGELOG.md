@@ -6,6 +6,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Localized update-readiness and update-check status text in the Configuration
+  view so English/Japanese app UI switching covers the non-mutating runtime
+  update guidance.
+- Tightened embedded Settings and Setup Guide inspector widths so the
+  sidebar-based main window keeps those utility surfaces compact.
 - Clarified update-check outcome wording so the user-triggered `llama.cpp`
   check stays metadata-only and does not imply Lantern prepares or runs
   updates.

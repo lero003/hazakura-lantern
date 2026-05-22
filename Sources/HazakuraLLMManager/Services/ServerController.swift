@@ -14,7 +14,7 @@ final class ServerController: ObservableObject {
     @Published private(set) var isRuntimeCapabilityProbeRunning = false
     @Published var runtimeUpdateCheckTarget: RuntimeUpdateCheckTarget = .llamaCpp
     @Published private(set) var runtimeUpdateAvailability: RuntimeUpdateAvailability?
-    @Published private(set) var runtimeUpdateAvailabilityMessage: String?
+    @Published private(set) var runtimeUpdateAvailabilityMessage: RuntimeUpdateAvailabilityMessage?
     @Published private(set) var isRuntimeUpdateCheckRunning = false
     @Published private(set) var recentPaths: RecentRuntimePaths
     @Published private(set) var detectedRuntimeExecutablePaths: [String]
@@ -104,14 +104,6 @@ final class ServerController: ObservableObject {
             executablePath: configuration.runtimeExecutablePath,
             capabilityResult: runtimeCapabilityProbeResult
         )
-    }
-
-    var runtimeUpdateDisplayMessage: String? {
-        if let runtimeUpdateAvailability {
-            return "\(runtimeUpdateAvailability.title). \(runtimeUpdateAvailability.detail)"
-        }
-
-        return runtimeUpdateAvailabilityMessage
     }
 
     func updateConfiguration(_ update: (inout RuntimeConfiguration) -> Void) {
@@ -225,7 +217,7 @@ final class ServerController: ObservableObject {
 
                     self.isRuntimeUpdateCheckRunning = false
                     guard self.runtimeUpdateCheckTarget == target else {
-                        self.runtimeUpdateAvailabilityMessage = "Runtime update target changed; check for updates again."
+                        self.runtimeUpdateAvailabilityMessage = .targetChanged
                         return
                     }
 
@@ -238,7 +230,7 @@ final class ServerController: ObservableObject {
                     }
 
                     self.isRuntimeUpdateCheckRunning = false
-                    self.runtimeUpdateAvailabilityMessage = "Update check failed: \(error.localizedDescription)"
+                    self.runtimeUpdateAvailabilityMessage = .failed(error.localizedDescription)
                 }
             }
         }
@@ -489,4 +481,9 @@ final class ServerController: ObservableObject {
         runtimeUpdateAvailability = nil
         runtimeUpdateAvailabilityMessage = nil
     }
+}
+
+enum RuntimeUpdateAvailabilityMessage: Equatable {
+    case targetChanged
+    case failed(String)
 }

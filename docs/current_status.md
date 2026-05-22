@@ -28,6 +28,8 @@ Implemented scope:
 - The same language toggle is reachable inside the main window through the
   sidebar Settings destination, so changing app UI language does not require
   opening the separate macOS Settings scene.
+- The embedded sidebar Settings view and Setup Guide inspector use compact
+  widths so those utility surfaces do not crowd the main window.
 - Settings now shows the current source checkpoint and makes the source-only,
   no-packaged-app boundary visible inside the app without adding release assets.
 - The in-app source checkpoint identifier now comes from a tested core metadata
@@ -325,6 +327,9 @@ Implemented scope:
   target, currently only `llama.cpp`, and a non-mutating Check for Updates
   action that reads the latest official GitHub release metadata and compares
   `bNNNN` build numbers when local version evidence is available.
+- Update-readiness and update-check status text in the Configuration view now
+  follows the selected English/Japanese app UI language while staying
+  non-mutating and advisory.
 - The Setup Guide now includes a manual Homebrew update command copy affordance
   for `llama.cpp`, matching the existing install-command style without running
   package-manager commands.
@@ -382,7 +387,7 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-22 hourly run):
+Current source-verification status (2026-05-22 19:50 JST hourly run):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (194 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun

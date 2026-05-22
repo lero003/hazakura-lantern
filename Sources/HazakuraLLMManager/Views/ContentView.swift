@@ -71,7 +71,7 @@ struct ContentView: View {
                                 .padding(24)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         case .settings:
-                            SettingsView()
+                            SettingsView(maxContentWidth: 380)
                                 .padding(24)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         }
@@ -169,7 +169,7 @@ struct ContentView: View {
         .groupBoxStyle(GlassGroupBoxStyle())
         .inspector(isPresented: $showSetupGuide) {
             SetupGuideView(controller: controller)
-                .inspectorColumnWidth(min: 300, ideal: 340, max: 400)
+                .inspectorColumnWidth(min: 300, ideal: 320, max: 340)
         }
         .onAppear {
             if controller.configuration.runtimeExecutablePath.isEmpty ||
