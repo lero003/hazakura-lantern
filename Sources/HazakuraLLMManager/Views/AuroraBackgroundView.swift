@@ -3,12 +3,18 @@ import HazakuraLLMManagerCore
 
 struct AuroraBackgroundView: View {
     let status: ServerStatus
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        TimelineView(.animation(paused: !status.animatesAuroraBackground)) { timeline in
-            AuroraBackgroundLayer(date: timeline.date, status: status)
+        if reduceMotion {
+            AuroraBackgroundStaticLayer(status: status)
+                .ignoresSafeArea()
+        } else {
+            TimelineView(.animation(paused: !status.animatesAuroraBackground)) { timeline in
+                AuroraBackgroundLayer(date: timeline.date, status: status)
+            }
+            .ignoresSafeArea()
         }
-        .ignoresSafeArea()
     }
 }
 
@@ -64,6 +70,77 @@ private struct AuroraBackgroundLayer: View {
             }
             .blur(radius: size * 0.12 + 45)
             .animation(.easeInOut(duration: 1.5), value: status)
+            .drawingGroup()
+        }
+    }
+
+    private func currentColors(for status: ServerStatus) -> (orb1: Color, orb2: Color, orb3: Color) {
+        switch status {
+        case .running:
+            return (orb1: .yellow, orb2: .orange, orb3: Color(red: 0.95, green: 0.75, blue: 0.2))
+        case .starting, .loading, .restarting, .stopping:
+            return (orb1: .orange, orb2: .yellow, orb3: Color(red: 0.9, green: 0.4, blue: 0.1))
+        case .error:
+            return (orb1: .red, orb2: Color(red: 0.7, green: 0.1, blue: 0.1), orb3: .orange)
+        case .stopped:
+            return (
+                orb1: Color(red: 0.85, green: 0.5, blue: 0.15),
+                orb2: Color(red: 0.5, green: 0.25, blue: 0.05),
+                orb3: Color(red: 0.3, green: 0.15, blue: 0.0)
+            )
+        }
+    }
+}
+
+private struct AuroraBackgroundStaticLayer: View {
+    let status: ServerStatus
+
+    var body: some View {
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let height = geometry.size.height
+            let size = min(width, height)
+
+            let colors = currentColors(for: status)
+
+            ZStack {
+                Color(nsColor: .windowBackgroundColor)
+
+                Color.clear
+                    .background(.background)
+                    .opacity(0.65)
+
+                AuroraOrb(
+                    color: colors.orb1,
+                    opacity: 0.35,
+                    radius: size * 0.4,
+                    diameter: size * 0.8,
+                    x: width * 0.45,
+                    y: height * 0.45,
+                    scale: 1.0
+                )
+
+                AuroraOrb(
+                    color: colors.orb2,
+                    opacity: 0.3,
+                    radius: size * 0.45,
+                    diameter: size * 0.9,
+                    x: width * 0.55,
+                    y: height * 0.55,
+                    scale: 1.0
+                )
+
+                AuroraOrb(
+                    color: colors.orb3,
+                    opacity: 0.22,
+                    radius: size * 0.35,
+                    diameter: size * 0.7,
+                    x: width * 0.5,
+                    y: height * 0.5,
+                    scale: 1.0
+                )
+            }
+            .blur(radius: size * 0.12 + 45)
             .drawingGroup()
         }
     }

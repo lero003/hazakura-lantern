@@ -4,6 +4,7 @@ import HazakuraLLMManagerCore
 struct StatusHeaderView: View {
     @ObservedObject var controller: ServerController
     @Environment(\.locale) private var locale
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var lanternPulse: CGFloat = 1.0
 
     var body: some View {
@@ -18,6 +19,9 @@ struct StatusHeaderView: View {
                     startLanternPulse()
                 }
                 .onChange(of: controller.status) { _, _ in
+                    startLanternPulse()
+                }
+                .onChange(of: reduceMotion) { _, _ in
                     startLanternPulse()
                 }
 
@@ -54,11 +58,13 @@ struct StatusHeaderView: View {
     private func startLanternPulse() {
         if controller.status == .running {
             lanternPulse = 1.0
-            withAnimation(
-                .easeInOut(duration: 1.2)
-                .repeatForever(autoreverses: true)
-            ) {
-                lanternPulse = 1.15
+            if !reduceMotion {
+                withAnimation(
+                    .easeInOut(duration: 1.2)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    lanternPulse = 1.15
+                }
             }
         } else {
             lanternPulse = 1.0
@@ -95,6 +101,7 @@ struct StatusHeaderView: View {
 
 private struct StatusBadge: View {
     var status: ServerStatus
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var pulseScale: CGFloat = 1.0
 
     var body: some View {
@@ -110,6 +117,9 @@ private struct StatusBadge: View {
                     startPulseIfNeeded()
                 }
                 .onChange(of: status) { _, _ in
+                    startPulseIfNeeded()
+                }
+                .onChange(of: reduceMotion) { _, _ in
                     startPulseIfNeeded()
                 }
 
@@ -128,11 +138,13 @@ private struct StatusBadge: View {
     private func startPulseIfNeeded() {
         if status == .running {
             pulseScale = 1.0
-            withAnimation(
-                .easeInOut(duration: 1.0)
-                .repeatForever(autoreverses: true)
-            ) {
-                pulseScale = 1.4
+            if !reduceMotion {
+                withAnimation(
+                    .easeInOut(duration: 1.0)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    pulseScale = 1.4
+                }
             }
         } else {
             pulseScale = 1.0

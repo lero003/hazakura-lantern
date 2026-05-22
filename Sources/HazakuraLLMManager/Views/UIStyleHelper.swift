@@ -3,19 +3,21 @@ import SwiftUI
 // MARK: - Primary Button Style
 struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.colorScheme) private var colorScheme
     @State private var isHovered = false
 
     func makeBody(configuration: Configuration) -> some View {
         let isInteractive = isEnabled
         let isActiveHover = isInteractive && isHovered
-        let gradientColors = isInteractive ? [
-            Color.orange.opacity(isActiveHover ? 0.95 : 0.85),
-            Color(red: 0.95, green: 0.65, blue: 0.15).opacity(isActiveHover ? 0.9 : 0.8),
-            Color.yellow.opacity(isActiveHover ? 0.85 : 0.75)
-        ] : [
-            Color.white.opacity(0.12),
-            Color.white.opacity(0.08)
-        ]
+        let isPressed = isInteractive && configuration.isPressed
+
+        let fillColor: Color = isInteractive
+            ? (isPressed
+                ? Color.accentColor.opacity(0.8)
+                : (isActiveHover
+                    ? Color.accentColor.opacity(0.9)
+                    : Color.accentColor))
+            : (colorScheme == .dark ? .white.opacity(0.12) : .gray.opacity(0.15))
 
         configuration.label
             .font(.callout.weight(.semibold))
@@ -23,29 +25,29 @@ struct PrimaryButtonStyle: ButtonStyle {
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .background(
-                LinearGradient(
-                    colors: gradientColors,
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(fillColor)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.white.opacity(isInteractive ? 0.08 : 0.18), lineWidth: 1)
+                    .stroke(
+                        isInteractive
+                            ? Color.white.opacity(isActiveHover ? 0.15 : 0.08)
+                            : (colorScheme == .dark ? .white.opacity(0.18) : .gray.opacity(0.25)),
+                        lineWidth: 1
+                    )
             )
             .cornerRadius(8)
             .shadow(
-                color: Color.orange.opacity(isActiveHover ? 0.25 : (isInteractive ? 0.15 : 0)),
-                radius: isActiveHover ? 8 : 4,
+                color: isInteractive
+                    ? Color.accentColor.opacity(isActiveHover ? 0.25 : 0.15)
+                    : .clear,
+                radius: isActiveHover ? 6 : 3,
                 x: 0,
-                y: isActiveHover ? 4 : 2
+                y: isActiveHover ? 3 : 1
             )
-            .scaleEffect(
-                isInteractive
-                    ? (configuration.isPressed ? 0.96 : (isActiveHover ? 1.02 : 1.0))
-                    : 1.0
-            )
-            .saturation(isInteractive ? 1.0 : 0.45)
+            .scaleEffect(isPressed ? 0.96 : (isActiveHover ? 1.02 : 1.0))
+            .saturation(isInteractive ? 1.0 : 0.5)
             .animation(.smooth(duration: 0.2), value: isHovered)
             .animation(.smooth(duration: 0.1), value: configuration.isPressed)
             .onHover { hovering in
