@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Refined Setup Guide step-card accessibility hints so each setup state
+  announces the specific next action in English and Japanese.
 - Recorded the 2026-05-22 source verification evidence while keeping the
   existing app-bundle helper smoke regression separate from packaged-release
   proof.

@@ -21,6 +21,8 @@
 "Copied!" = "コピー済み";
 "Complete" = "完了";
 "Complete this setup step to continue." = "次へ進むには、このセットアップ手順を完了してください。";
+"A GGUF model file is selected." = "GGUFモデルファイルが選択されています。";
+"A llama-server executable is selected." = "llama-server 実行ファイルが選択されています。";
 "Copy AI Mobile Test" = "AI Mobileテストをコピー";
 "Copy Command" = "コマンドをコピー";
 "Copy Endpoint" = "エンドポイントをコピー";
@@ -144,7 +146,13 @@
 "Use Installed Runtime" = "インストール済みを使用";
 "llama-server binary is required to host local model processes." = "ローカルモデルプロセスを起動するには llama-server バイナリが必要です。";
 "Select a .gguf format model file to run on the server." = "サーバーで実行する .gguf 形式のモデルファイルを選択します。";
+"Choose an existing local GGUF model file." = "このMac上にある既存のGGUFモデルファイルを選択してください。";
+"Runtime and model are selected; review and apply a preset if needed." = "ランタイムとモデルは選択済みです。必要に応じてプリセットを確認して適用してください。";
+"Select a runtime and model before applying a preset." = "プリセットを適用する前に、ランタイムとモデルを選択してください。";
+"Select an installed llama-server executable or choose one manually." = "検出済みの llama-server 実行ファイルを選ぶか、手動で選択してください。";
 "Apply Recommended Preset" = "推奨プリセットを適用";
 "Configure basic settings based on your Mac environment." = "Mac環境に合わせて基本設定を調整します。";
 "Start your server process and test API availability." = "サーバープロセスを起動し、API接続を確認します。";
+"Start the server, then run a manual health check." = "サーバーを起動し、その後で手動ヘルスチェックを実行してください。";
+"The server is running and the latest manual health check is healthy." = "サーバーは実行中で、直近の手動ヘルスチェックは正常です。";
 "Tips" = "ヒント";

@@ -83,7 +83,9 @@ struct SetupGuideView: View {
                         stepNumber: 1,
                         title: "Prepare llama-server",
                         description: "llama-server binary is required to host local model processes.",
-                        isCompleted: isStep1Completed
+                        isCompleted: isStep1Completed,
+                        completeAccessibilityHint: "A llama-server executable is selected.",
+                        incompleteAccessibilityHint: "Select an installed llama-server executable or choose one manually."
                     ) {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("If not installed, run this command via Terminal:")
@@ -185,7 +187,9 @@ struct SetupGuideView: View {
                         stepNumber: 2,
                         title: "Prepare GGUF Model",
                         description: "Select a .gguf format model file to run on the server.",
-                        isCompleted: isStep2Completed
+                        isCompleted: isStep2Completed,
+                        completeAccessibilityHint: "A GGUF model file is selected.",
+                        incompleteAccessibilityHint: "Choose an existing local GGUF model file."
                     ) {
                         VStack(alignment: .leading, spacing: 10) {
                             if let ggufModelSearchURL = Self.ggufModelSearchURL {
@@ -225,7 +229,9 @@ struct SetupGuideView: View {
                         stepNumber: 3,
                         title: "Apply Recommended Preset",
                         description: "Configure basic settings based on your Mac environment.",
-                        isCompleted: isStep3Completed
+                        isCompleted: isStep3Completed,
+                        completeAccessibilityHint: "Runtime and model are selected; review and apply a preset if needed.",
+                        incompleteAccessibilityHint: "Select a runtime and model before applying a preset."
                     ) {
                         VStack(alignment: .leading, spacing: 10) {
                             Picker("Preset", selection: $selectedPresetIntent) {
@@ -258,7 +264,9 @@ struct SetupGuideView: View {
                         stepNumber: 4,
                         title: "Launch & Connect",
                         description: "Start your server process and test API availability.",
-                        isCompleted: isStep4Completed
+                        isCompleted: isStep4Completed,
+                        completeAccessibilityHint: "The server is running and the latest manual health check is healthy.",
+                        incompleteAccessibilityHint: "Start the server, then run a manual health check."
                     ) {
                         VStack(alignment: .leading, spacing: 10) {
                             ViewThatFits(in: .horizontal) {
@@ -333,6 +341,8 @@ struct SetupGuideView: View {
         title: String,
         description: String,
         isCompleted: Bool,
+        completeAccessibilityHint: LocalizedStringKey,
+        incompleteAccessibilityHint: LocalizedStringKey,
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -369,9 +379,7 @@ struct SetupGuideView: View {
             }
             .accessibilityElement(children: .combine)
             .accessibilityValue(Text(LocalizedStringKey(isCompleted ? "Complete" : "Incomplete")))
-            .accessibilityHint(Text(LocalizedStringKey(
-                isCompleted ? "This setup step is complete." : "Complete this setup step to continue."
-            )))
+            .accessibilityHint(Text(isCompleted ? completeAccessibilityHint : incompleteAccessibilityHint))
 
             content()
                 .padding(.leading, 32)

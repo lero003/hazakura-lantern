@@ -21,6 +21,8 @@
 "Copied!" = "Copied!";
 "Complete" = "Complete";
 "Complete this setup step to continue." = "Complete this setup step to continue.";
+"A GGUF model file is selected." = "A GGUF model file is selected.";
+"A llama-server executable is selected." = "A llama-server executable is selected.";
 "Copy AI Mobile Test" = "Copy AI Mobile Test";
 "Copy Command" = "Copy Command";
 "Copy Endpoint" = "Copy Endpoint";
@@ -144,7 +146,13 @@
 "Use Installed Runtime" = "Use Installed Runtime";
 "llama-server binary is required to host local model processes." = "llama-server binary is required to host local model processes.";
 "Select a .gguf format model file to run on the server." = "Select a .gguf format model file to run on the server.";
+"Choose an existing local GGUF model file." = "Choose an existing local GGUF model file.";
+"Runtime and model are selected; review and apply a preset if needed." = "Runtime and model are selected; review and apply a preset if needed.";
+"Select a runtime and model before applying a preset." = "Select a runtime and model before applying a preset.";
+"Select an installed llama-server executable or choose one manually." = "Select an installed llama-server executable or choose one manually.";
 "Apply Recommended Preset" = "Apply Recommended Preset";
 "Configure basic settings based on your Mac environment." = "Configure basic settings based on your Mac environment.";
 "Start your server process and test API availability." = "Start your server process and test API availability.";
+"Start the server, then run a manual health check." = "Start the server, then run a manual health check.";
+"The server is running and the latest manual health check is healthy." = "The server is running and the latest manual health check is healthy.";
 "Tips" = "Tips";
