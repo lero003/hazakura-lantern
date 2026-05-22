@@ -16,6 +16,15 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
         XCTAssertNil(RuntimeUpdateAvailabilityChecker.buildNumber(in: "llama-server custom build"))
     }
 
+    func testLlamaCppTargetDefinesLatestReleaseURLWithoutForceUnwrap() throws {
+        let url = try RuntimeUpdateCheckTarget.llamaCpp.latestReleaseURL()
+
+        XCTAssertEqual(
+            url.absoluteString,
+            "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest"
+        )
+    }
+
     func testCheckReportsUpdateAvailableWhenLocalBuildIsOlder() async throws {
         RuntimeUpdateURLProtocol.result = .success(
             statusCode: 200,

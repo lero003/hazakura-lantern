@@ -12,10 +12,13 @@ public enum RuntimeUpdateCheckTarget: String, CaseIterable, Identifiable, Sendab
         }
     }
 
-    var latestReleaseURL: URL {
+    func latestReleaseURL() throws -> URL {
         switch self {
         case .llamaCpp:
-            URL(string: "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest")!
+            guard let url = URL(string: "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest") else {
+                throw RuntimeUpdateAvailabilityError.invalidLatestReleaseURL(displayName)
+            }
+            return url
         }
     }
 }
@@ -117,7 +120,7 @@ public struct RuntimeUpdateAvailabilityChecker: RuntimeUpdateAvailabilityCheckin
     }
 
     private func latestRelease(for target: RuntimeUpdateCheckTarget) async throws -> RuntimeLatestRelease {
-        var request = URLRequest(url: target.latestReleaseURL)
+        var request = URLRequest(url: try target.latestReleaseURL())
         request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
         request.setValue("Hazakura-Lantern", forHTTPHeaderField: "User-Agent")
         request.timeoutInterval = 8
@@ -179,11 +182,14 @@ public struct RuntimeUpdateAvailabilityChecker: RuntimeUpdateAvailabilityCheckin
 }
 
 public enum RuntimeUpdateAvailabilityError: LocalizedError, Equatable {
+    case invalidLatestReleaseURL(String)
     case nonHTTPResponse
     case httpStatus(Int)
 
     public var errorDescription: String? {
         switch self {
+        case .invalidLatestReleaseURL(let targetName):
+            "Update check target \(targetName) does not define a valid latest-release URL."
         case .nonHTTPResponse:
             "Update check did not receive an HTTP response."
         case .httpStatus(let statusCode):
