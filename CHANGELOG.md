@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added the first v1.1 Smoke Console UI slice: a separate sidebar destination
+  for a user-triggered local endpoint smoke request with prompt, run state,
+  response display, copy response, clear result, and localized app UI strings.
 - Added the first core v1.1 Smoke Console client slice: a timeout-bounded,
   non-streaming OpenAI-compatible chat-completions runner with focused tests for
   request construction, response parsing, and endpoint/timeout/HTTP/error

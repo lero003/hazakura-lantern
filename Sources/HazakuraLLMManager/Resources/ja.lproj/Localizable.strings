@@ -225,3 +225,16 @@
 "validation.runtime.directory" = "ランタイムパスがフォルダです。";
 "validation.runtime.missing" = "ランタイム実行ファイルが存在しません。";
 "validation.runtime.not_executable" = "ランタイム実行ファイルに実行権限がありません。";
+"Clear Result" = "結果を消去";
+"Copy Response" = "応答をコピー";
+"Enter a short smoke prompt." = "短い確認プロンプトを入力してください。";
+"Local Endpoint" = "ローカルエンドポイント";
+"No Smoke Result" = "動作確認結果はありません";
+"Run a local endpoint smoke request to show the latest response here." = "ローカルエンドポイントの動作確認リクエストを実行すると、直近の応答がここに表示されます。";
+"Run Smoke" = "動作確認を実行";
+"Running local endpoint smoke..." = "ローカルエンドポイントを確認中...";
+"Running Smoke" = "確認中";
+"Smoke Console" = "動作確認コンソール";
+"Smoke Prompt" = "確認プロンプト";
+"Smoke Response" = "確認応答";
+"Start the server before running Smoke Console." = "Smoke Console を実行する前にサーバーを開始してください。";

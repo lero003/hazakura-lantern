@@ -742,6 +742,8 @@ runtime usability check. This is a smoke/testing surface, not a chat product.
 Candidate work:
 
 - add a separate Smoke Console destination
+- initial separate Smoke Console destination is implemented with prompt,
+  run state, response display, copy response, and clear result
 - use the selected adapter-owned endpoint/model contract already exposed by
   copied client snippets
 - send a user-triggered, timeout-bounded non-streaming `/v1/chat/completions`

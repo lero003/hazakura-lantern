@@ -11,6 +11,7 @@ struct ContentView: View {
     private enum SidebarItem: String, CaseIterable, Identifiable {
         case dashboard = "Dashboard"
         case configuration = "Configuration"
+        case smokeConsole = "Smoke Console"
         case logs = "Logs"
         case settings = "Settings"
 
@@ -20,6 +21,7 @@ struct ContentView: View {
             switch self {
             case .dashboard: return "square.grid.2x2"
             case .configuration: return "slider.horizontal.3"
+            case .smokeConsole: return "checkmark.circle"
             case .logs: return "doc.text"
             case .settings: return "gearshape"
             }
@@ -66,6 +68,10 @@ struct ContentView: View {
                                 }
                                 .padding(24)
                             }
+                        case .smokeConsole:
+                            SmokeConsoleView(controller: controller)
+                                .padding(24)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         case .logs:
                             LogsView(controller: controller)
                                 .padding(24)

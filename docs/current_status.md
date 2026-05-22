@@ -82,6 +82,10 @@ Implemented scope:
   user-triggered, timeout-bounded, non-streaming OpenAI-compatible
   `/v1/chat/completions` request and map invalid endpoint, connection, timeout,
   HTTP status, and malformed-response failures through focused core tests.
+- The first v1.1 Local Smoke Console UI slice now adds a separate sidebar
+  destination for a user-triggered local endpoint smoke request with prompt,
+  run state, response display, copy response, clear result, and localized
+  app-owned UI strings.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.
@@ -231,7 +235,7 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 during the v1.1 smoke-client
+- Local source verification passed on 2026-05-23 during the v1.1 smoke-console
   pass with
   `git diff --check`, localization lint, `swift test` (211 XCTest tests,
   0 failures), and
