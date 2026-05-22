@@ -86,7 +86,7 @@ struct ContentView: View {
                         Label("Setup Guide", systemImage: "laurel.leading")
                     }
                     .toggleStyle(.button)
-                    .labelStyle(.iconOnly)
+                    .labelStyle(.titleAndIcon)
                     .accessibilityLabel(Text("Setup Guide"))
                     .accessibilityHint(Text("Show or hide the setup guide inspector."))
                     .help("Show Setup Guide")
@@ -96,9 +96,9 @@ struct ContentView: View {
                     Button {
                         exportRuntimeProfile()
                     } label: {
-                        Label("Export Active Profile", systemImage: "square.and.arrow.up")
+                        Label("Export Profile", systemImage: "square.and.arrow.up")
                     }
-                    .labelStyle(.iconOnly)
+                    .labelStyle(.titleAndIcon)
                     .accessibilityLabel(Text("Export Active Profile"))
                     .accessibilityHint(Text("Export the active runtime profile as a .lantern-profile.json file."))
                     .help("Export Active Profile")
@@ -108,7 +108,7 @@ struct ContentView: View {
                     } label: {
                         Label("Import Profile", systemImage: "square.and.arrow.down")
                     }
-                    .labelStyle(.iconOnly)
+                    .labelStyle(.titleAndIcon)
                     .accessibilityLabel(Text("Import Profile"))
                     .accessibilityHint(Text("Import a .lantern-profile.json file into the active configuration."))
                     .help("Import Profile")
@@ -159,7 +159,7 @@ struct ContentView: View {
                             Image(systemName: didCopyFromToolbar ? "checkmark.circle" : "doc.on.doc")
                         }
                     }
-                    .labelStyle(.iconOnly)
+                    .labelStyle(.titleAndIcon)
                     .accessibilityLabel(Text("Copy"))
                     .accessibilityHint(Text("Open copy options for the launch command, endpoint, environment, and smoke commands."))
                     .help("Copy existing command, endpoint, and client snippets")

@@ -54,6 +54,7 @@
 "Hazakura Lantern" = "Hazakura Lantern";
 "Health Check curl" = "Health Check curl";
 "Health check is not available for this adapter." = "Health check is not available for this adapter.";
+"Hide Runtime Arguments" = "Hide Runtime Arguments";
 "If not installed, run this command via Terminal:" = "If not installed, run this command via Terminal:";
 "Import" = "Import";
 "Incomplete" = "Incomplete";
@@ -70,6 +71,7 @@
 "Launch & Connect" = "Launch & Connect";
 "Launch Command" = "Launch Command";
 "Local light for llama-server" = "Local light for llama-server";
+"Load Runtime Arguments" = "Load Runtime Arguments";
 "Logs" = "Logs";
 "Model" = "Model";
 "No logs yet." = "No logs yet.";
@@ -93,8 +95,12 @@
 "Restart Server" = "Restart Server";
 "Runtime" = "Runtime";
 "Runtime Diagnostics" = "Runtime Diagnostics";
+"Runtime Check" = "Runtime Check";
 "Running" = "Running";
+"Run Check Runtime to load argument help." = "Run Check Runtime to load argument help.";
+"Runtime Arguments" = "Runtime Arguments";
 "Runtime Profile" = "Runtime Profile";
+"Runtime Update" = "Runtime Update";
 "Runtime Update Target" = "Runtime Update Target";
 "Check local runtime version, supported options, and advisory update metadata." = "Check local runtime version, supported options, and advisory update metadata.";
 "Loading Model" = "Loading Model";
@@ -149,6 +155,7 @@
 "Settings" = "Settings";
 "Setup Guide" = "Setup Guide";
 "Show Command" = "Show Command";
+"Show Runtime Arguments" = "Show Runtime Arguments";
 "Show Setup Guide" = "Show Setup Guide";
 "Show explanation for %@" = "Show explanation for %@";
 "Show or hide the setup guide inspector." = "Show or hide the setup guide inspector.";
@@ -193,6 +200,7 @@
 "Additional Args" = "Additional Args";
 "Use Installed Runtime" = "Use Installed Runtime";
 "llama-server binary is required to host local model processes." = "llama-server binary is required to host local model processes.";
+"loading_elapsed.seconds" = "Model loading: %d seconds elapsed";
 "Select a .gguf format model file to run on the server." = "Select a .gguf format model file to run on the server.";
 "Choose an existing local GGUF model file." = "Choose an existing local GGUF model file.";
 "Runtime and model are selected; review and apply a preset if needed." = "Runtime and model are selected; review and apply a preset if needed.";
@@ -204,3 +212,11 @@
 "Start the server, then run a manual health check." = "Start the server, then run a manual health check.";
 "The server is running and the latest manual health check is healthy." = "The server is running and the latest manual health check is healthy.";
 "Tips" = "Tips";
+"validation.model.directory" = "Model path is a folder.";
+"validation.model.missing" = "Model file does not exist.";
+"validation.model.unsupported" = "Model must be a .gguf file.";
+"validation.port.invalid" = "Port must be between 1 and 65535.";
+"validation.port.unavailable" = "Port is already in use.";
+"validation.runtime.directory" = "Runtime path is a folder.";
+"validation.runtime.missing" = "Runtime executable does not exist.";
+"validation.runtime.not_executable" = "Runtime executable is not executable.";

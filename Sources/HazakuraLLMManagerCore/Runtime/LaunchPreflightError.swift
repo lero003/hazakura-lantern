@@ -6,6 +6,7 @@ public enum LaunchPreflightError: Error, Equatable, LocalizedError {
     case runtimeNotExecutable(String)
     case modelFileMissing(String)
     case modelPathIsDirectory(String)
+    case portUnavailable(Int)
 
     public var errorDescription: String? {
         switch self {
@@ -19,6 +20,8 @@ public enum LaunchPreflightError: Error, Equatable, LocalizedError {
             "Model file does not exist. Choose an existing .gguf model before starting. Current path: \(path)."
         case .modelPathIsDirectory(let path):
             "Model path is a directory. Choose an existing .gguf model file before starting. Current path: \(path)."
+        case .portUnavailable(let port):
+            "Port \(port) is already in use. Choose a different port before starting."
         }
     }
 }

@@ -18,10 +18,14 @@ final class ServerController: ObservableObject {
     @Published private(set) var isRuntimeUpdateCheckRunning = false
     @Published private(set) var recentPaths: RecentRuntimePaths
     @Published private(set) var detectedRuntimeExecutablePaths: [String]
+    @Published private(set) var loadingElapsedSeconds: Int?
     @Published var configuration: RuntimeConfiguration
 
     private let adapter: any RuntimeAdapter
-    private let endpointHealthChecker: EndpointHealthChecker
+    private let endpointHealthChecker: any EndpointHealthChecking
+    private let runtimeCapabilityProbe: any LlamaServerCapabilityProbing
+    private let runtimeUpdateAvailabilityChecker: any RuntimeUpdateAvailabilityChecking
+    private let portAvailabilityChecker: any PortAvailabilityChecking
     private let configurationStore: ConfigurationStore
     private let runtimeDiscovery: LlamaServerRuntimeDiscovery
     private let fileManager: FileManager
@@ -30,16 +34,24 @@ final class ServerController: ObservableObject {
     private var stderrPipe: Pipe?
     private var isRestartPending = false
     private var logBuffer = LogBuffer(maxEntries: 2_000)
+    private var loadingStartedAt: Date?
+    private var loadingTimer: Timer?
 
     init(
         adapter: any RuntimeAdapter = LlamaServerAdapter(),
-        endpointHealthChecker: EndpointHealthChecker = EndpointHealthChecker(),
+        endpointHealthChecker: any EndpointHealthChecking = EndpointHealthChecker(),
+        runtimeCapabilityProbe: any LlamaServerCapabilityProbing = LlamaServerCapabilityProbe(),
+        runtimeUpdateAvailabilityChecker: any RuntimeUpdateAvailabilityChecking = RuntimeUpdateAvailabilityChecker(),
+        portAvailabilityChecker: any PortAvailabilityChecking = PortAvailabilityChecker(),
         configurationStore: ConfigurationStore = ConfigurationStore(),
         runtimeDiscovery: LlamaServerRuntimeDiscovery = LlamaServerRuntimeDiscovery(),
         fileManager: FileManager = .default
     ) {
         self.adapter = adapter
         self.endpointHealthChecker = endpointHealthChecker
+        self.runtimeCapabilityProbe = runtimeCapabilityProbe
+        self.runtimeUpdateAvailabilityChecker = runtimeUpdateAvailabilityChecker
+        self.portAvailabilityChecker = portAvailabilityChecker
         self.configurationStore = configurationStore
         self.runtimeDiscovery = runtimeDiscovery
         self.fileManager = fileManager
@@ -76,6 +88,23 @@ final class ServerController: ObservableObject {
 
     var launchSetupHint: String? {
         adapter.launchSetupHint(config: configuration)
+    }
+
+    var launchPreflightHint: String? {
+        if let launchSetupHint {
+            return launchSetupHint
+        }
+
+        guard canStart else {
+            return nil
+        }
+
+        do {
+            try validateLaunchPreflight()
+            return nil
+        } catch {
+            return error.localizedDescription
+        }
     }
 
     var runtimeProfileDocument: RuntimeProfileDocument {
@@ -167,9 +196,10 @@ final class ServerController: ObservableObject {
 
         isRuntimeCapabilityProbeRunning = true
         runtimeCapabilityProbeMessage = nil
+        let probe = runtimeCapabilityProbe
 
         DispatchQueue.global(qos: .utility).async {
-            let result = LlamaServerCapabilityProbe().probe(executablePath: executablePath)
+            let result = probe.probe(executablePath: executablePath)
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else {
@@ -203,10 +233,11 @@ final class ServerController: ObservableObject {
 
         let target = runtimeUpdateCheckTarget
         let localVersionSummary = runtimeCapabilityProbeResult?.capabilities.versionSummary
+        let checker = runtimeUpdateAvailabilityChecker
 
         Task { [weak self] in
             do {
-                let availability = try await RuntimeUpdateAvailabilityChecker().check(
+                let availability = try await checker.check(
                     target: target,
                     localVersionSummary: localVersionSummary
                 )
@@ -246,7 +277,7 @@ final class ServerController: ObservableObject {
 
         do {
             let command = try adapter.buildLaunchCommand(config: configuration)
-            try adapter.validateLaunchPreconditions(config: configuration, fileManager: fileManager)
+            try validateLaunchPreflight()
 
             saveActiveProfile(configuration: configuration)
             clearError()
@@ -284,8 +315,10 @@ final class ServerController: ObservableObject {
             self.stderrPipe = stderrPipe
             self.processIdentifier = process.processIdentifier
             self.status = .loading
+            beginLoadingTimer()
             appendLog("Process started with pid \(process.processIdentifier); waiting for runtime readiness.", stream: .info)
         } catch {
+            endLoadingTimer()
             let message = processRunCommand.map {
                 adapter.describeLaunchProcessFailure(error, command: $0)
             } ?? error.localizedDescription
@@ -440,6 +473,7 @@ final class ServerController: ObservableObject {
         stderrPipe = nil
         process = nil
         processIdentifier = nil
+        endLoadingTimer()
 
         let exitCode = terminatedProcess.terminationStatus
         let requestedAction: ProcessTerminationRequest? = switch status {
@@ -486,7 +520,41 @@ final class ServerController: ObservableObject {
         }
 
         status = .running
+        endLoadingTimer()
         appendLog("Runtime is ready for local client connections.", stream: .info)
+    }
+
+    private func validateLaunchPreflight() throws {
+        try adapter.validateLaunchPreconditions(config: configuration, fileManager: fileManager)
+
+        guard portAvailabilityChecker.isPortAvailable(configuration.port) else {
+            throw LaunchPreflightError.portUnavailable(configuration.port)
+        }
+    }
+
+    private func beginLoadingTimer() {
+        loadingTimer?.invalidate()
+        loadingStartedAt = Date()
+        loadingElapsedSeconds = 0
+        loadingTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            self?.updateLoadingElapsedSeconds()
+        }
+    }
+
+    private func updateLoadingElapsedSeconds() {
+        guard let loadingStartedAt else {
+            loadingElapsedSeconds = nil
+            return
+        }
+
+        loadingElapsedSeconds = max(0, Int(Date().timeIntervalSince(loadingStartedAt)))
+    }
+
+    private func endLoadingTimer() {
+        loadingTimer?.invalidate()
+        loadingTimer = nil
+        loadingStartedAt = nil
+        loadingElapsedSeconds = nil
     }
 
     private func clearError() {

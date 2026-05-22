@@ -84,7 +84,14 @@ public struct RuntimeUpdateAvailability: Equatable, Sendable {
     }
 }
 
-public struct RuntimeUpdateAvailabilityChecker: Sendable {
+public protocol RuntimeUpdateAvailabilityChecking: Sendable {
+    func check(
+        target: RuntimeUpdateCheckTarget,
+        localVersionSummary: String?
+    ) async throws -> RuntimeUpdateAvailability
+}
+
+public struct RuntimeUpdateAvailabilityChecker: RuntimeUpdateAvailabilityChecking, Sendable {
     public let session: URLSession
 
     public init(session: URLSession = .shared) {

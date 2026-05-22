@@ -3,6 +3,7 @@ import HazakuraLLMManagerCore
 
 struct StatusHeaderView: View {
     @ObservedObject var controller: ServerController
+    @Environment(\.locale) private var locale
     @State private var lanternPulse: CGFloat = 1.0
 
     var body: some View {
@@ -37,7 +38,16 @@ struct StatusHeaderView: View {
                     .foregroundStyle(.secondary)
             }
 
-            StatusBadge(status: controller.status)
+            VStack(alignment: .trailing, spacing: 4) {
+                StatusBadge(status: controller.status)
+
+                if controller.status == .loading,
+                   let loadingElapsedSeconds = controller.loadingElapsedSeconds {
+                    Text(localized("loading_elapsed.seconds", loadingElapsedSeconds))
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
     }
 
@@ -66,6 +76,20 @@ struct StatusHeaderView: View {
         case .stopped:
             return .secondary
         }
+    }
+
+    private func localized(_ key: String, _ arguments: CVarArg...) -> String {
+        let format = String(
+            localized: String.LocalizationValue(key),
+            bundle: .module,
+            locale: locale
+        )
+
+        guard !arguments.isEmpty else {
+            return format
+        }
+
+        return String(format: format, locale: locale, arguments: arguments)
     }
 }
 

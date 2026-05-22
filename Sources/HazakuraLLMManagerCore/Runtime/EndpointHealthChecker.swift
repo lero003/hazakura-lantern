@@ -1,6 +1,10 @@
 import Foundation
 
-public struct EndpointHealthChecker {
+public protocol EndpointHealthChecking: Sendable {
+    func check(_ request: EndpointHealthRequest) async -> EndpointHealthStatus
+}
+
+public struct EndpointHealthChecker: EndpointHealthChecking, Sendable {
     private let session: URLSession
     private let timeoutInterval: TimeInterval
 

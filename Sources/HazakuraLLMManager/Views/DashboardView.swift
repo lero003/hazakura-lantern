@@ -10,7 +10,7 @@ struct DashboardView: View {
             VStack(alignment: .leading, spacing: 20) {
                 GroupBox("Server Controls") {
                     VStack(alignment: .leading, spacing: 16) {
-                        if let launchSetupHint = controller.launchSetupHint {
+                        if let launchSetupHint = controller.launchPreflightHint {
                             ViewThatFits(in: .horizontal) {
                                 setupHintRow(launchSetupHint)
                                 VStack(alignment: .leading, spacing: 6) {

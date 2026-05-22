@@ -54,6 +54,7 @@
 "Hazakura Lantern" = "Hazakura Lantern";
 "Health Check curl" = "ヘルスチェック curl";
 "Health check is not available for this adapter." = "このアダプタではヘルスチェックを利用できません。";
+"Hide Runtime Arguments" = "引数一覧を隠す";
 "If not installed, run this command via Terminal:" = "未インストールの場合は、ターミナルで次を実行してください:";
 "Import" = "読み込み";
 "Incomplete" = "未完了";
@@ -70,6 +71,7 @@
 "Launch & Connect" = "起動と接続";
 "Launch Command" = "起動コマンド";
 "Local light for llama-server" = "llama-server のためのローカルランタン";
+"Load Runtime Arguments" = "引数一覧を読み込む";
 "Logs" = "ログ";
 "Model" = "モデル";
 "No logs yet." = "まだログはありません。";
@@ -93,8 +95,12 @@
 "Restart Server" = "サーバーを再起動";
 "Runtime" = "ランタイム";
 "Runtime Diagnostics" = "ランタイム診断";
+"Runtime Check" = "ランタイム確認";
 "Running" = "実行中";
+"Run Check Runtime to load argument help." = "引数一覧を読み込むには、ランタイム確認を実行してください。";
+"Runtime Arguments" = "ランタイム引数一覧";
 "Runtime Profile" = "ランタイムプロファイル";
+"Runtime Update" = "アップデート確認";
 "Runtime Update Target" = "アップデート確認対象";
 "Check local runtime version, supported options, and advisory update metadata." = "ローカルランタイムのバージョン、対応オプション、参考用アップデート情報を確認します。";
 "Loading Model" = "モデル読み込み中";
@@ -149,6 +155,7 @@
 "Settings" = "設定";
 "Setup Guide" = "セットアップガイド";
 "Show Command" = "コマンドを表示";
+"Show Runtime Arguments" = "引数一覧を表示";
 "Show Setup Guide" = "セットアップガイドを表示";
 "Show explanation for %@" = "%@ の説明を表示";
 "Show or hide the setup guide inspector." = "セットアップガイドのインスペクタを表示または非表示にします。";
@@ -193,6 +200,7 @@
 "Additional Args" = "追加引数";
 "Use Installed Runtime" = "インストール済みを使用";
 "llama-server binary is required to host local model processes." = "ローカルモデルプロセスを起動するには llama-server バイナリが必要です。";
+"loading_elapsed.seconds" = "モデル読み込み中: %d秒経過";
 "Select a .gguf format model file to run on the server." = "サーバーで実行する .gguf 形式のモデルファイルを選択します。";
 "Choose an existing local GGUF model file." = "このMac上にある既存のGGUFモデルファイルを選択してください。";
 "Runtime and model are selected; review and apply a preset if needed." = "ランタイムとモデルは選択済みです。必要に応じてプリセットを確認して適用してください。";
@@ -204,3 +212,11 @@
 "Start the server, then run a manual health check." = "サーバーを起動し、その後で手動ヘルスチェックを実行してください。";
 "The server is running and the latest manual health check is healthy." = "サーバーは実行中で、直近の手動ヘルスチェックは正常です。";
 "Tips" = "ヒント";
+"validation.model.directory" = "モデルパスがフォルダです。";
+"validation.model.missing" = "モデルファイルが存在しません。";
+"validation.model.unsupported" = "モデルは .gguf ファイルを選択してください。";
+"validation.port.invalid" = "ポートは 1 から 65535 の範囲で指定してください。";
+"validation.port.unavailable" = "このポートは既に使用されています。";
+"validation.runtime.directory" = "ランタイムパスがフォルダです。";
+"validation.runtime.missing" = "ランタイム実行ファイルが存在しません。";
+"validation.runtime.not_executable" = "ランタイム実行ファイルに実行権限がありません。";

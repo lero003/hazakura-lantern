@@ -31,7 +31,7 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
     }
 
     public static let defaultValue = RuntimeConfiguration(
-        runtimeExecutablePath: "/usr/local/bin/llama-server",
+        runtimeExecutablePath: "",
         modelPath: "",
         host: "127.0.0.1",
         port: 1234,

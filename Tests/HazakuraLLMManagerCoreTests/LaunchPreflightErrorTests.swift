@@ -36,4 +36,11 @@ final class LaunchPreflightErrorTests: XCTestCase {
             "Model path is a directory. Choose an existing .gguf model file before starting. Current path: /Users/kei/Models/qwen.gguf."
         )
     }
+
+    func testPortUnavailableDescriptionPointsToDifferentPort() {
+        XCTAssertEqual(
+            LaunchPreflightError.portUnavailable(1234).errorDescription,
+            "Port 1234 is already in use. Choose a different port before starting."
+        )
+    }
 }

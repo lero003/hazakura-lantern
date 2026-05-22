@@ -170,7 +170,11 @@ public struct LlamaServerCapabilityProbeResult: Equatable, Sendable {
     }
 }
 
-public struct LlamaServerCapabilityProbe: Sendable {
+public protocol LlamaServerCapabilityProbing: Sendable {
+    func probe(executablePath: String) -> LlamaServerCapabilityProbeResult
+}
+
+public struct LlamaServerCapabilityProbe: LlamaServerCapabilityProbing, Sendable {
     public let timeout: TimeInterval
 
     public init(timeout: TimeInterval = 8) {

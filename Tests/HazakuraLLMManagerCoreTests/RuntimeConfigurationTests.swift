@@ -2,6 +2,15 @@ import XCTest
 @testable import HazakuraLLMManagerCore
 
 final class RuntimeConfigurationTests: XCTestCase {
+    func testDefaultValueLeavesRuntimeAndModelUnselected() {
+        XCTAssertEqual(RuntimeConfiguration.defaultValue.runtimeExecutablePath, "")
+        XCTAssertEqual(RuntimeConfiguration.defaultValue.modelPath, "")
+        XCTAssertEqual(
+            RuntimeConfiguration.defaultValue.launchSetupHint,
+            "Choose a llama-server executable and .gguf model before starting."
+        )
+    }
+
     func testAPIBaseURLUsesConfiguredPort() {
         var config = RuntimeConfiguration.defaultValue
         config.port = 9876

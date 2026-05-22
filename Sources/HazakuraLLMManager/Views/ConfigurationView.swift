@@ -4,9 +4,9 @@ import HazakuraLLMManagerCore
 
 struct ConfigurationView: View {
     @ObservedObject var controller: ServerController
-    @Environment(\.locale) private var locale
     @State private var selectedPresetIntent: LlamaServerPresetIntent = .standard
     @State private var isAdvancedExpanded = false
+    private let portAvailabilityChecker = PortAvailabilityChecker()
 
     private var selectedPreset: LlamaServerPreset {
         LlamaServerPreset.preset(for: selectedPresetIntent)
@@ -79,6 +79,7 @@ struct ConfigurationView: View {
                         allowedExtensions: nil,
                         detectedPaths: controller.detectedRuntimeExecutablePaths,
                         isHighlighted: controller.configuration.runtimeExecutablePath.isEmpty,
+                        validationMessageKey: runtimePathValidationMessageKey,
                         stepLabel: "Step 1",
                         selectPath: controller.selectRuntimeExecutablePath
                     )
@@ -91,102 +92,12 @@ struct ConfigurationView: View {
                         allowedExtensions: ["gguf"],
                         detectedPaths: [],
                         isHighlighted: controller.configuration.modelPath.isEmpty,
+                        validationMessageKey: modelPathValidationMessageKey,
                         stepLabel: "Step 2",
                         selectPath: controller.selectModelPath
                     )
 
-                    GridRow {
-                        Text("Runtime Diagnostics")
-                            .foregroundStyle(.secondary)
-
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Check local runtime version, supported options, and advisory update metadata.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-
-                            HStack(spacing: 8) {
-                                Button {
-                                    controller.checkRuntimeCapabilities()
-                                } label: {
-                                    Label("Check Runtime", systemImage: "checkmark.shield")
-                                }
-                                .buttonStyle(SecondaryButtonStyle())
-                                .disabled(controller.isRuntimeCapabilityProbeRunning)
-
-                                if controller.isRuntimeCapabilityProbeRunning {
-                                    ProgressView()
-                                        .controlSize(.small)
-                                }
-                            }
-
-                            if let message = localizedRuntimeCapabilityProbeMessage {
-                                Label(message, systemImage: "info.circle")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            if let advice = localizedRuntimeInstallSourceAdvice {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Label(advice.title, systemImage: "arrow.triangle.2.circlepath.circle")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-
-                                    Text(advice.detail)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .lineLimit(2)
-                                }
-                            }
-
-                            if let advice = localizedUpdateReadinessAdvice {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Label(advice.title, systemImage: "checklist")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-
-                                    Text(advice.detail)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .lineLimit(3)
-                                }
-                            }
-
-                            VStack(alignment: .leading, spacing: 6) {
-                                HStack(spacing: 8) {
-                                    Picker("Runtime Update Target", selection: $controller.runtimeUpdateCheckTarget) {
-                                        ForEach(RuntimeUpdateCheckTarget.allCases) { target in
-                                            Text(target.displayName)
-                                                .tag(target)
-                                        }
-                                    }
-                                    .labelsHidden()
-                                    .pickerStyle(.menu)
-                                    .frame(width: 150)
-
-                                    Button {
-                                        controller.checkRuntimeUpdates()
-                                    } label: {
-                                        Label("Check for Updates", systemImage: "arrow.down.circle")
-                                    }
-                                    .buttonStyle(SecondaryButtonStyle())
-                                    .disabled(controller.isRuntimeUpdateCheckRunning)
-
-                                    if controller.isRuntimeUpdateCheckRunning {
-                                        ProgressView()
-                                            .controlSize(.small)
-                                    }
-                                }
-
-                                if let message = localizedRuntimeUpdateDisplayMessage {
-                                    Label(message, systemImage: "arrow.down.circle")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                            }
-                        }
-                    }
+                    RuntimeDiagnosticsSectionView(controller: controller)
 
                     GridRow {
                         Text("Preset")
@@ -253,9 +164,17 @@ struct ConfigurationView: View {
                                         .foregroundStyle(.secondary)
                                     HelpTooltip.port()
                                 }
-                                TextField("1234", value: binding(\.port), format: .number)
-                                    .glassTextFieldStyle()
-                                    .frame(width: 110)
+                                HStack(spacing: 8) {
+                                    TextField("1234", value: binding(\.port), format: .number)
+                                        .glassTextFieldStyle()
+                                        .frame(width: 110)
+
+                                    if let portValidationMessageKey {
+                                        Label(LocalizedStringKey(portValidationMessageKey), systemImage: "exclamationmark.triangle")
+                                            .font(.caption)
+                                            .foregroundStyle(.orange)
+                                    }
+                                }
                             }
 
                             GridRow {
@@ -363,6 +282,7 @@ struct ConfigurationView: View {
         allowedExtensions: [String]?,
         detectedPaths: [String],
         isHighlighted: Bool,
+        validationMessageKey: String? = nil,
         stepLabel: String?,
         selectPath: @escaping (String) -> Void
     ) -> some View {
@@ -381,40 +301,61 @@ struct ConfigurationView: View {
                 helpTooltip
             }
 
-            HStack(spacing: 8) {
-                TextField(title, text: text)
-                    .glassTextFieldStyle()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(isHighlighted ? Color.accentColor.opacity(0.6) : Color.clear, lineWidth: 1.5)
-                    )
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 8) {
+                    TextField(title, text: text)
+                        .glassTextFieldStyle()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(
+                                    pathRowBorderColor(
+                                        isHighlighted: isHighlighted,
+                                        validationMessageKey: validationMessageKey
+                                    ),
+                                    lineWidth: 1.5
+                                )
+                        )
 
-                Button {
-                    if let path = FilePanel.chooseFile(allowedExtensions: allowedExtensions) {
-                        selectPath(path)
-                    }
-                } label: {
-                    Label(buttonTitle, systemImage: "folder")
-                }
-                .buttonStyle(SecondaryButtonStyle())
-
-                if !detectedPaths.isEmpty {
-                    Menu {
-                        ForEach(detectedPaths, id: \.self) { path in
-                            Button {
-                                selectPath(path)
-                            } label: {
-                                Text(pathMenuLabel(path))
-                            }
+                    Button {
+                        if let path = FilePanel.chooseFile(allowedExtensions: allowedExtensions) {
+                            selectPath(path)
                         }
                     } label: {
-                        Label("Installed", systemImage: "checkmark.seal")
+                        Label(buttonTitle, systemImage: "folder")
                     }
                     .buttonStyle(SecondaryButtonStyle())
+
+                    if !detectedPaths.isEmpty {
+                        Menu {
+                            ForEach(detectedPaths, id: \.self) { path in
+                                Button {
+                                    selectPath(path)
+                                } label: {
+                                    Text(pathMenuLabel(path))
+                                }
+                            }
+                        } label: {
+                            Label("Installed", systemImage: "checkmark.seal")
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+                    }
                 }
 
+                if let validationMessageKey {
+                    Label(LocalizedStringKey(validationMessageKey), systemImage: "exclamationmark.triangle")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                }
             }
         }
+    }
+
+    private func pathRowBorderColor(isHighlighted: Bool, validationMessageKey: String?) -> Color {
+        if validationMessageKey != nil {
+            return .orange.opacity(0.7)
+        }
+
+        return isHighlighted ? Color.accentColor.opacity(0.6) : .clear
     }
 
     private func binding<Value>(_ keyPath: WritableKeyPath<RuntimeConfiguration, Value>) -> Binding<Value> {
@@ -435,6 +376,66 @@ struct ConfigurationView: View {
         }
 
         return "\(name) - \(path)"
+    }
+
+    private var runtimePathValidationMessageKey: String? {
+        let path = controller.configuration.runtimeExecutablePath.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !path.isEmpty else {
+            return nil
+        }
+
+        var isDirectory = ObjCBool(false)
+        guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) else {
+            return "validation.runtime.missing"
+        }
+
+        guard !isDirectory.boolValue else {
+            return "validation.runtime.directory"
+        }
+
+        guard FileManager.default.isExecutableFile(atPath: path) else {
+            return "validation.runtime.not_executable"
+        }
+
+        return nil
+    }
+
+    private var modelPathValidationMessageKey: String? {
+        let path = controller.configuration.modelPath.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !path.isEmpty else {
+            return nil
+        }
+
+        var isDirectory = ObjCBool(false)
+        guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) else {
+            return "validation.model.missing"
+        }
+
+        guard !isDirectory.boolValue else {
+            return "validation.model.directory"
+        }
+
+        guard URL(fileURLWithPath: path).pathExtension.lowercased() == "gguf" else {
+            return "validation.model.unsupported"
+        }
+
+        return nil
+    }
+
+    private var portValidationMessageKey: String? {
+        guard controller.canStart else {
+            return nil
+        }
+
+        guard (1...65535).contains(controller.configuration.port) else {
+            return "validation.port.invalid"
+        }
+
+        guard portAvailabilityChecker.isPortAvailable(controller.configuration.port) else {
+            return "validation.port.unavailable"
+        }
+
+        return nil
     }
 
     private func presetDescriptionKey(for intent: LlamaServerPresetIntent) -> String {
@@ -470,210 +471,4 @@ struct ConfigurationView: View {
         }
     }
 
-    private var localizedRuntimeUpdateDisplayMessage: String? {
-        if let availability = controller.runtimeUpdateAvailability {
-            return "\(runtimeUpdateAvailabilityTitle(availability)). \(runtimeUpdateAvailabilityDetail(availability))"
-        }
-
-        guard let message = controller.runtimeUpdateAvailabilityMessage else {
-            return nil
-        }
-
-        switch message {
-        case .targetChanged:
-            return localized("runtime_update.target_changed")
-        case .failed(let errorDescription):
-            return localized("runtime_update.failed", errorDescription)
-        }
-    }
-
-    private var localizedRuntimeCapabilityProbeMessage: String? {
-        guard let message = controller.runtimeCapabilityProbeMessage else {
-            return nil
-        }
-
-        if let version = message.stripPrefix("Runtime: ") {
-            return localized("runtime_probe.version", version)
-        }
-
-        switch message {
-        case "Choose a llama-server executable before checking runtime options.":
-            return localized("runtime_probe.choose_runtime")
-        case "Runtime selection changed; check capabilities again.":
-            return localized("runtime_probe.selection_changed")
-        case "Runtime version unavailable.":
-            return localized("runtime_probe.version_unavailable")
-        default:
-            return message
-        }
-    }
-
-    private var localizedRuntimeInstallSourceAdvice: (title: String, detail: String)? {
-        guard let advice = controller.runtimeInstallSourceAdvice else {
-            return nil
-        }
-
-        switch advice.source {
-        case .homebrew:
-            return (
-                localized("runtime_source.homebrew.title"),
-                localized("runtime_source.homebrew.detail")
-            )
-        case .macPorts:
-            return (
-                localized("runtime_source.macports.title"),
-                localized("runtime_source.macports.detail")
-            )
-        case .sourceCheckout:
-            return (
-                localized("runtime_source.source_checkout.title"),
-                localized("runtime_source.source_checkout.detail")
-            )
-        case .manualPath:
-            return (
-                localized("runtime_source.manual.title"),
-                localized("runtime_source.manual.detail")
-            )
-        }
-    }
-
-    private var localizedUpdateReadinessAdvice: (title: String, detail: String)? {
-        guard let advice = controller.runtimeUpdateReadinessAdvice else {
-            return nil
-        }
-
-        switch advice.readiness {
-        case .needsCapabilityCheck:
-            return (
-                localized("runtime_update_readiness.needs_capability.title"),
-                localized("runtime_update_readiness.needs_capability.detail")
-            )
-        case .capabilityEvidenceIncomplete:
-            let gapSummary = controller.runtimeCapabilityProbeResult.map(localizedIncompleteUpdateEvidenceSummary) ?? localized("runtime_update_readiness.evidence.version_unavailable")
-            return (
-                localized("runtime_update_readiness.incomplete.title"),
-                localized("runtime_update_readiness.incomplete.detail", gapSummary)
-            )
-        case .planningEvidenceReady:
-            let versionSummary = controller.runtimeCapabilityProbeResult?.capabilities.versionSummary ?? localized("runtime_update_readiness.selected_runtime")
-            return (
-                localized("runtime_update_readiness.ready.title"),
-                localizedPlanningEvidenceReadyDetail(versionSummary: versionSummary)
-            )
-        case .manualOnly:
-            return (
-                localized("runtime_update_readiness.manual.title"),
-                localized("runtime_update_readiness.manual.detail")
-            )
-        }
-    }
-
-    private func localizedIncompleteUpdateEvidenceSummary(_ result: LlamaServerCapabilityProbeResult) -> String {
-        var missingEvidence: [String] = []
-
-        if !result.versionCheck.completedSuccessfully || result.capabilities.versionSummary == nil {
-            missingEvidence.append(localizedVersionEvidenceGap(result.versionCheck))
-        }
-
-        if !result.helpCheck.completedSuccessfully || result.capabilities.supportedOptions.isEmpty {
-            missingEvidence.append(localizedHelpEvidenceGap(result.helpCheck))
-        }
-
-        return missingEvidence.joined(separator: localized("runtime_update_readiness.evidence.separator"))
-    }
-
-    private func localizedVersionEvidenceGap(_ check: LlamaServerCapabilityCommandResult) -> String {
-        if check.didTimeOut {
-            return localized("runtime_update_readiness.evidence.version_timeout")
-        }
-
-        if let errorDescription = check.errorDescription {
-            return localized("runtime_update_readiness.evidence.version_failed", errorDescription)
-        }
-
-        if let terminationStatus = check.terminationStatus, terminationStatus != 0 {
-            return localized("runtime_update_readiness.evidence.version_status", Int(terminationStatus))
-        }
-
-        return localized("runtime_update_readiness.evidence.version_unavailable")
-    }
-
-    private func localizedHelpEvidenceGap(_ check: LlamaServerCapabilityCommandResult) -> String {
-        if check.didTimeOut {
-            return localized("runtime_update_readiness.evidence.help_timeout")
-        }
-
-        if let errorDescription = check.errorDescription {
-            return localized("runtime_update_readiness.evidence.help_failed", errorDescription)
-        }
-
-        if let terminationStatus = check.terminationStatus, terminationStatus != 0 {
-            return localized("runtime_update_readiness.evidence.help_status", Int(terminationStatus))
-        }
-
-        return localized("runtime_update_readiness.evidence.help_unavailable")
-    }
-
-    private func localizedPlanningEvidenceReadyDetail(versionSummary: String) -> String {
-        switch controller.runtimeInstallSourceAdvice?.source {
-        case .homebrew:
-            localized("runtime_update_readiness.ready.homebrew.detail", versionSummary)
-        case .macPorts:
-            localized("runtime_update_readiness.ready.macports.detail", versionSummary)
-        case .sourceCheckout:
-            localized("runtime_update_readiness.ready.source_checkout.detail", versionSummary)
-        case .manualPath, nil:
-            localized("runtime_update_readiness.ready.detail", versionSummary)
-        }
-    }
-
-    private func runtimeUpdateAvailabilityTitle(_ availability: RuntimeUpdateAvailability) -> String {
-        switch availability.comparison {
-        case .updateAvailable:
-            localized("runtime_update.available.title", availability.latestRelease.tagName)
-        case .currentOrNewer:
-            localized("runtime_update.current.title", availability.latestRelease.tagName)
-        case .unknownLocalVersion:
-            localized("runtime_update.unknown_local.title", availability.target.displayName, availability.latestRelease.tagName)
-        case .unknownLatestVersion:
-            localized("runtime_update.unknown_latest.title", availability.target.displayName)
-        }
-    }
-
-    private func runtimeUpdateAvailabilityDetail(_ availability: RuntimeUpdateAvailability) -> String {
-        switch availability.comparison {
-        case .updateAvailable:
-            localized("runtime_update.available.detail", availability.latestRelease.tagName)
-        case .currentOrNewer:
-            localized("runtime_update.current.detail")
-        case .unknownLocalVersion:
-            localized("runtime_update.unknown_local.detail")
-        case .unknownLatestVersion:
-            localized("runtime_update.unknown_latest.detail")
-        }
-    }
-
-    private func localized(_ key: String, _ arguments: CVarArg...) -> String {
-        let format = String(
-            localized: String.LocalizationValue(key),
-            bundle: .module,
-            locale: locale
-        )
-
-        guard !arguments.isEmpty else {
-            return format
-        }
-
-        return String(format: format, locale: locale, arguments: arguments)
-    }
-}
-
-private extension String {
-    func stripPrefix(_ prefix: String) -> String? {
-        guard hasPrefix(prefix) else {
-            return nil
-        }
-
-        return String(dropFirst(prefix.count))
-    }
 }

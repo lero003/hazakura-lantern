@@ -226,8 +226,8 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-22 17:49 JST with
-  `git diff --check`, localization lint, `swift test` (194 XCTest tests,
+- Local source verification passed on 2026-05-22 21:47 JST with
+  `git diff --check`, localization lint, `swift test` (200 XCTest tests,
   0 failures), and `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
   `kLSNoExecutableErr` in this Codex environment.
@@ -393,9 +393,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-22 20:49 JST hourly run):
+Current source-verification status (2026-05-22 21:47 JST hourly run):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (196 XCTest tests, 0 failures), and
+`swift test` (200 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.
