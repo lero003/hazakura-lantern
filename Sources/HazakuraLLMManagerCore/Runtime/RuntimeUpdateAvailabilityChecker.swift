@@ -75,11 +75,11 @@ public struct RuntimeUpdateAvailability: Equatable, Sendable {
         case .updateAvailable:
             "The selected runtime appears older than \(latestRelease.tagName). Lantern only reports release metadata; review any update command manually outside Lantern before changing the runtime."
         case .currentOrNewer:
-            "The selected runtime version appears to be at least as new as the latest published release."
+            "The selected runtime version appears to be at least as new as the latest published release. Lantern does not prepare or run runtime updates."
         case .unknownLocalVersion:
-            "Lantern could not compare the selected runtime version. Run Check Runtime first, then check for updates again."
+            "Lantern could not compare the selected runtime version. Run Check Runtime first, then check for updates again. Lantern does not prepare or run runtime updates."
         case .unknownLatestVersion:
-            "Lantern found the latest release metadata, but could not read a comparable release build number."
+            "Lantern found the latest release metadata, but could not read a comparable release build number. Lantern does not prepare or run runtime updates."
         }
     }
 }

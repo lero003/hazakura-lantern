@@ -55,6 +55,7 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
 
         XCTAssertEqual(result.comparison, .currentOrNewer)
         XCTAssertTrue(result.detail.contains("at least as new"))
+        XCTAssertTrue(result.detail.contains("does not prepare or run runtime updates"))
     }
 
     func testCheckReportsCurrentWhenLocalBuildIsNewerThanLatestRelease() async throws {
@@ -72,6 +73,7 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
         XCTAssertEqual(result.comparison, .currentOrNewer)
         XCTAssertEqual(result.title, "Runtime appears current: b9060")
         XCTAssertTrue(result.detail.contains("at least as new"))
+        XCTAssertTrue(result.detail.contains("does not prepare or run runtime updates"))
     }
 
     func testCheckKeepsLatestReleaseWhenLocalVersionCannotBeCompared() async throws {
@@ -88,6 +90,7 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
 
         XCTAssertEqual(result.comparison, .unknownLocalVersion)
         XCTAssertTrue(result.detail.contains("Run Check Runtime first"))
+        XCTAssertTrue(result.detail.contains("does not prepare or run runtime updates"))
     }
 
     func testCheckReportsUnknownLatestVersionWhenReleaseTagCannotBeCompared() async throws {
@@ -105,6 +108,7 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
         XCTAssertEqual(result.comparison, .unknownLatestVersion)
         XCTAssertEqual(result.title, "Latest llama.cpp release found")
         XCTAssertTrue(result.detail.contains("could not read a comparable release build number"))
+        XCTAssertTrue(result.detail.contains("does not prepare or run runtime updates"))
     }
 
     func testCheckUsesExplicitLlamaCppLatestReleaseRequestMetadata() async throws {

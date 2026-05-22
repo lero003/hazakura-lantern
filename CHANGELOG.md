@@ -6,8 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
-- Clarified update-available wording so the user-triggered `llama.cpp` check
-  stays metadata-only and does not imply Lantern prepares or runs updates.
+- Clarified update-check outcome wording so the user-triggered `llama.cpp`
+  check stays metadata-only and does not imply Lantern prepares or runs
+  updates.
 - Treated `/usr/local/bin/llama-server` as a Homebrew-style runtime path for
   non-mutating install-source and update-readiness advice.
 - Refined Setup Guide step-card accessibility hints so each setup state
