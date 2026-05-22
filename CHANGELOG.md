@@ -6,9 +6,13 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added a `Loading Model` process state after launch so Lantern does not mark a
+  runtime as running until known server-readiness log text is observed.
 - Localized update-readiness and update-check status text in the Configuration
   view so English/Japanese app UI switching covers the non-mutating runtime
   update guidance.
+- Split Configuration runtime diagnostics from presets and localized the
+  install-source / capability probe status text for English and Japanese app UI.
 - Tightened embedded Settings and Setup Guide inspector widths so the
   sidebar-based main window keeps those utility surfaces compact.
 - Clarified update-check outcome wording so the user-triggered `llama.cpp`

@@ -151,19 +151,23 @@ public struct RuntimeUpdateAvailabilityChecker: Sendable {
             return nil
         }
 
-        let pattern = #"(?i)\bb([0-9]+)\b"#
-        guard let regex = try? NSRegularExpression(pattern: pattern) else {
-            return nil
+        for pattern in [#"(?i)\bb([0-9]+)\b"#, #"(?i)\bversion:\s*([0-9]+)\b"#] {
+            guard let regex = try? NSRegularExpression(pattern: pattern) else {
+                continue
+            }
+
+            let range = NSRange(text.startIndex..<text.endIndex, in: text)
+            guard let match = regex.firstMatch(in: text, range: range),
+                  let buildRange = Range(match.range(at: 1), in: text),
+                  let build = Int(text[buildRange])
+            else {
+                continue
+            }
+
+            return build
         }
 
-        let range = NSRange(text.startIndex..<text.endIndex, in: text)
-        guard let match = regex.firstMatch(in: text, range: range),
-              let buildRange = Range(match.range(at: 1), in: text)
-        else {
-            return nil
-        }
-
-        return Int(text[buildRange])
+        return nil
     }
 }
 

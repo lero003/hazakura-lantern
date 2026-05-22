@@ -3,6 +3,7 @@ import Foundation
 public enum ServerStatus: String, CaseIterable, Sendable {
     case stopped
     case starting
+    case loading
     case running
     case stopping
     case restarting
@@ -14,6 +15,8 @@ public enum ServerStatus: String, CaseIterable, Sendable {
             "Stopped"
         case .starting:
             "Starting"
+        case .loading:
+            "Loading Model"
         case .running:
             "Running"
         case .stopping:

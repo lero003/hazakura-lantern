@@ -96,39 +96,14 @@ struct ConfigurationView: View {
                     )
 
                     GridRow {
-                        Text("Preset")
+                        Text("Runtime Diagnostics")
                             .foregroundStyle(.secondary)
 
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack(spacing: 8) {
-                                Picker("Preset", selection: $selectedPresetIntent) {
-                                    ForEach(LlamaServerPreset.all, id: \.intent) { preset in
-                                        Text(preset.displayName)
-                                            .tag(preset.intent)
-                                    }
-                                }
-                                .labelsHidden()
-                                .pickerStyle(.menu)
-                                .frame(width: 180)
-
-                                Button {
-                                    controller.applyPreset(selectedPreset)
-                                } label: {
-                                    Label("Apply Preset", systemImage: "slider.horizontal.3")
-                                }
-                                .buttonStyle(SecondaryButtonStyle())
-                            }
-
-                            Text(selectedPreset.previewSummary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Check local runtime version, supported options, and advisory update metadata.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                                .lineLimit(2)
-
-                            Text(LocalizedStringKey(presetDescriptionKey(for: selectedPresetIntent)))
-                                .font(.caption)
-                                .foregroundStyle(Color.accentColor)
-                                .lineLimit(2)
-                                .padding(.top, 2)
+                                .fixedSize(horizontal: false, vertical: true)
 
                             HStack(spacing: 8) {
                                 Button {
@@ -145,13 +120,13 @@ struct ConfigurationView: View {
                                 }
                             }
 
-                            if let message = controller.runtimeCapabilityProbeMessage {
+                            if let message = localizedRuntimeCapabilityProbeMessage {
                                 Label(message, systemImage: "info.circle")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
 
-                            if let advice = controller.runtimeInstallSourceAdvice {
+                            if let advice = localizedRuntimeInstallSourceAdvice {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Label(advice.title, systemImage: "arrow.triangle.2.circlepath.circle")
                                         .font(.caption)
@@ -210,6 +185,43 @@ struct ConfigurationView: View {
                                         .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
+                        }
+                    }
+
+                    GridRow {
+                        Text("Preset")
+                            .foregroundStyle(.secondary)
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack(spacing: 8) {
+                                Picker("Preset", selection: $selectedPresetIntent) {
+                                    ForEach(LlamaServerPreset.all, id: \.intent) { preset in
+                                        Text(preset.displayName)
+                                            .tag(preset.intent)
+                                    }
+                                }
+                                .labelsHidden()
+                                .pickerStyle(.menu)
+                                .frame(width: 180)
+
+                                Button {
+                                    controller.applyPreset(selectedPreset)
+                                } label: {
+                                    Label("Apply Preset", systemImage: "slider.horizontal.3")
+                                }
+                                .buttonStyle(SecondaryButtonStyle())
+                            }
+
+                            Text(selectedPreset.previewSummary)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(2)
+
+                            Text(LocalizedStringKey(presetDescriptionKey(for: selectedPresetIntent)))
+                                .font(.caption)
+                                .foregroundStyle(Color.accentColor)
+                                .lineLimit(2)
+                                .padding(.top, 2)
 
                             if let note = controller.runtimeCapabilityProbeResult?.presetCompatibilityNote(for: selectedPreset) {
                                 VStack(alignment: .leading, spacing: 2) {
@@ -475,6 +487,56 @@ struct ConfigurationView: View {
         }
     }
 
+    private var localizedRuntimeCapabilityProbeMessage: String? {
+        guard let message = controller.runtimeCapabilityProbeMessage else {
+            return nil
+        }
+
+        if let version = message.stripPrefix("Runtime: ") {
+            return localized("runtime_probe.version", version)
+        }
+
+        switch message {
+        case "Choose a llama-server executable before checking runtime options.":
+            return localized("runtime_probe.choose_runtime")
+        case "Runtime selection changed; check capabilities again.":
+            return localized("runtime_probe.selection_changed")
+        case "Runtime version unavailable.":
+            return localized("runtime_probe.version_unavailable")
+        default:
+            return message
+        }
+    }
+
+    private var localizedRuntimeInstallSourceAdvice: (title: String, detail: String)? {
+        guard let advice = controller.runtimeInstallSourceAdvice else {
+            return nil
+        }
+
+        switch advice.source {
+        case .homebrew:
+            return (
+                localized("runtime_source.homebrew.title"),
+                localized("runtime_source.homebrew.detail")
+            )
+        case .macPorts:
+            return (
+                localized("runtime_source.macports.title"),
+                localized("runtime_source.macports.detail")
+            )
+        case .sourceCheckout:
+            return (
+                localized("runtime_source.source_checkout.title"),
+                localized("runtime_source.source_checkout.detail")
+            )
+        case .manualPath:
+            return (
+                localized("runtime_source.manual.title"),
+                localized("runtime_source.manual.detail")
+            )
+        }
+    }
+
     private var localizedUpdateReadinessAdvice: (title: String, detail: String)? {
         guard let advice = controller.runtimeUpdateReadinessAdvice else {
             return nil
@@ -603,5 +665,15 @@ struct ConfigurationView: View {
         }
 
         return String(format: format, locale: locale, arguments: arguments)
+    }
+}
+
+private extension String {
+    func stripPrefix(_ prefix: String) -> String? {
+        guard hasPrefix(prefix) else {
+            return nil
+        }
+
+        return String(dropFirst(prefix.count))
     }
 }

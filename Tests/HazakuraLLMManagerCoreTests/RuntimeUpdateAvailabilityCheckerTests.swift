@@ -12,6 +12,7 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
     func testBuildNumberParsesLlamaCppReleaseStyleTags() {
         XCTAssertEqual(RuntimeUpdateAvailabilityChecker.buildNumber(in: "b9060"), 9060)
         XCTAssertEqual(RuntimeUpdateAvailabilityChecker.buildNumber(in: "llama-server version b4600"), 4600)
+        XCTAssertEqual(RuntimeUpdateAvailabilityChecker.buildNumber(in: "version: 9240"), 9240)
         XCTAssertNil(RuntimeUpdateAvailabilityChecker.buildNumber(in: "llama-server custom build"))
     }
 

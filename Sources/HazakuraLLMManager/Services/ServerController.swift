@@ -55,7 +55,7 @@ final class ServerController: ObservableObject {
     }
 
     var canStop: Bool {
-        status == .starting || status == .running
+        status == .starting || status == .loading || status == .running
     }
 
     var canRestart: Bool {
@@ -283,8 +283,8 @@ final class ServerController: ObservableObject {
             self.stdoutPipe = stdoutPipe
             self.stderrPipe = stderrPipe
             self.processIdentifier = process.processIdentifier
-            self.status = .running
-            appendLog("Process started with pid \(process.processIdentifier).", stream: .info)
+            self.status = .loading
+            appendLog("Process started with pid \(process.processIdentifier); waiting for runtime readiness.", stream: .info)
         } catch {
             let message = processRunCommand.map {
                 adapter.describeLaunchProcessFailure(error, command: $0)
@@ -420,7 +420,12 @@ final class ServerController: ObservableObject {
 
         let text = String(decoding: data, as: UTF8.self)
         DispatchQueue.main.async { [weak self] in
-            self?.appendLog(text, stream: stream)
+            guard let self else {
+                return
+            }
+
+            self.appendLog(text, stream: stream)
+            self.markRunningIfRuntimeReady(from: text)
         }
     }
 
@@ -469,6 +474,19 @@ final class ServerController: ObservableObject {
     private func appendLog(_ text: String, stream: LogEntry.Stream) {
         logBuffer.append(text, stream: stream)
         logEntries = logBuffer.entries
+    }
+
+    private func markRunningIfRuntimeReady(from text: String) {
+        guard status == .loading else {
+            return
+        }
+
+        guard LlamaServerReadinessLogDetector.isReadyLog(text) else {
+            return
+        }
+
+        status = .running
+        appendLog("Runtime is ready for local client connections.", stream: .info)
     }
 
     private func clearError() {

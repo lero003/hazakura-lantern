@@ -116,7 +116,7 @@ struct MenuBarControlView: View {
         switch controller.status {
         case .running:
             "checkmark.circle"
-        case .starting:
+        case .starting, .loading:
             "clock"
         case .stopping:
             "pause.circle"

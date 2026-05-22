@@ -66,7 +66,7 @@ struct HazakuraLLMManagerApp: App {
         switch controller.status {
         case .running:
             "lightbulb.fill"
-        case .starting, .stopping, .restarting:
+        case .starting, .loading, .stopping, .restarting:
             "lightbulb"
         case .error:
             "exclamationmark.triangle.fill"

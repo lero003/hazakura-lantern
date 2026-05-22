@@ -173,7 +173,7 @@ public struct LlamaServerCapabilityProbeResult: Equatable, Sendable {
 public struct LlamaServerCapabilityProbe: Sendable {
     public let timeout: TimeInterval
 
-    public init(timeout: TimeInterval = 2) {
+    public init(timeout: TimeInterval = 8) {
         self.timeout = timeout
     }
 

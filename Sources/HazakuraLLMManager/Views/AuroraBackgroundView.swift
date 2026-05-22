@@ -72,7 +72,7 @@ private struct AuroraBackgroundLayer: View {
         switch status {
         case .running:
             return (orb1: .yellow, orb2: .orange, orb3: Color(red: 0.95, green: 0.75, blue: 0.2))
-        case .starting, .restarting, .stopping:
+        case .starting, .loading, .restarting, .stopping:
             return (orb1: .orange, orb2: .yellow, orb3: Color(red: 0.9, green: 0.4, blue: 0.1))
         case .error:
             return (orb1: .red, orb2: Color(red: 0.7, green: 0.1, blue: 0.1), orb3: .orange)
@@ -116,7 +116,7 @@ private extension ServerStatus {
         switch self {
         case .stopped:
             false
-        case .starting, .running, .stopping, .restarting, .error:
+        case .starting, .loading, .running, .stopping, .restarting, .error:
             true
         }
     }

@@ -505,19 +505,19 @@ struct SetupGuideView: View {
 
     private var launchToggleButton: some View {
         Button {
-            if controller.status == .running {
+            if controller.canStop {
                 controller.stop()
             } else {
                 controller.start()
             }
         } label: {
             Label(
-                controller.status == .running ? "Stop Server" : "Start Server",
-                systemImage: controller.status == .running ? "stop.fill" : "play.fill"
+                controller.canStop ? "Stop Server" : "Start Server",
+                systemImage: controller.canStop ? "stop.fill" : "play.fill"
             )
         }
-        .buttonStyle(controller.status == .running ? AnyButtonStyle(SecondaryButtonStyle()) : AnyButtonStyle(PrimaryButtonStyle()))
-        .disabled((controller.status != .running && !controller.canStart) || (controller.status == .running && !controller.canStop))
+        .buttonStyle(controller.canStop ? AnyButtonStyle(SecondaryButtonStyle()) : AnyButtonStyle(PrimaryButtonStyle()))
+        .disabled(!controller.canStart && !controller.canStop)
     }
 
     private var checkHealthButton: some View {
@@ -535,7 +535,7 @@ struct SetupGuideView: View {
         switch status {
         case .running:
             return .green
-        case .starting, .restarting:
+        case .starting, .loading, .restarting:
             return .orange
         case .stopping:
             return .yellow

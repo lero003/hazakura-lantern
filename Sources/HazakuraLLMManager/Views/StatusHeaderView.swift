@@ -59,7 +59,7 @@ struct StatusHeaderView: View {
         switch controller.status {
         case .running:
             return .orange
-        case .starting, .stopping, .restarting:
+        case .starting, .loading, .stopping, .restarting:
             return .yellow
         case .error:
             return .red
@@ -119,7 +119,7 @@ private struct StatusBadge: View {
         switch status {
         case .stopped:
             "stop.circle"
-        case .starting:
+        case .starting, .loading:
             "clock"
         case .running:
             "checkmark.circle"
@@ -138,7 +138,7 @@ private struct StatusBadge: View {
             .green
         case .error:
             .red
-        case .starting, .stopping, .restarting:
+        case .starting, .loading, .stopping, .restarting:
             .orange
         case .stopped:
             .secondary

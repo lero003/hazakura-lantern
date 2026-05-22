@@ -44,6 +44,9 @@ Implemented scope:
 - `llama-server` launch command construction without shell interpolation.
 - Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
+- Startup now shows an explicit `Loading Model` state after the child process
+  starts, then moves to `Running` only after known `llama-server` readiness log
+  text is observed.
 - Restart requests now show an explicit `Restarting` state while Lantern waits
   for the current process to terminate before starting the next one.
 - Runtime termination logs and error text distinguish normal exit codes from
@@ -320,6 +323,9 @@ Implemented scope:
   `/opt/homebrew/bin` and `/usr/local/bin`, MacPorts-managed,
   source-checkout-built, or manual, while keeping update execution outside
   Lantern.
+- The server configuration view keeps runtime diagnostics separate from presets
+  and localizes install-source and capability-probe status text for
+  English/Japanese app UI switching.
 - The server configuration view now shows non-mutating update-readiness dry-run
   guidance that combines selected runtime source with local version/help
   capability evidence before any future guarded update plan can be prepared.
@@ -387,9 +393,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-22 19:50 JST hourly run):
+Current source-verification status (2026-05-22 20:49 JST hourly run):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (194 XCTest tests, 0 failures), and
+`swift test` (196 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.
