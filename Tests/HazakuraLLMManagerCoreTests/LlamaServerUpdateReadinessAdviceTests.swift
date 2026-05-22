@@ -76,6 +76,32 @@ final class LlamaServerUpdateReadinessAdviceTests: XCTestCase {
         XCTAssertTrue(advice.detail.contains("No update plan should be prepared yet"))
     }
 
+    func testEvaluateExplainsVersionCheckProcessFailure() throws {
+        let advice = try XCTUnwrap(
+            LlamaServerUpdateReadinessAdvice.evaluate(
+                executablePath: "/opt/homebrew/bin/llama-server",
+                capabilityResult: probeResultWithFailedVersionCheck()
+            )
+        )
+
+        XCTAssertEqual(advice.readiness, .capabilityEvidenceIncomplete)
+        XCTAssertTrue(advice.detail.contains("--version check failed: permission denied"))
+        XCTAssertTrue(advice.detail.contains("No update plan should be prepared yet"))
+    }
+
+    func testEvaluateExplainsHelpCheckTimeout() throws {
+        let advice = try XCTUnwrap(
+            LlamaServerUpdateReadinessAdvice.evaluate(
+                executablePath: "/opt/local/bin/llama-server",
+                capabilityResult: probeResultWithTimedOutHelpCheck()
+            )
+        )
+
+        XCTAssertEqual(advice.readiness, .capabilityEvidenceIncomplete)
+        XCTAssertTrue(advice.detail.contains("--help check timed out"))
+        XCTAssertTrue(advice.detail.contains("No update plan should be prepared yet"))
+    }
+
     func testEvaluateReportsPlanningEvidenceForHomebrewStyleSource() throws {
         let advice = try XCTUnwrap(
             LlamaServerUpdateReadinessAdvice.evaluate(
@@ -175,6 +201,48 @@ final class LlamaServerUpdateReadinessAdviceTests: XCTestCase {
             capabilities: .parse(
                 versionOutput: "llama-server version b4600",
                 helpOutput: "usage: llama-server\n"
+            )
+        )
+    }
+
+    private func probeResultWithFailedVersionCheck() -> LlamaServerCapabilityProbeResult {
+        LlamaServerCapabilityProbeResult(
+            versionCheck: .init(
+                output: "",
+                terminationStatus: nil,
+                didTimeOut: false,
+                errorDescription: "permission denied"
+            ),
+            helpCheck: .init(
+                output: "--model FNAME",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            capabilities: .parse(
+                versionOutput: nil,
+                helpOutput: "--model FNAME"
+            )
+        )
+    }
+
+    private func probeResultWithTimedOutHelpCheck() -> LlamaServerCapabilityProbeResult {
+        LlamaServerCapabilityProbeResult(
+            versionCheck: .init(
+                output: "llama-server version b4600",
+                terminationStatus: 0,
+                didTimeOut: false,
+                errorDescription: nil
+            ),
+            helpCheck: .init(
+                output: "",
+                terminationStatus: nil,
+                didTimeOut: true,
+                errorDescription: nil
+            ),
+            capabilities: .parse(
+                versionOutput: "llama-server version b4600",
+                helpOutput: nil
             )
         )
     }
