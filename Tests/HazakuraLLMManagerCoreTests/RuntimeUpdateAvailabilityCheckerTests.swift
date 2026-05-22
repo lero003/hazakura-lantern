@@ -55,6 +55,23 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
         XCTAssertTrue(result.detail.contains("at least as new"))
     }
 
+    func testCheckReportsCurrentWhenLocalBuildIsNewerThanLatestRelease() async throws {
+        RuntimeUpdateURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"tag_name":"b9060","html_url":"https://github.com/ggml-org/llama.cpp/releases/tag/b9060","published_at":"2026-05-07T18:36:22Z"}"#
+        )
+
+        let checker = RuntimeUpdateAvailabilityChecker(session: makeSession())
+        let result = try await checker.check(
+            target: .llamaCpp,
+            localVersionSummary: "llama-server version b9061"
+        )
+
+        XCTAssertEqual(result.comparison, .currentOrNewer)
+        XCTAssertEqual(result.title, "Runtime appears current: b9060")
+        XCTAssertTrue(result.detail.contains("at least as new"))
+    }
+
     func testCheckKeepsLatestReleaseWhenLocalVersionCannotBeCompared() async throws {
         RuntimeUpdateURLProtocol.result = .success(
             statusCode: 200,
