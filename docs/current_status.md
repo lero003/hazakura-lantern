@@ -221,10 +221,11 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local verification baseline has run `swift test` and
-  `swift build --disable-sandbox` successfully; the current 2026-05-21 local
-  app-bundle helper smoke regressed with `kLSNoExecutableErr` in this Codex
-  environment.
+- Local source verification passed on 2026-05-22 with `git diff --check`,
+  localization lint, `swift test` (194 XCTest tests, 0 failures), and
+  `swift build --disable-sandbox`; the current 2026-05-21 local app-bundle
+  helper smoke still stands as regressed with `kLSNoExecutableErr` in this
+  Codex environment.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -376,6 +377,13 @@ Use `./script/build_and_run.sh --verify` only when a macOS launch smoke check is
 needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
+
+Current source-verification status (2026-05-22 hourly run):
+`git diff --check`, English/Japanese `Localizable.strings` lint,
+`swift test` (194 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
+in that slice because no fresh Launch Services hypothesis or normal desktop
+verification environment was available.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

@@ -4,7 +4,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-No changes yet.
+### Changed
+
+- Recorded the 2026-05-22 source verification evidence while keeping the
+  existing app-bundle helper smoke regression separate from packaged-release
+  proof.
 
 ## v1.0.0-rc.1 - 2026-05-22
 
