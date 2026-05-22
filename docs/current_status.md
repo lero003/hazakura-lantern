@@ -226,7 +226,7 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 00:48 JST with
+- Local source verification passed on 2026-05-23 01:46 JST with
   `git diff --check`, localization lint, `swift test` (204 XCTest tests,
   0 failures), and `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
@@ -393,7 +393,7 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 00:48 JST hourly run):
+Current source-verification status (2026-05-23 01:46 JST hourly run):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (204 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
