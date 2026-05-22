@@ -289,6 +289,9 @@ struct SetupGuideView: View {
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(statusColor(controller.status))
                             }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(Text("Process Status"))
+                            .accessibilityValue(Text(LocalizedStringKey(controller.status.title)))
 
                             HStack(spacing: 8) {
                                 Text("API Health:")
@@ -298,6 +301,9 @@ struct SetupGuideView: View {
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(healthColor(controller.endpointHealthStatus))
                             }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(Text("Endpoint Health"))
+                            .accessibilityValue(Text(healthAccessibilityValue))
 
                             if let endpoint = controller.runtimeEndpoint {
                                 Divider()
@@ -556,6 +562,14 @@ struct SetupGuideView: View {
             return .orange
         case .unchecked:
             return .secondary
+        }
+    }
+
+    private var healthAccessibilityValue: String {
+        if let detail = controller.endpointHealthStatus.detail {
+            "\(controller.endpointHealthStatus.title). \(detail)"
+        } else {
+            controller.endpointHealthStatus.title
         }
     }
 }

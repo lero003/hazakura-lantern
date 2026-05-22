@@ -359,8 +359,8 @@ Implemented scope:
   `llama-server` discovery finds no candidate, while keeping manual runtime
   selection available.
 - Process status and endpoint health indicators now expose explicit
-  accessibility labels and values while keeping decorative status artwork out of
-  the reading order.
+  accessibility labels and values in the main status surfaces and Setup Guide
+  while keeping decorative status artwork out of the reading order.
 - Advanced configuration fields are now grouped behind disclosure controls, with
   context, thread, and GPU-layer sliders supplementing the existing editable
   values.

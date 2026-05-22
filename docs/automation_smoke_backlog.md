@@ -431,7 +431,9 @@ exists.
 ### Accessibility
 
 - Add accessibility labels to one visible control group at a time.
-- Add accessibility values for status and health indicators.
+- Add accessibility values for status and health indicators. Main status,
+  Endpoint, and Setup Guide Step 4 rows are covered; revisit only for a newly
+  surfaced indicator.
 - Combine stream and text into one useful accessibility label for log rows.
 - Add Setup Guide step-card accessibility hints for complete and incomplete
   states.
