@@ -36,6 +36,8 @@ final class RuntimeUpdateAvailabilityCheckerTests: XCTestCase {
         XCTAssertEqual(result.latestRelease.tagName, "b9060")
         XCTAssertEqual(result.comparison, .updateAvailable)
         XCTAssertEqual(result.title, "Update available: b9060")
+        XCTAssertTrue(result.detail.contains("only reports release metadata"))
+        XCTAssertTrue(result.detail.contains("outside Lantern"))
         XCTAssertEqual(RuntimeUpdateURLProtocol.observedRequest?.value(forHTTPHeaderField: "Accept"), "application/vnd.github+json")
     }
 

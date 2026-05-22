@@ -73,7 +73,7 @@ public struct RuntimeUpdateAvailability: Equatable, Sendable {
     public var detail: String {
         switch comparison {
         case .updateAvailable:
-            "The selected runtime appears older than \(latestRelease.tagName). Review the update command manually before changing the runtime."
+            "The selected runtime appears older than \(latestRelease.tagName). Lantern only reports release metadata; review any update command manually outside Lantern before changing the runtime."
         case .currentOrNewer:
             "The selected runtime version appears to be at least as new as the latest published release."
         case .unknownLocalVersion:
