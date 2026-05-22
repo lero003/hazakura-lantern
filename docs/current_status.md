@@ -78,6 +78,10 @@ Implemented scope:
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Copied AI Mobile / OpenAI-compatible client smoke commands are fail-fast and
   timeout-bounded so a local client check does not hang indefinitely.
+- The first v1.1 Local Smoke Console core client slice can now send a
+  user-triggered, timeout-bounded, non-streaming OpenAI-compatible
+  `/v1/chat/completions` request and map invalid endpoint, connection, timeout,
+  HTTP status, and malformed-response failures through focused core tests.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.
@@ -227,10 +231,11 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 during the rc2 finalization
+- Local source verification passed on 2026-05-23 during the v1.1 smoke-client
   pass with
-  `git diff --check`, localization lint, `swift test` (205 XCTest tests,
-  0 failures), and `swift build --disable-sandbox`; the current 2026-05-21
+  `git diff --check`, localization lint, `swift test` (211 XCTest tests,
+  0 failures), and
+  `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
   `kLSNoExecutableErr` in this Codex environment.
 - App bundle launch helper at `script/build_and_run.sh`.

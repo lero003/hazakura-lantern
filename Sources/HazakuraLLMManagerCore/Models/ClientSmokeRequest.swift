@@ -26,17 +26,7 @@ public struct ClientSmokeRequest: Equatable, Sendable {
     }
 
     public var curlCommand: String {
-        let payload = Payload(
-            model: model,
-            stream: false,
-            messages: [
-                Message(role: "user", content: userText)
-            ]
-        )
-
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.sortedKeys]
-        let payloadString = (try? encoder.encode(payload))
+        let payloadString = (try? JSONEncoder.clientSmoke.encode(payload))
             .flatMap { String(data: $0, encoding: .utf8) }
             ?? #"{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}"#
 
@@ -54,6 +44,20 @@ public struct ClientSmokeRequest: Equatable, Sendable {
         return lines.joined(separator: "\n")
     }
 
+    public var payloadData: Data {
+        (try? JSONEncoder.clientSmoke.encode(payload)) ?? Data()
+    }
+
+    private var payload: Payload {
+        Payload(
+            model: model,
+            stream: false,
+            messages: [
+                Message(role: "user", content: userText)
+            ]
+        )
+    }
+
     private struct Payload: Encodable {
         var model: String
         var stream: Bool
@@ -63,5 +67,13 @@ public struct ClientSmokeRequest: Equatable, Sendable {
     private struct Message: Encodable {
         var role: String
         var content: String
+    }
+}
+
+private extension JSONEncoder {
+    static var clientSmoke: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        return encoder
     }
 }

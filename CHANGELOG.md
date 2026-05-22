@@ -6,6 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added the first core v1.1 Smoke Console client slice: a timeout-bounded,
+  non-streaming OpenAI-compatible chat-completions runner with focused tests for
+  request construction, response parsing, and endpoint/timeout/HTTP/error
+  mapping.
 - Reoriented automated development after `v1.0.0-rc.2` toward a 30-minute
   v1.1/v1.2 lane: non-persistent local endpoint smoke testing first, then
   careful approximate smoke metrics, while keeping packaged releases and chat
