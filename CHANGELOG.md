@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Treated `/usr/local/bin/llama-server` as a Homebrew-style runtime path for
+  non-mutating install-source and update-readiness advice.
 - Refined Setup Guide step-card accessibility hints so each setup state
   announces the specific next action in English and Japanese.
 - Recorded the 2026-05-22 source verification evidence while keeping the

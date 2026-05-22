@@ -311,7 +311,8 @@ Implemented scope:
   command, endpoint, environment snippet, health-check curl, and AI Mobile
   smoke curl.
 - The server configuration view now shows non-mutating install-source advice for
-  selected `llama-server` paths that look Homebrew-managed, MacPorts-managed,
+  selected `llama-server` paths that look Homebrew-managed, including
+  `/opt/homebrew/bin` and `/usr/local/bin`, MacPorts-managed,
   source-checkout-built, or manual, while keeping update execution outside
   Lantern.
 - The server configuration view now shows non-mutating update-readiness dry-run

@@ -61,6 +61,7 @@ public struct LlamaServerInstallSourceAdvice: Equatable, Sendable {
     private static func isHomebrewPath(_ path: String) -> Bool {
         path.hasPrefix("/opt/homebrew/")
             || path.hasPrefix("/usr/local/cellar/")
+            || path.hasPrefix("/usr/local/bin/")
             || path.hasPrefix("/usr/local/homebrew/")
             || path.hasPrefix("/usr/local/opt/")
     }

@@ -7,15 +7,20 @@ final class LlamaServerInstallSourceAdviceTests: XCTestCase {
     }
 
     func testClassifyRecognizesHomebrewStylePath() throws {
-        let advice = try XCTUnwrap(
-            LlamaServerInstallSourceAdvice.classify(
-                executablePath: "/opt/homebrew/bin/llama-server"
+        for executablePath in [
+            "/opt/homebrew/bin/llama-server",
+            "/usr/local/bin/llama-server"
+        ] {
+            let advice = try XCTUnwrap(
+                LlamaServerInstallSourceAdvice.classify(
+                    executablePath: executablePath
+                )
             )
-        )
 
-        XCTAssertEqual(advice.source, .homebrew)
-        XCTAssertEqual(advice.title, "Runtime source: Homebrew-style path")
-        XCTAssertTrue(advice.detail.contains("updates stay outside the app"))
+            XCTAssertEqual(advice.source, .homebrew)
+            XCTAssertEqual(advice.title, "Runtime source: Homebrew-style path")
+            XCTAssertTrue(advice.detail.contains("updates stay outside the app"))
+        }
     }
 
     func testClassifyRecognizesMacPortsStylePath() throws {
