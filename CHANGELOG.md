@@ -2,10 +2,13 @@
 
 All notable changes to Hazakura Lantern will be documented in this file.
 
-## Unreleased
+## v1.0.0-rc.2 - 2026-05-23
 
 ### Changed
 
+- Released a second source-only release candidate for personal/local use, with
+  no packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
+  distribution artifact.
 - Added a `Loading Model` process state after launch so Lantern does not mark a
   runtime as running until known server-readiness log text is observed.
 - Localized update-readiness and update-check status text in the Configuration
@@ -26,7 +29,7 @@ All notable changes to Hazakura Lantern will be documented in this file.
   announces the specific next action in English and Japanese.
 - Added localized accessibility labels and hints to the main toolbar's
   icon-only Setup Guide, profile import/export, and Copy controls.
-- Recorded the 2026-05-22 source verification evidence while keeping the
+- Recorded the 2026-05-23 source verification evidence while keeping the
   existing app-bundle helper smoke regression separate from packaged-release
   proof.
 

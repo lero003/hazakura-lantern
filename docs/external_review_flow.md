@@ -26,9 +26,9 @@ there is a human handoff for that exact action.
 
 Before asking for current release feedback, gather:
 
-- latest checkpoint: `v1.0.0-rc.1`
+- latest checkpoint: `v1.0.0-rc.2`
 - branch and working-tree state: `git status --short --branch`
-- recent commits since the checkpoint: `git log --oneline v1.0.0-rc.1..HEAD`
+- recent commits since the previous checkpoint: `git log --oneline v1.0.0-rc.1..HEAD`
 - verification results: `swift test`, `swift build --disable-sandbox`,
   localization lint if resources changed, and `git diff --check`
 - current release gates from `docs/current_status.md` and `docs/roadmap.md`
@@ -47,7 +47,7 @@ I want an external release-readiness review for Hazakura Lantern.
 
 Project state:
 - macOS SwiftUI source-only release candidate
-- latest checkpoint: v1.0.0-rc.1
+- latest checkpoint: v1.0.0-rc.2
 - no packaged .app, zip, dmg, signing, notarization, checksum, or binary
   distribution claim
 - current lane: source-only RC polish, manual desktop smoke evidence, and

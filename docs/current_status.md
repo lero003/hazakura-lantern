@@ -7,9 +7,10 @@ Last reviewed: 2026-05-23
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v1.0.0-rc.1` is a public source-only release
+Current release checkpoint: `v1.0.0-rc.2` is a public source-only release
 candidate for personal/local use. It keeps the existing `llama-server` control
-boundary and is not a packaged app release.
+boundary and is not a packaged app release. The previous public source-only
+checkpoint was `v1.0.0-rc.1`.
 
 Implemented scope:
 
@@ -226,7 +227,8 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 04:48 JST with
+- Local source verification passed on 2026-05-23 during the rc2 finalization
+  pass with
   `git diff --check`, localization lint, `swift test` (205 XCTest tests,
   0 failures), and `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
@@ -393,7 +395,7 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 04:48 JST hourly run):
+Current source-verification status (2026-05-23 rc2 finalization pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (205 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
@@ -456,7 +458,7 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: `v1.0.0-rc.1` is the source-only RC for personal/local
+Current human direction: `v1.0.0-rc.2` is the source-only RC for personal/local
 use. Packaged app release remains separate: automation should continue
 code-quality checks, narrow verified improvements, and packaged-release
 readiness evidence, but should not create packaged artifacts, change GitHub

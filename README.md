@@ -12,7 +12,7 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v1.0.0-rc.1` is a public source-only release candidate
+Current checkpoint: `v1.0.0-rc.2` is a public source-only release candidate
 for personal/local use. It keeps the existing `llama-server` control boundary
 and does not include a packaged `.app`, zip, dmg, signing, notarization,
 checksum, or binary distribution artifact.
@@ -24,7 +24,7 @@ checksum, or binary distribution artifact.
 - Configure port, context size, threads, GPU layers, and extra launch args.
 - Start, stop, and restart the server process.
 - Show stdout/stderr logs in memory.
-- Show and copy the runtime-provided local OpenAI-compatible base URL.
+- Show and copy the selected local OpenAI-compatible endpoint.
 - Show and copy the generated launch command for inspection.
 - Check the local endpoint health manually.
 - Export and import the active runtime profile as `.lantern-profile.json`.

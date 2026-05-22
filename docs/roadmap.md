@@ -134,10 +134,11 @@ share a local-runtime control contract with Lantern.
 
 ## Current Source Lane: v1.0 Source-Only Release Candidate
 
-The project has reached a public source-only `v1.0.0-rc.1` release candidate
+The project has reached a public source-only `v1.0.0-rc.2` release candidate
 for personal/local use. It keeps the existing `llama-server` control boundary
 and does not include packaged `.app`, zip, dmg, signing, notarization,
-checksum, or binary distribution artifacts. The 2026-05-21 automated
+checksum, or binary distribution artifacts. The previous public source-only
+checkpoint was `v1.0.0-rc.1`. The 2026-05-21 automated
 app-bundle helper smoke has mixed evidence and currently regresses with
 `kLSNoExecutableErr`, so a normal desktop/manual UI pass is still required
 before any packaged app release.
