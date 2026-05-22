@@ -59,15 +59,40 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
         "http://\(clientHost):\(port)/v1"
     }
 
+    public var modelName: String {
+        let trimmedModelPath = modelPath.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedModelPath.isEmpty else {
+            return "local model"
+        }
+
+        let name = URL(fileURLWithPath: trimmedModelPath).lastPathComponent
+        return name.isEmpty ? "local model" : name
+    }
+
+    public var modelID: String {
+        if let alias = explicitModelAlias {
+            return alias
+        }
+
+        let trimmedModelPath = modelPath.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedModelPath.isEmpty else {
+            return "local"
+        }
+
+        let url = URL(fileURLWithPath: trimmedModelPath)
+        let name = url.deletingPathExtension().lastPathComponent
+        return name.isEmpty ? "local" : name
+    }
+
     public var environmentSnippet: String {
         """
         OPENAI_BASE_URL=\(apiBaseURL)
-        OPENAI_API_KEY=local
+        OPENAI_MODEL_ID=\(ShellQuoter.quote(modelID))
         """
     }
 
     public var aiMobileSmokeRequest: ClientSmokeRequest {
-        ClientSmokeRequest(baseURL: apiBaseURL)
+        ClientSmokeRequest(baseURL: apiBaseURL, model: modelID)
     }
 
     public var aiMobileSmokeCurlCommand: String {
@@ -154,5 +179,48 @@ public struct RuntimeConfiguration: Codable, Equatable, Sendable {
         }
 
         return intValue >= 0
+    }
+
+    private var explicitModelAlias: String? {
+        guard let arguments = try? CommandLineArgumentTokenizer.tokenize(additionalArguments) else {
+            return nil
+        }
+
+        for index in arguments.indices {
+            let argument = arguments[index]
+
+            if argument == "--alias" || argument == "-a" {
+                let nextIndex = arguments.index(after: index)
+                guard nextIndex < arguments.endIndex else {
+                    continue
+                }
+
+                return firstAlias(in: arguments[nextIndex])
+            }
+
+            if let value = argument.stripOptionValue("--alias=") ?? argument.stripOptionValue("-a="),
+               let alias = firstAlias(in: value) {
+                return alias
+            }
+        }
+
+        return nil
+    }
+
+    private func firstAlias(in value: String) -> String? {
+        value
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+}
+
+private extension String {
+    func stripOptionValue(_ prefix: String) -> String? {
+        guard hasPrefix(prefix) else {
+            return nil
+        }
+
+        return String(dropFirst(prefix.count))
     }
 }

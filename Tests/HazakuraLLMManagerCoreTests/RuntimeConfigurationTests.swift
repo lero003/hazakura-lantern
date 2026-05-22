@@ -50,7 +50,7 @@ final class RuntimeConfigurationTests: XCTestCase {
         XCTAssertEqual(config.apiBaseURL, "http://[fd00::12]:9876/v1")
     }
 
-    func testEnvironmentSnippetUsesGeneratedBaseURLAndLocalAPIKey() {
+    func testEnvironmentSnippetUsesGeneratedBaseURLAndModelID() {
         var config = RuntimeConfiguration.defaultValue
         config.port = 9876
 
@@ -58,9 +58,26 @@ final class RuntimeConfigurationTests: XCTestCase {
             config.environmentSnippet,
             """
             OPENAI_BASE_URL=http://localhost:9876/v1
-            OPENAI_API_KEY=local
+            OPENAI_MODEL_ID=local
             """
         )
+    }
+
+    func testModelIDUsesAliasWhenConfigured() {
+        var config = RuntimeConfiguration.defaultValue
+        config.modelPath = "/Users/kei/Models/Qwen3.6-27B-UD-Q6_K_XL.gguf"
+        config.additionalArguments = "--alias \"qwen local,backup\""
+
+        XCTAssertEqual(config.modelName, "Qwen3.6-27B-UD-Q6_K_XL.gguf")
+        XCTAssertEqual(config.modelID, "qwen local")
+    }
+
+    func testModelIDFallsBackToModelFileStem() {
+        var config = RuntimeConfiguration.defaultValue
+        config.modelPath = "/Users/kei/Models/Qwen3.6-27B-UD-Q6_K_XL.gguf"
+
+        XCTAssertEqual(config.modelName, "Qwen3.6-27B-UD-Q6_K_XL.gguf")
+        XCTAssertEqual(config.modelID, "Qwen3.6-27B-UD-Q6_K_XL")
     }
 
     func testAIMobileSmokeCurlCommandUsesConfiguredPort() {
@@ -69,6 +86,8 @@ final class RuntimeConfigurationTests: XCTestCase {
 
         XCTAssertTrue(config.aiMobileSmokeCurlCommand.contains("http://localhost:9876/v1/chat/completions"))
         XCTAssertTrue(config.aiMobileSmokeCurlCommand.contains(#""stream":false"#))
+        XCTAssertTrue(config.aiMobileSmokeCurlCommand.contains(#""model":"local""#))
+        XCTAssertFalse(config.aiMobileSmokeCurlCommand.contains("Authorization: Bearer"))
     }
 
     func testEndpointHealthCurlCommandUsesConfiguredPort() {

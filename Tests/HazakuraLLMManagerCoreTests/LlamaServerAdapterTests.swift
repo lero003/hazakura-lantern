@@ -307,6 +307,7 @@ final class LlamaServerAdapterTests: XCTestCase {
 
     func testEndpointURLsUseConfiguredPort() throws {
         var config = RuntimeConfiguration.defaultValue
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
         config.port = 9876
 
         let adapter = LlamaServerAdapter()
@@ -315,23 +316,29 @@ final class LlamaServerAdapterTests: XCTestCase {
         XCTAssertEqual(try adapter.apiBaseURL(config: config), URL(string: "http://localhost:9876/v1"))
         XCTAssertEqual(try adapter.healthCheckURL(config: config), URL(string: "http://localhost:9876/v1/models"))
         XCTAssertEqual(endpoint.apiBaseURLString, "http://localhost:9876/v1")
+        XCTAssertEqual(endpoint.modelID, "qwen")
+        XCTAssertEqual(endpoint.modelName, "qwen.gguf")
         XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS --max-time 5 http://localhost:9876/v1/models")
         XCTAssertTrue(endpoint.aiMobileSmokeCurlCommand.contains("http://localhost:9876/v1/chat/completions"))
+        XCTAssertTrue(endpoint.aiMobileSmokeCurlCommand.contains(#""model":"qwen""#))
     }
 
     func testEndpointContractKeepsClientReachableHostAndLocalHealthCheckSeparate() throws {
         var config = RuntimeConfiguration.defaultValue
         config.host = "192.168.1.12"
+        config.modelPath = "/Users/kei/Models/qwen.gguf"
+        config.additionalArguments = "--alias \"qwen local\""
         config.port = 9876
 
         let endpoint = try LlamaServerAdapter().endpoint(config: config)
 
         XCTAssertEqual(endpoint.apiBaseURLString, "http://192.168.1.12:9876/v1")
+        XCTAssertEqual(endpoint.modelID, "qwen local")
         XCTAssertEqual(
             endpoint.environmentSnippet,
             """
             OPENAI_BASE_URL=http://192.168.1.12:9876/v1
-            OPENAI_API_KEY=local
+            OPENAI_MODEL_ID='qwen local'
             """
         )
         XCTAssertEqual(endpoint.endpointHealthCurlCommand, "curl -fsS --max-time 5 http://localhost:9876/v1/models")

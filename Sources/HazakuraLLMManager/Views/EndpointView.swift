@@ -30,6 +30,23 @@ struct EndpointView: View {
                         )
                     }
 
+                    VStack(alignment: .leading, spacing: 6) {
+                        endpointDetailRow(
+                            title: "Model ID",
+                            value: endpoint.modelID,
+                            copyTitle: "Copy Model ID"
+                        )
+
+                        endpointDetailRow(
+                            title: "Model Name",
+                            value: endpoint.modelName
+                        )
+
+                        Label("API key is not required unless llama-server is started with --api-key.", systemImage: "lock.open")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
                     HStack(alignment: .top, spacing: 12) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
@@ -158,6 +175,34 @@ struct EndpointView: View {
                 )
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func endpointDetailRow(
+        title: LocalizedStringKey,
+        value: String,
+        copyTitle: LocalizedStringKey? = nil
+    ) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .frame(width: 78, alignment: .leading)
+
+            Text(value)
+                .font(.system(.caption, design: .monospaced))
+                .textSelection(.enabled)
+                .lineLimit(1)
+                .truncationMode(.middle)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            if let copyTitle {
+                EndpointCopyButton(
+                    title: copyTitle,
+                    systemImage: "doc.on.doc",
+                    value: value
+                )
             }
         }
     }

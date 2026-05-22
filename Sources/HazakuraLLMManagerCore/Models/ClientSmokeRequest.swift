@@ -2,14 +2,14 @@ import Foundation
 
 public struct ClientSmokeRequest: Equatable, Sendable {
     public var baseURL: String
-    public var apiKey: String
+    public var apiKey: String?
     public var model: String
     public var userText: String
     public var timeoutSeconds: Int
 
     public init(
         baseURL: String,
-        apiKey: String = "local",
+        apiKey: String? = nil,
         model: String = "local",
         userText: String = "Hazakura AI Mobile runtime smoke. Reply with OK.",
         timeoutSeconds: Int = 60
@@ -40,12 +40,18 @@ public struct ClientSmokeRequest: Equatable, Sendable {
             .flatMap { String(data: $0, encoding: .utf8) }
             ?? #"{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}"#
 
-        return """
-        curl -fsS --max-time \(timeoutSeconds) \(ShellQuoter.quote(chatCompletionsURL)) \\
-          -H \(ShellQuoter.quote("Authorization: Bearer \(apiKey)")) \\
-          -H \(ShellQuoter.quote("Content-Type: application/json")) \\
-          -d \(ShellQuoter.quote(payloadString))
-        """
+        var lines = [
+            "curl -fsS --max-time \(timeoutSeconds) \(ShellQuoter.quote(chatCompletionsURL)) \\"
+        ]
+
+        if let apiKey, !apiKey.isEmpty {
+            lines.append("  -H \(ShellQuoter.quote("Authorization: Bearer \(apiKey)")) \\")
+        }
+
+        lines.append("  -H \(ShellQuoter.quote("Content-Type: application/json")) \\")
+        lines.append("  -d \(ShellQuoter.quote(payloadString))")
+
+        return lines.joined(separator: "\n")
     }
 
     private struct Payload: Encodable {

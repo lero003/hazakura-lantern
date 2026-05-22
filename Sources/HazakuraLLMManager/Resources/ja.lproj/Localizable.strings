@@ -1,6 +1,7 @@
 "Advanced Connection Details" = "詳細な接続情報";
 "Advanced Settings" = "詳細設定";
 "API Health:" = "API状態:";
+"API key is not required unless llama-server is started with --api-key." = "llama-server を --api-key 付きで起動していない限り、API key は不要です。";
 "Apply Preset" = "プリセットを適用";
 "Apply to Configuration" = "設定に適用";
 "Check Health" = "接続確認";
@@ -32,6 +33,7 @@
 "Copy the generated launch command to the clipboard." = "生成された起動コマンドをクリップボードへコピーします。";
 "Copy Health Check" = "ヘルスチェックをコピー";
 "Copy Launch Command" = "起動コマンドをコピー";
+"Copy Model ID" = "モデルIDをコピー";
 "Description" = "説明";
 "Copy the client connection URL to the clipboard." = "クライアント接続URLをクリップボードへコピーします。";
 "Copy the timeout-bounded AI Mobile smoke curl command to the clipboard." = "タイムアウト付きのAI Mobile動作確認curlコマンドをクリップボードへコピーします。";
@@ -74,6 +76,8 @@
 "Load Runtime Arguments" = "引数一覧を読み込む";
 "Logs" = "ログ";
 "Model" = "モデル";
+"Model ID" = "モデルID";
+"Model Name" = "モデル名";
 "No logs yet." = "まだログはありません。";
 "Open Setup Guide" = "セットアップガイドを開く";
 "Open copy options for the launch command, endpoint, environment, and smoke commands." = "起動コマンド、エンドポイント、環境変数、動作確認コマンドのコピー項目を開きます。";
@@ -83,6 +87,7 @@
 "Prepare llama-server" = "llama-serverを準備";
 "Preset" = "プリセット";
 "preset.description.gemma" = "【Gemma向け】標準より控えめな文脈でKVキャッシュ圧縮を試す設定です。必要に応じて手動で伸ばします。";
+"preset.description.qwen36_mtp_m4max" = "【Qwen 3.6 MTP / M4 Max 128GB向け】262K文脈、モデル本体とMTP draft側をMetalへ寄せ、単一スロット、f16 KV、Apple Silicon向けにFlash Attention offで始めます。";
 "preset.description.qwen" = "【Qwen向け】長めの文脈とKVキャッシュ圧縮を試す設定です。メモリ使用量と速度はモデルサイズに依存します。";
 "preset.description.standard" = "【標準】モデルとランタイムに任せる設定です。まずはここから始め、必要な項目だけ調整します。";
 "Process Status" = "プロセス状態";

@@ -5,7 +5,7 @@ final class LlamaServerPresetTests: XCTestCase {
     func testPresetVocabularyStaysSmallAndOrdered() {
         XCTAssertEqual(
             LlamaServerPreset.all.map(\.intent),
-            [.standard, .qwenRecommended, .gemmaRecommended]
+            [.standard, .qwenRecommended, .qwen36MTPM4Max, .gemmaRecommended]
         )
     }
 
@@ -37,6 +37,10 @@ final class LlamaServerPresetTests: XCTestCase {
             LlamaServerPreset.qwenRecommended.previewSummary,
             "Sets context 131072, threads auto, GPU layers auto, adds --flash-attn auto --cache-type-k q8_0 --cache-type-v q8_0."
         )
+        XCTAssertEqual(
+            LlamaServerPreset.qwen36MTPM4Max.previewSummary,
+            "Sets context 262144, threads auto, GPU layers 99, adds --spec-type draft-mtp --spec-draft-n-max 3 --spec-draft-ngl 99 --parallel 1 --flash-attn off --cache-type-k f16 --cache-type-v f16 --temp 0.6 --top-p 0.95 --top-k 20 --repeat-penalty 1.0."
+        )
     }
 
     func testStandardPresetLeavesGPULayersToRuntimeDefault() throws {
@@ -59,11 +63,32 @@ final class LlamaServerPresetTests: XCTestCase {
     }
 
     func testNoPresetAddsSpeculativeDecodingArguments() throws {
-        for preset in LlamaServerPreset.all {
+        for preset in [LlamaServerPreset.standard, .qwenRecommended, .gemmaRecommended] {
             let command = try LlamaServerAdapter().buildLaunchCommand(config: configured(preset))
             XCTAssertFalse(command.arguments.contains("--spec-type"), "\(preset.displayName) should keep MTP off")
             XCTAssertFalse(command.arguments.contains("--spec-draft-n-max"), "\(preset.displayName) should keep MTP off")
         }
+    }
+
+    func testQwen36MTPM4MaxPresetAddsVisibleMTPLaunchArguments() throws {
+        let command = try LlamaServerAdapter().buildLaunchCommand(
+            config: configured(.qwen36MTPM4Max)
+        )
+
+        XCTAssertTrue(command.arguments.contains("-ngl"))
+        XCTAssertTrue(command.arguments.contains("99"))
+        XCTAssertTrue(command.arguments.contains("--spec-type"))
+        XCTAssertTrue(command.arguments.contains("draft-mtp"))
+        XCTAssertTrue(command.arguments.contains("--spec-draft-n-max"))
+        XCTAssertTrue(command.arguments.contains("--spec-draft-ngl"))
+        XCTAssertTrue(command.arguments.contains("--parallel"))
+        XCTAssertTrue(command.arguments.contains("--flash-attn"))
+        XCTAssertTrue(command.arguments.contains("off"))
+        XCTAssertTrue(command.arguments.contains("--cache-type-k"))
+        XCTAssertTrue(command.arguments.contains("f16"))
+        XCTAssertTrue(command.arguments.contains("--cache-type-v"))
+        XCTAssertTrue(command.arguments.contains("--temp"))
+        XCTAssertTrue(command.arguments.contains("0.6"))
     }
 
     private func configured(_ preset: LlamaServerPreset) -> RuntimeConfiguration {

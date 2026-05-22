@@ -25,6 +25,11 @@ Start with a small vocabulary:
   the command.
 - `Qwen Recommended`: a Qwen-family starting point with a longer context and
   visible KV-cache-oriented arguments.
+- `Qwen 3.6 MTP M4 Max`: a hardware-specific starting point for
+  Qwen3.6-27B MTP GGUF on an M4 Max Mac Studio with 128 GB unified memory.
+  It favors full 262K context, full Metal offload for both the main model and
+  MTP draft path, and f16 KV cache over the generic Qwen preset's memory-saving
+  KV compression.
 - `Gemma Recommended`: a Gemma-family starting point with moderate context and
   visible KV-cache-oriented arguments.
 
@@ -77,6 +82,11 @@ Use speculative decoding only when all are true:
 
 If capability is unknown, prefer leaving speculative decoding off and showing a
 clear note. A safe fallback is more useful than a surprising failed launch.
+
+The `Qwen 3.6 MTP M4 Max` preset is intentionally not the generic Qwen default.
+It assumes a user-selected MTP-capable Qwen3.6 GGUF and a current Homebrew
+`llama-server` build with `--spec-type draft-mtp`. The launch command stays
+visible and editable before start.
 
 ## Runtime Capability Checks
 

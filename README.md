@@ -104,17 +104,21 @@ OpenAI SDK style environment values for the selected runtime endpoint:
 
 ```bash
 OPENAI_BASE_URL=http://localhost:1234/v1
-OPENAI_API_KEY=local
+OPENAI_MODEL_ID=local
 ```
 
 AI Mobile / OpenAI-compatible client smoke:
 
 ```bash
 curl -fsS --max-time 60 http://localhost:1234/v1/chat/completions \
-  -H 'Authorization: Bearer local' \
   -H 'Content-Type: application/json' \
   -d '{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
 ```
+
+`llama-server` does not require an API key unless it is launched with
+`--api-key` or `--api-key-file`. Some OpenAI-compatible client libraries still
+require a non-empty client-side key value; in that case a local dummy value is
+only a client compatibility setting, not Lantern authentication.
 
 ## Security Defaults
 

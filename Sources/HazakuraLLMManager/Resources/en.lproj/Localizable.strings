@@ -1,6 +1,7 @@
 "Advanced Connection Details" = "Advanced Connection Details";
 "Advanced Settings" = "Advanced Settings";
 "API Health:" = "API Health:";
+"API key is not required unless llama-server is started with --api-key." = "API key is not required unless llama-server is started with --api-key.";
 "Apply Preset" = "Apply Preset";
 "Apply to Configuration" = "Apply to Configuration";
 "Check Health" = "Check Health";
@@ -32,6 +33,7 @@
 "Copy the generated launch command to the clipboard." = "Copy the generated launch command to the clipboard.";
 "Copy Health Check" = "Copy Health Check";
 "Copy Launch Command" = "Copy Launch Command";
+"Copy Model ID" = "Copy Model ID";
 "Description" = "Description";
 "Copy the client connection URL to the clipboard." = "Copy the client connection URL to the clipboard.";
 "Copy the timeout-bounded AI Mobile smoke curl command to the clipboard." = "Copy the timeout-bounded AI Mobile smoke curl command to the clipboard.";
@@ -74,6 +76,8 @@
 "Load Runtime Arguments" = "Load Runtime Arguments";
 "Logs" = "Logs";
 "Model" = "Model";
+"Model ID" = "Model ID";
+"Model Name" = "Model Name";
 "No logs yet." = "No logs yet.";
 "Open Setup Guide" = "Open Setup Guide";
 "Open copy options for the launch command, endpoint, environment, and smoke commands." = "Open copy options for the launch command, endpoint, environment, and smoke commands.";
@@ -83,6 +87,7 @@
 "Prepare llama-server" = "Prepare llama-server";
 "Preset" = "Preset";
 "preset.description.gemma" = "Gemma: tries KV cache compression with a more conservative context than Qwen. Increase it manually only when needed.";
+"preset.description.qwen36_mtp_m4max" = "Qwen 3.6 MTP on M4 Max 128GB: uses 262K context, full Metal offload for model and MTP draft path, single slot, f16 KV, and Apple Silicon-friendly Flash Attention off.";
 "preset.description.qwen" = "Qwen: tries a longer context with KV cache compression. Memory use and speed still depend on model size.";
 "preset.description.standard" = "Standard: leaves core choices to the model and runtime. Start here, then adjust only what you need.";
 "Process Status" = "Process Status";

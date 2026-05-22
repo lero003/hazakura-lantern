@@ -2,7 +2,7 @@ import SwiftUI
 import HazakuraLLMManagerCore
 
 struct SettingsView: View {
-    var maxContentWidth: CGFloat = 520
+    var maxContentWidth: CGFloat = 560
 
     @AppStorage(AppLanguage.storageKey) private var languageRawValue = AppLanguage.system.rawValue
 
@@ -14,30 +14,45 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        Form {
-            Section {
-                Picker("Language", selection: languageSelection) {
-                    ForEach(AppLanguage.allCases) { language in
-                        Text(language.titleKey)
-                            .tag(language)
+        VStack(alignment: .leading, spacing: 18) {
+            GroupBox("Language") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Picker("Language", selection: languageSelection) {
+                        ForEach(AppLanguage.allCases) { language in
+                            Text(language.titleKey)
+                                .tag(language)
+                        }
                     }
-                }
-                .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .pickerStyle(.segmented)
+                    .frame(maxWidth: 360, alignment: .leading)
 
-                Text("Language changes apply to UI labels and controls only.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    Text("Language changes apply to UI labels and controls only.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            Section("Source Checkpoint") {
-                LabeledContent("Source checkpoint", value: SourceCheckpointInfo.current.identifier)
+            GroupBox("Source Checkpoint") {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(alignment: .firstTextBaseline, spacing: 12) {
+                        Text("Source checkpoint")
+                            .foregroundStyle(.secondary)
+                            .frame(width: 150, alignment: .leading)
 
-                Text("Source-only release candidate; no packaged app artifact is included.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                        Text(SourceCheckpointInfo.current.identifier)
+                            .font(.body.weight(.semibold))
+                            .textSelection(.enabled)
+                    }
+
+                    Text("Source-only release candidate; no packaged app artifact is included.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding(20)
-        .frame(minWidth: 320, maxWidth: maxContentWidth, alignment: .leading)
+        .frame(minWidth: 360, maxWidth: maxContentWidth, alignment: .topLeading)
     }
 }

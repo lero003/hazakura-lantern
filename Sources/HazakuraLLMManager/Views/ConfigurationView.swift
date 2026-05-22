@@ -444,6 +444,8 @@ struct ConfigurationView: View {
             return "preset.description.standard"
         case .qwenRecommended:
             return "preset.description.qwen"
+        case .qwen36MTPM4Max:
+            return "preset.description.qwen36_mtp_m4max"
         case .gemmaRecommended:
             return "preset.description.gemma"
         }

@@ -71,7 +71,7 @@ struct ContentView: View {
                                 .padding(24)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         case .settings:
-                            SettingsView(maxContentWidth: 380)
+                            SettingsView()
                                 .padding(24)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         }

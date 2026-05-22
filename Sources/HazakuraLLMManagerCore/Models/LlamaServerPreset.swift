@@ -3,6 +3,7 @@ import Foundation
 public enum LlamaServerPresetIntent: String, CaseIterable, Codable, Equatable, Hashable, Sendable {
     case standard
     case qwenRecommended
+    case qwen36MTPM4Max
     case gemmaRecommended
 }
 
@@ -33,6 +34,7 @@ public struct LlamaServerPreset: Equatable, Sendable {
     public static let all: [LlamaServerPreset] = [
         standard,
         qwenRecommended,
+        qwen36MTPM4Max,
         gemmaRecommended
     ]
 
@@ -53,6 +55,27 @@ public struct LlamaServerPreset: Equatable, Sendable {
         additionalArguments: ["--flash-attn", "auto", "--cache-type-k", "q8_0", "--cache-type-v", "q8_0"]
     )
 
+    public static let qwen36MTPM4Max = LlamaServerPreset(
+        intent: .qwen36MTPM4Max,
+        displayName: "Qwen 3.6 MTP M4 Max",
+        contextSize: 262144,
+        threads: "auto",
+        gpuLayers: "99",
+        additionalArguments: [
+            "--spec-type", "draft-mtp",
+            "--spec-draft-n-max", "3",
+            "--spec-draft-ngl", "99",
+            "--parallel", "1",
+            "--flash-attn", "off",
+            "--cache-type-k", "f16",
+            "--cache-type-v", "f16",
+            "--temp", "0.6",
+            "--top-p", "0.95",
+            "--top-k", "20",
+            "--repeat-penalty", "1.0"
+        ]
+    )
+
     public static let gemmaRecommended = LlamaServerPreset(
         intent: .gemmaRecommended,
         displayName: "Gemma Recommended",
@@ -68,6 +91,8 @@ public struct LlamaServerPreset: Equatable, Sendable {
             return standard
         case .qwenRecommended:
             return qwenRecommended
+        case .qwen36MTPM4Max:
+            return qwen36MTPM4Max
         case .gemmaRecommended:
             return gemmaRecommended
         }

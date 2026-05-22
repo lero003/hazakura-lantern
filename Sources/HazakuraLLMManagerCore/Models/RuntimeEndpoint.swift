@@ -4,17 +4,23 @@ public struct RuntimeEndpoint: Equatable, Sendable {
     public var apiBaseURL: URL
     public var healthCheckURL: URL?
     public var healthCheckTimeoutSeconds: Int
-    public var apiKey: String
+    public var modelID: String
+    public var modelName: String
+    public var apiKey: String?
 
     public init(
         apiBaseURL: URL,
         healthCheckURL: URL?,
         healthCheckTimeoutSeconds: Int = 5,
-        apiKey: String = "local"
+        modelID: String = "local",
+        modelName: String = "local model",
+        apiKey: String? = nil
     ) {
         self.apiBaseURL = apiBaseURL
         self.healthCheckURL = healthCheckURL
         self.healthCheckTimeoutSeconds = healthCheckTimeoutSeconds
+        self.modelID = modelID
+        self.modelName = modelName
         self.apiKey = apiKey
     }
 
@@ -23,10 +29,16 @@ public struct RuntimeEndpoint: Equatable, Sendable {
     }
 
     public var environmentSnippet: String {
-        """
-        OPENAI_BASE_URL=\(ShellQuoter.quote(apiBaseURLString))
-        OPENAI_API_KEY=\(ShellQuoter.quote(apiKey))
-        """
+        var lines = [
+            "OPENAI_BASE_URL=\(ShellQuoter.quote(apiBaseURLString))",
+            "OPENAI_MODEL_ID=\(ShellQuoter.quote(modelID))"
+        ]
+
+        if let apiKey, !apiKey.isEmpty {
+            lines.append("OPENAI_API_KEY=\(ShellQuoter.quote(apiKey))")
+        }
+
+        return lines.joined(separator: "\n")
     }
 
     public var endpointHealthRequest: EndpointHealthRequest? {
@@ -43,7 +55,7 @@ public struct RuntimeEndpoint: Equatable, Sendable {
     }
 
     public var aiMobileSmokeRequest: ClientSmokeRequest {
-        ClientSmokeRequest(baseURL: apiBaseURLString, apiKey: apiKey)
+        ClientSmokeRequest(baseURL: apiBaseURLString, apiKey: apiKey, model: modelID)
     }
 
     public var aiMobileSmokeCurlCommand: String {

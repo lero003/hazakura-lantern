@@ -12,7 +12,7 @@ final class RuntimeEndpointTests: XCTestCase {
             endpoint.environmentSnippet,
             """
             OPENAI_BASE_URL=http://localhost:1234/v1
-            OPENAI_API_KEY=local
+            OPENAI_MODEL_ID=local
             """
         )
     }
@@ -21,6 +21,7 @@ final class RuntimeEndpointTests: XCTestCase {
         let endpoint = RuntimeEndpoint(
             apiBaseURL: try XCTUnwrap(URL(string: "http://localhost:1234/v1?profile=owner-desk")),
             healthCheckURL: nil,
+            modelID: "owner's model",
             apiKey: "owner's local key"
         )
 
@@ -28,6 +29,7 @@ final class RuntimeEndpointTests: XCTestCase {
             endpoint.environmentSnippet,
             """
             OPENAI_BASE_URL='http://localhost:1234/v1?profile=owner-desk'
+            OPENAI_MODEL_ID='owner'\\''s model'
             OPENAI_API_KEY='owner'\\''s local key'
             """
         )

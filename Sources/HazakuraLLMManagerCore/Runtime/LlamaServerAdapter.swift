@@ -47,7 +47,9 @@ public struct LlamaServerAdapter: RuntimeAdapter {
 
         return RuntimeEndpoint(
             apiBaseURL: apiBaseURL,
-            healthCheckURL: healthCheckURL
+            healthCheckURL: healthCheckURL,
+            modelID: config.modelID,
+            modelName: config.modelName
         )
     }
 
