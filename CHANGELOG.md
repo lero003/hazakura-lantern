@@ -10,6 +10,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   non-mutating install-source and update-readiness advice.
 - Refined Setup Guide step-card accessibility hints so each setup state
   announces the specific next action in English and Japanese.
+- Added localized accessibility labels and hints to the main toolbar's
+  icon-only Setup Guide, profile import/export, and Copy controls.
 - Recorded the 2026-05-22 source verification evidence while keeping the
   existing app-bundle helper smoke regression separate from packaged-release
   proof.

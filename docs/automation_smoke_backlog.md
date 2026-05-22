@@ -254,6 +254,8 @@ Already covered on current `main`:
   instead of bilingual literal keys
 - reduced toolbar scope: Setup Guide, profile import/export, and copy actions
   only
+- main toolbar icon-only controls now expose localized accessibility labels and
+  hints for Setup Guide, active profile import/export, and the Copy menu
 
 Human decision:
 

@@ -74,6 +74,7 @@
 "Model" = "Model";
 "No logs yet." = "No logs yet.";
 "Open Setup Guide" = "Open Setup Guide";
+"Open copy options for the launch command, endpoint, environment, and smoke commands." = "Open copy options for the launch command, endpoint, environment, and smoke commands.";
 "Open Window" = "Open Window";
 "Port" = "Port";
 "Prepare GGUF Model" = "Prepare GGUF Model";
@@ -104,6 +105,7 @@
 "Show Command" = "Show Command";
 "Show Setup Guide" = "Show Setup Guide";
 "Show explanation for %@" = "Show explanation for %@";
+"Show or hide the setup guide inspector." = "Show or hide the setup guide inspector.";
 "Show the dashboard command preview" = "Show the dashboard command preview";
 "Source Checkpoint" = "Source Checkpoint";
 "Source checkpoint" = "Source checkpoint";

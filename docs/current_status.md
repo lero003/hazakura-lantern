@@ -302,6 +302,9 @@ Implemented scope:
 - The main window toolbar is reduced to Setup Guide visibility, active profile
   import/export, and copy actions; server lifecycle, health, command reveal,
   and log clearing remain in the page content or menu bar.
+- Main toolbar icon-only Setup Guide, profile import/export, and copy-menu
+  controls now expose localized accessibility labels and hints while preserving
+  the reduced toolbar scope.
 - A menu bar control surface now mirrors the existing server lifecycle, health,
   copy, active-profile import/export, log clear, open-window, and quit actions
   while keeping the app as a regular Dock/windowed app.

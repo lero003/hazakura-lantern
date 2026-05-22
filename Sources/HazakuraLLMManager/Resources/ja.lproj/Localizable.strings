@@ -74,6 +74,7 @@
 "Model" = "モデル";
 "No logs yet." = "まだログはありません。";
 "Open Setup Guide" = "セットアップガイドを開く";
+"Open copy options for the launch command, endpoint, environment, and smoke commands." = "起動コマンド、エンドポイント、環境変数、動作確認コマンドのコピー項目を開きます。";
 "Open Window" = "ウィンドウを開く";
 "Port" = "ポート";
 "Prepare GGUF Model" = "GGUFモデルを準備";
@@ -104,6 +105,7 @@
 "Show Command" = "コマンドを表示";
 "Show Setup Guide" = "セットアップガイドを表示";
 "Show explanation for %@" = "%@ の説明を表示";
+"Show or hide the setup guide inspector." = "セットアップガイドのインスペクタを表示または非表示にします。";
 "Show the dashboard command preview" = "ダッシュボードのコマンドプレビューを表示します";
 "Source Checkpoint" = "ソースチェックポイント";
 "Source checkpoint" = "ソースチェックポイント";

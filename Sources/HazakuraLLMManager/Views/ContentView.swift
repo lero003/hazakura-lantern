@@ -87,6 +87,8 @@ struct ContentView: View {
                     }
                     .toggleStyle(.button)
                     .labelStyle(.iconOnly)
+                    .accessibilityLabel(Text("Setup Guide"))
+                    .accessibilityHint(Text("Show or hide the setup guide inspector."))
                     .help("Show Setup Guide")
                 }
 
@@ -97,6 +99,8 @@ struct ContentView: View {
                         Label("Export Active Profile", systemImage: "square.and.arrow.up")
                     }
                     .labelStyle(.iconOnly)
+                    .accessibilityLabel(Text("Export Active Profile"))
+                    .accessibilityHint(Text("Export the active runtime profile as a .lantern-profile.json file."))
                     .help("Export Active Profile")
 
                     Button {
@@ -105,6 +109,8 @@ struct ContentView: View {
                         Label("Import Profile", systemImage: "square.and.arrow.down")
                     }
                     .labelStyle(.iconOnly)
+                    .accessibilityLabel(Text("Import Profile"))
+                    .accessibilityHint(Text("Import a .lantern-profile.json file into the active configuration."))
                     .help("Import Profile")
                 }
 
@@ -154,6 +160,8 @@ struct ContentView: View {
                         }
                     }
                     .labelStyle(.iconOnly)
+                    .accessibilityLabel(Text("Copy"))
+                    .accessibilityHint(Text("Open copy options for the launch command, endpoint, environment, and smoke commands."))
                     .help("Copy existing command, endpoint, and client snippets")
                 }
             }
