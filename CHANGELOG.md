@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added the first v1.2 Smoke Console metrics slice: successful local endpoint
+  smoke results now record elapsed time, output character count, request mode,
+  and timeout used, with focused core coverage and localized UI labels.
 - Added the first v1.1 Smoke Console UI slice: a separate sidebar destination
   for a user-triggered local endpoint smoke request with prompt, run state,
   response display, copy response, clear result, and localized app UI strings.

@@ -25,7 +25,11 @@ final class ClientSmokeClientTests: XCTestCase {
 
         let result = try await client.run(request)
 
-        XCTAssertEqual(result, ClientSmokeResult(responseText: "OK from local runtime"))
+        XCTAssertEqual(result.responseText, "OK from local runtime")
+        XCTAssertGreaterThanOrEqual(result.elapsedSeconds, 0)
+        XCTAssertEqual(result.outputCharacterCount, 21)
+        XCTAssertEqual(result.requestMode, .nonStreaming)
+        XCTAssertEqual(result.timeoutSeconds, 9)
         let observedRequest = try XCTUnwrap(ClientSmokeURLProtocol.observedRequest)
         XCTAssertEqual(observedRequest.url?.absoluteString, "http://localhost:1234/v1/chat/completions")
         XCTAssertEqual(observedRequest.httpMethod, "POST")

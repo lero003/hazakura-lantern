@@ -6,6 +6,7 @@ struct SmokeConsoleView: View {
 
     @State private var prompt = ""
     @State private var responseText: String?
+    @State private var resultMetrics: ClientSmokeResult?
     @State private var errorMessage: String?
     @State private var isRunning = false
     @State private var didCopy = false
@@ -165,6 +166,8 @@ struct SmokeConsoleView: View {
                         RoundedRectangle(cornerRadius: 6)
                             .stroke(Color.white.opacity(0.08), lineWidth: 1)
                     )
+
+                metricsSummary
             }
         } else if let errorMessage {
             Label(errorMessage, systemImage: "exclamationmark.triangle")
@@ -181,6 +184,45 @@ struct SmokeConsoleView: View {
             )
             .frame(maxWidth: .infinity, minHeight: 180)
         }
+    }
+
+    @ViewBuilder
+    private var metricsSummary: some View {
+        if let resultMetrics {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) {
+                    metricsBadges(for: resultMetrics)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    metricsBadges(for: resultMetrics)
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private func metricsBadges(for result: ClientSmokeResult) -> some View {
+        metricBadge(title: "Elapsed", value: formattedElapsed(result.elapsedSeconds))
+        metricBadge(title: "Characters", value: "\(result.outputCharacterCount)")
+        metricBadge(title: "Mode", value: displayRequestMode(result.requestMode))
+        metricBadge(title: "Timeout", value: "\(result.timeoutSeconds)s")
+    }
+
+    private func metricBadge(title: LocalizedStringKey, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.caption2.weight(.semibold))
+                .textCase(.uppercase)
+            Text(value)
+                .font(.system(.caption, design: .monospaced))
+                .textSelection(.enabled)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 5)
+        .background(.black.opacity(0.14), in: RoundedRectangle(cornerRadius: 6))
     }
 
     private var isServerRunning: Bool {
@@ -205,6 +247,7 @@ struct SmokeConsoleView: View {
 
         isRunning = true
         responseText = nil
+        resultMetrics = nil
         errorMessage = nil
         let request = ClientSmokeRequest(
             baseURL: endpoint.apiBaseURLString,
@@ -218,15 +261,18 @@ struct SmokeConsoleView: View {
                 let result = try await ClientSmokeClient().run(request)
                 await MainActor.run {
                     responseText = result.responseText
+                    resultMetrics = result
                     isRunning = false
                 }
             } catch let smokeError as ClientSmokeError {
                 await MainActor.run {
+                    resultMetrics = nil
                     errorMessage = smokeError.message
                     isRunning = false
                 }
             } catch {
                 await MainActor.run {
+                    resultMetrics = nil
                     errorMessage = error.localizedDescription
                     isRunning = false
                 }
@@ -260,7 +306,19 @@ struct SmokeConsoleView: View {
 
     private func clearResult() {
         responseText = nil
+        resultMetrics = nil
         errorMessage = nil
         didCopy = false
+    }
+
+    private func formattedElapsed(_ seconds: Double) -> String {
+        String(format: "%.2fs", seconds)
+    }
+
+    private func displayRequestMode(_ requestMode: ClientSmokeResult.RequestMode) -> String {
+        switch requestMode {
+        case .nonStreaming:
+            return String(localized: "Non-streaming")
+        }
     }
 }

@@ -1,10 +1,27 @@
 import Foundation
 
 public struct ClientSmokeResult: Equatable, Sendable {
-    public var responseText: String
+    public enum RequestMode: String, Equatable, Sendable {
+        case nonStreaming = "non-streaming"
+    }
 
-    public init(responseText: String) {
+    public var responseText: String
+    public var elapsedSeconds: Double
+    public var outputCharacterCount: Int
+    public var requestMode: RequestMode
+    public var timeoutSeconds: Int
+
+    public init(
+        responseText: String,
+        elapsedSeconds: Double = 0,
+        requestMode: RequestMode = .nonStreaming,
+        timeoutSeconds: Int = 60
+    ) {
         self.responseText = responseText
+        self.elapsedSeconds = max(0, elapsedSeconds)
+        self.outputCharacterCount = responseText.count
+        self.requestMode = requestMode
+        self.timeoutSeconds = max(1, timeoutSeconds)
     }
 }
 
@@ -69,6 +86,8 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
         }
         urlRequest.httpBody = request.payloadData
 
+        let startedAt = Date()
+
         do {
             let (data, response) = try await session.data(for: urlRequest)
 
@@ -83,7 +102,13 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
                 )
             }
 
-            return try Self.decodeResult(from: data)
+            let responseText = try Self.decodeResponseText(from: data)
+            return ClientSmokeResult(
+                responseText: responseText,
+                elapsedSeconds: Date().timeIntervalSince(startedAt),
+                requestMode: .nonStreaming,
+                timeoutSeconds: request.timeoutSeconds
+            )
         } catch let smokeError as ClientSmokeError {
             throw smokeError
         } catch {
@@ -91,13 +116,13 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
         }
     }
 
-    private static func decodeResult(from data: Data) throws -> ClientSmokeResult {
+    private static func decodeResponseText(from data: Data) throws -> String {
         do {
             let response = try JSONDecoder().decode(ChatCompletionsResponse.self, from: data)
             guard let content = response.choices.first?.message.content else {
                 throw ClientSmokeError.malformedResponse("No message content was found in the first choice.")
             }
-            return ClientSmokeResult(responseText: content)
+            return content
         } catch let smokeError as ClientSmokeError {
             throw smokeError
         } catch {

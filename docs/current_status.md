@@ -86,6 +86,9 @@ Implemented scope:
   destination for a user-triggered local endpoint smoke request with prompt,
   run state, response display, copy response, clear result, and localized
   app-owned UI strings.
+- The first v1.2 Runtime Smoke Metrics slice now records successful Smoke
+  Console elapsed time, output character count, request mode, and timeout used,
+  then shows those values under the response with localized app-owned labels.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.
@@ -235,7 +238,7 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 during the v1.1 smoke-console
+- Local source verification passed on 2026-05-23 during the v1.2 smoke-metrics
   pass with
   `git diff --check`, localization lint, `swift test` (211 XCTest tests,
   0 failures), and

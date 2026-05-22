@@ -226,9 +226,13 @@
 "validation.runtime.missing" = "Runtime executable does not exist.";
 "validation.runtime.not_executable" = "Runtime executable is not executable.";
 "Clear Result" = "Clear Result";
+"Characters" = "Characters";
 "Copy Response" = "Copy Response";
+"Elapsed" = "Elapsed";
 "Enter a short smoke prompt." = "Enter a short smoke prompt.";
 "Local Endpoint" = "Local Endpoint";
+"Mode" = "Mode";
+"Non-streaming" = "Non-streaming";
 "No Smoke Result" = "No Smoke Result";
 "Run a local endpoint smoke request to show the latest response here." = "Run a local endpoint smoke request to show the latest response here.";
 "Run Smoke" = "Run Smoke";
@@ -238,3 +242,4 @@
 "Smoke Prompt" = "Smoke Prompt";
 "Smoke Response" = "Smoke Response";
 "Start the server before running Smoke Console." = "Start the server before running Smoke Console.";
+"Timeout" = "Timeout";
