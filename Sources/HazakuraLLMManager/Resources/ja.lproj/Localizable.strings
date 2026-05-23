@@ -234,6 +234,7 @@
 "Elapsed" = "経過時間";
 "Enter a smoke prompt before running." = "実行する前に確認プロンプトを入力してください。";
 "Enter a short smoke prompt." = "短い確認プロンプトを入力してください。";
+"Finish Reason" = "終了理由";
 "Approx TPS" = "概算TPS";
 "Local Endpoint" = "ローカルエンドポイント";
 "Non-streaming" = "非ストリーミング";

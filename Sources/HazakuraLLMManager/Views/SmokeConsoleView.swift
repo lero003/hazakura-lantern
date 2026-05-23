@@ -249,6 +249,9 @@ struct SmokeConsoleView: View {
         }
         metricBadge(title: "Elapsed", value: formattedElapsed(result.elapsedSeconds))
         metricBadge(title: "Characters", value: "\(result.outputCharacterCount)")
+        if let finishReason = result.finishReason {
+            metricBadge(title: "Finish Reason", value: finishReason)
+        }
         if let runtimeUsage = result.runtimeUsage {
             metricBadge(title: "Usage Reported by Runtime", value: formattedRuntimeUsage(runtimeUsage))
         } else {
@@ -416,6 +419,9 @@ struct SmokeConsoleView: View {
         }
         lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(result.elapsedSeconds))")
         lines.append("\(String(localized: "Characters")): \(result.outputCharacterCount)")
+        if let finishReason = result.finishReason {
+            lines.append("\(String(localized: "Finish Reason")): \(finishReason)")
+        }
         if let runtimeUsage = result.runtimeUsage {
             lines.append("\(String(localized: "Usage Reported by Runtime")): \(formattedRuntimeUsage(runtimeUsage))")
         } else {

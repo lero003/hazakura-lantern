@@ -234,6 +234,7 @@
 "Elapsed" = "Elapsed";
 "Enter a smoke prompt before running." = "Enter a smoke prompt before running.";
 "Enter a short smoke prompt." = "Enter a short smoke prompt.";
+"Finish Reason" = "Finish Reason";
 "Approx TPS" = "Approx TPS";
 "Local Endpoint" = "Local Endpoint";
 "Non-streaming" = "Non-streaming";

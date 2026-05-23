@@ -4,7 +4,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-No changes yet.
+### Changed
+
+- Added Smoke Console finish-reason metrics for OpenAI-compatible responses, so
+  local smoke evidence can show cases such as `stop` or `length` alongside the
+  existing elapsed time, usage, and timeout details.
 
 ## v1.2.0 - 2026-05-23
 

@@ -54,7 +54,7 @@ final class ClientSmokeClientTests: XCTestCase {
     func testRunCapturesRuntimeReportedUsageWhenAvailable() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,
-            body: #"{"choices":[{"message":{"content":"OK"}}],"usage":{"prompt_tokens":8,"completion_tokens":2,"total_tokens":10}}"#
+            body: #"{"choices":[{"message":{"content":"OK"},"finish_reason":"stop"}],"usage":{"prompt_tokens":8,"completion_tokens":2,"total_tokens":10}}"#
         )
         let client = ClientSmokeClient(session: makeSession())
         let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
@@ -66,6 +66,7 @@ final class ClientSmokeClientTests: XCTestCase {
             result.runtimeUsage,
             ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2, totalTokens: 10)
         )
+        XCTAssertEqual(result.finishReason, "stop")
         XCTAssertNotNil(result.outputTokensPerSecond)
         XCTAssertFalse(result.usesApproximateOutputRate)
         XCTAssertNil(result.approximateOutputTokenCount)
@@ -112,6 +113,12 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertEqual(result.approximateOutputTokensPerSecond, 1)
         XCTAssertEqual(result.outputTokensPerSecond, 1)
         XCTAssertTrue(result.usesApproximateOutputRate)
+    }
+
+    func testClientSmokeResultOmitsBlankFinishReason() {
+        let result = ClientSmokeResult(responseText: "OK", finishReason: "  ")
+
+        XCTAssertNil(result.finishReason)
     }
 
     func testRunRejectsInvalidEndpointBeforeRequest() async {

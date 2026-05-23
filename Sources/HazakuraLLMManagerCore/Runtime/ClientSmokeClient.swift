@@ -32,6 +32,7 @@ public struct ClientSmokeResult: Equatable, Sendable {
     public var approximateOutputTokensPerSecond: Double?
     public var outputTokensPerSecond: Double?
     public var usesApproximateOutputRate: Bool
+    public var finishReason: String?
 
     public init(
         responseText: String,
@@ -39,7 +40,8 @@ public struct ClientSmokeResult: Equatable, Sendable {
         elapsedSeconds: Double = 0,
         requestMode: RequestMode = .nonStreaming,
         timeoutSeconds: Int = 60,
-        runtimeUsage: Usage? = nil
+        runtimeUsage: Usage? = nil,
+        finishReason: String? = nil
     ) {
         self.responseText = responseText
         self.startedAt = startedAt
@@ -48,6 +50,7 @@ public struct ClientSmokeResult: Equatable, Sendable {
         self.requestMode = requestMode
         self.timeoutSeconds = max(1, timeoutSeconds)
         self.runtimeUsage = runtimeUsage?.hasReportedTokens == true ? runtimeUsage : nil
+        self.finishReason = finishReason?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
 
         if self.runtimeUsage == nil {
             let approximateOutputTokenCount = Self.approximateOutputTokens(for: responseText)
@@ -168,7 +171,8 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
                 elapsedSeconds: Date().timeIntervalSince(startedAt),
                 requestMode: .nonStreaming,
                 timeoutSeconds: request.timeoutSeconds,
-                runtimeUsage: decodedResponse.usage
+                runtimeUsage: decodedResponse.usage,
+                finishReason: decodedResponse.finishReason
             )
         } catch let smokeError as ClientSmokeError {
             throw smokeError
@@ -185,7 +189,8 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             }
             return DecodedClientSmokeResponse(
                 responseText: content,
-                usage: response.usage?.clientSmokeUsage
+                usage: response.usage?.clientSmokeUsage,
+                finishReason: response.choices.first?.finishReason
             )
         } catch let smokeError as ClientSmokeError {
             throw smokeError
@@ -254,6 +259,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
 private struct DecodedClientSmokeResponse {
     var responseText: String
     var usage: ClientSmokeResult.Usage?
+    var finishReason: String?
 }
 
 private struct OpenAIErrorResponse: Decodable {
@@ -293,6 +299,12 @@ private struct ChatCompletionsResponse: Decodable {
 
     struct Choice: Decodable {
         var message: Message
+        var finishReason: String?
+
+        enum CodingKeys: String, CodingKey {
+            case message
+            case finishReason = "finish_reason"
+        }
     }
 
     struct Message: Decodable {
@@ -383,5 +395,11 @@ private struct ChatCompletionsResponse: Decodable {
             )
             return usage.hasReportedTokens ? usage : nil
         }
+    }
+}
+
+private extension String {
+    var nilIfEmpty: String? {
+        isEmpty ? nil : self
     }
 }
