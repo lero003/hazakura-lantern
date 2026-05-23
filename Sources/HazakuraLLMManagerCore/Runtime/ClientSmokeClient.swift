@@ -425,6 +425,7 @@ private struct ChatCompletionsResponse: Decodable {
     enum MessageContent: Decodable {
         case string(String)
         case parts([ContentPart])
+        case part(ContentPart)
 
         var displayText: String {
             switch self {
@@ -434,6 +435,8 @@ private struct ChatCompletionsResponse: Decodable {
                 return parts
                     .compactMap(\.displayText)
                     .joined(separator: "\n")
+            case .part(let part):
+                return part.displayText ?? ""
             }
         }
 
@@ -442,6 +445,11 @@ private struct ChatCompletionsResponse: Decodable {
 
             if let content = try? container.decode(String.self) {
                 self = .string(content)
+                return
+            }
+
+            if let contentPart = try? container.decode(ContentPart.self) {
+                self = .part(contentPart)
                 return
             }
 

@@ -6,6 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added Smoke Console response parsing for compatible
+  `/v1/chat/completions` responses that return `message.content` as a single
+  text-part object, keeping local smoke evidence readable without adding chat
+  or history behavior.
 - Made Smoke Console metric parsing tolerant of numeric-string usage/timing
   values and malformed optional metric fields, so a readable local smoke
   response is not rejected just because advisory metrics are incompatible.

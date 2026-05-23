@@ -154,6 +154,9 @@ Implemented scope:
   when a local `/v1/chat/completions` endpoint omits
   `choices[0].message.content`, keeping the same non-streaming smoke boundary
   while widening response-shape tolerance.
+- Smoke Console can now read compatible single text-part `message.content`
+  objects from local `/v1/chat/completions` responses, keeping odd but readable
+  smoke evidence from being reported as malformed JSON.
 - Smoke Console success metrics now retain and display the actual
   `/v1/chat/completions` request URL, and copied success evidence includes it
   with the other bounded metrics.
@@ -513,14 +516,15 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console metric-tolerance pass):
+Current source-verification status (2026-05-23 Smoke Console single-content-part pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (233 XCTest tests, 0 failures), and
+`swift test` (234 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available. The follow-up localization polish keeps
-Smoke Console Japanese unavailable-run messages on the localized "動作確認"
-surface name.
+verification environment was available. Smoke Console response parsing now
+accepts compatible single text-part `message.content` objects in addition to
+plain strings, text-part arrays, `reasoning_content`, and legacy
+`choices[0].text` fallback output.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

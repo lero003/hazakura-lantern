@@ -192,6 +192,21 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertEqual(result.approximateOutputTokenCount, 6)
     }
 
+    func testRunUsesSingleTextPartWhenMessageContentIsObject() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":{"type":"text","text":" OK from content object "}}}]}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "OK from content object")
+        XCTAssertEqual(result.outputCharacterCount, 22)
+        XCTAssertEqual(result.approximateOutputTokenCount, 6)
+    }
+
     func testRunUsesChoiceTextFallbackWhenMessageIsMissing() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,
