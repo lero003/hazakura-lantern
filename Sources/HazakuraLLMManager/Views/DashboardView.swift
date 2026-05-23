@@ -50,34 +50,26 @@ struct DashboardView: View {
 private struct BentoGridLayout: View {
     @ObservedObject var controller: ServerController
     var onOpenSetupGuide: () -> Void
-    @State private var isCompact = false
 
-    var body: some View {
-        GeometryReader { geo in
-            let isWide = geo.size.width >= 700
-
-            if isWide {
-                wideLayout
-            } else {
-                VStack(spacing: DesignTokens.Bento.gridSpacing) {
-                    DashboardControlCard(controller: controller)
-                    DashboardHealthCard(controller: controller, onOpenSetupGuide: onOpenSetupGuide)
-                    DashboardEndpointCard(controller: controller)
-                    DashboardCommandCard(controller: controller)
-                }
-            }
-        }
+    private var columns: [GridItem] {
+        [
+            GridItem(
+                .adaptive(minimum: 320),
+                spacing: DesignTokens.Bento.gridSpacing,
+                alignment: .top
+            )
+        ]
     }
 
-    @ViewBuilder
-    private var wideLayout: some View {
-        HStack(spacing: DesignTokens.Bento.gridSpacing) {
-            VStack(spacing: DesignTokens.Bento.gridSpacing) {
-                DashboardEndpointCard(controller: controller)
-                DashboardCommandCard(controller: controller)
-            }
-
+    var body: some View {
+        LazyVGrid(columns: columns, alignment: .leading, spacing: DesignTokens.Bento.gridSpacing) {
             DashboardControlCard(controller: controller)
+                .frame(maxWidth: .infinity)
+            DashboardHealthCard(controller: controller, onOpenSetupGuide: onOpenSetupGuide)
+                .frame(maxWidth: .infinity)
+            DashboardEndpointCard(controller: controller)
+                .frame(maxWidth: .infinity)
+            DashboardCommandCard(controller: controller)
                 .frame(maxWidth: .infinity)
         }
     }
@@ -202,7 +194,7 @@ private struct DashboardHealthCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.xl) {
-            Label("Health", systemImage: "heart.pulsewave")
+            Label("Endpoint Health", systemImage: "heart.pulsewave")
                 .font(DesignTokens.Font.subheading)
                 .foregroundStyle(.primary.opacity(DesignTokens.Opacity.textPrimary))
 
@@ -228,7 +220,7 @@ private struct DashboardHealthCard: View {
                 Button {
                     controller.checkEndpointHealth()
                 } label: {
-                    Label("Check", systemImage: "waveform.path.ecg")
+                    Label("Check Health", systemImage: "waveform.path.ecg")
                 }
                 .buttonStyle(SecondaryButtonStyle())
                 .disabled(!controller.canCheckEndpointHealth)
