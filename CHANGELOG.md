@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Reconnected localized accessibility hints to the menu bar copy actions for
+  endpoint, launch command, environment snippet, health-check curl, and AI
+  Mobile smoke curl copies.
 - Improved Smoke Console HTTP error snippets so blank preferred structured
   error messages can fall through to readable sibling `detail` or `message`
   fields instead of showing raw JSON.

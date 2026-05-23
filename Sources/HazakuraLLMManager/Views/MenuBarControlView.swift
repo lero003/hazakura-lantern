@@ -118,15 +118,18 @@ struct MenuBarControlView: View {
                 }
             }
             .disabled(controller.runtimeEndpoint == nil)
+            .accessibilityHint(Text("Copy the client connection URL to the clipboard."))
 
             Button("Copy Launch Command") {
                 copyFromMenuBar(controller.launchCommandPreview)
             }
+            .accessibilityHint(Text("Copy the generated launch command to the clipboard."))
 
             if let endpoint = controller.runtimeEndpoint {
                 Button("Copy Environment") {
                     copyFromMenuBar(endpoint.environmentSnippet)
                 }
+                .accessibilityHint(Text("Copy OpenAI-compatible environment variables to the clipboard."))
 
                 Button("Copy Health Check") {
                     if let cmd = endpoint.endpointHealthCurlCommand {
@@ -134,10 +137,12 @@ struct MenuBarControlView: View {
                     }
                 }
                 .disabled(endpoint.endpointHealthCurlCommand == nil)
+                .accessibilityHint(Text("Copy the timeout-bounded health-check curl command to the clipboard."))
 
                 Button("Copy AI Mobile Test") {
                     copyFromMenuBar(endpoint.aiMobileSmokeCurlCommand)
                 }
+                .accessibilityHint(Text("Copy the timeout-bounded AI Mobile smoke curl command to the clipboard."))
             }
         }
     }
