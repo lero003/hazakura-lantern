@@ -246,6 +246,7 @@
 "Running local endpoint smoke..." = "ローカルエンドポイントを確認中...";
 "Running Smoke" = "確認中";
 "Smoke Console" = "動作確認コンソール";
+"Smoke Error" = "動作確認エラー";
 "Smoke Metrics" = "動作確認メトリクス";
 "Smoke Prompt" = "確認プロンプト";
 "Smoke Response" = "確認応答";

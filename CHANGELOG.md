@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added failed-attempt metrics to Smoke Console errors, so failed local endpoint
+  smoke evidence now shows started time, elapsed time, request mode, and
+  timeout used when displayed or copied.
 - Seeded the Smoke Console prompt with the same bounded local smoke prompt used
   by the copyable curl command, so a running server can be checked immediately
   while the prompt remains editable.

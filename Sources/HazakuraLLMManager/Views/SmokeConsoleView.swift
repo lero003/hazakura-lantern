@@ -7,6 +7,7 @@ struct SmokeConsoleView: View {
     @State private var prompt = ClientSmokeRequest.defaultUserText
     @State private var responseText: String?
     @State private var resultMetrics: ClientSmokeResult?
+    @State private var failureMetrics: SmokeFailureMetrics?
     @State private var errorMessage: String?
     @State private var isRunning = false
     @State private var didCopy = false
@@ -184,12 +185,16 @@ struct SmokeConsoleView: View {
                 metricsSummary
             }
         } else if let errorMessage {
-            Label(errorMessage, systemImage: "exclamationmark.triangle")
-                .font(.caption)
-                .foregroundStyle(.red)
-                .padding(10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.red.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
+            VStack(alignment: .leading, spacing: 6) {
+                Label(errorMessage, systemImage: "exclamationmark.triangle")
+                    .font(.caption)
+                    .foregroundStyle(.red)
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.red.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
+
+                metricsSummary
+            }
         } else {
             ContentUnavailableView(
                 "No Smoke Result",
@@ -210,6 +215,18 @@ struct SmokeConsoleView: View {
 
                 VStack(alignment: .leading, spacing: 8) {
                     metricsBadges(for: resultMetrics)
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        } else if let failureMetrics {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) {
+                    metricsBadges(for: failureMetrics)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    metricsBadges(for: failureMetrics)
                 }
             }
             .font(.caption)
@@ -236,6 +253,16 @@ struct SmokeConsoleView: View {
         }
         metricBadge(title: "Request Mode", value: displayRequestMode(result.requestMode))
         metricBadge(title: "Timeout Used", value: "\(result.timeoutSeconds)s")
+    }
+
+    @ViewBuilder
+    private func metricsBadges(for metrics: SmokeFailureMetrics) -> some View {
+        if let startedAt = metrics.startedAt {
+            metricBadge(title: "Started", value: formattedStartedAt(startedAt))
+        }
+        metricBadge(title: "Elapsed", value: formattedElapsed(metrics.elapsedSeconds))
+        metricBadge(title: "Request Mode", value: displayRequestMode(metrics.requestMode))
+        metricBadge(title: "Timeout Used", value: "\(metrics.timeoutSeconds)s")
     }
 
     private func metricBadge(title: LocalizedStringKey, value: String) -> some View {
@@ -279,6 +306,7 @@ struct SmokeConsoleView: View {
         isRunning = true
         responseText = nil
         resultMetrics = nil
+        failureMetrics = nil
         errorMessage = nil
         didCopy = false
         let request = ClientSmokeRequest(
@@ -287,6 +315,7 @@ struct SmokeConsoleView: View {
             model: endpoint.modelID,
             userText: prompt
         )
+        let startedAt = Date()
 
         Task {
             do {
@@ -294,17 +323,30 @@ struct SmokeConsoleView: View {
                 await MainActor.run {
                     responseText = result.responseText
                     resultMetrics = result
+                    failureMetrics = nil
                     isRunning = false
                 }
             } catch let smokeError as ClientSmokeError {
                 await MainActor.run {
                     resultMetrics = nil
+                    failureMetrics = SmokeFailureMetrics(
+                        startedAt: startedAt,
+                        elapsedSeconds: Date().timeIntervalSince(startedAt),
+                        requestMode: .nonStreaming,
+                        timeoutSeconds: request.timeoutSeconds
+                    )
                     errorMessage = smokeError.message
                     isRunning = false
                 }
             } catch {
                 await MainActor.run {
                     resultMetrics = nil
+                    failureMetrics = SmokeFailureMetrics(
+                        startedAt: startedAt,
+                        elapsedSeconds: Date().timeIntervalSince(startedAt),
+                        requestMode: .nonStreaming,
+                        timeoutSeconds: request.timeoutSeconds
+                    )
                     errorMessage = error.localizedDescription
                     isRunning = false
                 }
@@ -317,7 +359,7 @@ struct SmokeConsoleView: View {
             return copyableSuccessResult(responseText)
         }
 
-        return errorMessage
+        return copyableErrorResult
     }
 
     private func copyableSuccessResult(_ responseText: String) -> String {
@@ -332,6 +374,25 @@ struct SmokeConsoleView: View {
             String(localized: "Smoke Metrics"),
             copyMetricLines(for: resultMetrics).joined(separator: "\n")
         ].joined(separator: "\n")
+    }
+
+    private var copyableErrorResult: String? {
+        guard let errorMessage else {
+            return nil
+        }
+
+        var sections = [
+            String(localized: "Smoke Error"),
+            errorMessage
+        ]
+
+        if let failureMetrics {
+            sections.append("")
+            sections.append(String(localized: "Smoke Metrics"))
+            sections.append(copyMetricLines(for: failureMetrics).joined(separator: "\n"))
+        }
+
+        return sections.joined(separator: "\n")
     }
 
     private func copyMetricLines(for result: ClientSmokeResult) -> [String] {
@@ -354,6 +415,19 @@ struct SmokeConsoleView: View {
         }
         lines.append("\(String(localized: "Request Mode")): \(displayRequestMode(result.requestMode))")
         lines.append("\(String(localized: "Timeout Used")): \(result.timeoutSeconds)s")
+
+        return lines
+    }
+
+    private func copyMetricLines(for metrics: SmokeFailureMetrics) -> [String] {
+        var lines: [String] = []
+
+        if let startedAt = metrics.startedAt {
+            lines.append("\(String(localized: "Started")): \(formattedStartedAt(startedAt))")
+        }
+        lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(metrics.elapsedSeconds))")
+        lines.append("\(String(localized: "Request Mode")): \(displayRequestMode(metrics.requestMode))")
+        lines.append("\(String(localized: "Timeout Used")): \(metrics.timeoutSeconds)s")
 
         return lines
     }
@@ -385,6 +459,7 @@ struct SmokeConsoleView: View {
     private func clearResult() {
         responseText = nil
         resultMetrics = nil
+        failureMetrics = nil
         errorMessage = nil
         didCopy = false
     }
@@ -424,4 +499,11 @@ struct SmokeConsoleView: View {
             return String(localized: "Non-streaming")
         }
     }
+}
+
+private struct SmokeFailureMetrics: Equatable {
+    var startedAt: Date?
+    var elapsedSeconds: Double
+    var requestMode: ClientSmokeResult.RequestMode
+    var timeoutSeconds: Int
 }

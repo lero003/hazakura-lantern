@@ -97,6 +97,9 @@ Implemented scope:
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, so local smoke evidence is easier to share without adding logs or
   persistence.
+- Failed Smoke Console attempts now show and copy bounded attempt metrics:
+  started time, elapsed time, request mode, and timeout used, keeping failure
+  evidence shareable without adding logs, history, or benchmark claims.
 - Smoke Console now opens with the same bounded local smoke prompt used by the
   copyable OpenAI-compatible curl command, keeping the explicit prompt editable
   while avoiding a blank first run.
@@ -260,14 +263,15 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 during the Smoke Console HTTP
-  error-snippet readability pass with
-  `git diff --check`, localization lint, `swift test` (214 XCTest tests,
+- Local source verification passed on 2026-05-23 during the Smoke Console
+  failed-attempt metrics pass with
+  `git diff --check`, localization lint, `swift test` (216 XCTest tests,
   0 failures), and
   `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
   `kLSNoExecutableErr` in this Codex environment. The previous 2026-05-23
-  disabled-run feedback and v1.2 usage-metrics passes also had passing
+  Smoke Console HTTP-snippet, disabled-run feedback, and v1.2 metrics passes
+  also had passing
   source-verification results.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
@@ -431,9 +435,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console max-token cap pass):
+Current source-verification status (2026-05-23 Smoke Console failed-attempt metrics pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (215 XCTest tests, 0 failures), and
+`swift test` (216 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.

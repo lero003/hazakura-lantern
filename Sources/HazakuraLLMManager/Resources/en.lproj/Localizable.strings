@@ -246,6 +246,7 @@
 "Running local endpoint smoke..." = "Running local endpoint smoke...";
 "Running Smoke" = "Running Smoke";
 "Smoke Console" = "Smoke Console";
+"Smoke Error" = "Smoke Error";
 "Smoke Metrics" = "Smoke Metrics";
 "Smoke Prompt" = "Smoke Prompt";
 "Smoke Response" = "Smoke Response";

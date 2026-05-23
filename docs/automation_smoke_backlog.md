@@ -41,11 +41,11 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-23 Smoke Console max-token cap run):
+Latest source-verification result (2026-05-23 Smoke Console failed-attempt metrics run):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 215 XCTest tests, 0 failures.
+- `swift test` passed: 216 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - App-bundle helper smoke was not rerun in this slice because no fresh Launch
   Services hypothesis or normal desktop verification environment was available.
@@ -59,6 +59,9 @@ Latest source-verification result (2026-05-23 Smoke Console max-token cap run):
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, keeping local smoke evidence shareable without adding logs or
   persistence.
+- Failed Smoke Console attempts now include started time, elapsed time, request
+  mode, and timeout used in the visible and copied failure evidence, without
+  adding logs, history, or benchmark claims.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
   into bounded readable summaries before showing them in the error surface.
 - The v1.2 metrics path now covers successful Smoke Console started time,
