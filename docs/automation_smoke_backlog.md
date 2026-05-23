@@ -41,11 +41,11 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-23 30-minute automation evidence refresh):
+Latest source-verification result (2026-05-23 Smoke Console response-shape fallback pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 221 XCTest tests, 0 failures.
+- `swift test` passed: 222 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - App-bundle helper smoke was not rerun in this slice because no fresh Launch
   Services hypothesis or normal desktop verification environment was available.
@@ -87,6 +87,10 @@ Latest source-verification result (2026-05-23 30-minute automation evidence refr
 - Smoke Console now preserves OpenAI-compatible `finish_reason` values such as
   `stop` or `length` in displayed and copied metrics, so bounded local smoke
   evidence shows whether the runtime stopped naturally or hit the request cap.
+- Smoke Console response parsing now falls back to legacy-compatible
+  `choices[0].text` when a local `/v1/chat/completions` response omits
+  `choices[0].message.content`, keeping odd but readable smoke evidence from
+  being reported as malformed JSON.
 
 Latest app-bundle helper smoke result (2026-05-21 current run):
 

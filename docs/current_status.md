@@ -129,6 +129,10 @@ Implemented scope:
 - Compatible `reasoning_content` smoke output is trimmed before display and
   copy, keeping last-run smoke evidence tidy without adding conversation
   history or persistence.
+- Smoke Console can now read legacy-compatible `choices[0].text` response text
+  when a local `/v1/chat/completions` endpoint omits
+  `choices[0].message.content`, keeping the same non-streaming smoke boundary
+  while widening response-shape tolerance.
 - Smoke Console Run, Copy Result, and Clear Result controls now expose localized
   accessibility hints that keep the surface framed as an explicit endpoint
   smoke, not saved conversation history.
@@ -307,6 +311,10 @@ Implemented scope:
 - Local source verification passed again on 2026-05-23 during the
   `reasoning_content` smoke-evidence trim pass with `git diff --check`,
   English/Japanese `Localizable.strings` lint, `swift test` (221 XCTest tests,
+  0 failures), and `swift build --disable-sandbox`.
+- Local source verification passed again on 2026-05-23 during the
+  `choices[0].text` smoke-response fallback pass with `git diff --check`,
+  English/Japanese `Localizable.strings` lint, `swift test` (222 XCTest tests,
   0 failures), and `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`

@@ -6,6 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added a Smoke Console response parser fallback for legacy-compatible
+  `/v1/chat/completions` responses that provide `choices[0].text` instead of
+  `choices[0].message.content`, keeping endpoint smoke evidence readable
+  without changing the non-streaming request boundary.
 - Trimmed surrounding whitespace from compatible `reasoning_content` smoke
   responses before display or copy, keeping Smoke Console evidence tidy without
   changing the non-streaming request boundary.

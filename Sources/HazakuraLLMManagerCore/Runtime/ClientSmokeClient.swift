@@ -184,7 +184,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
     private static func decodeResponse(from data: Data) throws -> DecodedClientSmokeResponse {
         do {
             let response = try JSONDecoder().decode(ChatCompletionsResponse.self, from: data)
-            guard let content = response.choices.first?.message.displayText else {
+            guard let content = response.choices.first?.displayText else {
                 throw ClientSmokeError.malformedResponse("No message content was found in the first choice.")
             }
             return DecodedClientSmokeResponse(
@@ -298,12 +298,22 @@ private struct ChatCompletionsResponse: Decodable {
     var usage: Usage?
 
     struct Choice: Decodable {
-        var message: Message
+        var message: Message?
+        var text: String?
         var finishReason: String?
 
         enum CodingKeys: String, CodingKey {
             case message
+            case text
             case finishReason = "finish_reason"
+        }
+
+        var displayText: String? {
+            if let content = message?.displayText {
+                return content
+            }
+
+            return text?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
         }
     }
 

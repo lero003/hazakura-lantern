@@ -103,6 +103,22 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertEqual(result.approximateOutputTokenCount, 6)
     }
 
+    func testRunUsesChoiceTextFallbackWhenMessageIsMissing() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"text":"  OK from legacy-compatible runtime\n","finish_reason":"stop"}]}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "OK from legacy-compatible runtime")
+        XCTAssertEqual(result.finishReason, "stop")
+        XCTAssertEqual(result.outputCharacterCount, 33)
+        XCTAssertEqual(result.approximateOutputTokenCount, 9)
+    }
+
     func testApproximateTokenMetricsAreOnlyReportedWhenUsageIsMissing() {
         let startedAt = Date(timeIntervalSince1970: 1_779_501_600)
         let result = ClientSmokeResult(responseText: "abcdefgh", startedAt: startedAt, elapsedSeconds: 2)
