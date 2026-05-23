@@ -140,6 +140,10 @@ Implemented scope:
   `timings.cache_n`, `timings.prompt_n`, and `timings.predicted_n` token counts
   as runtime-reported usage when standard `usage` is missing, keeping token
   evidence explicit instead of approximate.
+- Smoke Console metric parsing now tolerates numeric-string usage/timing values
+  and ignores malformed optional metric fields when the response text itself is
+  readable, so advisory metrics do not turn a valid smoke response into a
+  malformed-response failure.
 - Smoke Console now promotes runtime-reported or approximate output TPS ahead
   of the response body, and can display compatible `reasoning_content` output
   or text-part `message.content` arrays from OpenAI-compatible local runtimes.
@@ -506,9 +510,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console error-code snippet pass):
+Current source-verification status (2026-05-23 Smoke Console metric-tolerance pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (231 XCTest tests, 0 failures), and
+`swift test` (233 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.

@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Made Smoke Console metric parsing tolerant of numeric-string usage/timing
+  values and malformed optional metric fields, so a readable local smoke
+  response is not rejected just because advisory metrics are incompatible.
 - Improved Smoke Console HTTP error snippets so structured `error`, `detail`,
   or `message` payloads from compatible local endpoints, including
   FastAPI-style detail arrays and code-only error objects, are shown as

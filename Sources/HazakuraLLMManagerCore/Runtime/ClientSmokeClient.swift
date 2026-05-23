@@ -364,6 +364,19 @@ private struct ChatCompletionsResponse: Decodable {
     var usage: Usage?
     var timings: Timings?
 
+    enum CodingKeys: String, CodingKey {
+        case choices
+        case usage
+        case timings
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        choices = try container.decode([Choice].self, forKey: .choices)
+        usage = try? container.decode(Usage.self, forKey: .usage)
+        timings = try? container.decode(Timings.self, forKey: .timings)
+    }
+
     struct Choice: Decodable {
         var message: Message?
         var text: String?
@@ -467,6 +480,13 @@ private struct ChatCompletionsResponse: Decodable {
             case totalTokens = "total_tokens"
         }
 
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            promptTokens = container.decodeLossyPositiveIntIfPresent(forKey: .promptTokens)
+            completionTokens = container.decodeLossyPositiveIntIfPresent(forKey: .completionTokens)
+            totalTokens = container.decodeLossyPositiveIntIfPresent(forKey: .totalTokens)
+        }
+
         var clientSmokeUsage: ClientSmokeResult.Usage? {
             let usage = ClientSmokeResult.Usage(
                 promptTokens: promptTokens,
@@ -488,6 +508,14 @@ private struct ChatCompletionsResponse: Decodable {
             case promptTokenCount = "prompt_n"
             case predictedTokenCount = "predicted_n"
             case predictedPerSecond = "predicted_per_second"
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            cacheTokenCount = container.decodeLossyPositiveIntIfPresent(forKey: .cacheTokenCount)
+            promptTokenCount = container.decodeLossyPositiveIntIfPresent(forKey: .promptTokenCount)
+            predictedTokenCount = container.decodeLossyPositiveIntIfPresent(forKey: .predictedTokenCount)
+            predictedPerSecond = container.decodeLossyPositiveDoubleIfPresent(forKey: .predictedPerSecond)
         }
 
         var clientSmokeUsage: ClientSmokeResult.Usage? {
@@ -531,5 +559,56 @@ private struct ChatCompletionsResponse: Decodable {
 private extension String {
     var nilIfEmpty: String? {
         isEmpty ? nil : self
+    }
+}
+
+private extension KeyedDecodingContainer {
+    func decodeLossyPositiveIntIfPresent(forKey key: Key) -> Int? {
+        if let value = try? decode(Int.self, forKey: key), value > 0 {
+            return value
+        }
+
+        if let value = try? decode(Double.self, forKey: key) {
+            return positiveInteger(from: value)
+        }
+
+        if
+            let rawValue = try? decode(String.self, forKey: key),
+            let value = Double(rawValue.trimmingCharacters(in: .whitespacesAndNewlines))
+        {
+            return positiveInteger(from: value)
+        }
+
+        return nil
+    }
+
+    func decodeLossyPositiveDoubleIfPresent(forKey key: Key) -> Double? {
+        if let value = try? decode(Double.self, forKey: key), value.isFinite, value > 0 {
+            return value
+        }
+
+        if
+            let rawValue = try? decode(String.self, forKey: key),
+            let value = Double(rawValue.trimmingCharacters(in: .whitespacesAndNewlines)),
+            value.isFinite,
+            value > 0
+        {
+            return value
+        }
+
+        return nil
+    }
+
+    private func positiveInteger(from value: Double) -> Int? {
+        guard
+            value.isFinite,
+            value > 0,
+            value.rounded(.towardZero) == value,
+            value <= Double(Int.max)
+        else {
+            return nil
+        }
+
+        return Int(value)
     }
 }
