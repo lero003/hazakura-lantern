@@ -75,10 +75,12 @@
 "Local light for llama-server" = "Local light for llama-server";
 "Load Runtime Arguments" = "Load Runtime Arguments";
 "Logs" = "Logs";
+"Memory" = "Memory";
 "Model" = "Model";
 "Model ID" = "Model ID";
 "Model Name" = "Model Name";
 "No logs yet." = "No logs yet.";
+"Not running" = "Not running";
 "Open Setup Guide" = "Open Setup Guide";
 "Open copy options for the launch command, endpoint, environment, and smoke commands." = "Open copy options for the launch command, endpoint, environment, and smoke commands.";
 "Open Window" = "Open Window";
@@ -90,6 +92,7 @@
 "preset.description.qwen36_mtp_m4max" = "Qwen 3.6 MTP on M4 Max 128GB: uses 262K context, full Metal offload for model and MTP draft path, single slot, f16 KV, and Apple Silicon-friendly Flash Attention off.";
 "preset.description.qwen" = "Qwen: tries a longer context with KV cache compression. Memory use and speed still depend on model size.";
 "preset.description.standard" = "Standard: leaves core choices to the model and runtime. Start here, then adjust only what you need.";
+"Process" = "Process";
 "Process Status" = "Process Status";
 "Process Status:" = "Process Status:";
 "Profile" = "Profile";
@@ -179,6 +182,7 @@
 "This setup step is complete." = "This setup step is complete.";
 "Threads" = "Threads";
 "To update an existing Homebrew runtime, run this command manually:" = "To update an existing Homebrew runtime, run this command manually:";
+"Unavailable" = "Unavailable";
 "no_runtime_detected_guide" = "No installed llama-server was detected. Scan again or choose an existing executable manually.";
 "runtime_logs_in_memory_description" = "Runtime logs stay in memory and are not saved automatically.";
 "tooltip.additional_args.description" = "Additional arguments are passed directly to llama-server as optional launch flags.";

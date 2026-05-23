@@ -45,6 +45,9 @@ Implemented scope:
 - `llama-server` launch command construction without shell interpolation.
 - Copyable launch command preview for terminal inspection.
 - Start, stop, restart, process id, status, and in-memory stdout/stderr logs.
+- Dashboard now shows the managed process PID and current resident memory when
+  `llama-server` is running, keeping the visibility limited to Lantern's own
+  supervised process rather than broader system telemetry.
 - Startup now shows an explicit `Loading Model` state after the child process
   starts, then moves to `Running` only after known `llama-server` readiness log
   text is observed.

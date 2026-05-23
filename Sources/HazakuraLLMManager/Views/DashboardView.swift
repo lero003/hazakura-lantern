@@ -91,7 +91,17 @@ private struct DashboardControlCard: View {
                 StatusPill(controller: controller)
             }
 
-            controlButtons
+            processSummary
+
+            Divider()
+
+            ViewThatFits(in: .horizontal) {
+                controlButtons
+
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
+                    controlButtons
+                }
+            }
 
             if let message = controller.lastErrorMessage {
                 Label(message, systemImage: "exclamationmark.triangle")
@@ -106,6 +116,19 @@ private struct DashboardControlCard: View {
         .cornerRadius(DesignTokens.Bento.cornerRadius)
         .glassBorder()
         .designShadow(DesignTokens.Shadow.subtle)
+    }
+
+    private var processSummary: some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
+            metricRow(
+                title: "Process",
+                value: controller.processIdentifier.map { "pid \($0)" } ?? localized("Not running")
+            )
+            metricRow(
+                title: "Memory",
+                value: memorySummary
+            )
+        }
     }
 
     private var controlButtons: some View {
@@ -133,6 +156,38 @@ private struct DashboardControlCard: View {
             }
             .buttonStyle(SecondaryButtonStyle())
             .disabled(!controller.canRestart)
+        }
+    }
+
+    private var memorySummary: String {
+        guard controller.processIdentifier != nil else {
+            return localized("Not running")
+        }
+
+        guard let bytes = controller.processResidentMemoryBytes else {
+            return localized("Unavailable")
+        }
+
+        return ByteCountFormatter.string(fromByteCount: Int64(bytes), countStyle: .memory)
+    }
+
+    private func localized(_ key: String.LocalizationValue) -> String {
+        String(localized: key, bundle: .module)
+    }
+
+    private func metricRow(title: LocalizedStringKey, value: String) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: DesignTokens.Spacing.md) {
+            Text(title)
+                .font(DesignTokens.Font.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: 64, alignment: .leading)
+
+            Text(value)
+                .font(DesignTokens.Font.codeCaption)
+                .textSelection(.enabled)
+                .lineLimit(1)
+                .truncationMode(.middle)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

@@ -75,10 +75,12 @@
 "Local light for llama-server" = "llama-server のためのローカルランタン";
 "Load Runtime Arguments" = "引数一覧を読み込む";
 "Logs" = "ログ";
+"Memory" = "メモリ";
 "Model" = "モデル";
 "Model ID" = "モデルID";
 "Model Name" = "モデル名";
 "No logs yet." = "まだログはありません。";
+"Not running" = "未実行";
 "Open Setup Guide" = "セットアップガイドを開く";
 "Open copy options for the launch command, endpoint, environment, and smoke commands." = "起動コマンド、エンドポイント、環境変数、動作確認コマンドのコピー項目を開きます。";
 "Open Window" = "ウィンドウを開く";
@@ -90,6 +92,7 @@
 "preset.description.qwen36_mtp_m4max" = "【Qwen 3.6 MTP / M4 Max 128GB向け】262K文脈、モデル本体とMTP draft側をMetalへ寄せ、単一スロット、f16 KV、Apple Silicon向けにFlash Attention offで始めます。";
 "preset.description.qwen" = "【Qwen向け】長めの文脈とKVキャッシュ圧縮を試す設定です。メモリ使用量と速度はモデルサイズに依存します。";
 "preset.description.standard" = "【標準】モデルとランタイムに任せる設定です。まずはここから始め、必要な項目だけ調整します。";
+"Process" = "プロセス";
 "Process Status" = "プロセス状態";
 "Process Status:" = "プロセス状態:";
 "Profile" = "プロファイル";
@@ -179,6 +182,7 @@
 "This setup step is complete." = "このセットアップ手順は完了しています。";
 "Threads" = "スレッド";
 "To update an existing Homebrew runtime, run this command manually:" = "既存のHomebrewランタイムを更新する場合は、次を手動で実行してください:";
+"Unavailable" = "取得不可";
 "no_runtime_detected_guide" = "インストール済みの llama-server は検出されませんでした。再スキャンするか、既存の実行ファイルを手動で選択してください。";
 "runtime_logs_in_memory_description" = "ランタイムログはメモリ上に保持され、自動保存されません。";
 "tooltip.additional_args.description" = "追加引数は、任意の起動フラグとして llama-server に直接渡されます。";

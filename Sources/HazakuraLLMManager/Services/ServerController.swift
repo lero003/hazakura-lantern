@@ -20,6 +20,7 @@ final class ServerController: ObservableObject {
     @Published private(set) var recentPaths: RecentRuntimePaths
     @Published private(set) var detectedRuntimeExecutablePaths: [String]
     @Published private(set) var loadingElapsedSeconds: Int?
+    @Published private(set) var processResidentMemoryBytes: UInt64?
     @Published var configuration: RuntimeConfiguration
 
     private let adapter: any RuntimeAdapter
@@ -37,6 +38,7 @@ final class ServerController: ObservableObject {
     private var logBuffer = LogBuffer(maxEntries: 2_000)
     private var loadingStartedAt: Date?
     private var loadingTimer: Timer?
+    private var processResourceTimer: Timer?
     private var forceTerminationWorkItem: DispatchWorkItem?
     private var pendingStopCompletions: [() -> Void] = []
 
@@ -319,9 +321,11 @@ final class ServerController: ObservableObject {
             self.processIdentifier = process.processIdentifier
             self.status = .loading
             beginLoadingTimer()
+            beginProcessResourceMonitoring(pid: process.processIdentifier)
             appendLog("Process started with pid \(process.processIdentifier); waiting for runtime readiness.", stream: .info)
         } catch {
             endLoadingTimer()
+            endProcessResourceMonitoring()
             let message = processRunCommand.map {
                 adapter.describeLaunchProcessFailure(error, command: $0)
             } ?? error.localizedDescription
@@ -342,6 +346,7 @@ final class ServerController: ObservableObject {
             status = .stopped
             processIdentifier = nil
             endpointHealthStatus = .unchecked
+            endProcessResourceMonitoring()
             return false
         }
 
@@ -370,6 +375,7 @@ final class ServerController: ObservableObject {
             status = .stopped
             processIdentifier = nil
             endpointHealthStatus = .unchecked
+            endProcessResourceMonitoring()
             return
         }
 
@@ -526,6 +532,7 @@ final class ServerController: ObservableObject {
         process = nil
         processIdentifier = nil
         endLoadingTimer()
+        endProcessResourceMonitoring()
 
         let exitCode = terminatedProcess.terminationStatus
         let requestedAction: ProcessTerminationRequest? = switch status {
@@ -611,6 +618,43 @@ final class ServerController: ObservableObject {
         loadingTimer = nil
         loadingStartedAt = nil
         loadingElapsedSeconds = nil
+    }
+
+    private func beginProcessResourceMonitoring(pid: pid_t) {
+        processResourceTimer?.invalidate()
+        updateProcessResidentMemory(pid: pid)
+        processResourceTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
+            self?.updateProcessResidentMemory(pid: pid)
+        }
+    }
+
+    private func updateProcessResidentMemory(pid: pid_t) {
+        guard processIdentifier == pid, process?.isRunning == true else {
+            endProcessResourceMonitoring()
+            return
+        }
+
+        var info = proc_taskinfo()
+        let byteCount = proc_pidinfo(
+            pid,
+            PROC_PIDTASKINFO,
+            0,
+            &info,
+            Int32(MemoryLayout<proc_taskinfo>.size)
+        )
+
+        guard byteCount == Int32(MemoryLayout<proc_taskinfo>.size) else {
+            processResidentMemoryBytes = nil
+            return
+        }
+
+        processResidentMemoryBytes = UInt64(info.pti_resident_size)
+    }
+
+    private func endProcessResourceMonitoring() {
+        processResourceTimer?.invalidate()
+        processResourceTimer = nil
+        processResidentMemoryBytes = nil
     }
 
     private func clearError() {

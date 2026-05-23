@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added a clearer Dashboard server summary with the managed process PID and
+  current resident memory when `llama-server` is running, without adding CPU,
+  request, or benchmark tracking.
 - Added Smoke Console finish-reason metrics for OpenAI-compatible responses, so
   local smoke evidence can show cases such as `stop` or `length` alongside the
   existing elapsed time, usage, and timeout details.
