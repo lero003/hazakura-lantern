@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added Smoke Console request model ID evidence to successful and failed local
+  smoke metrics, so displayed and copied results identify both the tested
+  endpoint URL and model alias without adding history or benchmark behavior.
 - Hardened Smoke Console response parsing so compatible multi-choice
   `/v1/chat/completions` responses use the first readable choice instead of
   failing when an earlier choice is blank.

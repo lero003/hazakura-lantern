@@ -250,6 +250,9 @@ struct SmokeConsoleView: View {
         if let requestURL = result.requestURL {
             metricBadge(title: "Request URL", value: requestURL, valueLineLimit: 1)
         }
+        if let modelID = result.modelID {
+            metricBadge(title: "Model ID", value: modelID, valueLineLimit: 1)
+        }
         metricBadge(title: "Elapsed", value: formattedElapsed(result.elapsedSeconds))
         metricBadge(title: "Characters", value: "\(result.outputCharacterCount)")
         if let finishReason = result.finishReason {
@@ -273,6 +276,9 @@ struct SmokeConsoleView: View {
         }
         if let requestURL = metrics.requestURL {
             metricBadge(title: "Request URL", value: requestURL, valueLineLimit: 1)
+        }
+        if let modelID = metrics.modelID {
+            metricBadge(title: "Model ID", value: modelID, valueLineLimit: 1)
         }
         metricBadge(title: "Elapsed", value: formattedElapsed(metrics.elapsedSeconds))
         metricBadge(title: "Request Mode", value: displayRequestMode(metrics.requestMode))
@@ -359,7 +365,8 @@ struct SmokeConsoleView: View {
                         elapsedSeconds: Date().timeIntervalSince(startedAt),
                         requestMode: .nonStreaming,
                         timeoutSeconds: request.timeoutSeconds,
-                        requestURL: smokeError.requestURL ?? request.chatCompletionsURL
+                        requestURL: smokeError.requestURL ?? request.chatCompletionsURL,
+                        modelID: request.model
                     )
                     errorMessage = smokeError.message
                     isRunning = false
@@ -372,7 +379,8 @@ struct SmokeConsoleView: View {
                         elapsedSeconds: Date().timeIntervalSince(startedAt),
                         requestMode: .nonStreaming,
                         timeoutSeconds: request.timeoutSeconds,
-                        requestURL: request.chatCompletionsURL
+                        requestURL: request.chatCompletionsURL,
+                        modelID: request.model
                     )
                     errorMessage = error.localizedDescription
                     isRunning = false
@@ -431,6 +439,9 @@ struct SmokeConsoleView: View {
         if let requestURL = result.requestURL {
             lines.append("\(String(localized: "Request URL")): \(requestURL)")
         }
+        if let modelID = result.modelID {
+            lines.append("\(String(localized: "Model ID")): \(modelID)")
+        }
         if let outputTokensPerSecond = result.outputTokensPerSecond {
             let title = outputRateCopyTitle(for: result)
             lines.append("\(title): \(formattedApproximateRate(outputTokensPerSecond))")
@@ -461,6 +472,9 @@ struct SmokeConsoleView: View {
         }
         if let requestURL = metrics.requestURL {
             lines.append("\(String(localized: "Request URL")): \(requestURL)")
+        }
+        if let modelID = metrics.modelID {
+            lines.append("\(String(localized: "Model ID")): \(modelID)")
         }
         lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(metrics.elapsedSeconds))")
         lines.append("\(String(localized: "Request Mode")): \(displayRequestMode(metrics.requestMode))")
@@ -560,4 +574,5 @@ private struct SmokeFailureMetrics: Equatable {
     var requestMode: ClientSmokeResult.RequestMode
     var timeoutSeconds: Int
     var requestURL: String?
+    var modelID: String?
 }

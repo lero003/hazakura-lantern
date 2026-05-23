@@ -182,6 +182,9 @@ Implemented scope:
 - Smoke Console success metrics now retain and display the actual
   `/v1/chat/completions` request URL, and copied success evidence includes it
   with the other bounded metrics.
+- Smoke Console success and failure metrics now retain and copy the tested
+  model ID, keeping shared local smoke evidence tied to both endpoint URL and
+  model alias without adding chat history, persistence, or benchmark behavior.
 - Smoke Console Run, Copy Result, and Clear Result controls now expose localized
   accessibility hints that keep the surface framed as an explicit endpoint
   smoke, not saved conversation history.
