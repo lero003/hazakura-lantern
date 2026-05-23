@@ -108,6 +108,9 @@ Implemented scope:
 - Smoke Console metric labels now explicitly distinguish usage reported by the
   runtime from approximate output-token fallback metrics, keeping copied smoke
   evidence honest without adding benchmark claims.
+- Smoke Console Run, Copy Result, and Clear Result controls now expose localized
+  accessibility hints that keep the surface framed as an explicit endpoint
+  smoke, not saved conversation history.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.

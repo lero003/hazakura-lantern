@@ -228,8 +228,10 @@
 "Approx Decode Rate" = "概算生成速度";
 "Approx Output Tokens" = "概算出力トークン";
 "Clear Result" = "結果を消去";
+"Clear the displayed smoke response, error, and metrics." = "表示中の確認応答、エラー、メトリクスを消去します。";
 "Characters" = "文字数";
 "Copy Result" = "結果をコピー";
+"Copy the latest smoke response or error with visible metrics." = "直近の確認応答またはエラーを、表示中のメトリクスと一緒にコピーします。";
 "Elapsed" = "経過時間";
 "Enter a smoke prompt before running." = "実行する前に確認プロンプトを入力してください。";
 "Enter a short smoke prompt." = "短い確認プロンプトを入力してください。";
@@ -239,6 +241,7 @@
 "Request Mode" = "リクエスト方式";
 "Run a local endpoint smoke request to show the latest response here." = "ローカルエンドポイントの動作確認リクエストを実行すると、直近の応答がここに表示されます。";
 "Run Smoke" = "動作確認を実行";
+"Send the prompt to the selected local endpoint without saving a conversation." = "会話を保存せず、選択中のローカルエンドポイントへプロンプトを送信します。";
 "Resolve the endpoint configuration before running Smoke Console." = "Smoke Console を実行する前にエンドポイント設定を解決してください。";
 "Running local endpoint smoke..." = "ローカルエンドポイントを確認中...";
 "Running Smoke" = "確認中";

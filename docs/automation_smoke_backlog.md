@@ -299,6 +299,8 @@ Already covered on current `main`:
   only
 - main toolbar icon-only controls now expose localized accessibility labels and
   hints for Setup Guide, active profile import/export, and the Copy menu
+- Smoke Console Run, Copy Result, and Clear Result controls now expose localized
+  accessibility hints while preserving the explicit endpoint-smoke boundary
 
 Human decision:
 

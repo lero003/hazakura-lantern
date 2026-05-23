@@ -112,6 +112,7 @@ struct SmokeConsoleView: View {
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(!canRunSmoke)
+            .accessibilityHint(Text("Send the prompt to the selected local endpoint without saving a conversation."))
 
             Button {
                 copyResult()
@@ -120,6 +121,7 @@ struct SmokeConsoleView: View {
             }
             .buttonStyle(SecondaryButtonStyle())
             .disabled(copyableResult == nil)
+            .accessibilityHint(Text("Copy the latest smoke response or error with visible metrics."))
 
             Button {
                 clearResult()
@@ -128,6 +130,7 @@ struct SmokeConsoleView: View {
             }
             .buttonStyle(SecondaryButtonStyle())
             .disabled(responseText == nil && errorMessage == nil)
+            .accessibilityHint(Text("Clear the displayed smoke response, error, and metrics."))
         }
     }
 

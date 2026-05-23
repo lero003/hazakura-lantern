@@ -228,8 +228,10 @@
 "Approx Decode Rate" = "Approx Decode Rate";
 "Approx Output Tokens" = "Approx Output Tokens";
 "Clear Result" = "Clear Result";
+"Clear the displayed smoke response, error, and metrics." = "Clear the displayed smoke response, error, and metrics.";
 "Characters" = "Characters";
 "Copy Result" = "Copy Result";
+"Copy the latest smoke response or error with visible metrics." = "Copy the latest smoke response or error with visible metrics.";
 "Elapsed" = "Elapsed";
 "Enter a smoke prompt before running." = "Enter a smoke prompt before running.";
 "Enter a short smoke prompt." = "Enter a short smoke prompt.";
@@ -239,6 +241,7 @@
 "Request Mode" = "Request Mode";
 "Run a local endpoint smoke request to show the latest response here." = "Run a local endpoint smoke request to show the latest response here.";
 "Run Smoke" = "Run Smoke";
+"Send the prompt to the selected local endpoint without saving a conversation." = "Send the prompt to the selected local endpoint without saving a conversation.";
 "Resolve the endpoint configuration before running Smoke Console." = "Resolve the endpoint configuration before running Smoke Console.";
 "Running local endpoint smoke..." = "Running local endpoint smoke...";
 "Running Smoke" = "Running Smoke";
