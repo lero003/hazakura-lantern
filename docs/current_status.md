@@ -155,6 +155,10 @@ Implemented scope:
   and ignores malformed optional metric fields when the response text itself is
   readable, so advisory metrics do not turn a valid smoke response into a
   malformed-response failure.
+- Smoke Console metric parsing now preserves runtime-reported zero token counts
+  from standard `usage` and compatible `llama-server` `timings` payloads, so
+  explicit runtime evidence does not get replaced with approximate fallback
+  metrics.
 - Smoke Console now promotes runtime-reported or approximate output TPS ahead
   of the response body, and can display compatible `reasoning_content` output
   or text-part `message.content` arrays from OpenAI-compatible local runtimes.
@@ -387,6 +391,10 @@ Implemented scope:
   Smoke Console HTTP-error snippet pass with `git diff --check`,
   English/Japanese `Localizable.strings` lint, `swift test` (227 XCTest tests,
   0 failures), and `swift build --disable-sandbox`.
+- Local source verification passed again on 2026-05-24 during the zero-token
+  Smoke Console metrics pass with `git diff --check`, English/Japanese
+  `Localizable.strings` lint, `swift test` (246 XCTest tests, 0 failures), and
+  `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -549,14 +557,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 Smoke Console structured-message array error pass):
+Current source-verification status (2026-05-24 Smoke Console zero-token metrics pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (244 XCTest tests, 0 failures), and
+`swift test` (246 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available. Smoke Console HTTP error snippets now
-read compatible structured message arrays nested under `error.message`,
-`detail`, `msg`, or `code` before falling back to raw JSON.
+verification environment was available. Smoke Console metric parsing now
+preserves explicitly reported zero token counts from standard `usage` and
+compatible `llama-server` `timings` payloads.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

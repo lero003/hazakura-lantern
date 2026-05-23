@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Preserved zero-valued runtime-reported Smoke Console usage metrics, so local
+  endpoints that explicitly report `0` token counts do not fall back to
+  approximate output-token evidence.
 - Improved Smoke Console HTTP error snippets so structured `error.message`,
   `detail`, `msg`, or `code` fields that contain compatible message arrays can
   still collapse into readable bounded evidence instead of raw JSON.

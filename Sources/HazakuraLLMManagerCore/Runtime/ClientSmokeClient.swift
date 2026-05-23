@@ -558,9 +558,9 @@ private struct ChatCompletionsResponse: Decodable {
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            promptTokens = container.decodeLossyPositiveIntIfPresent(forKey: .promptTokens)
-            completionTokens = container.decodeLossyPositiveIntIfPresent(forKey: .completionTokens)
-            totalTokens = container.decodeLossyPositiveIntIfPresent(forKey: .totalTokens)
+            promptTokens = container.decodeLossyNonNegativeIntIfPresent(forKey: .promptTokens)
+            completionTokens = container.decodeLossyNonNegativeIntIfPresent(forKey: .completionTokens)
+            totalTokens = container.decodeLossyNonNegativeIntIfPresent(forKey: .totalTokens)
         }
 
         var clientSmokeUsage: ClientSmokeResult.Usage? {
@@ -588,16 +588,16 @@ private struct ChatCompletionsResponse: Decodable {
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            cacheTokenCount = container.decodeLossyPositiveIntIfPresent(forKey: .cacheTokenCount)
-            promptTokenCount = container.decodeLossyPositiveIntIfPresent(forKey: .promptTokenCount)
-            predictedTokenCount = container.decodeLossyPositiveIntIfPresent(forKey: .predictedTokenCount)
+            cacheTokenCount = container.decodeLossyNonNegativeIntIfPresent(forKey: .cacheTokenCount)
+            promptTokenCount = container.decodeLossyNonNegativeIntIfPresent(forKey: .promptTokenCount)
+            predictedTokenCount = container.decodeLossyNonNegativeIntIfPresent(forKey: .predictedTokenCount)
             predictedPerSecond = container.decodeLossyPositiveDoubleIfPresent(forKey: .predictedPerSecond)
         }
 
         var clientSmokeUsage: ClientSmokeResult.Usage? {
-            let promptTokens = sumPositiveTokenCounts(cacheTokenCount, promptTokenCount)
-            let completionTokens = positiveTokenCount(predictedTokenCount)
-            let totalTokens = sumPositiveTokenCounts(promptTokens, completionTokens)
+            let promptTokens = sumReportedTokenCounts(cacheTokenCount, promptTokenCount)
+            let completionTokens = predictedTokenCount
+            let totalTokens = sumReportedTokenCounts(promptTokens, completionTokens)
             let usage = ClientSmokeResult.Usage(
                 promptTokens: promptTokens,
                 completionTokens: completionTokens,
@@ -614,20 +614,13 @@ private struct ChatCompletionsResponse: Decodable {
             return predictedPerSecond
         }
 
-        private func positiveTokenCount(_ count: Int?) -> Int? {
-            guard let count, count > 0 else {
+        private func sumReportedTokenCounts(_ counts: Int?...) -> Int? {
+            let reportedCounts = counts.compactMap { $0 }
+            guard !reportedCounts.isEmpty else {
                 return nil
             }
 
-            return count
-        }
-
-        private func sumPositiveTokenCounts(_ counts: Int?...) -> Int? {
-            let total = counts
-                .compactMap(positiveTokenCount)
-                .reduce(0, +)
-
-            return total > 0 ? total : nil
+            return reportedCounts.reduce(0, +)
         }
     }
 }
@@ -643,20 +636,20 @@ private extension KeyedDecodingContainer {
         try? decode(String.self, forKey: key)
     }
 
-    func decodeLossyPositiveIntIfPresent(forKey key: Key) -> Int? {
-        if let value = try? decode(Int.self, forKey: key), value > 0 {
+    func decodeLossyNonNegativeIntIfPresent(forKey key: Key) -> Int? {
+        if let value = try? decode(Int.self, forKey: key), value >= 0 {
             return value
         }
 
         if let value = try? decode(Double.self, forKey: key) {
-            return positiveInteger(from: value)
+            return nonNegativeInteger(from: value)
         }
 
         if
             let rawValue = try? decode(String.self, forKey: key),
             let value = Double(rawValue.trimmingCharacters(in: .whitespacesAndNewlines))
         {
-            return positiveInteger(from: value)
+            return nonNegativeInteger(from: value)
         }
 
         return nil
@@ -679,10 +672,10 @@ private extension KeyedDecodingContainer {
         return nil
     }
 
-    private func positiveInteger(from value: Double) -> Int? {
+    private func nonNegativeInteger(from value: Double) -> Int? {
         guard
             value.isFinite,
-            value > 0,
+            value >= 0,
             value.rounded(.towardZero) == value,
             value <= Double(Int.max)
         else {
