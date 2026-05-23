@@ -145,6 +145,17 @@ struct SmokeConsoleView: View {
             Label("Start the server before running Smoke Console.", systemImage: "info.circle")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        } else if isPromptEmpty {
+            Label("Enter a smoke prompt before running.", systemImage: "text.cursor")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } else if controller.runtimeEndpoint == nil {
+            Label(
+                "Resolve the endpoint configuration before running Smoke Console.",
+                systemImage: "exclamationmark.triangle"
+            )
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -247,7 +258,11 @@ struct SmokeConsoleView: View {
         isServerRunning &&
             !isRunning &&
             controller.runtimeEndpoint != nil &&
-            !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            !isPromptEmpty
+    }
+
+    private var isPromptEmpty: Bool {
+        prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     private func runSmoke() {

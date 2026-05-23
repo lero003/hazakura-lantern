@@ -231,6 +231,7 @@
 "Characters" = "Characters";
 "Copy Response" = "Copy Response";
 "Elapsed" = "Elapsed";
+"Enter a smoke prompt before running." = "Enter a smoke prompt before running.";
 "Enter a short smoke prompt." = "Enter a short smoke prompt.";
 "Local Endpoint" = "Local Endpoint";
 "Mode" = "Mode";
@@ -238,6 +239,7 @@
 "No Smoke Result" = "No Smoke Result";
 "Run a local endpoint smoke request to show the latest response here." = "Run a local endpoint smoke request to show the latest response here.";
 "Run Smoke" = "Run Smoke";
+"Resolve the endpoint configuration before running Smoke Console." = "Resolve the endpoint configuration before running Smoke Console.";
 "Running local endpoint smoke..." = "Running local endpoint smoke...";
 "Running Smoke" = "Running Smoke";
 "Runtime Usage" = "Runtime Usage";

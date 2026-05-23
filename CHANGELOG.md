@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Clarified Smoke Console disabled-run feedback: when the server is running but
+  the prompt is blank or the endpoint configuration is invalid, the view now
+  shows localized next-step guidance instead of only disabling Run.
 - Added the first v1.2 Smoke Console metrics slice: successful local endpoint
   smoke results now record elapsed time, output character count, request mode,
   and timeout used, with focused core coverage and localized UI labels.

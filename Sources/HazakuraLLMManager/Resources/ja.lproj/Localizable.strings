@@ -231,6 +231,7 @@
 "Characters" = "文字数";
 "Copy Response" = "応答をコピー";
 "Elapsed" = "経過時間";
+"Enter a smoke prompt before running." = "実行する前に確認プロンプトを入力してください。";
 "Enter a short smoke prompt." = "短い確認プロンプトを入力してください。";
 "Local Endpoint" = "ローカルエンドポイント";
 "Mode" = "モード";
@@ -238,6 +239,7 @@
 "No Smoke Result" = "動作確認結果はありません";
 "Run a local endpoint smoke request to show the latest response here." = "ローカルエンドポイントの動作確認リクエストを実行すると、直近の応答がここに表示されます。";
 "Run Smoke" = "動作確認を実行";
+"Resolve the endpoint configuration before running Smoke Console." = "Smoke Console を実行する前にエンドポイント設定を解決してください。";
 "Running local endpoint smoke..." = "ローカルエンドポイントを確認中...";
 "Running Smoke" = "確認中";
 "Runtime Usage" = "ランタイム使用量";

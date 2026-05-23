@@ -86,6 +86,8 @@ Implemented scope:
   destination for a user-triggered local endpoint smoke request with prompt,
   run state, response display, copy response, clear result, and localized
   app-owned UI strings.
+- Smoke Console now explains why Run is unavailable when the server is running
+  but the smoke prompt is blank or the endpoint configuration cannot be built.
 - The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
   elapsed time, output character count, runtime-reported usage when available,
   explicitly approximate fallback output token count/rate, request mode, and
@@ -240,13 +242,14 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 during the v1.2 usage-metrics
-  pass with
+- Local source verification passed on 2026-05-23 during the Smoke Console
+  disabled-run feedback pass with
   `git diff --check`, localization lint, `swift test` (213 XCTest tests,
   0 failures), and
   `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
-  `kLSNoExecutableErr` in this Codex environment.
+  `kLSNoExecutableErr` in this Codex environment. The previous 2026-05-23
+  v1.2 usage-metrics pass also had the same source-verification result.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -409,7 +412,7 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 09:05 JST v1.2 usage-metrics pass):
+Current source-verification status (2026-05-23 09:35 JST Smoke Console disabled-run feedback pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (213 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
