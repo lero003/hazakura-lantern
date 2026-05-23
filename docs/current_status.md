@@ -123,6 +123,9 @@ Implemented scope:
 - Smoke Console metric labels now explicitly distinguish usage reported by the
   runtime from approximate output-token fallback metrics, keeping copied smoke
   evidence honest without adding benchmark claims.
+- Smoke Console now reads compatible `llama-server`
+  `timings.predicted_per_second` values as Runtime TPS when present, while still
+  falling back to elapsed-time or approximate rates without benchmark claims.
 - Smoke Console now promotes runtime-reported or approximate output TPS ahead
   of the response body, and can display compatible `reasoning_content` output
   or text-part `message.content` arrays from OpenAI-compatible local runtimes.
@@ -316,6 +319,10 @@ Implemented scope:
   `choices[0].text` smoke-response fallback pass with `git diff --check`,
   English/Japanese `Localizable.strings` lint, `swift test` (222 XCTest tests,
   0 failures), and `swift build --disable-sandbox`.
+- Local source verification passed again on 2026-05-23 during the
+  runtime-reported Smoke Console TPS pass with `git diff --check`,
+  English/Japanese `Localizable.strings` lint, `swift test` (223 XCTest tests,
+  0 failures), and `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -478,17 +485,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 30-minute automation evidence refresh):
+Current source-verification status (2026-05-23 runtime-reported Smoke Console TPS pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (221 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
-in that slice because no fresh Launch Services hypothesis or normal desktop
+`swift test` (223 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
+that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.
-
-Current source-verification status (2026-05-23 `reasoning_content`
-smoke-evidence trim pass): `git diff --check`, English/Japanese
-`Localizable.strings` lint, `swift test` (221 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

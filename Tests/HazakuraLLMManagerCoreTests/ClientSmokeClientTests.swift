@@ -54,7 +54,7 @@ final class ClientSmokeClientTests: XCTestCase {
     func testRunCapturesRuntimeReportedUsageWhenAvailable() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,
-            body: #"{"choices":[{"message":{"content":"OK"},"finish_reason":"stop"}],"usage":{"prompt_tokens":8,"completion_tokens":2,"total_tokens":10}}"#
+            body: #"{"choices":[{"message":{"content":"OK"},"finish_reason":"stop"}],"usage":{"prompt_tokens":8,"completion_tokens":2,"total_tokens":10},"timings":{"predicted_per_second":12.5}}"#
         )
         let client = ClientSmokeClient(session: makeSession())
         let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
@@ -67,10 +67,27 @@ final class ClientSmokeClientTests: XCTestCase {
             ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2, totalTokens: 10)
         )
         XCTAssertEqual(result.finishReason, "stop")
-        XCTAssertNotNil(result.outputTokensPerSecond)
+        XCTAssertEqual(result.outputTokensPerSecond, 12.5)
+        XCTAssertTrue(result.usesRuntimeReportedOutputRate)
         XCTAssertFalse(result.usesApproximateOutputRate)
         XCTAssertNil(result.approximateOutputTokenCount)
         XCTAssertNil(result.approximateOutputTokensPerSecond)
+    }
+
+    func testRunFallsBackToElapsedUsageRateWhenRuntimeTimingIsMissing() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"OK"}}],"usage":{"completion_tokens":2}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.runtimeUsage, ClientSmokeResult.Usage(completionTokens: 2))
+        XCTAssertNotNil(result.outputTokensPerSecond)
+        XCTAssertFalse(result.usesRuntimeReportedOutputRate)
+        XCTAssertFalse(result.usesApproximateOutputRate)
     }
 
     func testRunUsesReasoningContentWhenMessageContentIsEmpty() async throws {

@@ -41,11 +41,11 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-23 Smoke Console response-shape fallback pass):
+Latest source-verification result (2026-05-23 runtime-reported Smoke Console TPS pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 222 XCTest tests, 0 failures.
+- `swift test` passed: 223 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - App-bundle helper smoke was not rerun in this slice because no fresh Launch
   Services hypothesis or normal desktop verification environment was available.
@@ -74,9 +74,12 @@ Latest source-verification result (2026-05-23 Smoke Console response-shape fallb
   manual reports to fix one concrete rough edge without turning metrics into
   benchmarking.
 - Smoke Console metric labels now say "Usage Reported by Runtime",
-  "Approx Output Tokens", "TPS", "Approx TPS", "Request Mode", and "Timeout
-  Used" in localized UI copy, so copied smoke evidence is clearer about
-  reported versus approximate values.
+  "Approx Output Tokens", "Runtime TPS", "TPS", "Approx TPS", "Request Mode",
+  and "Timeout Used" in localized UI copy, so copied smoke evidence is clearer
+  about runtime-reported versus approximate values.
+- Smoke Console now reads compatible `llama-server`
+  `timings.predicted_per_second` values as Runtime TPS when present, while
+  keeping elapsed-time and approximate fallback rates clearly labeled.
 - Smoke Console can now display compatible `reasoning_content` output and
   text-part `message.content` arrays from OpenAI-compatible local runtimes, and
   the app-side port availability probe no longer treats recently closed local

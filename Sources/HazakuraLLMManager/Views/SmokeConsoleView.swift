@@ -239,7 +239,7 @@ struct SmokeConsoleView: View {
     private func metricsBadges(for result: ClientSmokeResult) -> some View {
         if let outputTokensPerSecond = result.outputTokensPerSecond {
             metricBadge(
-                title: result.usesApproximateOutputRate ? "Approx TPS" : "TPS",
+                title: outputRateTitle(for: result),
                 value: formattedApproximateRate(outputTokensPerSecond),
                 isProminent: true
             )
@@ -414,7 +414,7 @@ struct SmokeConsoleView: View {
             lines.append("\(String(localized: "Started")): \(formattedStartedAt(startedAt))")
         }
         if let outputTokensPerSecond = result.outputTokensPerSecond {
-            let title = result.usesApproximateOutputRate ? String(localized: "Approx TPS") : String(localized: "TPS")
+            let title = outputRateCopyTitle(for: result)
             lines.append("\(title): \(formattedApproximateRate(outputTokensPerSecond))")
         }
         lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(result.elapsedSeconds))")
@@ -507,6 +507,22 @@ struct SmokeConsoleView: View {
 
     private func formattedApproximateRate(_ tokensPerSecond: Double) -> String {
         String(format: "%.1f/s", tokensPerSecond)
+    }
+
+    private func outputRateTitle(for result: ClientSmokeResult) -> LocalizedStringKey {
+        if result.usesRuntimeReportedOutputRate {
+            return "Runtime TPS"
+        }
+
+        return result.usesApproximateOutputRate ? "Approx TPS" : "TPS"
+    }
+
+    private func outputRateCopyTitle(for result: ClientSmokeResult) -> String {
+        if result.usesRuntimeReportedOutputRate {
+            return String(localized: "Runtime TPS")
+        }
+
+        return result.usesApproximateOutputRate ? String(localized: "Approx TPS") : String(localized: "TPS")
     }
 
     private func displayRequestMode(_ requestMode: ClientSmokeResult.RequestMode) -> String {

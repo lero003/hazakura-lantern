@@ -32,6 +32,7 @@ public struct ClientSmokeResult: Equatable, Sendable {
     public var approximateOutputTokensPerSecond: Double?
     public var outputTokensPerSecond: Double?
     public var usesApproximateOutputRate: Bool
+    public var usesRuntimeReportedOutputRate: Bool
     public var finishReason: String?
 
     public init(
@@ -41,6 +42,7 @@ public struct ClientSmokeResult: Equatable, Sendable {
         requestMode: RequestMode = .nonStreaming,
         timeoutSeconds: Int = 60,
         runtimeUsage: Usage? = nil,
+        runtimeOutputTokensPerSecond: Double? = nil,
         finishReason: String? = nil
     ) {
         self.responseText = responseText
@@ -65,16 +67,22 @@ public struct ClientSmokeResult: Equatable, Sendable {
             self.approximateOutputTokensPerSecond = nil
         }
 
-        if
+        if let runtimeOutputTokensPerSecond, runtimeOutputTokensPerSecond > 0 {
+            self.outputTokensPerSecond = runtimeOutputTokensPerSecond
+            self.usesApproximateOutputRate = false
+            self.usesRuntimeReportedOutputRate = true
+        } else if
             let completionTokens = self.runtimeUsage?.completionTokens,
             self.elapsedSeconds > 0,
             completionTokens > 0
         {
             self.outputTokensPerSecond = Double(completionTokens) / self.elapsedSeconds
             self.usesApproximateOutputRate = false
+            self.usesRuntimeReportedOutputRate = false
         } else {
             self.outputTokensPerSecond = self.approximateOutputTokensPerSecond
             self.usesApproximateOutputRate = self.approximateOutputTokensPerSecond != nil
+            self.usesRuntimeReportedOutputRate = false
         }
     }
 
@@ -172,6 +180,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
                 requestMode: .nonStreaming,
                 timeoutSeconds: request.timeoutSeconds,
                 runtimeUsage: decodedResponse.usage,
+                runtimeOutputTokensPerSecond: decodedResponse.runtimeOutputTokensPerSecond,
                 finishReason: decodedResponse.finishReason
             )
         } catch let smokeError as ClientSmokeError {
@@ -190,6 +199,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             return DecodedClientSmokeResponse(
                 responseText: content,
                 usage: response.usage?.clientSmokeUsage,
+                runtimeOutputTokensPerSecond: response.timings?.runtimeOutputTokensPerSecond,
                 finishReason: response.choices.first?.finishReason
             )
         } catch let smokeError as ClientSmokeError {
@@ -259,6 +269,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
 private struct DecodedClientSmokeResponse {
     var responseText: String
     var usage: ClientSmokeResult.Usage?
+    var runtimeOutputTokensPerSecond: Double?
     var finishReason: String?
 }
 
@@ -296,6 +307,7 @@ private struct OpenAIErrorResponse: Decodable {
 private struct ChatCompletionsResponse: Decodable {
     var choices: [Choice]
     var usage: Usage?
+    var timings: Timings?
 
     struct Choice: Decodable {
         var message: Message?
@@ -407,6 +419,22 @@ private struct ChatCompletionsResponse: Decodable {
                 totalTokens: totalTokens
             )
             return usage.hasReportedTokens ? usage : nil
+        }
+    }
+
+    struct Timings: Decodable {
+        var predictedPerSecond: Double?
+
+        enum CodingKeys: String, CodingKey {
+            case predictedPerSecond = "predicted_per_second"
+        }
+
+        var runtimeOutputTokensPerSecond: Double? {
+            guard let predictedPerSecond, predictedPerSecond > 0 else {
+                return nil
+            }
+
+            return predictedPerSecond
         }
     }
 }
