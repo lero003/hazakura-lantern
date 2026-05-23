@@ -102,6 +102,9 @@ Implemented scope:
 - Smoke Console HTTP error snippets now prefer OpenAI-compatible
   `error.message` payloads when present, so local runtime errors are shown as
   readable bounded messages instead of raw JSON.
+- Smoke Console HTTP error snippets now also prefer structured top-level
+  `detail` or `message` payloads when present, keeping compatible local
+  endpoint failures readable without adding logs, history, or persistence.
 - Smoke Console result copy now copies the latest success response with the
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, so local smoke evidence is easier to share without adding logs or
@@ -326,6 +329,10 @@ Implemented scope:
 - Local source verification passed again on 2026-05-23 during the
   runtime-reported Smoke Console TPS pass with `git diff --check`,
   English/Japanese `Localizable.strings` lint, `swift test` (223 XCTest tests,
+  0 failures), and `swift build --disable-sandbox`.
+- Local source verification passed again on 2026-05-23 during the structured
+  Smoke Console HTTP-error snippet pass with `git diff --check`,
+  English/Japanese `Localizable.strings` lint, `swift test` (227 XCTest tests,
   0 failures), and `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`

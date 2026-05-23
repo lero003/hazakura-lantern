@@ -278,6 +278,34 @@ final class ClientSmokeClientTests: XCTestCase {
         )
     }
 
+    func testRunMapsTopLevelDetailErrorSnippet() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 422,
+            body: #"{"detail":"model is still loading\ntry again shortly"}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(422, bodySnippet: "model is still loading try again shortly")
+        )
+    }
+
+    func testRunMapsTopLevelMessageErrorSnippet() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 404,
+            body: #"{"message":"chat endpoint not found"}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(404, bodySnippet: "chat endpoint not found")
+        )
+    }
+
     func testRunMapsMalformedResponseJSON() async {
         ClientSmokeURLProtocol.result = .success(statusCode: 200, body: #"{"choices":[]}"#)
         let client = ClientSmokeClient(session: makeSession())

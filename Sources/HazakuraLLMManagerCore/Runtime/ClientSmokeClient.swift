@@ -237,7 +237,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             return nil
         }
 
-        let normalizedBody = normalizedSnippetText(Self.openAIErrorMessage(from: data) ?? body)
+        let normalizedBody = normalizedSnippetText(Self.structuredErrorMessage(from: data) ?? body)
 
         let limit = 240
         if normalizedBody.count <= limit {
@@ -253,10 +253,10 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             .joined(separator: " ")
     }
 
-    private static func openAIErrorMessage(from data: Data) -> String? {
+    private static func structuredErrorMessage(from data: Data) -> String? {
         guard
             let response = try? JSONDecoder().decode(OpenAIErrorResponse.self, from: data),
-            let message = response.error.message?.trimmingCharacters(in: .whitespacesAndNewlines),
+            let message = response.message?.trimmingCharacters(in: .whitespacesAndNewlines),
             !message.isEmpty
         else {
             return nil
@@ -274,7 +274,19 @@ private struct DecodedClientSmokeResponse {
 }
 
 private struct OpenAIErrorResponse: Decodable {
-    var error: ErrorPayload
+    var error: ErrorPayload?
+    var detail: ErrorPayload?
+    var topLevelMessage: String?
+
+    var message: String? {
+        error?.message ?? detail?.message ?? topLevelMessage
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case error
+        case detail
+        case topLevelMessage = "message"
+    }
 
     enum ErrorPayload: Decodable {
         case message(String?)
