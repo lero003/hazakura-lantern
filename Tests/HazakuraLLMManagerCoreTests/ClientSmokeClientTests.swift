@@ -534,6 +534,24 @@ final class ClientSmokeClientTests: XCTestCase {
         )
     }
 
+    func testRunMapsStructuredErrorFallbackWhenPreferredMessageIsBlank() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 503,
+            body: #"{"error":{"message":"   "},"detail":"model queue is full"}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(
+                503,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "model queue is full"
+            )
+        )
+    }
+
     func testRunMapsTopLevelMessageErrorSnippet() async {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 404,

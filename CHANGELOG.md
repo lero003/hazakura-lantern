@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Improved Smoke Console HTTP error snippets so blank preferred structured
+  error messages can fall through to readable sibling `detail` or `message`
+  fields instead of showing raw JSON.
 - Added Smoke Console request model ID evidence to successful and failed local
   smoke metrics, so displayed and copied results identify both the tested
   endpoint URL and model alias without adding history or benchmark behavior.

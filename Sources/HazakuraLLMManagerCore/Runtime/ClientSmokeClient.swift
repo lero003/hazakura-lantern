@@ -311,7 +311,9 @@ private struct OpenAIErrorResponse: Decodable {
     var topLevelMessage: String?
 
     var message: String? {
-        error?.message ?? detail?.message ?? topLevelMessage
+        [error?.message, detail?.message, topLevelMessage]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
     }
 
     enum CodingKeys: String, CodingKey {
