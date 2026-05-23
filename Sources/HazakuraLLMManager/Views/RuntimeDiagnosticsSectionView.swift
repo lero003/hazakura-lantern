@@ -7,139 +7,146 @@ struct RuntimeDiagnosticsSectionView: View {
     @State private var isRuntimeArgumentsExpanded = false
 
     var body: some View {
-        GridRow {
-            VStack(alignment: .leading, spacing: 14) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Runtime Diagnostics")
-                        .font(.headline)
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Runtime Check")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
 
-                    Text("Check local runtime version, supported options, and advisory update metadata.")
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 8) {
+                        runtimeCheckControls
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        runtimeCheckControls
+                    }
+                }
+
+                if let message = localizedRuntimeCapabilityProbeMessage {
+                    Label(message, systemImage: "info.circle")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                if isRuntimeArgumentsExpanded {
+                    runtimeArgumentsHelp
+                        .padding(.top, 2)
+                }
+
+                if let advice = localizedRuntimeInstallSourceAdvice {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Label(advice.title, systemImage: "arrow.triangle.2.circlepath.circle")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Text(advice.detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+                }
+            }
+
+            Divider()
+                .opacity(0.5)
+                .padding(.vertical, 2)
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Runtime Update")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                if let advice = localizedUpdateReadinessAdvice {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Label(advice.title, systemImage: "checklist")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Text(advice.detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(3)
+                    }
+                }
+
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 8) {
+                        runtimeUpdateControls
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        runtimeUpdateControls
+                    }
+                }
+
+                if let message = localizedRuntimeUpdateDisplayMessage {
+                    Label(message, systemImage: "arrow.down.circle")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
+            }
+        }
+    }
 
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Runtime Check")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.secondary)
+    @ViewBuilder
+    private var runtimeCheckControls: some View {
+        Button {
+            controller.checkRuntimeCapabilities()
+        } label: {
+            Label("Check Runtime", systemImage: "checkmark.shield")
+        }
+        .buttonStyle(SecondaryButtonStyle())
+        .disabled(controller.isRuntimeCapabilityProbeRunning)
 
-                    HStack(spacing: 8) {
-                        Button {
-                            controller.checkRuntimeCapabilities()
-                        } label: {
-                            Label("Check Runtime", systemImage: "checkmark.shield")
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        .disabled(controller.isRuntimeCapabilityProbeRunning)
+        if controller.isRuntimeCapabilityProbeRunning {
+            ProgressView()
+                .controlSize(.small)
+        }
 
-                        if controller.isRuntimeCapabilityProbeRunning {
-                            ProgressView()
-                                .controlSize(.small)
-                        }
-
-                        Button {
-                            if runtimeHelpOutput == nil {
-                                isRuntimeArgumentsExpanded = true
-                                controller.checkRuntimeCapabilities()
-                            } else {
-                                withAnimation(.easeInOut(duration: 0.15)) {
-                                    isRuntimeArgumentsExpanded.toggle()
-                                }
-                            }
-                        } label: {
-                            Label(
-                                LocalizedStringKey(runtimeArgumentsButtonTitle),
-                                systemImage: "list.bullet.rectangle"
-                            )
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        .disabled(controller.isRuntimeCapabilityProbeRunning)
-                    }
-
-                    if let message = localizedRuntimeCapabilityProbeMessage {
-                        Label(message, systemImage: "info.circle")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    if isRuntimeArgumentsExpanded {
-                        runtimeArgumentsHelp
-                            .padding(.top, 2)
-                    }
-
-                    if let advice = localizedRuntimeInstallSourceAdvice {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Label(advice.title, systemImage: "arrow.triangle.2.circlepath.circle")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-
-                            Text(advice.detail)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(2)
-                        }
-                    }
-                }
-
-                Divider()
-                    .opacity(0.5)
-                    .padding(.vertical, 2)
-
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Runtime Update")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.secondary)
-
-                    if let advice = localizedUpdateReadinessAdvice {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Label(advice.title, systemImage: "checklist")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-
-                            Text(advice.detail)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(3)
-                        }
-                    }
-
-                    HStack(spacing: 8) {
-                        Picker("Runtime Update Target", selection: $controller.runtimeUpdateCheckTarget) {
-                            ForEach(RuntimeUpdateCheckTarget.allCases) { target in
-                                Text(target.displayName)
-                                    .tag(target)
-                            }
-                        }
-                        .labelsHidden()
-                        .pickerStyle(.menu)
-                        .frame(width: 150)
-
-                        Button {
-                            controller.checkRuntimeUpdates()
-                        } label: {
-                            Label("Check for Updates", systemImage: "arrow.down.circle")
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        .disabled(controller.isRuntimeUpdateCheckRunning)
-
-                        if controller.isRuntimeUpdateCheckRunning {
-                            ProgressView()
-                                .controlSize(.small)
-                        }
-                    }
-
-                    if let message = localizedRuntimeUpdateDisplayMessage {
-                        Label(message, systemImage: "arrow.down.circle")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
+        Button {
+            if runtimeHelpOutput == nil {
+                isRuntimeArgumentsExpanded = true
+                controller.checkRuntimeCapabilities()
+            } else {
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isRuntimeArgumentsExpanded.toggle()
                 }
             }
-            .padding(.top, 6)
-            .padding(.bottom, 10)
-            .gridCellColumns(2)
+        } label: {
+            Label(
+                LocalizedStringKey(runtimeArgumentsButtonTitle),
+                systemImage: "list.bullet.rectangle"
+            )
+        }
+        .buttonStyle(SecondaryButtonStyle())
+        .disabled(controller.isRuntimeCapabilityProbeRunning)
+    }
+
+    @ViewBuilder
+    private var runtimeUpdateControls: some View {
+        Picker("Runtime Update Target", selection: $controller.runtimeUpdateCheckTarget) {
+            ForEach(RuntimeUpdateCheckTarget.allCases) { target in
+                Text(target.displayName)
+                    .tag(target)
+            }
+        }
+        .labelsHidden()
+        .pickerStyle(.menu)
+        .frame(width: 150)
+
+        Button {
+            controller.checkRuntimeUpdates()
+        } label: {
+            Label("Check for Updates", systemImage: "arrow.down.circle")
+        }
+        .buttonStyle(SecondaryButtonStyle())
+        .disabled(controller.isRuntimeUpdateCheckRunning)
+
+        if controller.isRuntimeUpdateCheckRunning {
+            ProgressView()
+                .controlSize(.small)
         }
     }
 

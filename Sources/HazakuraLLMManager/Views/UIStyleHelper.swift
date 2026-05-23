@@ -109,7 +109,7 @@ struct GlassTextFieldModifier: ViewModifier {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
                         LinearGradient(
-                            colors: isFocused ? [Color.orange, Color(red: 0.95, green: 0.65, blue: 0.15)] : [Color.white.opacity(0.1)],
+                            colors: isFocused ? [Color.accentColor, Color.accentColor.opacity(0.72)] : [Color.white.opacity(0.1)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
@@ -117,7 +117,7 @@ struct GlassTextFieldModifier: ViewModifier {
                     )
             )
             .shadow(
-                color: isFocused ? Color.orange.opacity(0.15) : Color.clear,
+                color: isFocused ? Color.accentColor.opacity(0.15) : Color.clear,
                 radius: 4,
                 x: 0,
                 y: 2
