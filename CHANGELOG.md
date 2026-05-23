@@ -6,6 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added Smoke Console runtime-usage parsing for compatible `usage.input_tokens`
+  and `usage.output_tokens` fields, while keeping standard
+  `prompt_tokens` / `completion_tokens` values authoritative when both shapes
+  are present.
 - Preserved zero-valued runtime-reported Smoke Console usage metrics, so local
   endpoints that explicitly report `0` token counts do not fall back to
   approximate output-token evidence.

@@ -162,6 +162,41 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertNil(result.approximateOutputTokenCount)
     }
 
+    func testRunReadsCompatibleInputOutputUsageAliases() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"OK"}}],"usage":{"input_tokens":8,"output_tokens":"2"}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(
+            result.runtimeUsage,
+            ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2)
+        )
+        XCTAssertNotNil(result.outputTokensPerSecond)
+        XCTAssertNil(result.approximateOutputTokenCount)
+    }
+
+    func testRunPrefersStandardUsageOverCompatibleAliases() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"OK"}}],"usage":{"prompt_tokens":8,"completion_tokens":2,"total_tokens":10,"input_tokens":80,"output_tokens":20}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(
+            result.runtimeUsage,
+            ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2, totalTokens: 10)
+        )
+        XCTAssertNil(result.approximateOutputTokenCount)
+    }
+
     func testRunKeepsZeroRuntimeReportedUsageValues() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,

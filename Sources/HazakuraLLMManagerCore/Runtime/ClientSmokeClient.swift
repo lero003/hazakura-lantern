@@ -554,12 +554,16 @@ private struct ChatCompletionsResponse: Decodable {
             case promptTokens = "prompt_tokens"
             case completionTokens = "completion_tokens"
             case totalTokens = "total_tokens"
+            case inputTokens = "input_tokens"
+            case outputTokens = "output_tokens"
         }
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             promptTokens = container.decodeLossyNonNegativeIntIfPresent(forKey: .promptTokens)
+                ?? container.decodeLossyNonNegativeIntIfPresent(forKey: .inputTokens)
             completionTokens = container.decodeLossyNonNegativeIntIfPresent(forKey: .completionTokens)
+                ?? container.decodeLossyNonNegativeIntIfPresent(forKey: .outputTokens)
             totalTokens = container.decodeLossyNonNegativeIntIfPresent(forKey: .totalTokens)
         }
 

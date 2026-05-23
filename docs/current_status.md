@@ -159,6 +159,10 @@ Implemented scope:
   from standard `usage` and compatible `llama-server` `timings` payloads, so
   explicit runtime evidence does not get replaced with approximate fallback
   metrics.
+- Smoke Console metric parsing now also treats compatible `usage.input_tokens`
+  and `usage.output_tokens` fields as runtime-reported usage, while keeping
+  standard `prompt_tokens` / `completion_tokens` values authoritative when both
+  shapes are present.
 - Smoke Console now promotes runtime-reported or approximate output TPS ahead
   of the response body, and can display compatible `reasoning_content` output
   or text-part `message.content` arrays from OpenAI-compatible local runtimes.
