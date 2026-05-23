@@ -350,6 +350,24 @@ final class ClientSmokeClientTests: XCTestCase {
         )
     }
 
+    func testRunMapsStructuredErrorCodeWhenMessageIsMissing() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 400,
+            body: #"{"error":{"code":"context_window_exceeded"}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(
+                400,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "context_window_exceeded"
+            )
+        )
+    }
+
     func testRunMapsTopLevelMessageErrorSnippet() async {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 404,

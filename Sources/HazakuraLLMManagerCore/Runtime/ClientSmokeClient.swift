@@ -347,13 +347,14 @@ private struct OpenAIErrorResponse: Decodable {
             }
 
             let payload = try container.decode(MessagePayload.self)
-            self = .message(payload.message ?? payload.detail ?? payload.msg)
+            self = .message(payload.message ?? payload.detail ?? payload.msg ?? payload.code)
         }
 
         private struct MessagePayload: Decodable {
             var message: String?
             var detail: String?
             var msg: String?
+            var code: String?
         }
     }
 }
