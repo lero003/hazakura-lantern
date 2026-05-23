@@ -423,10 +423,12 @@ private struct ChatCompletionsResponse: Decodable {
     struct Message: Decodable {
         var content: MessageContent?
         var reasoningContent: String?
+        var reasoning: String?
 
         enum CodingKeys: String, CodingKey {
             case content
             case reasoningContent = "reasoning_content"
+            case reasoning
         }
 
         var displayText: String? {
@@ -434,11 +436,13 @@ private struct ChatCompletionsResponse: Decodable {
                 return content
             }
 
-            if
-                let reasoningContent = reasoningContent?.trimmingCharacters(in: .whitespacesAndNewlines),
-                !reasoningContent.isEmpty
-            {
-                return reasoningContent
+            for candidate in [reasoningContent, reasoning] {
+                if
+                    let text = candidate?.trimmingCharacters(in: .whitespacesAndNewlines),
+                    !text.isEmpty
+                {
+                    return text
+                }
             }
 
             return nil

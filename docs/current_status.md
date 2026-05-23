@@ -169,6 +169,9 @@ Implemented scope:
 - Compatible `reasoning_content` smoke output is trimmed before display and
   copy, keeping last-run smoke evidence tidy without adding conversation
   history or persistence.
+- Smoke Console can now read compatible `message.reasoning` fallback text when
+  `message.content` is blank, keeping reasoning-style local smoke output
+  readable without adding conversation history or benchmark behavior.
 - Smoke Console can now read legacy-compatible `choices[0].text` response text
   when a local `/v1/chat/completions` endpoint omits
   `choices[0].message.content`, keeping the same non-streaming smoke boundary
@@ -399,6 +402,10 @@ Implemented scope:
   Smoke Console metrics pass with `git diff --check`, English/Japanese
   `Localizable.strings` lint, `swift test` (246 XCTest tests, 0 failures), and
   `swift build --disable-sandbox`.
+- Local source verification passed again on 2026-05-24 during the
+  `message.reasoning` smoke-response fallback pass with `git diff --check`,
+  English/Japanese `Localizable.strings` lint, `swift test` (249 XCTest tests,
+  0 failures), and `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -561,14 +568,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 Smoke Console zero-token metrics pass):
+Current source-verification status (2026-05-24 Smoke Console `message.reasoning` fallback pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (246 XCTest tests, 0 failures), and
+`swift test` (249 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available. Smoke Console metric parsing now
-preserves explicitly reported zero token counts from standard `usage` and
-compatible `llama-server` `timings` payloads.
+verification environment was available. Smoke Console response parsing now
+accepts compatible `message.reasoning` fallback text when `message.content` is
+blank.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

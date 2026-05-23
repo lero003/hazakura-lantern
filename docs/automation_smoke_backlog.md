@@ -41,14 +41,18 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-24 Smoke Console usage-alias metrics pass):
+Latest source-verification result (2026-05-24 Smoke Console `message.reasoning` fallback pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 248 XCTest tests, 0 failures.
+- `swift test` passed: 249 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - App-bundle helper smoke was not rerun in this slice because no fresh Launch
   Services hypothesis or normal desktop verification environment was available.
+- Smoke Console response parsing now accepts compatible `message.reasoning`
+  fallback text when `message.content` is blank, keeping reasoning-style local
+  smoke output readable without adding chat history, persistence, or benchmark
+  behavior.
 - Smoke Console metric parsing now treats compatible `usage.input_tokens` and
   `usage.output_tokens` fields as runtime-reported usage, while keeping
   standard `prompt_tokens` / `completion_tokens` values authoritative when both

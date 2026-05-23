@@ -267,6 +267,21 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertNotNil(result.outputTokensPerSecond)
     }
 
+    func testRunUsesReasoningAliasWhenMessageContentIsEmpty() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"   ","reasoning":"  Compatible reasoning text\n"}}]}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "Compatible reasoning text")
+        XCTAssertEqual(result.outputCharacterCount, 25)
+        XCTAssertEqual(result.approximateOutputTokenCount, 7)
+    }
+
     func testRunUsesTextPartsWhenMessageContentIsArray() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,

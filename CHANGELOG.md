@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added Smoke Console response parsing for compatible `message.reasoning`
+  fallback text when `message.content` is blank, keeping local smoke evidence
+  readable without adding chat history or benchmark behavior.
 - Added Smoke Console runtime-usage parsing for compatible `usage.input_tokens`
   and `usage.output_tokens` fields, while keeping standard
   `prompt_tokens` / `completion_tokens` values authoritative when both shapes
