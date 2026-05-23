@@ -180,7 +180,7 @@ final class ClientSmokeClientTests: XCTestCase {
     func testRunUsesTextPartsWhenMessageContentIsArray() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,
-            body: #"{"choices":[{"message":{"content":[{"type":"text","text":" First line "},{"type":"image_url","text":"ignored"},{"text":"Second line"}]}}]}"#
+            body: #"{"choices":[{"message":{"content":[{"type":" Text ","text":" First line "},{"type":"image_url","text":"ignored"},{"text":"Second line"}]}}]}"#
         )
         let client = ClientSmokeClient(session: makeSession())
         let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")

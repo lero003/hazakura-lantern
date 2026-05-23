@@ -55,6 +55,9 @@ Latest source-verification result (2026-05-24 Smoke Console blank-message error-
 - Smoke Console response parsing now accepts compatible single text-part
   `message.content` objects, keeping odd but readable local smoke output from
   being reported as malformed JSON.
+- Smoke Console text-part response parsing now accepts loose `text` content
+  type labels with extra whitespace or casing differences, keeping compatible
+  local smoke output readable without widening the smoke surface.
 - Smoke Console Japanese unavailable-run messages now consistently use the
   localized "動作確認" surface name instead of mixing in the English
   "Smoke Console" label.

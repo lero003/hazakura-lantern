@@ -469,7 +469,7 @@ private struct ChatCompletionsResponse: Decodable {
 
         var displayText: String? {
             if
-                let type,
+                let type = type?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
                 type != "text"
             {
                 return nil

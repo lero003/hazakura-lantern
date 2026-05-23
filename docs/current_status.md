@@ -157,6 +157,9 @@ Implemented scope:
 - Smoke Console can now read compatible single text-part `message.content`
   objects from local `/v1/chat/completions` responses, keeping odd but readable
   smoke evidence from being reported as malformed JSON.
+- Smoke Console text-part response parsing now normalizes content type casing
+  and whitespace before accepting `text` parts, keeping compatible local smoke
+  responses readable when runtimes return loose type labels.
 - Smoke Console success metrics now retain and display the actual
   `/v1/chat/completions` request URL, and copied success evidence includes it
   with the other bounded metrics.
