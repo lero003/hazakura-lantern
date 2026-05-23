@@ -12,10 +12,11 @@ outside release-readiness or future-direction review.
 
 ## Operating Posture
 
-Hazakura Lantern is currently public as a source-only `v1.0.0-rc.1` release
-candidate for personal/local use. Automated work should keep the project
-understandable, narrow, and easy to review while the near-term source lane
-improves the existing `llama-server` path.
+Hazakura Lantern is currently public as a source-only `v1.0.0-rc.2` release
+candidate for personal/local use. The previous source-only release candidate
+was `v1.0.0-rc.1`. Automated work should keep the project understandable,
+narrow, and easy to review while the near-term source lane improves the
+existing `llama-server` path.
 
 Post-public stewardship is a guardrail now and the formal v0.5 lane later.
 Automation may start v0.5 docs and triage improvements when v0.4 has no
