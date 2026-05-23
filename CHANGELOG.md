@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Hardened Smoke Console response parsing so compatible `message.content`
+  arrays can ignore structured non-text parts while still displaying readable
+  `text` and `output_text` parts from local runtime responses.
 - Made Smoke Console finish-reason parsing tolerant of malformed optional
   values, so a readable local smoke response is not rejected when only
   `finish_reason` is incompatible.

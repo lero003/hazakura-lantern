@@ -461,12 +461,17 @@ private struct ChatCompletionsResponse: Decodable {
                 return
             }
 
+            if let parts = try? container.decode([ContentPart].self) {
+                self = .parts(parts)
+                return
+            }
+
             if let contentPart = try? container.decode(ContentPart.self) {
                 self = .part(contentPart)
                 return
             }
 
-            self = .parts(try container.decode([ContentPart].self))
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unsupported message content shape.")
         }
     }
 
@@ -483,7 +488,12 @@ private struct ChatCompletionsResponse: Decodable {
                 return
             }
 
-            let payload = try container.decode(Payload.self)
+            guard let payload = try? container.decode(Payload.self) else {
+                self.type = nil
+                self.text = nil
+                return
+            }
+
             self.type = payload.type
             self.text = payload.text ?? payload.content
         }
@@ -509,6 +519,19 @@ private struct ChatCompletionsResponse: Decodable {
             var type: String?
             var text: String?
             var content: String?
+
+            enum CodingKeys: String, CodingKey {
+                case type
+                case text
+                case content
+            }
+
+            init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                type = container.decodeLossyStringIfPresent(forKey: .type)
+                text = container.decodeLossyStringIfPresent(forKey: .text)
+                content = container.decodeLossyStringIfPresent(forKey: .content)
+            }
         }
     }
 
@@ -606,6 +629,10 @@ private extension String {
 }
 
 private extension KeyedDecodingContainer {
+    func decodeLossyStringIfPresent(forKey key: Key) -> String? {
+        try? decode(String.self, forKey: key)
+    }
+
     func decodeLossyPositiveIntIfPresent(forKey key: Key) -> Int? {
         if let value = try? decode(Int.self, forKey: key), value > 0 {
             return value

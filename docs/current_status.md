@@ -172,6 +172,10 @@ Implemented scope:
 - Smoke Console text-part response parsing now also accepts plain string items
   inside compatible `message.content` arrays, keeping mixed readable local
   smoke output from being reported as malformed JSON.
+- Smoke Console text-part response parsing now ignores unreadable structured
+  non-text content parts inside compatible `message.content` arrays, keeping
+  readable text/output-text evidence visible when a local runtime includes
+  tool-call-like payloads.
 - Smoke Console success metrics now retain and display the actual
   `/v1/chat/completions` request URL, and copied success evidence includes it
   with the other bounded metrics.
@@ -531,15 +535,15 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 Smoke Console content-field text-part pass):
+Current source-verification status (2026-05-24 Smoke Console structured non-text part pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (239 XCTest tests, 0 failures), and
+`swift test` (240 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available. Smoke Console text-part response parsing
-now accepts compatible `content` fields inside text and output-text parts,
-keeping readable local smoke output from becoming a malformed-response error
-when a runtime uses that field name instead of `text`.
+now ignores structured non-text parts inside compatible `message.content`
+arrays, keeping readable text/output-text local smoke output from becoming a
+malformed-response error when a runtime includes tool-call-like payloads.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

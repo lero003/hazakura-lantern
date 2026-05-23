@@ -252,6 +252,21 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertEqual(result.approximateOutputTokenCount, 6)
     }
 
+    func testRunIgnoresStructuredNonTextContentParts() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":[{"type":"text","text":" First line "},{"type":"tool_call","content":{"name":"ignored","arguments":{"prompt":"ignored"}}},7,{"type":"output_text","content":" Second line "}]}}]}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "First line\nSecond line")
+        XCTAssertEqual(result.outputCharacterCount, 22)
+        XCTAssertEqual(result.approximateOutputTokenCount, 6)
+    }
+
     func testRunUsesSingleTextPartWhenMessageContentIsObject() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,
