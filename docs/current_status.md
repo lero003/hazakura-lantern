@@ -130,6 +130,9 @@ Implemented scope:
 - Smoke Console now preserves OpenAI-compatible response finish reasons such as
   `stop` or `length` in displayed and copied metrics, keeping bounded-output
   evidence visible without adding benchmark or conversation history behavior.
+- Smoke Console finish-reason parsing now ignores malformed optional values
+  when the response body is otherwise readable, keeping advisory metadata from
+  turning local smoke evidence into a malformed-response failure.
 - Smoke Console metric labels now explicitly distinguish usage reported by the
   runtime from approximate output-token fallback metrics, keeping copied smoke
   evidence honest without adding benchmark claims.
@@ -522,14 +525,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 Smoke Console string-part content pass):
+Current source-verification status (2026-05-24 Smoke Console finish-reason tolerance pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (236 XCTest tests, 0 failures), and
+`swift test` (237 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available. Smoke Console response parsing now
-accepts plain string items inside compatible `message.content` arrays, keeping
-mixed readable local smoke output from being reported as malformed JSON.
+verification environment was available. Smoke Console finish-reason parsing now
+ignores malformed optional values when the response text itself is readable,
+keeping advisory metadata from causing malformed-response errors.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

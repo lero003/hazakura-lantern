@@ -394,6 +394,13 @@ private struct ChatCompletionsResponse: Decodable {
             case finishReason = "finish_reason"
         }
 
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            message = try? container.decode(Message.self, forKey: .message)
+            text = try? container.decode(String.self, forKey: .text)
+            finishReason = try? container.decode(String.self, forKey: .finishReason)
+        }
+
         var displayText: String? {
             if let content = message?.displayText {
                 return content

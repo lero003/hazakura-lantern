@@ -75,6 +75,21 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertNil(result.approximateOutputTokensPerSecond)
     }
 
+    func testRunKeepsReadableResponseWhenFinishReasonIsMalformed() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"OK"},"finish_reason":123}]}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "OK")
+        XCTAssertNil(result.finishReason)
+        XCTAssertEqual(result.approximateOutputTokenCount, 1)
+    }
+
     func testRunFallsBackToElapsedUsageRateWhenRuntimeTimingIsMissing() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,
