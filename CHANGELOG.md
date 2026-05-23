@@ -6,6 +6,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Normalized and bounded Smoke Console HTTP error snippets so multiline runtime
+  error bodies stay readable in the local smoke error surface.
 - Aligned post-public automation guidance with the current `v1.0.0-rc.2`
   source-only release-candidate posture, keeping `v1.0.0-rc.1` as the previous
   checkpoint and packaged release as a later handoff.

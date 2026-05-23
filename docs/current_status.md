@@ -88,6 +88,8 @@ Implemented scope:
   app-owned UI strings.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
+- Smoke Console HTTP error snippets now collapse multiline runtime error bodies
+  into a bounded readable summary before showing them in the error surface.
 - The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
   elapsed time, output character count, runtime-reported usage when available,
   explicitly approximate fallback output token count/rate, request mode, and
@@ -242,14 +244,15 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 during the Smoke Console
-  disabled-run feedback pass with
-  `git diff --check`, localization lint, `swift test` (213 XCTest tests,
+- Local source verification passed on 2026-05-23 during the Smoke Console HTTP
+  error-snippet readability pass with
+  `git diff --check`, localization lint, `swift test` (214 XCTest tests,
   0 failures), and
   `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
   `kLSNoExecutableErr` in this Codex environment. The previous 2026-05-23
-  v1.2 usage-metrics pass also had the same source-verification result.
+  disabled-run feedback and v1.2 usage-metrics passes also had passing
+  source-verification results.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -412,9 +415,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 09:35 JST Smoke Console disabled-run feedback pass):
+Current source-verification status (2026-05-23 10:33 JST Smoke Console HTTP error-snippet readability pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (213 XCTest tests, 0 failures), and
+`swift test` (214 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.

@@ -123,6 +123,31 @@ final class ClientSmokeClientTests: XCTestCase {
         )
     }
 
+    func testRunMapsNonSuccessHTTPStatusWithNormalizedBoundedBodySnippet() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 500,
+            body: "first line\n\nsecond\tline " + String(repeating: "x", count: 260)
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        do {
+            _ = try await client.run(request)
+            XCTFail("Expected HTTP status error.")
+        } catch let error as ClientSmokeError {
+            guard case .httpStatus(500, let bodySnippet?) = error else {
+                return XCTFail("Expected HTTP status with snippet, got \(error).")
+            }
+            XCTAssertTrue(bodySnippet.hasPrefix("first line second line "))
+            XCTAssertTrue(bodySnippet.hasSuffix("..."))
+            XCTAssertLessThanOrEqual(bodySnippet.count, 243)
+            XCTAssertFalse(bodySnippet.contains("\n"))
+            XCTAssertFalse(bodySnippet.contains("\t"))
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
     func testRunMapsMalformedResponseJSON() async {
         ClientSmokeURLProtocol.result = .success(statusCode: 200, body: #"{"choices":[]}"#)
         let client = ClientSmokeClient(session: makeSession())

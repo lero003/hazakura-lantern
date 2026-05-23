@@ -204,12 +204,16 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             return nil
         }
 
+        let normalizedBody = body
+            .split(whereSeparator: \.isWhitespace)
+            .joined(separator: " ")
+
         let limit = 240
-        if body.count <= limit {
-            return body
+        if normalizedBody.count <= limit {
+            return normalizedBody
         }
 
-        return String(body.prefix(limit)) + "..."
+        return String(normalizedBody.prefix(limit)) + "..."
     }
 }
 
