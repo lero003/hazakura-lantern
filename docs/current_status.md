@@ -86,9 +86,11 @@ Implemented scope:
   destination for a user-triggered local endpoint smoke request with prompt,
   run state, response display, copy response, clear result, and localized
   app-owned UI strings.
-- The first v1.2 Runtime Smoke Metrics slice now records successful Smoke
-  Console elapsed time, output character count, request mode, and timeout used,
-  then shows those values under the response with localized app-owned labels.
+- The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
+  elapsed time, output character count, runtime-reported usage when available,
+  explicitly approximate fallback output token count/rate, request mode, and
+  timeout used, then shows those values under the response with localized
+  app-owned labels.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.
@@ -238,9 +240,9 @@ Implemented scope:
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
-- Local source verification passed on 2026-05-23 during the v1.2 smoke-metrics
+- Local source verification passed on 2026-05-23 during the v1.2 usage-metrics
   pass with
-  `git diff --check`, localization lint, `swift test` (211 XCTest tests,
+  `git diff --check`, localization lint, `swift test` (213 XCTest tests,
   0 failures), and
   `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
@@ -407,9 +409,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 rc2 finalization pass):
+Current source-verification status (2026-05-23 09:05 JST v1.2 usage-metrics pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (205 XCTest tests, 0 failures), and
+`swift test` (213 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.
@@ -535,13 +537,6 @@ Good next automated candidates:
 
 - fix any failing `swift test`, `swift build --disable-sandbox`, localization
   lint, or `git diff --check` result before picking a polish slice
-- add v1.1 Local Smoke Console in small steps: core request/result/error model,
-  timeout-bounded non-streaming `/v1/chat/completions` client, focused tests,
-  then a separate compact UI destination with prompt, run, response, copy, and
-  clear actions
-- add v1.2 Runtime Smoke Metrics after the console exists: elapsed time,
-  output character count, runtime-reported usage when available, explicitly
-  approximate fallback token count/rate, request mode, and timeout used
 - after v1.2, run smoke and fix one concrete rough edge at a time while keeping
   conversation history, prompt libraries, RAG/tools, benchmark rankings, and
   runtime optimization out of scope

@@ -5,23 +5,65 @@ public struct ClientSmokeResult: Equatable, Sendable {
         case nonStreaming = "non-streaming"
     }
 
+    public struct Usage: Equatable, Sendable {
+        public var promptTokens: Int?
+        public var completionTokens: Int?
+        public var totalTokens: Int?
+
+        public init(promptTokens: Int? = nil, completionTokens: Int? = nil, totalTokens: Int? = nil) {
+            self.promptTokens = promptTokens
+            self.completionTokens = completionTokens
+            self.totalTokens = totalTokens
+        }
+
+        public var hasReportedTokens: Bool {
+            promptTokens != nil || completionTokens != nil || totalTokens != nil
+        }
+    }
+
     public var responseText: String
     public var elapsedSeconds: Double
     public var outputCharacterCount: Int
     public var requestMode: RequestMode
     public var timeoutSeconds: Int
+    public var runtimeUsage: Usage?
+    public var approximateOutputTokenCount: Int?
+    public var approximateOutputTokensPerSecond: Double?
 
     public init(
         responseText: String,
         elapsedSeconds: Double = 0,
         requestMode: RequestMode = .nonStreaming,
-        timeoutSeconds: Int = 60
+        timeoutSeconds: Int = 60,
+        runtimeUsage: Usage? = nil
     ) {
         self.responseText = responseText
         self.elapsedSeconds = max(0, elapsedSeconds)
         self.outputCharacterCount = responseText.count
         self.requestMode = requestMode
         self.timeoutSeconds = max(1, timeoutSeconds)
+        self.runtimeUsage = runtimeUsage?.hasReportedTokens == true ? runtimeUsage : nil
+
+        if self.runtimeUsage == nil {
+            let approximateOutputTokenCount = Self.approximateOutputTokens(for: responseText)
+            self.approximateOutputTokenCount = approximateOutputTokenCount
+            if self.elapsedSeconds > 0, approximateOutputTokenCount > 0 {
+                self.approximateOutputTokensPerSecond = Double(approximateOutputTokenCount) / self.elapsedSeconds
+            } else {
+                self.approximateOutputTokensPerSecond = nil
+            }
+        } else {
+            self.approximateOutputTokenCount = nil
+            self.approximateOutputTokensPerSecond = nil
+        }
+    }
+
+    private static func approximateOutputTokens(for text: String) -> Int {
+        guard !text.isEmpty else {
+            return 0
+        }
+
+        return max(1, Int(ceil(Double(text.count) / 4.0)))
     }
 }
 
@@ -102,12 +144,13 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
                 )
             }
 
-            let responseText = try Self.decodeResponseText(from: data)
+            let decodedResponse = try Self.decodeResponse(from: data)
             return ClientSmokeResult(
-                responseText: responseText,
+                responseText: decodedResponse.responseText,
                 elapsedSeconds: Date().timeIntervalSince(startedAt),
                 requestMode: .nonStreaming,
-                timeoutSeconds: request.timeoutSeconds
+                timeoutSeconds: request.timeoutSeconds,
+                runtimeUsage: decodedResponse.usage
             )
         } catch let smokeError as ClientSmokeError {
             throw smokeError
@@ -116,13 +159,16 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
         }
     }
 
-    private static func decodeResponseText(from data: Data) throws -> String {
+    private static func decodeResponse(from data: Data) throws -> DecodedClientSmokeResponse {
         do {
             let response = try JSONDecoder().decode(ChatCompletionsResponse.self, from: data)
             guard let content = response.choices.first?.message.content else {
                 throw ClientSmokeError.malformedResponse("No message content was found in the first choice.")
             }
-            return content
+            return DecodedClientSmokeResponse(
+                responseText: content,
+                usage: response.usage?.clientSmokeUsage
+            )
         } catch let smokeError as ClientSmokeError {
             throw smokeError
         } catch {
@@ -167,8 +213,14 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
     }
 }
 
+private struct DecodedClientSmokeResponse {
+    var responseText: String
+    var usage: ClientSmokeResult.Usage?
+}
+
 private struct ChatCompletionsResponse: Decodable {
     var choices: [Choice]
+    var usage: Usage?
 
     struct Choice: Decodable {
         var message: Message
@@ -176,5 +228,26 @@ private struct ChatCompletionsResponse: Decodable {
 
     struct Message: Decodable {
         var content: String?
+    }
+
+    struct Usage: Decodable {
+        var promptTokens: Int?
+        var completionTokens: Int?
+        var totalTokens: Int?
+
+        enum CodingKeys: String, CodingKey {
+            case promptTokens = "prompt_tokens"
+            case completionTokens = "completion_tokens"
+            case totalTokens = "total_tokens"
+        }
+
+        var clientSmokeUsage: ClientSmokeResult.Usage? {
+            let usage = ClientSmokeResult.Usage(
+                promptTokens: promptTokens,
+                completionTokens: completionTokens,
+                totalTokens: totalTokens
+            )
+            return usage.hasReportedTokens ? usage : nil
+        }
     }
 }

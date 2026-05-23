@@ -225,6 +225,8 @@
 "validation.runtime.directory" = "ランタイムパスがフォルダです。";
 "validation.runtime.missing" = "ランタイム実行ファイルが存在しません。";
 "validation.runtime.not_executable" = "ランタイム実行ファイルに実行権限がありません。";
+"Approx Decode Rate" = "概算生成速度";
+"Approx Tokens" = "概算トークン";
 "Clear Result" = "結果を消去";
 "Characters" = "文字数";
 "Copy Response" = "応答をコピー";
@@ -238,8 +240,11 @@
 "Run Smoke" = "動作確認を実行";
 "Running local endpoint smoke..." = "ローカルエンドポイントを確認中...";
 "Running Smoke" = "確認中";
+"Runtime Usage" = "ランタイム使用量";
 "Smoke Console" = "動作確認コンソール";
 "Smoke Prompt" = "確認プロンプト";
 "Smoke Response" = "確認応答";
 "Start the server before running Smoke Console." = "Smoke Console を実行する前にサーバーを開始してください。";
 "Timeout" = "タイムアウト";
+"smoke.metric.unavailable" = "なし";
+"smoke.usage.summary" = "入力 %@ / 出力 %@ / 合計 %@";

@@ -207,6 +207,16 @@ struct SmokeConsoleView: View {
     private func metricsBadges(for result: ClientSmokeResult) -> some View {
         metricBadge(title: "Elapsed", value: formattedElapsed(result.elapsedSeconds))
         metricBadge(title: "Characters", value: "\(result.outputCharacterCount)")
+        if let runtimeUsage = result.runtimeUsage {
+            metricBadge(title: "Runtime Usage", value: formattedRuntimeUsage(runtimeUsage))
+        } else {
+            if let approximateOutputTokenCount = result.approximateOutputTokenCount {
+                metricBadge(title: "Approx Tokens", value: "\(approximateOutputTokenCount)")
+            }
+            if let approximateOutputTokensPerSecond = result.approximateOutputTokensPerSecond {
+                metricBadge(title: "Approx Decode Rate", value: formattedApproximateRate(approximateOutputTokensPerSecond))
+            }
+        }
         metricBadge(title: "Mode", value: displayRequestMode(result.requestMode))
         metricBadge(title: "Timeout", value: "\(result.timeoutSeconds)s")
     }
@@ -313,6 +323,27 @@ struct SmokeConsoleView: View {
 
     private func formattedElapsed(_ seconds: Double) -> String {
         String(format: "%.2fs", seconds)
+    }
+
+    private func formattedRuntimeUsage(_ usage: ClientSmokeResult.Usage) -> String {
+        String(
+            format: String(localized: "smoke.usage.summary"),
+            formattedTokenCount(usage.promptTokens),
+            formattedTokenCount(usage.completionTokens),
+            formattedTokenCount(usage.totalTokens)
+        )
+    }
+
+    private func formattedTokenCount(_ count: Int?) -> String {
+        guard let count else {
+            return String(localized: "smoke.metric.unavailable")
+        }
+
+        return "\(count)"
+    }
+
+    private func formattedApproximateRate(_ tokensPerSecond: Double) -> String {
+        String(format: "%.1f/s", tokensPerSecond)
     }
 
     private func displayRequestMode(_ requestMode: ClientSmokeResult.RequestMode) -> String {

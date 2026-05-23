@@ -30,6 +30,9 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertEqual(result.outputCharacterCount, 21)
         XCTAssertEqual(result.requestMode, .nonStreaming)
         XCTAssertEqual(result.timeoutSeconds, 9)
+        XCTAssertNil(result.runtimeUsage)
+        XCTAssertEqual(result.approximateOutputTokenCount, 6)
+        XCTAssertNotNil(result.approximateOutputTokensPerSecond)
         let observedRequest = try XCTUnwrap(ClientSmokeURLProtocol.observedRequest)
         XCTAssertEqual(observedRequest.url?.absoluteString, "http://localhost:1234/v1/chat/completions")
         XCTAssertEqual(observedRequest.httpMethod, "POST")
@@ -42,6 +45,33 @@ final class ClientSmokeClientTests: XCTestCase {
             body,
             #"{"messages":[{"content":"Reply OK.","role":"user"}],"model":"qwen-local","stream":false}"#
         )
+    }
+
+    func testRunCapturesRuntimeReportedUsageWhenAvailable() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"OK"}}],"usage":{"prompt_tokens":8,"completion_tokens":2,"total_tokens":10}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "OK")
+        XCTAssertEqual(
+            result.runtimeUsage,
+            ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2, totalTokens: 10)
+        )
+        XCTAssertNil(result.approximateOutputTokenCount)
+        XCTAssertNil(result.approximateOutputTokensPerSecond)
+    }
+
+    func testApproximateTokenMetricsAreOnlyReportedWhenUsageIsMissing() {
+        let result = ClientSmokeResult(responseText: "abcdefgh", elapsedSeconds: 2)
+
+        XCTAssertNil(result.runtimeUsage)
+        XCTAssertEqual(result.approximateOutputTokenCount, 2)
+        XCTAssertEqual(result.approximateOutputTokensPerSecond, 1)
     }
 
     func testRunRejectsInvalidEndpointBeforeRequest() async {
