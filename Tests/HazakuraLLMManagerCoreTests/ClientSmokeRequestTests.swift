@@ -16,7 +16,7 @@ final class ClientSmokeRequestTests: XCTestCase {
             """
             curl -fsS --max-time 60 http://localhost:9876/v1/chat/completions \\
               -H 'Content-Type: application/json' \\
-              -d '{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
+              -d '{"max_tokens":64,"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
             """
         )
     }
@@ -40,6 +40,12 @@ final class ClientSmokeRequestTests: XCTestCase {
         let request = ClientSmokeRequest(baseURL: "http://localhost:9876/v1", timeoutSeconds: 0)
 
         XCTAssertTrue(request.curlCommand.hasPrefix("curl -fsS --max-time 1 "))
+    }
+
+    func testCurlCommandKeepsMaxTokensPositive() {
+        let request = ClientSmokeRequest(baseURL: "http://localhost:9876/v1", maxTokens: 0)
+
+        XCTAssertTrue(request.curlCommand.contains(#""max_tokens":1"#))
     }
 
     func testCurlCommandShellQuotesApostrophesInPayload() {

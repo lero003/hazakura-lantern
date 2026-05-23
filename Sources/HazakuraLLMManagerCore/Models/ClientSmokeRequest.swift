@@ -6,19 +6,22 @@ public struct ClientSmokeRequest: Equatable, Sendable {
     public var model: String
     public var userText: String
     public var timeoutSeconds: Int
+    public var maxTokens: Int
 
     public init(
         baseURL: String,
         apiKey: String? = nil,
         model: String = "local",
         userText: String = "Hazakura AI Mobile runtime smoke. Reply with OK.",
-        timeoutSeconds: Int = 60
+        timeoutSeconds: Int = 60,
+        maxTokens: Int = 64
     ) {
         self.baseURL = baseURL
         self.apiKey = apiKey
         self.model = model
         self.userText = userText
         self.timeoutSeconds = max(1, timeoutSeconds)
+        self.maxTokens = max(1, maxTokens)
     }
 
     public var chatCompletionsURL: String {
@@ -50,6 +53,7 @@ public struct ClientSmokeRequest: Equatable, Sendable {
 
     private var payload: Payload {
         Payload(
+            maxTokens: maxTokens,
             model: model,
             stream: false,
             messages: [
@@ -59,9 +63,17 @@ public struct ClientSmokeRequest: Equatable, Sendable {
     }
 
     private struct Payload: Encodable {
+        var maxTokens: Int
         var model: String
         var stream: Bool
         var messages: [Message]
+
+        enum CodingKeys: String, CodingKey {
+            case maxTokens = "max_tokens"
+            case messages
+            case model
+            case stream
+        }
     }
 
     private struct Message: Encodable {

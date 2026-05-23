@@ -112,7 +112,7 @@ AI Mobile / OpenAI-compatible client smoke:
 ```bash
 curl -fsS --max-time 60 http://localhost:1234/v1/chat/completions \
   -H 'Content-Type: application/json' \
-  -d '{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
+  -d '{"max_tokens":64,"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
 ```
 
 `llama-server` does not require an API key unless it is launched with

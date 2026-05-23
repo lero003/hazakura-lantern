@@ -78,6 +78,9 @@ Implemented scope:
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Copied AI Mobile / OpenAI-compatible client smoke commands are fail-fast and
   timeout-bounded so a local client check does not hang indefinitely.
+- OpenAI-compatible smoke requests also include a small `max_tokens` cap, so
+  user-triggered local smoke stays output-bounded without becoming a benchmark
+  or chat surface.
 - The first v1.1 Local Smoke Console core client slice can now send a
   user-triggered, timeout-bounded, non-streaming OpenAI-compatible
   `/v1/chat/completions` request and map invalid endpoint, connection, timeout,
@@ -419,9 +422,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console metric-copy pass):
+Current source-verification status (2026-05-23 Smoke Console max-token cap pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (214 XCTest tests, 0 failures), and
+`swift test` (215 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.

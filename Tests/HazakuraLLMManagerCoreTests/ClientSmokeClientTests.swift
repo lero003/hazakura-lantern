@@ -47,7 +47,7 @@ final class ClientSmokeClientTests: XCTestCase {
         let body = String(data: try XCTUnwrap(ClientSmokeURLProtocol.observedBody), encoding: .utf8)
         XCTAssertEqual(
             body,
-            #"{"messages":[{"content":"Reply OK.","role":"user"}],"model":"qwen-local","stream":false}"#
+            #"{"max_tokens":64,"messages":[{"content":"Reply OK.","role":"user"}],"model":"qwen-local","stream":false}"#
         )
     }
 
