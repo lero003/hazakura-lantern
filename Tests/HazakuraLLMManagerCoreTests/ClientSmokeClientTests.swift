@@ -242,7 +242,11 @@ final class ClientSmokeClientTests: XCTestCase {
 
         await XCTAssertThrowsClientSmokeError(
             try await client.run(request),
-            equals: .httpStatus(503, bodySnippet: "model still loading")
+            equals: .httpStatus(
+                503,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "model still loading"
+            )
         )
     }
 
@@ -258,9 +262,12 @@ final class ClientSmokeClientTests: XCTestCase {
             _ = try await client.run(request)
             XCTFail("Expected HTTP status error.")
         } catch let error as ClientSmokeError {
-            guard case .httpStatus(500, let bodySnippet?) = error else {
+            guard case .httpStatus(500, let url, let bodySnippet?) = error else {
                 return XCTFail("Expected HTTP status with snippet, got \(error).")
             }
+            XCTAssertEqual(url, "http://localhost:1234/v1/chat/completions")
+            XCTAssertEqual(error.requestURL, "http://localhost:1234/v1/chat/completions")
+            XCTAssertTrue(error.message.hasPrefix("Smoke request returned HTTP 500 for http://localhost:1234/v1/chat/completions:"))
             XCTAssertTrue(bodySnippet.hasPrefix("first line second line "))
             XCTAssertTrue(bodySnippet.hasSuffix("..."))
             XCTAssertLessThanOrEqual(bodySnippet.count, 243)
@@ -281,7 +288,11 @@ final class ClientSmokeClientTests: XCTestCase {
 
         await XCTAssertThrowsClientSmokeError(
             try await client.run(request),
-            equals: .httpStatus(500, bodySnippet: "model still loading try again soon")
+            equals: .httpStatus(
+                500,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "model still loading try again soon"
+            )
         )
     }
 
@@ -295,7 +306,11 @@ final class ClientSmokeClientTests: XCTestCase {
 
         await XCTAssertThrowsClientSmokeError(
             try await client.run(request),
-            equals: .httpStatus(422, bodySnippet: "model is still loading try again shortly")
+            equals: .httpStatus(
+                422,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "model is still loading try again shortly"
+            )
         )
     }
 
@@ -309,7 +324,11 @@ final class ClientSmokeClientTests: XCTestCase {
 
         await XCTAssertThrowsClientSmokeError(
             try await client.run(request),
-            equals: .httpStatus(422, bodySnippet: "messages field is required; model is still loading")
+            equals: .httpStatus(
+                422,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "messages field is required; model is still loading"
+            )
         )
     }
 
@@ -323,7 +342,11 @@ final class ClientSmokeClientTests: XCTestCase {
 
         await XCTAssertThrowsClientSmokeError(
             try await client.run(request),
-            equals: .httpStatus(503, bodySnippet: "runtime queue is full")
+            equals: .httpStatus(
+                503,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "runtime queue is full"
+            )
         )
     }
 
@@ -337,7 +360,11 @@ final class ClientSmokeClientTests: XCTestCase {
 
         await XCTAssertThrowsClientSmokeError(
             try await client.run(request),
-            equals: .httpStatus(404, bodySnippet: "chat endpoint not found")
+            equals: .httpStatus(
+                404,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "chat endpoint not found"
+            )
         )
     }
 
@@ -350,10 +377,16 @@ final class ClientSmokeClientTests: XCTestCase {
             _ = try await client.run(request)
             XCTFail("Expected malformed response error.")
         } catch let error as ClientSmokeError {
-            guard case .malformedResponse(let message) = error else {
+            guard case .malformedResponse(let message, let url) = error else {
                 return XCTFail("Expected malformed response, got \(error).")
             }
             XCTAssertEqual(message, "No message content was found in the first choice.")
+            XCTAssertEqual(url, "http://localhost:1234/v1/chat/completions")
+            XCTAssertEqual(error.requestURL, "http://localhost:1234/v1/chat/completions")
+            XCTAssertEqual(
+                error.message,
+                "Smoke response from http://localhost:1234/v1/chat/completions could not be read: No message content was found in the first choice."
+            )
         } catch {
             XCTFail("Unexpected error: \(error)")
         }

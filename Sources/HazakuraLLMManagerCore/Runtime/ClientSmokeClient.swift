@@ -102,9 +102,9 @@ public enum ClientSmokeError: Error, Equatable, Sendable {
     case invalidEndpoint(String)
     case connectionFailed(String)
     case timedOut(seconds: Int, url: String)
-    case httpStatus(Int, bodySnippet: String?)
-    case malformedResponse(String)
-    case requestFailed(String)
+    case httpStatus(Int, url: String, bodySnippet: String?)
+    case malformedResponse(String, url: String?)
+    case requestFailed(String, url: String?)
 
     public var message: String {
         switch self {
@@ -114,15 +114,38 @@ public enum ClientSmokeError: Error, Equatable, Sendable {
             return "No server responded at \(url). Start the runtime or verify the configured port."
         case .timedOut(let seconds, let url):
             return "Smoke request timed out after \(seconds) seconds for \(url)."
-        case .httpStatus(let statusCode, let bodySnippet):
+        case .httpStatus(let statusCode, let url, let bodySnippet):
             if let bodySnippet, !bodySnippet.isEmpty {
-                return "Smoke request returned HTTP \(statusCode): \(bodySnippet)"
+                return "Smoke request returned HTTP \(statusCode) for \(url): \(bodySnippet)"
             }
-            return "Smoke request returned HTTP \(statusCode)."
-        case .malformedResponse(let detail):
+            return "Smoke request returned HTTP \(statusCode) for \(url)."
+        case .malformedResponse(let detail, let url):
+            if let url, !url.isEmpty {
+                return "Smoke response from \(url) could not be read: \(detail)"
+            }
             return "Smoke response could not be read: \(detail)"
-        case .requestFailed(let detail):
+        case .requestFailed(let detail, let url):
+            if let url, !url.isEmpty {
+                return "Smoke request failed for \(url): \(detail)"
+            }
             return "Smoke request failed: \(detail)"
+        }
+    }
+
+    public var requestURL: String? {
+        switch self {
+        case .invalidEndpoint(let endpoint):
+            return endpoint
+        case .connectionFailed(let url):
+            return url
+        case .timedOut(_, let url):
+            return url
+        case .httpStatus(_, let url, _):
+            return url
+        case .malformedResponse(_, let url):
+            return url
+        case .requestFailed(_, let url):
+            return url
         }
     }
 }
@@ -165,17 +188,18 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             let (data, response) = try await session.data(for: urlRequest)
 
             guard let httpResponse = response as? HTTPURLResponse else {
-                throw ClientSmokeError.malformedResponse("The server did not return an HTTP response.")
+                throw ClientSmokeError.malformedResponse("The server did not return an HTTP response.", url: urlString)
             }
 
             guard (200...299).contains(httpResponse.statusCode) else {
                 throw ClientSmokeError.httpStatus(
                     httpResponse.statusCode,
+                    url: urlString,
                     bodySnippet: Self.bodySnippet(from: data)
                 )
             }
 
-            let decodedResponse = try Self.decodeResponse(from: data)
+            let decodedResponse = try Self.decodeResponse(from: data, url: urlString)
             return ClientSmokeResult(
                 responseText: decodedResponse.responseText,
                 startedAt: startedAt,
@@ -194,11 +218,11 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
         }
     }
 
-    private static func decodeResponse(from data: Data) throws -> DecodedClientSmokeResponse {
+    private static func decodeResponse(from data: Data, url: String) throws -> DecodedClientSmokeResponse {
         do {
             let response = try JSONDecoder().decode(ChatCompletionsResponse.self, from: data)
             guard let content = response.choices.first?.displayText else {
-                throw ClientSmokeError.malformedResponse("No message content was found in the first choice.")
+                throw ClientSmokeError.malformedResponse("No message content was found in the first choice.", url: url)
             }
             return DecodedClientSmokeResponse(
                 responseText: content,
@@ -209,7 +233,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
         } catch let smokeError as ClientSmokeError {
             throw smokeError
         } catch {
-            throw ClientSmokeError.malformedResponse(error.localizedDescription)
+            throw ClientSmokeError.malformedResponse(error.localizedDescription, url: url)
         }
     }
 
@@ -219,7 +243,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
         timeoutSeconds: Int
     ) -> ClientSmokeError {
         guard let urlError = error as? URLError else {
-            return .requestFailed(error.localizedDescription)
+            return .requestFailed(error.localizedDescription, url: url)
         }
 
         switch urlError.code {
@@ -228,7 +252,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
         case .timedOut:
             return .timedOut(seconds: timeoutSeconds, url: url)
         default:
-            return .requestFailed(urlError.localizedDescription)
+            return .requestFailed(urlError.localizedDescription, url: url)
         }
     }
 

@@ -271,6 +271,9 @@ struct SmokeConsoleView: View {
         if let startedAt = metrics.startedAt {
             metricBadge(title: "Started", value: formattedStartedAt(startedAt))
         }
+        if let requestURL = metrics.requestURL {
+            metricBadge(title: "Request URL", value: requestURL, valueLineLimit: 1)
+        }
         metricBadge(title: "Elapsed", value: formattedElapsed(metrics.elapsedSeconds))
         metricBadge(title: "Request Mode", value: displayRequestMode(metrics.requestMode))
         metricBadge(title: "Timeout Used", value: "\(metrics.timeoutSeconds)s")
@@ -355,7 +358,8 @@ struct SmokeConsoleView: View {
                         startedAt: startedAt,
                         elapsedSeconds: Date().timeIntervalSince(startedAt),
                         requestMode: .nonStreaming,
-                        timeoutSeconds: request.timeoutSeconds
+                        timeoutSeconds: request.timeoutSeconds,
+                        requestURL: smokeError.requestURL ?? request.chatCompletionsURL
                     )
                     errorMessage = smokeError.message
                     isRunning = false
@@ -367,7 +371,8 @@ struct SmokeConsoleView: View {
                         startedAt: startedAt,
                         elapsedSeconds: Date().timeIntervalSince(startedAt),
                         requestMode: .nonStreaming,
-                        timeoutSeconds: request.timeoutSeconds
+                        timeoutSeconds: request.timeoutSeconds,
+                        requestURL: request.chatCompletionsURL
                     )
                     errorMessage = error.localizedDescription
                     isRunning = false
@@ -453,6 +458,9 @@ struct SmokeConsoleView: View {
 
         if let startedAt = metrics.startedAt {
             lines.append("\(String(localized: "Started")): \(formattedStartedAt(startedAt))")
+        }
+        if let requestURL = metrics.requestURL {
+            lines.append("\(String(localized: "Request URL")): \(requestURL)")
         }
         lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(metrics.elapsedSeconds))")
         lines.append("\(String(localized: "Request Mode")): \(displayRequestMode(metrics.requestMode))")
@@ -551,4 +559,5 @@ private struct SmokeFailureMetrics: Equatable {
     var elapsedSeconds: Double
     var requestMode: ClientSmokeResult.RequestMode
     var timeoutSeconds: Int
+    var requestURL: String?
 }

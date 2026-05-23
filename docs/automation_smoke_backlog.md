@@ -41,7 +41,7 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-23 Smoke Console request-URL evidence pass):
+Latest source-verification result (2026-05-23 Smoke Console failure request-URL evidence pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
@@ -60,8 +60,8 @@ Latest source-verification result (2026-05-23 Smoke Console request-URL evidence
   fails, keeping local smoke evidence shareable without adding logs or
   persistence.
 - Failed Smoke Console attempts now include started time, elapsed time, request
-  mode, and timeout used in the visible and copied failure evidence, without
-  adding logs, history, or benchmark claims.
+  URL, request mode, and timeout used in the visible and copied failure
+  evidence, without adding logs, history, or benchmark claims.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
   into bounded readable summaries before showing them in the error surface.
 - Smoke Console HTTP error snippets now prefer OpenAI-compatible

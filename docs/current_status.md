@@ -113,8 +113,9 @@ Implemented scope:
   fails, so local smoke evidence is easier to share without adding logs or
   persistence.
 - Failed Smoke Console attempts now show and copy bounded attempt metrics:
-  started time, elapsed time, request mode, and timeout used, keeping failure
-  evidence shareable without adding logs, history, or benchmark claims.
+  started time, elapsed time, request URL, request mode, and timeout used,
+  keeping failure evidence shareable without adding logs, history, or
+  benchmark claims.
 - Smoke Console now opens with the same bounded local smoke prompt used by the
   copyable OpenAI-compatible curl command, keeping the explicit prompt editable
   while avoiding a blank first run.
@@ -502,7 +503,7 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console request-URL evidence pass):
+Current source-verification status (2026-05-23 Smoke Console failure request-URL evidence pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (230 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
