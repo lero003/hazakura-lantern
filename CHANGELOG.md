@@ -4,8 +4,18 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+No changes yet.
+
+## v1.2.0 - 2026-05-23
+
 ### Changed
 
+- Released a source-only v1.2 checkpoint for personal/local use, with no
+  packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
+  distribution artifact.
+- Hardened Stop, Restart, and app-quit process termination so Lantern escalates
+  from `SIGTERM` to `SIGKILL` when the child runtime does not exit, reducing
+  the chance that a hung `llama-server` keeps the configured port occupied.
 - Hardened Smoke Console response parsing for OpenAI-compatible runtimes that
   return assistant text as `message.content` text parts instead of a plain
   string, while keeping the surface non-persistent and smoke-only.
@@ -39,9 +49,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   endpoint smoke evidence easier to share.
 - Normalized and bounded Smoke Console HTTP error snippets so multiline runtime
   error bodies stay readable in the local smoke error surface.
-- Aligned post-public automation guidance with the current `v1.0.0-rc.2`
-  source-only release-candidate posture, keeping `v1.0.0-rc.1` as the previous
-  checkpoint and packaged release as a later handoff.
+- Aligned post-public automation guidance after `v1.0.0-rc.2`, keeping the
+  source-only checkpoint posture explicit and packaged release as a later
+  handoff.
 - Clarified Smoke Console disabled-run feedback: when the server is running but
   the prompt is blank or the endpoint configuration is invalid, the view now
   shows localized next-step guidance instead of only disabling Run.

@@ -46,7 +46,7 @@ struct SettingsView: View {
                             .textSelection(.enabled)
                     }
 
-                    Text("Source-only release candidate; no packaged app artifact is included.")
+                    Text("Source-only checkpoint; no packaged app artifact is included.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

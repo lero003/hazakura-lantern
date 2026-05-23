@@ -166,9 +166,9 @@ were already covered on `main` after the reviewed snapshot: copy feedback,
 running-only health checks, Setup Guide no-runtime wording, endpoint copy
 accessibility, logs retention wording, source-checkpoint centralization,
 localized preset descriptions, duplicate localization key cleanup, and toolbar
-reduction. The v1.0 release posture is now decided: `v1.0.0-rc.2` is the
-current source-only release candidate, while `v1.0.0-rc.1` is the previous
-source-only candidate and packaged release remains a later handoff. Keep the
+reduction. The current source posture is now decided: `v1.2.0` is the current
+source-only checkpoint, while `v1.0.0-rc.2` is the previous source-only
+checkpoint and packaged release remains a later handoff. Keep the
 remaining current signals narrow: normal desktop/manual UI smoke is still
 missing, helper launch smoke is still not packaged-release proof, and Hugging
 Face setup guidance / Homebrew command placement remain human-decision items.

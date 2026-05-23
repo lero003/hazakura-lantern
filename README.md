@@ -12,10 +12,10 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v1.0.0-rc.2` is a public source-only release candidate
-for personal/local use. It keeps the existing `llama-server` control boundary
-and does not include a packaged `.app`, zip, dmg, signing, notarization,
-checksum, or binary distribution artifact.
+Current checkpoint: `v1.2.0` is a public source-only checkpoint for
+personal/local use. It keeps the existing `llama-server` control boundary and
+does not include a packaged `.app`, zip, dmg, signing, notarization, checksum,
+or binary distribution artifact.
 
 ## Current Source Scope
 
@@ -37,7 +37,7 @@ checksum, or binary distribution artifact.
 - No chat UI.
 - No proxy layer or OpenAI API compatibility shim.
 - No LAN exposure by default.
-- No API key/authentication gate in the current source release candidate.
+- No API key/authentication gate in the current source checkpoint.
 
 ## Local Development
 

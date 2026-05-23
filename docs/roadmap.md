@@ -132,13 +132,13 @@ Use `docs/external_review_flow.md` when asking outside reviewers whether this
 multimedia direction should stay separate, become a sibling project, or later
 share a local-runtime control contract with Lantern.
 
-## Current Source Lane: v1.0 Source-Only Release Candidate
+## Current Source Lane: v1.2 Source-Only Checkpoint
 
-The project has reached a public source-only `v1.0.0-rc.2` release candidate
-for personal/local use. It keeps the existing `llama-server` control boundary
-and does not include packaged `.app`, zip, dmg, signing, notarization,
-checksum, or binary distribution artifacts. The previous public source-only
-checkpoint was `v1.0.0-rc.1`. The 2026-05-21 automated
+The project has reached a public source-only `v1.2.0` checkpoint for
+personal/local use. It keeps the existing `llama-server` control boundary and
+does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
+binary distribution artifacts. The previous public source-only checkpoint was
+`v1.0.0-rc.2`. The 2026-05-21 automated
 app-bundle helper smoke has mixed evidence and currently regresses with
 `kLSNoExecutableErr`, so a normal desktop/manual UI pass is still required
 before any packaged app release.
@@ -150,12 +150,14 @@ packaging-prep checks, and guarded update-workflow planning. This preparation
 must not create packaged artifacts, mutate runtimes, or change GitHub settings
 without a new human handoff.
 
-Use v0 through v0.4 notes below as foundation and backlog context, not as a
+Use v0 through v1.2 notes below as foundation and backlog context, not as a
 reason to reopen closed work without a concrete ambiguity. The next useful
-source work should fix failing checks, improve one narrow code-quality issue,
+source work should fix failing checks, improve one smoke-observed rough edge,
 classify post-public feedback, tighten automation-safe triage, prepare
 packaged-release evidence without artifact mutation, or address a specific
-`llama-server` reliability issue only when it is concrete and testable.
+`llama-server` reliability issue only when it is concrete and testable. The
+next planned source milestone is `v1.3`, after automated and manual device
+smoke confirm the v1.2 console and metrics path is quiet enough.
 
 Do not loop on historical `kLSNoExecutableErr` diagnostics without a fresh
 Launch Services hypothesis. Continue with release-quality source work that can

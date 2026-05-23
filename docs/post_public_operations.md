@@ -1,8 +1,8 @@
 # Post-Public Operations
 
-This document is the operating guide for the public source-only release
-candidate after the repository is visible. It is not permission to publish
-packaged app artifacts, change GitHub settings, or widen runtime scope.
+This document is the operating guide for the public source-only checkpoint after
+the repository is visible. It is not permission to publish packaged app
+artifacts, change GitHub settings, or widen runtime scope.
 
 Use `docs/public_opening_preflight.md` for historical pre-open checks and
 future visibility or release handoffs. Use this document for ongoing public
@@ -12,11 +12,11 @@ outside release-readiness or future-direction review.
 
 ## Operating Posture
 
-Hazakura Lantern is currently public as a source-only `v1.0.0-rc.2` release
-candidate for personal/local use. The previous source-only release candidate
-was `v1.0.0-rc.1`. Automated work should keep the project understandable,
-narrow, and easy to review while the near-term source lane improves the
-existing `llama-server` path.
+Hazakura Lantern is currently public as a source-only `v1.2.0` checkpoint for
+personal/local use. The previous source-only checkpoint was `v1.0.0-rc.2`.
+Automated work should keep the project understandable, narrow, and easy to
+review while the near-term source lane improves the existing `llama-server`
+path toward a later `v1.3` polish checkpoint.
 
 Post-public stewardship is a guardrail now and the formal v0.5 lane later.
 Automation may start v0.5 docs and triage improvements when v0.4 has no
@@ -133,7 +133,7 @@ Human approval is <needed/not needed> before any public issue mutation.
 For packaged-app or release-asset blockers:
 
 ```text
-Thanks for the report. Lantern is currently a source-only release candidate,
+Thanks for the report. Lantern is currently a source-only checkpoint,
 so this is a packaged-release blocker rather than a source-build blocker.
 The current safe path is SwiftPM verification while the app-bundle launch path
 is investigated separately.

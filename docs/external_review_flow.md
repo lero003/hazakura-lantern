@@ -9,7 +9,7 @@ the release decision.
 Keep release readiness and future product direction separate.
 
 1. Current release/readiness review
-   - Is the source-only release candidate honest, useful, and understandable?
+   - Is the source-only checkpoint honest, useful, and understandable?
    - Are the known release gates clear enough?
    - What should block a packaged app release?
 2. Future direction review
@@ -26,9 +26,9 @@ there is a human handoff for that exact action.
 
 Before asking for current release feedback, gather:
 
-- latest checkpoint: `v1.0.0-rc.2`
+- latest checkpoint: `v1.2.0`
 - branch and working-tree state: `git status --short --branch`
-- recent commits since the previous checkpoint: `git log --oneline v1.0.0-rc.1..HEAD`
+- recent commits since the previous checkpoint: `git log --oneline v1.0.0-rc.2..HEAD`
 - verification results: `swift test`, `swift build --disable-sandbox`,
   localization lint if resources changed, and `git diff --check`
 - current release gates from `docs/current_status.md` and `docs/roadmap.md`
@@ -46,11 +46,11 @@ list alone.
 I want an external release-readiness review for Hazakura Lantern.
 
 Project state:
-- macOS SwiftUI source-only release candidate
-- latest checkpoint: v1.0.0-rc.2
+- macOS SwiftUI source-only checkpoint
+- latest checkpoint: v1.2.0
 - no packaged .app, zip, dmg, signing, notarization, checksum, or binary
   distribution claim
-- current lane: source-only RC polish, manual desktop smoke evidence, and
+- current lane: source-only v1.3 polish, manual device smoke evidence, and
   packaged-release readiness separation
 
 Product boundary:
@@ -69,7 +69,7 @@ Known evidence:
   packaged app release.
 
 Please review:
-1. Are the source-only release-candidate claims honest and understandable?
+1. Are the source-only checkpoint claims honest and understandable?
 2. What, if anything, must be fixed before another source checkpoint?
 3. What must block a packaged app release?
 4. Are any docs or UI claims stronger than the implementation evidence?
@@ -102,7 +102,7 @@ Please review:
 2. If it belongs near Lantern, is the shared concept "local runtime control" or
    "creative generation workspace"?
 3. What boundary would prevent image/video/audio generation from confusing the
-   current source-only release candidate?
+   current source-only checkpoint?
 4. Which first experiment would be smallest: supervising an existing local
    image-generation server, documenting a separate project thesis, or doing
    nothing until Lantern reaches packaged-release confidence?

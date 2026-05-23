@@ -7,10 +7,10 @@ Last reviewed: 2026-05-23
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v1.0.0-rc.2` is a public source-only release
-candidate for personal/local use. It keeps the existing `llama-server` control
-boundary and is not a packaged app release. The previous public source-only
-checkpoint was `v1.0.0-rc.1`.
+Current release checkpoint: `v1.2.0` is a public source-only checkpoint for
+personal/local use. It keeps the existing `llama-server` control boundary and
+is not a packaged app release. The previous public source-only checkpoint was
+`v1.0.0-rc.2`.
 
 Implemented scope:
 
@@ -50,6 +50,9 @@ Implemented scope:
   text is observed.
 - Restart requests now show an explicit `Restarting` state while Lantern waits
   for the current process to terminate before starting the next one.
+- Stop, restart, and app quit now escalate from `SIGTERM` to `SIGKILL` if the
+  child process does not exit, so a hung runtime is less likely to keep the
+  configured port occupied after Lantern closes.
 - Runtime termination logs and error text distinguish normal exit codes from
   signal-based termination.
 - Expected Stop and Restart termination logs now say the requested action
@@ -260,7 +263,7 @@ Implemented scope:
 - Public bug-report guidance now asks for reproduction steps, runtime adapter
   id, profile schema version, command previews, and redacted logs while keeping
   chat, model download, proxy, LAN exposure, authentication, runtime installer,
-  and packaged-app requests outside the current source-only RC boundary.
+  and packaged-app requests outside the current source-only checkpoint boundary.
 - Local/static public-opening review has checked workflow, issue-template,
   manifest, script, README, changelog, and docs guidance for surprising CI
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
@@ -276,6 +279,13 @@ Implemented scope:
   Smoke Console HTTP-snippet, disabled-run feedback, and v1.2 metrics passes
   also had passing
   source-verification results.
+- Local source verification passed again on 2026-05-23 during process
+  termination hardening with `git diff --check`, `swift test` (219 XCTest tests,
+  0 failures), and `swift build --disable-sandbox`.
+- Local source verification passed again on 2026-05-23 during `v1.2.0`
+  source-checkpoint prep with `git diff --check`, English/Japanese
+  `Localizable.strings` lint, `swift test` (219 XCTest tests, 0 failures), and
+  `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -493,7 +503,7 @@ matched.
   user presses Check for Updates. Lantern does not run package-manager, Git,
   download, or binary replacement commands.
 - LAN exposure and authentication are intentionally outside the current source
-  release candidate.
+  checkpoint.
 
 ## Automation Focus
 
@@ -501,13 +511,14 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: continue automated development every 30 minutes through
-`v1.1` Local Smoke Console and `v1.2` Runtime Smoke Metrics, then let the same
-loop fix smoke-observed rough edges before a later source-stable checkpoint
-around `v1.3`. Packaged app release remains separate: automation should continue
-code-quality checks, narrow verified improvements, and packaged-release
-readiness evidence, but should not create packaged artifacts, change GitHub
-settings, mutate public issues, or decide packaged-release readiness by itself.
+Current human direction: continue automated development and manual device
+verification after the `v1.2.0` source-only checkpoint, then fix one
+smoke-observed rough edge at a time before a later source-stable checkpoint
+around `v1.3`. Packaged app release remains separate: automation should
+continue code-quality checks, narrow verified improvements, and
+packaged-release readiness evidence, but should not create packaged artifacts,
+change GitHub settings, mutate public issues, or decide packaged-release
+readiness by itself.
 
 No user-facing packaged release should be cut until the remaining release
 quality gates below are resolved or explicitly deferred by a human.
@@ -557,8 +568,8 @@ assets, repository packages, public issue state, a new
 adapter, custom command implementation, profile schema version, dependencies,
 runtime installation/update, model download, or hidden auto-optimization
 without an explicit human handoff. The current human handoff explicitly allows
-the saved Lantern development automation to run every 30 minutes for the
-v1.1/v1.2 smoke lane and immediate smoke-driven polish afterward.
+the saved Lantern development automation to continue every 30 minutes for
+smoke-driven `v1.3` polish after the `v1.2.0` source checkpoint.
 
 ## Next Best Slice
 
@@ -597,7 +608,7 @@ Good next automated candidates:
   by build/tests
 - review the Setup Guide inspector against the normal Configuration flow and
   remove duplication or crowding if it is visible
-- prepare post-RC readiness evidence, such as release-gate clarity,
+- prepare post-checkpoint readiness evidence, such as release-gate clarity,
   deterministic smoke notes, packaging-prep checks, guarded update-workflow
   planning, or focused tests, without executing runtime updates or public
   release mutations

@@ -54,7 +54,7 @@ Checks:
 
 The health check is a local smoke signal from this Mac. LAN exposure,
 authentication, and remote reachability remain outside the current source
-release candidate.
+checkpoint.
 
 ## App Bundle Launch Smoke
 

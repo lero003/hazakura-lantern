@@ -167,7 +167,7 @@
 "Show the dashboard command preview" = "Show the dashboard command preview";
 "Source Checkpoint" = "Source Checkpoint";
 "Source checkpoint" = "Source checkpoint";
-"Source-only release candidate; no packaged app artifact is included." = "Source-only release candidate; no packaged app artifact is included.";
+"Source-only checkpoint; no packaged app artifact is included." = "Source-only checkpoint; no packaged app artifact is included.";
 "Start" = "Start";
 "Starting" = "Starting";
 "Start Server" = "Start Server";

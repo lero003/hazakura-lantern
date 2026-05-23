@@ -5,8 +5,14 @@ import HazakuraLLMManagerCore
 @main
 struct HazakuraLLMManagerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    @StateObject private var controller = ServerController()
+    @StateObject private var controller: ServerController
     @AppStorage(AppLanguage.storageKey) private var languageRawValue = AppLanguage.system.rawValue
+
+    init() {
+        let controller = ServerController()
+        _controller = StateObject(wrappedValue: controller)
+        appDelegate.serverController = controller
+    }
 
     private var appLanguage: AppLanguage {
         AppLanguage(rawValue: languageRawValue) ?? .system
@@ -77,8 +83,27 @@ struct HazakuraLLMManagerApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    weak var serverController: ServerController?
+    private var isWaitingForTerminationReply = false
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard !isWaitingForTerminationReply else {
+            return .terminateLater
+        }
+
+        guard serverController?.stopForApplicationTermination(completion: { [weak self, weak sender] in
+            self?.isWaitingForTerminationReply = false
+            sender?.reply(toApplicationShouldTerminate: true)
+        }) == true else {
+            return .terminateNow
+        }
+
+        isWaitingForTerminationReply = true
+        return .terminateLater
     }
 }

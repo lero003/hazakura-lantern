@@ -3,7 +3,7 @@ import XCTest
 
 final class SourceCheckpointInfoTests: XCTestCase {
     func testCurrentCheckpointStaysSourceOnly() {
-        XCTAssertEqual(SourceCheckpointInfo.current.identifier, "v1.0.0-rc.2")
+        XCTAssertEqual(SourceCheckpointInfo.current.identifier, "v1.2.0")
         XCTAssertFalse(SourceCheckpointInfo.current.includesPackagedAppArtifact)
     }
 }

@@ -1,3 +1,4 @@
+import Darwin
 import Foundation
 import HazakuraLLMManagerCore
 
@@ -36,6 +37,8 @@ final class ServerController: ObservableObject {
     private var logBuffer = LogBuffer(maxEntries: 2_000)
     private var loadingStartedAt: Date?
     private var loadingTimer: Timer?
+    private var forceTerminationWorkItem: DispatchWorkItem?
+    private var pendingStopCompletions: [() -> Void] = []
 
     init(
         adapter: any RuntimeAdapter = LlamaServerAdapter(),
@@ -332,6 +335,26 @@ final class ServerController: ObservableObject {
         stop(marking: .stopping)
     }
 
+    func stopForApplicationTermination(completion: @escaping () -> Void) -> Bool {
+        isRestartPending = false
+
+        guard let process else {
+            status = .stopped
+            processIdentifier = nil
+            endpointHealthStatus = .unchecked
+            return false
+        }
+
+        guard process.isRunning else {
+            handleTermination(process)
+            return false
+        }
+
+        pendingStopCompletions.append(completion)
+        stop(process, marking: .stopping, reason: "before app termination")
+        return true
+    }
+
     func restart() {
         if process?.isRunning == true {
             isRestartPending = true
@@ -355,10 +378,37 @@ final class ServerController: ObservableObject {
             return
         }
 
+        stop(process, marking: stoppingStatus)
+    }
+
+    private func stop(_ process: Process, marking stoppingStatus: ServerStatus, reason: String? = nil) {
         status = stoppingStatus
         endpointHealthStatus = .unchecked
-        appendLog("Stopping process pid \(process.processIdentifier).", stream: .info)
+        let suffix = reason.map { " \($0)" } ?? ""
+        appendLog("Stopping process pid \(process.processIdentifier)\(suffix).", stream: .info)
         process.terminate()
+        scheduleForceTermination(of: process, after: 3)
+    }
+
+    private func scheduleForceTermination(of process: Process, after delay: TimeInterval) {
+        forceTerminationWorkItem?.cancel()
+
+        let pid = process.processIdentifier
+        let workItem = DispatchWorkItem { [weak self, weak process] in
+            guard let self, let process else {
+                return
+            }
+
+            guard self.process === process, process.isRunning else {
+                return
+            }
+
+            kill(pid, SIGKILL)
+            self.appendLog("Process pid \(pid) did not exit after SIGTERM; sent SIGKILL.", stream: .info)
+        }
+
+        forceTerminationWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
     }
 
     func clearLogs() {
@@ -469,6 +519,8 @@ final class ServerController: ObservableObject {
 
         stdoutPipe?.fileHandleForReading.readabilityHandler = nil
         stderrPipe?.fileHandleForReading.readabilityHandler = nil
+        forceTerminationWorkItem?.cancel()
+        forceTerminationWorkItem = nil
         stdoutPipe = nil
         stderrPipe = nil
         process = nil
@@ -503,6 +555,10 @@ final class ServerController: ObservableObject {
             isRestartPending = false
             start()
         }
+
+        let completions = pendingStopCompletions
+        pendingStopCompletions.removeAll()
+        completions.forEach { $0() }
     }
 
     private func appendLog(_ text: String, stream: LogEntry.Stream) {

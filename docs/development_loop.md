@@ -27,36 +27,31 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Automation Focus
 
-The project has a public source-only `v1.0.0-rc.2` release candidate for
-personal/local use. It keeps the existing `llama-server` control boundary and
-does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
-binary distribution artifacts. Treat exact v0.x numbers as release history, not
-as the next work selector.
+The project has a public source-only `v1.2.0` checkpoint for personal/local
+use. It keeps the existing `llama-server` control boundary and does not include
+packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
+distribution artifacts. Treat exact v0.x numbers as release history, not as the
+next work selector.
 
-Current human direction: continue automated development every 30 minutes through
-`v1.1` and `v1.2`, then use the same loop for smoke-driven rough-edge fixes
-until a later source-stable checkpoint around `v1.3`. Packaged app release work
-remains a separate future handoff. Automation should keep progressing small
-verified slices without creating packaged artifacts, mutating runtime installs,
-changing GitHub settings, or deciding packaged-release readiness by itself.
+Current human direction: continue automated development and manual device
+verification after the `v1.2.0` source-only checkpoint, fixing smoke-observed
+rough edges until a later source-stable polish checkpoint around `v1.3`.
+Packaged app release work remains a separate future handoff. Automation should
+keep progressing small verified slices without creating packaged artifacts,
+mutating runtime installs, changing GitHub settings, or deciding
+packaged-release readiness by itself.
 
 The default question for each automation run is:
 
 > Does this make Lantern closer to release-quality daily use without expanding
 > scope?
 
-Prefer failing quality checks, `v1.1`/`v1.2` runtime usability work, and
-post-RC smoke evidence over packaged-release work. The currently useful
+Prefer failing quality checks, runtime usability polish, and post-checkpoint
+smoke evidence over packaged-release work. The currently useful
 unfinished gates are:
 
 - fix failing `swift test`, `swift build --disable-sandbox`, localization lint,
   or `git diff --check` results before choosing polish
-- v1.1: add or harden a separate Smoke Console destination for explicit,
-  user-triggered local endpoint smoke requests against the selected
-  OpenAI-compatible endpoint/model contract
-- v1.2: add or harden honest smoke metrics such as elapsed time, output
-  character count, runtime-reported usage, approximate token count, approximate
-  decode rate, request mode, and timeout used
 - after v1.2: use smoke runs and manual evidence to fix one concrete rough edge
   at a time before considering a source-stable checkpoint around v1.3
 - make one small code-quality improvement inside the current `llama-server`
@@ -75,7 +70,7 @@ unfinished gates are:
   toolbar, logs, and clean quit
 - concrete rough edges from `docs/automation_smoke_backlog.md` that can be
   fixed or exposed in one verified run
-- post-RC readiness prep such as release-gate clarity, deterministic
+- post-checkpoint readiness prep such as release-gate clarity, deterministic
   smoke evidence, packaging-prep checks, update-workflow planning, or focused
   tests that do not mutate runtime installs or packaged release state
 - external review preparation through `docs/external_review_flow.md` when the
@@ -136,8 +131,8 @@ source-checkpoint centralization. Health checks now follow the chosen rule:
 the action is disabled unless the server is running. Toolbar scope is also
 decided for now: keep only Setup Guide, profile import/export, and copy
 actions. The current source release posture is also decided for now:
-`v1.0.0-rc.2` is a source-only release candidate, while packaged release
-remains a later handoff. Keep Hugging Face setup guidance, Homebrew copy
+`v1.2.0` is a source-only checkpoint, while packaged release remains a later
+handoff. Keep Hugging Face setup guidance, Homebrew copy
 placement, runtime breadth, and packaged-release work as human-decision items.
 
 For pre-release rough-edge discovery, use `docs/automation_smoke_backlog.md`.
@@ -240,12 +235,12 @@ Saved Codex automation:
 - Start with `git status --short --branch`, then read the documents in the
   order above.
 - Choose at most one small v1.1/v1.2 smoke-console, smoke-metrics,
-  code-quality, release-quality, or post-RC readiness slice.
+  code-quality, release-quality, or post-checkpoint readiness slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
   clear and verification passes.
 - Keep runs quiet, but progress-biased. A verified no-op is valid when no
   failing quality check, v1.1/v1.2 smoke-lane slice, concrete rough edge, or
-  post-RC readiness prep is safely actionable in this run.
+  post-checkpoint readiness prep is safely actionable in this run.
 
 Preferred order:
 
@@ -265,7 +260,7 @@ Preferred order:
    pre-release rough edge that can be verified in the same run.
 9. Add focused tests for observed `llama-server` launch, validation, health,
    endpoint, restart, copy-flow, or profile-warning behavior.
-10. Prepare post-RC readiness evidence, such as packaging-prep checks, release-gate
+10. Prepare post-checkpoint readiness evidence, such as packaging-prep checks, release-gate
    wording, deterministic smoke notes, guarded update-workflow planning, or
    test coverage that does not perform real runtime or release mutation.
 11. Prepare external review packets when outside judgment is needed, using
