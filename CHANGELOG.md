@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Hardened Smoke Console response parsing so compatible multi-choice
+  `/v1/chat/completions` responses use the first readable choice instead of
+  failing when an earlier choice is blank.
 - Hardened Smoke Console response parsing so compatible `message.content`
   arrays can ignore structured non-text parts while still displaying readable
   `text` and `output_text` parts from local runtime responses.

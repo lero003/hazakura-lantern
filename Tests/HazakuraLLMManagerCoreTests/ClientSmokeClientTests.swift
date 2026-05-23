@@ -298,6 +298,22 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertEqual(result.approximateOutputTokenCount, 9)
     }
 
+    func testRunUsesFirstReadableChoiceWhenEarlierChoiceIsBlank() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"   "},"finish_reason":"length"},{"message":{"content":" OK from second choice "},"finish_reason":"stop"}]}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "OK from second choice")
+        XCTAssertEqual(result.finishReason, "stop")
+        XCTAssertEqual(result.outputCharacterCount, 21)
+        XCTAssertEqual(result.approximateOutputTokenCount, 6)
+    }
+
     func testApproximateTokenMetricsAreOnlyReportedWhenUsageIsMissing() {
         let startedAt = Date(timeIntervalSince1970: 1_779_501_600)
         let result = ClientSmokeResult(responseText: "abcdefgh", startedAt: startedAt, elapsedSeconds: 2)
@@ -541,12 +557,12 @@ final class ClientSmokeClientTests: XCTestCase {
             guard case .malformedResponse(let message, let url) = error else {
                 return XCTFail("Expected malformed response, got \(error).")
             }
-            XCTAssertEqual(message, "No message content was found in the first choice.")
+            XCTAssertEqual(message, "No readable message content was found in any choice.")
             XCTAssertEqual(url, "http://localhost:1234/v1/chat/completions")
             XCTAssertEqual(error.requestURL, "http://localhost:1234/v1/chat/completions")
             XCTAssertEqual(
                 error.message,
-                "Smoke response from http://localhost:1234/v1/chat/completions could not be read: No message content was found in the first choice."
+                "Smoke response from http://localhost:1234/v1/chat/completions could not be read: No readable message content was found in any choice."
             )
         } catch {
             XCTFail("Unexpected error: \(error)")

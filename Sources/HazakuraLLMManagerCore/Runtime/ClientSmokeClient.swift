@@ -221,14 +221,14 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
     private static func decodeResponse(from data: Data, url: String) throws -> DecodedClientSmokeResponse {
         do {
             let response = try JSONDecoder().decode(ChatCompletionsResponse.self, from: data)
-            guard let content = response.choices.first?.displayText else {
-                throw ClientSmokeError.malformedResponse("No message content was found in the first choice.", url: url)
+            guard let choice = response.readableChoice, let content = choice.displayText else {
+                throw ClientSmokeError.malformedResponse("No readable message content was found in any choice.", url: url)
             }
             return DecodedClientSmokeResponse(
                 responseText: content,
                 usage: response.usage?.clientSmokeUsage ?? response.timings?.clientSmokeUsage,
                 runtimeOutputTokensPerSecond: response.timings?.runtimeOutputTokensPerSecond,
-                finishReason: response.choices.first?.finishReason
+                finishReason: choice.finishReason
             )
         } catch let smokeError as ClientSmokeError {
             throw smokeError
@@ -369,6 +369,10 @@ private struct ChatCompletionsResponse: Decodable {
     var choices: [Choice]
     var usage: Usage?
     var timings: Timings?
+
+    var readableChoice: Choice? {
+        choices.first { $0.displayText != nil }
+    }
 
     enum CodingKeys: String, CodingKey {
         case choices
