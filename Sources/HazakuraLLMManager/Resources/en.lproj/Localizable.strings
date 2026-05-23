@@ -235,6 +235,7 @@
 "Elapsed" = "Elapsed";
 "Enter a smoke prompt before running." = "Enter a smoke prompt before running.";
 "Enter a short smoke prompt." = "Enter a short smoke prompt.";
+"Approx TPS" = "Approx TPS";
 "Local Endpoint" = "Local Endpoint";
 "Non-streaming" = "Non-streaming";
 "No Smoke Result" = "No Smoke Result";
@@ -252,6 +253,7 @@
 "Smoke Response" = "Smoke Response";
 "Start the server before running Smoke Console." = "Start the server before running Smoke Console.";
 "Started" = "Started";
+"TPS" = "TPS";
 "Timeout Used" = "Timeout Used";
 "Usage Reported by Runtime" = "Usage Reported by Runtime";
 "smoke.metric.unavailable" = "n/a";

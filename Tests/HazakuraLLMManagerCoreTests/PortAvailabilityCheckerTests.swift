@@ -17,6 +17,14 @@ final class PortAvailabilityCheckerTests: XCTestCase {
         XCTAssertFalse(checker.isPortAvailable(65_536))
     }
 
+    func testReportsRecentlyClosedListeningPortAsAvailable() throws {
+        let descriptor = try bindLoopbackSocketToEphemeralPort()
+        let port = descriptor.port
+        close(descriptor.socket)
+
+        XCTAssertTrue(PortAvailabilityChecker().isPortAvailable(port))
+    }
+
     private func bindLoopbackSocketToEphemeralPort() throws -> (socket: Int32, port: Int) {
         let descriptor = socket(AF_INET, SOCK_STREAM, 0)
         guard descriptor >= 0 else {

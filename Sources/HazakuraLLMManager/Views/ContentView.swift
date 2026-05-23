@@ -69,9 +69,12 @@ struct ContentView: View {
                                 .padding(24)
                             }
                         case .smokeConsole:
-                            SmokeConsoleView(controller: controller)
-                                .padding(24)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            ScrollView {
+                                SmokeConsoleView(controller: controller)
+                                    .padding(24)
+                                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         case .logs:
                             LogsView(controller: controller)
                                 .padding(24)

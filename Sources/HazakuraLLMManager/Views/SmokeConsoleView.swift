@@ -36,6 +36,7 @@ struct SmokeConsoleView: View {
             }
             .padding(.vertical, 8)
         }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
     }
 
     @ViewBuilder
@@ -79,7 +80,7 @@ struct SmokeConsoleView: View {
 
             TextEditor(text: $prompt)
                 .font(.body)
-                .frame(minHeight: 96)
+                .frame(minHeight: 52, idealHeight: 60, maxHeight: 70)
                 .scrollContentBackground(.hidden)
                 .padding(8)
                 .background(.black.opacity(0.16), in: RoundedRectangle(cornerRadius: 6))
@@ -171,29 +172,29 @@ struct SmokeConsoleView: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
 
+                metricsSummary
+
                 Text(responseText)
                     .font(.system(.body, design: .monospaced))
                     .textSelection(.enabled)
                     .padding(10)
-                    .frame(maxWidth: .infinity, minHeight: 120, alignment: .topLeading)
+                    .frame(maxWidth: .infinity, minHeight: 260, alignment: .topLeading)
                     .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
                     .overlay(
                         RoundedRectangle(cornerRadius: 6)
                             .stroke(Color.white.opacity(0.08), lineWidth: 1)
                     )
-
-                metricsSummary
             }
         } else if let errorMessage {
             VStack(alignment: .leading, spacing: 6) {
+                metricsSummary
+
                 Label(errorMessage, systemImage: "exclamationmark.triangle")
                     .font(.caption)
                     .foregroundStyle(.red)
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(.red.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
-
-                metricsSummary
             }
         } else {
             ContentUnavailableView(
@@ -236,6 +237,13 @@ struct SmokeConsoleView: View {
 
     @ViewBuilder
     private func metricsBadges(for result: ClientSmokeResult) -> some View {
+        if let outputTokensPerSecond = result.outputTokensPerSecond {
+            metricBadge(
+                title: result.usesApproximateOutputRate ? "Approx TPS" : "TPS",
+                value: formattedApproximateRate(outputTokensPerSecond),
+                isProminent: true
+            )
+        }
         if let startedAt = result.startedAt {
             metricBadge(title: "Started", value: formattedStartedAt(startedAt))
         }
@@ -265,18 +273,22 @@ struct SmokeConsoleView: View {
         metricBadge(title: "Timeout Used", value: "\(metrics.timeoutSeconds)s")
     }
 
-    private func metricBadge(title: LocalizedStringKey, value: String) -> some View {
+    private func metricBadge(title: LocalizedStringKey, value: String, isProminent: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .font(.caption2.weight(.semibold))
                 .textCase(.uppercase)
             Text(value)
-                .font(.system(.caption, design: .monospaced))
+                .font(.system(isProminent ? .body : .caption, design: .monospaced).weight(isProminent ? .semibold : .regular))
                 .textSelection(.enabled)
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 5)
-        .background(.black.opacity(0.14), in: RoundedRectangle(cornerRadius: 6))
+        .padding(.horizontal, isProminent ? 10 : 8)
+        .padding(.vertical, isProminent ? 7 : 5)
+        .background((isProminent ? Color.accentColor.opacity(0.22) : Color.black.opacity(0.14)), in: RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(isProminent ? Color.accentColor.opacity(0.24) : Color.clear, lineWidth: 1)
+        )
     }
 
     private var isServerRunning: Bool {
@@ -400,6 +412,10 @@ struct SmokeConsoleView: View {
 
         if let startedAt = result.startedAt {
             lines.append("\(String(localized: "Started")): \(formattedStartedAt(startedAt))")
+        }
+        if let outputTokensPerSecond = result.outputTokensPerSecond {
+            let title = result.usesApproximateOutputRate ? String(localized: "Approx TPS") : String(localized: "TPS")
+            lines.append("\(title): \(formattedApproximateRate(outputTokensPerSecond))")
         }
         lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(result.elapsedSeconds))")
         lines.append("\(String(localized: "Characters")): \(result.outputCharacterCount)")

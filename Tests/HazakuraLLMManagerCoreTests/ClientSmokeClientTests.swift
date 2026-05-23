@@ -47,7 +47,7 @@ final class ClientSmokeClientTests: XCTestCase {
         let body = String(data: try XCTUnwrap(ClientSmokeURLProtocol.observedBody), encoding: .utf8)
         XCTAssertEqual(
             body,
-            #"{"max_tokens":64,"messages":[{"content":"Reply OK.","role":"user"}],"model":"qwen-local","stream":false}"#
+            #"{"max_tokens":100000,"messages":[{"content":"Reply OK.","role":"user"}],"model":"qwen-local","stream":false}"#
         )
     }
 
@@ -66,8 +66,25 @@ final class ClientSmokeClientTests: XCTestCase {
             result.runtimeUsage,
             ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2, totalTokens: 10)
         )
+        XCTAssertNotNil(result.outputTokensPerSecond)
+        XCTAssertFalse(result.usesApproximateOutputRate)
         XCTAssertNil(result.approximateOutputTokenCount)
         XCTAssertNil(result.approximateOutputTokensPerSecond)
+    }
+
+    func testRunUsesReasoningContentWhenMessageContentIsEmpty() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"","reasoning_content":"Decoded reasoning text"}}],"usage":{"completion_tokens":4}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(result.responseText, "Decoded reasoning text")
+        XCTAssertEqual(result.runtimeUsage, ClientSmokeResult.Usage(completionTokens: 4))
+        XCTAssertNotNil(result.outputTokensPerSecond)
     }
 
     func testApproximateTokenMetricsAreOnlyReportedWhenUsageIsMissing() {
@@ -78,6 +95,8 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertNil(result.runtimeUsage)
         XCTAssertEqual(result.approximateOutputTokenCount, 2)
         XCTAssertEqual(result.approximateOutputTokensPerSecond, 1)
+        XCTAssertEqual(result.outputTokensPerSecond, 1)
+        XCTAssertTrue(result.usesApproximateOutputRate)
     }
 
     func testRunRejectsInvalidEndpointBeforeRequest() async {

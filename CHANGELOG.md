@@ -6,6 +6,18 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Adjusted Smoke Console after manual review: the sidebar now uses the shorter
+  Japanese label, response metrics appear above the response body with TPS
+  first and prominent, the prompt area is shorter, the response area/page can
+  use more vertical space, and empty `content` responses can display decoded
+  `reasoning_content` output from compatible local runtimes.
+- Raised the default Smoke Console request token cap so thinking-capable local
+  runtimes have room to return final `content` during an explicit smoke run
+  while the existing timeout still bounds the request.
+- Raised the default Smoke Console timeout to allow larger explicit local
+  verification runs without turning the feature into automatic benchmarking.
+- Relaxed the launch preflight port probe so recently closed local ports are
+  not treated as indefinitely unavailable by the app-side availability check.
 - Added failed-attempt metrics to Smoke Console errors, so failed local endpoint
   smoke evidence now shows started time, elapsed time, request mode, and
   timeout used when displayed or copied.

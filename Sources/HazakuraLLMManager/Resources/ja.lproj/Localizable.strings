@@ -235,6 +235,7 @@
 "Elapsed" = "経過時間";
 "Enter a smoke prompt before running." = "実行する前に確認プロンプトを入力してください。";
 "Enter a short smoke prompt." = "短い確認プロンプトを入力してください。";
+"Approx TPS" = "概算TPS";
 "Local Endpoint" = "ローカルエンドポイント";
 "Non-streaming" = "非ストリーミング";
 "No Smoke Result" = "動作確認結果はありません";
@@ -245,13 +246,14 @@
 "Resolve the endpoint configuration before running Smoke Console." = "Smoke Console を実行する前にエンドポイント設定を解決してください。";
 "Running local endpoint smoke..." = "ローカルエンドポイントを確認中...";
 "Running Smoke" = "確認中";
-"Smoke Console" = "動作確認コンソール";
+"Smoke Console" = "動作確認";
 "Smoke Error" = "動作確認エラー";
 "Smoke Metrics" = "動作確認メトリクス";
 "Smoke Prompt" = "確認プロンプト";
 "Smoke Response" = "確認応答";
 "Start the server before running Smoke Console." = "Smoke Console を実行する前にサーバーを開始してください。";
 "Started" = "開始時刻";
+"TPS" = "TPS";
 "Timeout Used" = "使用タイムアウト";
 "Usage Reported by Runtime" = "ランタイム報告の使用量";
 "smoke.metric.unavailable" = "なし";
