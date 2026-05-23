@@ -49,6 +49,9 @@ Latest source-verification result (2026-05-23 Smoke Console metric-tolerance pas
 - `swift build --disable-sandbox` passed.
 - App-bundle helper smoke was not rerun in this slice because no fresh Launch
   Services hypothesis or normal desktop verification environment was available.
+- Smoke Console Japanese unavailable-run messages now consistently use the
+  localized "動作確認" surface name instead of mixing in the English
+  "Smoke Console" label.
 - Smoke Console metric parsing now accepts numeric-string `usage` and
   `timings.predicted_per_second` values, and ignores malformed optional
   metrics when the response text is readable, keeping advisory metric

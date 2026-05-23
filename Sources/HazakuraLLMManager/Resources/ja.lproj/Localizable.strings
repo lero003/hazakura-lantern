@@ -249,7 +249,7 @@
 "Run a local endpoint smoke request to show the latest response here." = "ローカルエンドポイントの動作確認リクエストを実行すると、直近の応答がここに表示されます。";
 "Run Smoke" = "動作確認を実行";
 "Send the prompt to the selected local endpoint without saving a conversation." = "会話を保存せず、選択中のローカルエンドポイントへプロンプトを送信します。";
-"Resolve the endpoint configuration before running Smoke Console." = "Smoke Console を実行する前にエンドポイント設定を解決してください。";
+"Resolve the endpoint configuration before running Smoke Console." = "動作確認を実行する前にエンドポイント設定を解決してください。";
 "Running local endpoint smoke..." = "ローカルエンドポイントを確認中...";
 "Running Smoke" = "確認中";
 "Smoke Console" = "動作確認";
@@ -257,7 +257,7 @@
 "Smoke Metrics" = "動作確認メトリクス";
 "Smoke Prompt" = "確認プロンプト";
 "Smoke Response" = "確認応答";
-"Start the server before running Smoke Console." = "Smoke Console を実行する前にサーバーを開始してください。";
+"Start the server before running Smoke Console." = "動作確認を実行する前にサーバーを開始してください。";
 "Started" = "開始時刻";
 "TPS" = "TPS";
 "Timeout Used" = "使用タイムアウト";

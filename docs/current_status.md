@@ -160,6 +160,9 @@ Implemented scope:
 - Smoke Console Run, Copy Result, and Clear Result controls now expose localized
   accessibility hints that keep the surface framed as an explicit endpoint
   smoke, not saved conversation history.
+- Smoke Console Japanese unavailable-run messages now use the localized
+  "動作確認" surface name instead of mixing in the English "Smoke Console"
+  label.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.
@@ -515,7 +518,9 @@ Current source-verification status (2026-05-23 Smoke Console metric-tolerance pa
 `swift test` (233 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available.
+verification environment was available. The follow-up localization polish keeps
+Smoke Console Japanese unavailable-run messages on the localized "動作確認"
+surface name.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services
