@@ -96,6 +96,9 @@ Implemented scope:
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
   into a bounded readable summary before showing them in the error surface.
+- Smoke Console HTTP error snippets now prefer OpenAI-compatible
+  `error.message` payloads when present, so local runtime errors are shown as
+  readable bounded messages instead of raw JSON.
 - Smoke Console result copy now copies the latest success response with the
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, so local smoke evidence is easier to share without adding logs or

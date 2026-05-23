@@ -45,7 +45,7 @@ Latest source-verification result (2026-05-23 Smoke Console TPS/manual-review po
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 218 XCTest tests, 0 failures.
+- `swift test` passed: 220 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - App-bundle helper smoke was not rerun in this slice because no fresh Launch
   Services hypothesis or normal desktop verification environment was available.
@@ -64,6 +64,9 @@ Latest source-verification result (2026-05-23 Smoke Console TPS/manual-review po
   adding logs, history, or benchmark claims.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
   into bounded readable summaries before showing them in the error surface.
+- Smoke Console HTTP error snippets now prefer OpenAI-compatible
+  `error.message` payloads when present, keeping local runtime error evidence
+  readable without persisting logs or widening the smoke surface.
 - The v1.2 metrics path now covers successful Smoke Console started time,
   elapsed time, output character count, runtime-reported usage when available,
   explicitly approximate fallback output token count/rate, request mode, and

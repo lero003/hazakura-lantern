@@ -188,6 +188,20 @@ final class ClientSmokeClientTests: XCTestCase {
         }
     }
 
+    func testRunMapsOpenAIStyleErrorMessageSnippet() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 500,
+            body: #"{"error":{"message":"model still loading\ntry again soon","type":"server_error"}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(500, bodySnippet: "model still loading try again soon")
+        )
+    }
+
     func testRunMapsMalformedResponseJSON() async {
         ClientSmokeURLProtocol.result = .success(statusCode: 200, body: #"{"choices":[]}"#)
         let client = ClientSmokeClient(session: makeSession())

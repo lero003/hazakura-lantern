@@ -222,9 +222,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             return nil
         }
 
-        let normalizedBody = body
-            .split(whereSeparator: \.isWhitespace)
-            .joined(separator: " ")
+        let normalizedBody = normalizedSnippetText(Self.openAIErrorMessage(from: data) ?? body)
 
         let limit = 240
         if normalizedBody.count <= limit {
@@ -233,11 +231,60 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
 
         return String(normalizedBody.prefix(limit)) + "..."
     }
+
+    private static func normalizedSnippetText(_ text: String) -> String {
+        text
+            .split(whereSeparator: \.isWhitespace)
+            .joined(separator: " ")
+    }
+
+    private static func openAIErrorMessage(from data: Data) -> String? {
+        guard
+            let response = try? JSONDecoder().decode(OpenAIErrorResponse.self, from: data),
+            let message = response.error.message?.trimmingCharacters(in: .whitespacesAndNewlines),
+            !message.isEmpty
+        else {
+            return nil
+        }
+
+        return message
+    }
 }
 
 private struct DecodedClientSmokeResponse {
     var responseText: String
     var usage: ClientSmokeResult.Usage?
+}
+
+private struct OpenAIErrorResponse: Decodable {
+    var error: ErrorPayload
+
+    enum ErrorPayload: Decodable {
+        case message(String?)
+
+        var message: String? {
+            switch self {
+            case .message(let message):
+                return message
+            }
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+
+            if let message = try? container.decode(String.self) {
+                self = .message(message)
+                return
+            }
+
+            let payload = try container.decode(MessagePayload.self)
+            self = .message(payload.message)
+        }
+
+        private struct MessagePayload: Decodable {
+            var message: String?
+        }
+    }
 }
 
 private struct ChatCompletionsResponse: Decodable {
