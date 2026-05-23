@@ -485,7 +485,7 @@ private struct ChatCompletionsResponse: Decodable {
 
             let payload = try container.decode(Payload.self)
             self.type = payload.type
-            self.text = payload.text
+            self.text = payload.text ?? payload.content
         }
 
         var displayText: String? {
@@ -508,6 +508,7 @@ private struct ChatCompletionsResponse: Decodable {
         private struct Payload: Decodable {
             var type: String?
             var text: String?
+            var content: String?
         }
     }
 

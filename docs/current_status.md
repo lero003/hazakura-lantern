@@ -166,6 +166,9 @@ Implemented scope:
 - Smoke Console text-part response parsing now also accepts compatible
   `output_text` parts inside `message.content`, keeping response-style local
   smoke payloads readable without adding chat history or benchmark behavior.
+- Smoke Console text-part response parsing now also accepts compatible `content`
+  fields inside text and output-text parts, keeping readable local smoke output
+  visible when a runtime uses that field name instead of `text`.
 - Smoke Console text-part response parsing now also accepts plain string items
   inside compatible `message.content` arrays, keeping mixed readable local
   smoke output from being reported as malformed JSON.
@@ -528,14 +531,15 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 Smoke Console finish-reason tolerance pass):
+Current source-verification status (2026-05-24 Smoke Console content-field text-part pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (237 XCTest tests, 0 failures), and
+`swift test` (239 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available. Smoke Console finish-reason parsing now
-ignores malformed optional values when the response text itself is readable,
-keeping advisory metadata from causing malformed-response errors.
+verification environment was available. Smoke Console text-part response parsing
+now accepts compatible `content` fields inside text and output-text parts,
+keeping readable local smoke output from becoming a malformed-response error
+when a runtime uses that field name instead of `text`.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services
