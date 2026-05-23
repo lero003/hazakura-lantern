@@ -114,6 +114,9 @@ Implemented scope:
   when available, explicitly approximate fallback output token count/rate,
   request mode, and timeout used, then shows those values with the response
   with localized app-owned labels.
+- Smoke Console now preserves OpenAI-compatible response finish reasons such as
+  `stop` or `length` in displayed and copied metrics, keeping bounded-output
+  evidence visible without adding benchmark or conversation history behavior.
 - Smoke Console metric labels now explicitly distinguish usage reported by the
   runtime from approximate output-token fallback metrics, keeping copied smoke
   evidence honest without adding benchmark claims.

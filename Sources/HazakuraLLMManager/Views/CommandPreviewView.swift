@@ -7,21 +7,13 @@ struct CommandPreviewView: View {
 
     var body: some View {
         GroupBox("Launch Command") {
-            HStack(spacing: 8) {
+            HStack(spacing: DesignTokens.Spacing.md) {
                 Text(controller.launchCommandPreview)
-                    .font(.system(.caption, design: .monospaced))
-                    .foregroundStyle(.primary.opacity(0.85))
-                    .textSelection(.enabled)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
+                    .codeBlockStyle()
+                    .foregroundStyle(.primary.opacity(DesignTokens.Opacity.textBody))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                    )
 
-                VStack(alignment: .trailing, spacing: 3) {
+                VStack(alignment: .trailing, spacing: DesignTokens.Spacing.xxs) {
                     Button {
                         copyCommand()
                     } label: {
@@ -30,14 +22,14 @@ struct CommandPreviewView: View {
                     .buttonStyle(SecondaryButtonStyle())
 
                     Text("Copied!")
-                        .font(.caption2)
+                        .font(DesignTokens.Font.captionSmall)
                         .foregroundStyle(.green)
                         .opacity(didCopy ? 1 : 0)
                         .accessibilityHidden(!didCopy)
                         .frame(height: 12, alignment: .trailing)
                 }
             }
-            .padding(.vertical, 2)
+            .padding(.vertical, DesignTokens.Spacing.xxs)
         }
     }
 
@@ -46,16 +38,14 @@ struct CommandPreviewView: View {
         copyGeneration += 1
         let generation = copyGeneration
 
-        withAnimation(.easeInOut(duration: 0.15)) {
+        withAnimation(.easeInOut(duration: DesignTokens.Animation.snappy)) {
             didCopy = true
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-            guard copyGeneration == generation else {
-                return
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + DesignTokens.Animation.copyFeedback) {
+            guard copyGeneration == generation else { return }
 
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation(.easeInOut(duration: DesignTokens.Animation.defaultDur)) {
                 didCopy = false
             }
         }

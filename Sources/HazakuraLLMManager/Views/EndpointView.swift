@@ -1,4 +1,5 @@
 import SwiftUI
+import HazakuraLLMManagerCore
 
 struct EndpointView: View {
     @ObservedObject var controller: ServerController
@@ -9,19 +10,11 @@ struct EndpointView: View {
             if let endpoint = controller.runtimeEndpoint {
                 let healthCurlCommand = endpoint.endpointHealthCurlCommand
 
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.lg) {
+                    HStack(spacing: DesignTokens.Spacing.md) {
                         Text(endpoint.apiBaseURLString)
-                            .font(.system(.body, design: .monospaced))
-                            .textSelection(.enabled)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
+                            .codeBlockStyle()
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                            )
 
                         EndpointCopyButton(
                             title: "Copy Endpoint",
@@ -30,7 +23,7 @@ struct EndpointView: View {
                         )
                     }
 
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
                         endpointDetailRow(
                             title: "Model ID",
                             value: endpoint.modelID,
@@ -43,17 +36,17 @@ struct EndpointView: View {
                         )
 
                         Label("API key is not required unless llama-server is started with --api-key.", systemImage: "lock.open")
-                            .font(.caption)
+                            .font(DesignTokens.Font.caption)
                             .foregroundStyle(.secondary)
                     }
 
-                    HStack(alignment: .top, spacing: 12) {
+                    HStack(alignment: .top, spacing: DesignTokens.Spacing.xl) {
                         Label {
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                                 Text(controller.endpointHealthStatus.title)
                                 if let detail = controller.endpointHealthStatus.detail {
                                     Text(detail)
-                                        .font(.caption)
+                                        .font(DesignTokens.Font.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
@@ -78,94 +71,14 @@ struct EndpointView: View {
 
                     Divider()
 
-                    VStack(alignment: .leading, spacing: 0) {
-                        DisclosureSectionHeader(
-                            title: "Advanced Connection Details",
-                            isExpanded: $isAdvancedExpanded
-                        )
+                    DisclosureSectionHeader(
+                        title: "Advanced Connection Details",
+                        isExpanded: $isAdvancedExpanded
+                    )
 
-                        if isAdvancedExpanded {
-                            VStack(alignment: .leading, spacing: 10) {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Environment Variables")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                    HStack(spacing: 8) {
-                                        Text(endpoint.environmentSnippet)
-                                            .font(.system(.caption, design: .monospaced))
-                                            .foregroundStyle(.secondary)
-                                            .textSelection(.enabled)
-                                            .padding(.horizontal, 10)
-                                            .padding(.vertical, 6)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 6)
-                                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                                            )
-
-                                        EndpointCopyButton(
-                                            title: "Copy Environment",
-                                            systemImage: "terminal",
-                                            value: endpoint.environmentSnippet
-                                        )
-                                    }
-                                }
-
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Health Check curl")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                    HStack(spacing: 8) {
-                                        Text(healthCurlCommand ?? "Health check is not available for this adapter.")
-                                            .font(.system(.caption, design: .monospaced))
-                                            .foregroundStyle(.secondary)
-                                            .textSelection(.enabled)
-                                            .padding(.horizontal, 10)
-                                            .padding(.vertical, 6)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 6)
-                                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                                            )
-
-                                        EndpointCopyButton(
-                                            title: "Copy Health Check",
-                                            systemImage: "cross.case",
-                                            value: healthCurlCommand
-                                        )
-                                    }
-                                }
-
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Client Connection curl")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                    HStack(spacing: 8) {
-                                        Text(endpoint.aiMobileSmokeCurlCommand)
-                                            .font(.system(.caption, design: .monospaced))
-                                            .foregroundStyle(.secondary)
-                                            .textSelection(.enabled)
-                                            .padding(.horizontal, 10)
-                                            .padding(.vertical, 6)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 6)
-                                                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                                            )
-
-                                        EndpointCopyButton(
-                                            title: "Copy AI Mobile Test",
-                                            systemImage: "checkmark.circle",
-                                            value: endpoint.aiMobileSmokeCurlCommand
-                                        )
-                                    }
-                                }
-                            }
-                            .padding(.top, 8)
-                        }
+                    if isAdvancedExpanded {
+                        advancedDetails(endpoint, healthCurlCommand: healthCurlCommand)
+                            .padding(.top, DesignTokens.Spacing.sm)
                     }
                 }
             } else {
@@ -173,8 +86,61 @@ struct EndpointView: View {
                     controller.runtimeEndpointErrorMessage ?? "Endpoint is not available for the current configuration.",
                     systemImage: "exclamationmark.triangle"
                 )
-                .font(.caption)
+                .font(DesignTokens.Font.caption)
                 .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func advancedDetails(_ endpoint: RuntimeEndpoint, healthCurlCommand: String?) -> some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.lg) {
+            codeSnippetBlock(
+                label: "Environment Variables",
+                value: endpoint.environmentSnippet,
+                copyTitle: "Copy Environment",
+                copyIcon: "terminal"
+            )
+
+            codeSnippetBlock(
+                label: "Health Check curl",
+                value: healthCurlCommand ?? "Health check is not available for this adapter.",
+                copyTitle: "Copy Health Check",
+                copyIcon: "cross.case",
+                disabled: healthCurlCommand == nil
+            )
+
+            codeSnippetBlock(
+                label: "Client Connection curl",
+                value: endpoint.aiMobileSmokeCurlCommand,
+                copyTitle: "Copy AI Mobile Test",
+                copyIcon: "checkmark.circle"
+            )
+        }
+    }
+
+    private func codeSnippetBlock(
+        label: String,
+        value: String,
+        copyTitle: LocalizedStringKey,
+        copyIcon: String,
+        disabled: Bool = false
+    ) -> some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
+            Text(label)
+                .font(DesignTokens.Font.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: DesignTokens.Spacing.md) {
+                Text(value)
+                    .codeBlockStyle()
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                EndpointCopyButton(
+                    title: copyTitle,
+                    systemImage: copyIcon,
+                    value: value.isEmpty ? nil : value
+                )
             }
         }
     }
@@ -184,14 +150,14 @@ struct EndpointView: View {
         value: String,
         copyTitle: LocalizedStringKey? = nil
     ) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
+        HStack(alignment: .firstTextBaseline, spacing: DesignTokens.Spacing.md) {
             Text(title)
-                .font(.caption.weight(.semibold))
+                .font(DesignTokens.Font.caption)
                 .foregroundStyle(.secondary)
                 .frame(width: 78, alignment: .leading)
 
             Text(value)
-                .font(.system(.caption, design: .monospaced))
+                .font(DesignTokens.Font.codeCaption)
                 .textSelection(.enabled)
                 .lineLimit(1)
                 .truncationMode(.middle)
@@ -209,14 +175,10 @@ struct EndpointView: View {
 
     private var healthColor: Color {
         switch controller.endpointHealthStatus.tone {
-        case .neutral:
-            .secondary
-        case .inProgress:
-            .orange
-        case .success:
-            .green
-        case .failure:
-            .red
+        case .neutral: .secondary
+        case .inProgress: .orange
+        case .success: .green
+        case .failure: .red
         }
     }
 
@@ -238,7 +200,7 @@ private struct EndpointCopyButton: View {
     @State private var copyGeneration = 0
 
     var body: some View {
-        VStack(alignment: .trailing, spacing: 3) {
+        VStack(alignment: .trailing, spacing: DesignTokens.Spacing.xxs) {
             Button {
                 copyValue()
             } label: {
@@ -248,7 +210,7 @@ private struct EndpointCopyButton: View {
             .disabled(value == nil)
 
             Text("Copied!")
-                .font(.caption2)
+                .font(DesignTokens.Font.captionSmall)
                 .foregroundStyle(.green)
                 .opacity(didCopy ? 1 : 0)
                 .accessibilityHidden(!didCopy)
@@ -257,24 +219,20 @@ private struct EndpointCopyButton: View {
     }
 
     private func copyValue() {
-        guard let value else {
-            return
-        }
+        guard let value else { return }
 
         PasteboardWriter.copy(value)
         copyGeneration += 1
         let generation = copyGeneration
 
-        withAnimation(.easeInOut(duration: 0.15)) {
+        withAnimation(.easeInOut(duration: DesignTokens.Animation.snappy)) {
             didCopy = true
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-            guard copyGeneration == generation else {
-                return
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + DesignTokens.Animation.copyFeedback) {
+            guard copyGeneration == generation else { return }
 
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation(.easeInOut(duration: DesignTokens.Animation.defaultDur)) {
                 didCopy = false
             }
         }

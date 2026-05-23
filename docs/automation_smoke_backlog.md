@@ -81,6 +81,9 @@ Latest source-verification result (2026-05-23 Smoke Console TPS/manual-review po
   text-part `message.content` arrays from OpenAI-compatible local runtimes, and
   the app-side port availability probe no longer treats recently closed local
   ports as indefinitely unavailable.
+- Smoke Console now preserves OpenAI-compatible `finish_reason` values such as
+  `stop` or `length` in displayed and copied metrics, so bounded local smoke
+  evidence shows whether the runtime stopped naturally or hit the request cap.
 
 Latest app-bundle helper smoke result (2026-05-21 current run):
 
