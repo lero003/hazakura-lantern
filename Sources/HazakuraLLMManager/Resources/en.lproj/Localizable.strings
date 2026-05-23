@@ -244,6 +244,7 @@
 "Running Smoke" = "Running Smoke";
 "Runtime Usage" = "Runtime Usage";
 "Smoke Console" = "Smoke Console";
+"Smoke Metrics" = "Smoke Metrics";
 "Smoke Prompt" = "Smoke Prompt";
 "Smoke Response" = "Smoke Response";
 "Start the server before running Smoke Console." = "Start the server before running Smoke Console.";

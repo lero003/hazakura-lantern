@@ -277,6 +277,7 @@ struct SmokeConsoleView: View {
         responseText = nil
         resultMetrics = nil
         errorMessage = nil
+        didCopy = false
         let request = ClientSmokeRequest(
             baseURL: endpoint.apiBaseURLString,
             apiKey: endpoint.apiKey,
@@ -309,7 +310,49 @@ struct SmokeConsoleView: View {
     }
 
     private var copyableResult: String? {
-        responseText ?? errorMessage
+        if let responseText {
+            return copyableSuccessResult(responseText)
+        }
+
+        return errorMessage
+    }
+
+    private func copyableSuccessResult(_ responseText: String) -> String {
+        guard let resultMetrics else {
+            return responseText
+        }
+
+        return [
+            String(localized: "Smoke Response"),
+            responseText,
+            "",
+            String(localized: "Smoke Metrics"),
+            copyMetricLines(for: resultMetrics).joined(separator: "\n")
+        ].joined(separator: "\n")
+    }
+
+    private func copyMetricLines(for result: ClientSmokeResult) -> [String] {
+        var lines: [String] = []
+
+        if let startedAt = result.startedAt {
+            lines.append("\(String(localized: "Started")): \(formattedStartedAt(startedAt))")
+        }
+        lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(result.elapsedSeconds))")
+        lines.append("\(String(localized: "Characters")): \(result.outputCharacterCount)")
+        if let runtimeUsage = result.runtimeUsage {
+            lines.append("\(String(localized: "Runtime Usage")): \(formattedRuntimeUsage(runtimeUsage))")
+        } else {
+            if let approximateOutputTokenCount = result.approximateOutputTokenCount {
+                lines.append("\(String(localized: "Approx Tokens")): \(approximateOutputTokenCount)")
+            }
+            if let approximateOutputTokensPerSecond = result.approximateOutputTokensPerSecond {
+                lines.append("\(String(localized: "Approx Decode Rate")): \(formattedApproximateRate(approximateOutputTokensPerSecond))")
+            }
+        }
+        lines.append("\(String(localized: "Mode")): \(displayRequestMode(result.requestMode))")
+        lines.append("\(String(localized: "Timeout")): \(result.timeoutSeconds)s")
+
+        return lines
     }
 
     private func copyResult() {

@@ -244,6 +244,7 @@
 "Running Smoke" = "確認中";
 "Runtime Usage" = "ランタイム使用量";
 "Smoke Console" = "動作確認コンソール";
+"Smoke Metrics" = "動作確認メトリクス";
 "Smoke Prompt" = "確認プロンプト";
 "Smoke Response" = "確認応答";
 "Start the server before running Smoke Console." = "Smoke Console を実行する前にサーバーを開始してください。";

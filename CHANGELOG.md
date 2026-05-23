@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Extended Smoke Console success copies to include the displayed v1.2 metrics
+  alongside the response text, while failed smoke copies still copy the visible
+  error message.
 - Added Smoke Console started-time evidence to successful v1.2 metrics, so the
   latest local endpoint smoke result shows when the request began alongside
   elapsed time, output size, usage, request mode, and timeout.
