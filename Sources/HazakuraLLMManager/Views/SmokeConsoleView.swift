@@ -247,6 +247,9 @@ struct SmokeConsoleView: View {
         if let startedAt = result.startedAt {
             metricBadge(title: "Started", value: formattedStartedAt(startedAt))
         }
+        if let requestURL = result.requestURL {
+            metricBadge(title: "Request URL", value: requestURL, valueLineLimit: 1)
+        }
         metricBadge(title: "Elapsed", value: formattedElapsed(result.elapsedSeconds))
         metricBadge(title: "Characters", value: "\(result.outputCharacterCount)")
         if let finishReason = result.finishReason {
@@ -273,13 +276,20 @@ struct SmokeConsoleView: View {
         metricBadge(title: "Timeout Used", value: "\(metrics.timeoutSeconds)s")
     }
 
-    private func metricBadge(title: LocalizedStringKey, value: String, isProminent: Bool = false) -> some View {
+    private func metricBadge(
+        title: LocalizedStringKey,
+        value: String,
+        isProminent: Bool = false,
+        valueLineLimit: Int? = nil
+    ) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .font(.caption2.weight(.semibold))
                 .textCase(.uppercase)
             Text(value)
                 .font(.system(isProminent ? .body : .caption, design: .monospaced).weight(isProminent ? .semibold : .regular))
+                .lineLimit(valueLineLimit)
+                .truncationMode(.middle)
                 .textSelection(.enabled)
         }
         .padding(.horizontal, isProminent ? 10 : 8)
@@ -412,6 +422,9 @@ struct SmokeConsoleView: View {
 
         if let startedAt = result.startedAt {
             lines.append("\(String(localized: "Started")): \(formattedStartedAt(startedAt))")
+        }
+        if let requestURL = result.requestURL {
+            lines.append("\(String(localized: "Request URL")): \(requestURL)")
         }
         if let outputTokensPerSecond = result.outputTokensPerSecond {
             let title = outputRateCopyTitle(for: result)

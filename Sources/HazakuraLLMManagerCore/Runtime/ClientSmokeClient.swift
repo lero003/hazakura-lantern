@@ -34,6 +34,7 @@ public struct ClientSmokeResult: Equatable, Sendable {
     public var usesApproximateOutputRate: Bool
     public var usesRuntimeReportedOutputRate: Bool
     public var finishReason: String?
+    public var requestURL: String?
 
     public init(
         responseText: String,
@@ -43,7 +44,8 @@ public struct ClientSmokeResult: Equatable, Sendable {
         timeoutSeconds: Int = 60,
         runtimeUsage: Usage? = nil,
         runtimeOutputTokensPerSecond: Double? = nil,
-        finishReason: String? = nil
+        finishReason: String? = nil,
+        requestURL: String? = nil
     ) {
         self.responseText = responseText
         self.startedAt = startedAt
@@ -53,6 +55,7 @@ public struct ClientSmokeResult: Equatable, Sendable {
         self.timeoutSeconds = max(1, timeoutSeconds)
         self.runtimeUsage = runtimeUsage?.hasReportedTokens == true ? runtimeUsage : nil
         self.finishReason = finishReason?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        self.requestURL = requestURL?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
 
         if self.runtimeUsage == nil {
             let approximateOutputTokenCount = Self.approximateOutputTokens(for: responseText)
@@ -181,7 +184,8 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
                 timeoutSeconds: request.timeoutSeconds,
                 runtimeUsage: decodedResponse.usage,
                 runtimeOutputTokensPerSecond: decodedResponse.runtimeOutputTokensPerSecond,
-                finishReason: decodedResponse.finishReason
+                finishReason: decodedResponse.finishReason,
+                requestURL: urlString
             )
         } catch let smokeError as ClientSmokeError {
             throw smokeError

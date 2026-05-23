@@ -146,6 +146,9 @@ Implemented scope:
   when a local `/v1/chat/completions` endpoint omits
   `choices[0].message.content`, keeping the same non-streaming smoke boundary
   while widening response-shape tolerance.
+- Smoke Console success metrics now retain and display the actual
+  `/v1/chat/completions` request URL, and copied success evidence includes it
+  with the other bounded metrics.
 - Smoke Console Run, Copy Result, and Clear Result controls now expose localized
   accessibility hints that keep the surface framed as an explicit endpoint
   smoke, not saved conversation history.
@@ -499,9 +502,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 structured HTTP-error detail pass):
+Current source-verification status (2026-05-23 Smoke Console request-URL evidence pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (229 XCTest tests, 0 failures), and
+`swift test` (230 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.

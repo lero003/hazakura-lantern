@@ -244,6 +244,7 @@
 "Non-streaming" = "非ストリーミング";
 "No Smoke Result" = "動作確認結果はありません";
 "Request Mode" = "リクエスト方式";
+"Request URL" = "リクエストURL";
 "Runtime TPS" = "ランタイムTPS";
 "Run a local endpoint smoke request to show the latest response here." = "ローカルエンドポイントの動作確認リクエストを実行すると、直近の応答がここに表示されます。";
 "Run Smoke" = "動作確認を実行";

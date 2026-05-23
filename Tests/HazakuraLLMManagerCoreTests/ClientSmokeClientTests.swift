@@ -34,6 +34,7 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertEqual(result.outputCharacterCount, 21)
         XCTAssertEqual(result.requestMode, .nonStreaming)
         XCTAssertEqual(result.timeoutSeconds, 9)
+        XCTAssertEqual(result.requestURL, "http://localhost:1234/v1/chat/completions")
         XCTAssertNil(result.runtimeUsage)
         XCTAssertEqual(result.approximateOutputTokenCount, 6)
         XCTAssertNotNil(result.approximateOutputTokensPerSecond)
@@ -188,6 +189,12 @@ final class ClientSmokeClientTests: XCTestCase {
         let result = ClientSmokeResult(responseText: "OK", finishReason: "  ")
 
         XCTAssertNil(result.finishReason)
+    }
+
+    func testClientSmokeResultOmitsBlankRequestURL() {
+        let result = ClientSmokeResult(responseText: "OK", requestURL: "  ")
+
+        XCTAssertNil(result.requestURL)
     }
 
     func testRunRejectsInvalidEndpointBeforeRequest() async {

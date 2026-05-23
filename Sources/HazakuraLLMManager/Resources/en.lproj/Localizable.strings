@@ -244,6 +244,7 @@
 "Non-streaming" = "Non-streaming";
 "No Smoke Result" = "No Smoke Result";
 "Request Mode" = "Request Mode";
+"Request URL" = "Request URL";
 "Runtime TPS" = "Runtime TPS";
 "Run a local endpoint smoke request to show the latest response here." = "Run a local endpoint smoke request to show the latest response here.";
 "Run Smoke" = "Run Smoke";
