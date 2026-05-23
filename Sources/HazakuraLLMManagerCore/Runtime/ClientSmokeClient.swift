@@ -198,7 +198,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             }
             return DecodedClientSmokeResponse(
                 responseText: content,
-                usage: response.usage?.clientSmokeUsage,
+                usage: response.usage?.clientSmokeUsage ?? response.timings?.clientSmokeUsage,
                 runtimeOutputTokensPerSecond: response.timings?.runtimeOutputTokensPerSecond,
                 finishReason: response.choices.first?.finishReason
             )
@@ -423,10 +423,28 @@ private struct ChatCompletionsResponse: Decodable {
     }
 
     struct Timings: Decodable {
+        var cacheTokenCount: Int?
+        var promptTokenCount: Int?
+        var predictedTokenCount: Int?
         var predictedPerSecond: Double?
 
         enum CodingKeys: String, CodingKey {
+            case cacheTokenCount = "cache_n"
+            case promptTokenCount = "prompt_n"
+            case predictedTokenCount = "predicted_n"
             case predictedPerSecond = "predicted_per_second"
+        }
+
+        var clientSmokeUsage: ClientSmokeResult.Usage? {
+            let promptTokens = sumPositiveTokenCounts(cacheTokenCount, promptTokenCount)
+            let completionTokens = positiveTokenCount(predictedTokenCount)
+            let totalTokens = sumPositiveTokenCounts(promptTokens, completionTokens)
+            let usage = ClientSmokeResult.Usage(
+                promptTokens: promptTokens,
+                completionTokens: completionTokens,
+                totalTokens: totalTokens
+            )
+            return usage.hasReportedTokens ? usage : nil
         }
 
         var runtimeOutputTokensPerSecond: Double? {
@@ -435,6 +453,22 @@ private struct ChatCompletionsResponse: Decodable {
             }
 
             return predictedPerSecond
+        }
+
+        private func positiveTokenCount(_ count: Int?) -> Int? {
+            guard let count, count > 0 else {
+                return nil
+            }
+
+            return count
+        }
+
+        private func sumPositiveTokenCounts(_ counts: Int?...) -> Int? {
+            let total = counts
+                .compactMap(positiveTokenCount)
+                .reduce(0, +)
+
+            return total > 0 ? total : nil
         }
     }
 }

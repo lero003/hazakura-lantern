@@ -6,6 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added Smoke Console support for compatible `llama-server`
+  `timings.cache_n`, `timings.prompt_n`, and `timings.predicted_n` token counts
+  when standard `usage` is missing, keeping runtime-reported smoke evidence
+  visible without falling back to approximate counts.
 - Added Smoke Console support for runtime-reported
   `timings.predicted_per_second` values from compatible `llama-server`
   responses, showing them as Runtime TPS while keeping approximate fallback

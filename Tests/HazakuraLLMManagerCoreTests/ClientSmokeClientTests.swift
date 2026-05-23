@@ -90,6 +90,42 @@ final class ClientSmokeClientTests: XCTestCase {
         XCTAssertFalse(result.usesApproximateOutputRate)
     }
 
+    func testRunCapturesLlamaServerTimingTokenUsageWhenStandardUsageIsMissing() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"OK"}}],"timings":{"cache_n":3,"prompt_n":5,"predicted_n":2,"predicted_per_second":12.5}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(
+            result.runtimeUsage,
+            ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2, totalTokens: 10)
+        )
+        XCTAssertEqual(result.outputTokensPerSecond, 12.5)
+        XCTAssertTrue(result.usesRuntimeReportedOutputRate)
+        XCTAssertNil(result.approximateOutputTokenCount)
+    }
+
+    func testRunPrefersStandardUsageOverTimingTokenCounts() async throws {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 200,
+            body: #"{"choices":[{"message":{"content":"OK"}}],"usage":{"prompt_tokens":8,"completion_tokens":2,"total_tokens":10},"timings":{"cache_n":50,"prompt_n":40,"predicted_n":30,"predicted_per_second":12.5}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        let result = try await client.run(request)
+
+        XCTAssertEqual(
+            result.runtimeUsage,
+            ClientSmokeResult.Usage(promptTokens: 8, completionTokens: 2, totalTokens: 10)
+        )
+        XCTAssertEqual(result.outputTokensPerSecond, 12.5)
+    }
+
     func testRunUsesReasoningContentWhenMessageContentIsEmpty() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,

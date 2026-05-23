@@ -126,6 +126,10 @@ Implemented scope:
 - Smoke Console now reads compatible `llama-server`
   `timings.predicted_per_second` values as Runtime TPS when present, while still
   falling back to elapsed-time or approximate rates without benchmark claims.
+- Smoke Console also reads compatible `llama-server`
+  `timings.cache_n`, `timings.prompt_n`, and `timings.predicted_n` token counts
+  as runtime-reported usage when standard `usage` is missing, keeping token
+  evidence explicit instead of approximate.
 - Smoke Console now promotes runtime-reported or approximate output TPS ahead
   of the response body, and can display compatible `reasoning_content` output
   or text-part `message.content` arrays from OpenAI-compatible local runtimes.
@@ -485,9 +489,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 runtime-reported Smoke Console TPS pass):
+Current source-verification status (2026-05-23 runtime timing token usage pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (223 XCTest tests, 0 failures), and
+`swift test` (225 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.
