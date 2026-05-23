@@ -222,17 +222,17 @@ struct SmokeConsoleView: View {
         metricBadge(title: "Elapsed", value: formattedElapsed(result.elapsedSeconds))
         metricBadge(title: "Characters", value: "\(result.outputCharacterCount)")
         if let runtimeUsage = result.runtimeUsage {
-            metricBadge(title: "Runtime Usage", value: formattedRuntimeUsage(runtimeUsage))
+            metricBadge(title: "Usage Reported by Runtime", value: formattedRuntimeUsage(runtimeUsage))
         } else {
             if let approximateOutputTokenCount = result.approximateOutputTokenCount {
-                metricBadge(title: "Approx Tokens", value: "\(approximateOutputTokenCount)")
+                metricBadge(title: "Approx Output Tokens", value: "\(approximateOutputTokenCount)")
             }
             if let approximateOutputTokensPerSecond = result.approximateOutputTokensPerSecond {
                 metricBadge(title: "Approx Decode Rate", value: formattedApproximateRate(approximateOutputTokensPerSecond))
             }
         }
-        metricBadge(title: "Mode", value: displayRequestMode(result.requestMode))
-        metricBadge(title: "Timeout", value: "\(result.timeoutSeconds)s")
+        metricBadge(title: "Request Mode", value: displayRequestMode(result.requestMode))
+        metricBadge(title: "Timeout Used", value: "\(result.timeoutSeconds)s")
     }
 
     private func metricBadge(title: LocalizedStringKey, value: String) -> some View {
@@ -340,17 +340,17 @@ struct SmokeConsoleView: View {
         lines.append("\(String(localized: "Elapsed")): \(formattedElapsed(result.elapsedSeconds))")
         lines.append("\(String(localized: "Characters")): \(result.outputCharacterCount)")
         if let runtimeUsage = result.runtimeUsage {
-            lines.append("\(String(localized: "Runtime Usage")): \(formattedRuntimeUsage(runtimeUsage))")
+            lines.append("\(String(localized: "Usage Reported by Runtime")): \(formattedRuntimeUsage(runtimeUsage))")
         } else {
             if let approximateOutputTokenCount = result.approximateOutputTokenCount {
-                lines.append("\(String(localized: "Approx Tokens")): \(approximateOutputTokenCount)")
+                lines.append("\(String(localized: "Approx Output Tokens")): \(approximateOutputTokenCount)")
             }
             if let approximateOutputTokensPerSecond = result.approximateOutputTokensPerSecond {
                 lines.append("\(String(localized: "Approx Decode Rate")): \(formattedApproximateRate(approximateOutputTokensPerSecond))")
             }
         }
-        lines.append("\(String(localized: "Mode")): \(displayRequestMode(result.requestMode))")
-        lines.append("\(String(localized: "Timeout")): \(result.timeoutSeconds)s")
+        lines.append("\(String(localized: "Request Mode")): \(displayRequestMode(result.requestMode))")
+        lines.append("\(String(localized: "Timeout Used")): \(result.timeoutSeconds)s")
 
         return lines
     }

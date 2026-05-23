@@ -102,6 +102,9 @@ Implemented scope:
   when available, explicitly approximate fallback output token count/rate,
   request mode, and timeout used, then shows those values under the response
   with localized app-owned labels.
+- Smoke Console metric labels now explicitly distinguish usage reported by the
+  runtime from approximate output-token fallback metrics, keeping copied smoke
+  evidence honest without adding benchmark claims.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.

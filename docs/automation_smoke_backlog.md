@@ -64,6 +64,10 @@ Latest source-verification result (2026-05-23 Smoke Console max-token cap run):
   timeout used. The next automation lane should use Smoke Console evidence or
   manual reports to fix one concrete rough edge without turning metrics into
   benchmarking.
+- Smoke Console metric labels now say "Usage Reported by Runtime",
+  "Approx Output Tokens", "Request Mode", and "Timeout Used" in localized UI
+  copy, so copied smoke evidence is clearer about reported versus approximate
+  values.
 
 Latest app-bundle helper smoke result (2026-05-21 current run):
 
