@@ -491,7 +491,7 @@ private struct ChatCompletionsResponse: Decodable {
         var displayText: String? {
             if
                 let type = type?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
-                type != "text"
+                !Self.textPartTypes.contains(type)
             {
                 return nil
             }
@@ -502,6 +502,8 @@ private struct ChatCompletionsResponse: Decodable {
 
             return text
         }
+
+        private static let textPartTypes: Set<String> = ["text", "output_text"]
 
         private struct Payload: Decodable {
             var type: String?

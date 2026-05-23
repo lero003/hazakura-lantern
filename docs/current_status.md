@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-23
+Last reviewed: 2026-05-24
 
 ## Project State
 
@@ -163,6 +163,9 @@ Implemented scope:
 - Smoke Console text-part response parsing now normalizes content type casing
   and whitespace before accepting `text` parts, keeping compatible local smoke
   responses readable when runtimes return loose type labels.
+- Smoke Console text-part response parsing now also accepts compatible
+  `output_text` parts inside `message.content`, keeping response-style local
+  smoke payloads readable without adding chat history or benchmark behavior.
 - Smoke Console text-part response parsing now also accepts plain string items
   inside compatible `message.content` arrays, keeping mixed readable local
   smoke output from being reported as malformed JSON.

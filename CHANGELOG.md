@@ -9,6 +9,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Made Smoke Console finish-reason parsing tolerant of malformed optional
   values, so a readable local smoke response is not rejected when only
   `finish_reason` is incompatible.
+- Added Smoke Console response parsing for compatible `output_text` content
+  parts, keeping text-part smoke evidence readable when a local runtime uses
+  response-style labels inside `message.content`.
 - Added Smoke Console response parsing for compatible `message.content` arrays
   that mix plain string parts with typed text parts, keeping readable local
   smoke evidence from becoming a malformed-response error.
