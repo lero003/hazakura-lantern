@@ -52,6 +52,9 @@ Latest source-verification result (2026-05-23 Smoke Console max-token cap run):
 - OpenAI-compatible smoke requests now include a small `max_tokens` cap, keeping
   local smoke output bounded without adding chat history, prompt libraries, or
   benchmark behavior.
+- Smoke Console now opens with the same bounded default local smoke prompt used
+  by the copyable curl command, so a running server can execute a first smoke
+  request without inventing prompt text.
 - Smoke Console result copy now copies the latest success response with the
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, keeping local smoke evidence shareable without adding logs or

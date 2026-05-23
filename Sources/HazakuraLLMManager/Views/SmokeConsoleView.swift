@@ -4,7 +4,7 @@ import HazakuraLLMManagerCore
 struct SmokeConsoleView: View {
     @ObservedObject var controller: ServerController
 
-    @State private var prompt = ""
+    @State private var prompt = ClientSmokeRequest.defaultUserText
     @State private var responseText: String?
     @State private var resultMetrics: ClientSmokeResult?
     @State private var errorMessage: String?

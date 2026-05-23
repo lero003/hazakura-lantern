@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Seeded the Smoke Console prompt with the same bounded local smoke prompt used
+  by the copyable curl command, so a running server can be checked immediately
+  while the prompt remains editable.
 - Extended Smoke Console success copies to include the displayed v1.2 metrics
   alongside the response text, while failed smoke copies still copy the visible
   error message.

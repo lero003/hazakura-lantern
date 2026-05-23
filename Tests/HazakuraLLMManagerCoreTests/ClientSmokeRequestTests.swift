@@ -2,6 +2,16 @@ import XCTest
 @testable import HazakuraLLMManagerCore
 
 final class ClientSmokeRequestTests: XCTestCase {
+    func testDefaultUserTextIsTheBoundedLocalSmokePrompt() {
+        let request = ClientSmokeRequest(baseURL: "http://localhost:9876/v1")
+
+        XCTAssertEqual(
+            request.userText,
+            "Hazakura AI Mobile runtime smoke. Reply with OK."
+        )
+        XCTAssertTrue(request.curlCommand.contains(#""content":"\#(ClientSmokeRequest.defaultUserText)""#))
+    }
+
     func testChatCompletionsURLUsesConfiguredBaseURLWithoutDoubleSlash() {
         let request = ClientSmokeRequest(baseURL: "http://localhost:9876/v1/")
 

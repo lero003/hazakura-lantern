@@ -1,6 +1,8 @@
 import Foundation
 
 public struct ClientSmokeRequest: Equatable, Sendable {
+    public static let defaultUserText = "Hazakura AI Mobile runtime smoke. Reply with OK."
+
     public var baseURL: String
     public var apiKey: String?
     public var model: String
@@ -12,7 +14,7 @@ public struct ClientSmokeRequest: Equatable, Sendable {
         baseURL: String,
         apiKey: String? = nil,
         model: String = "local",
-        userText: String = "Hazakura AI Mobile runtime smoke. Reply with OK.",
+        userText: String = Self.defaultUserText,
         timeoutSeconds: Int = 60,
         maxTokens: Int = 64
     ) {
@@ -31,7 +33,7 @@ public struct ClientSmokeRequest: Equatable, Sendable {
     public var curlCommand: String {
         let payloadString = (try? JSONEncoder.clientSmoke.encode(payload))
             .flatMap { String(data: $0, encoding: .utf8) }
-            ?? #"{"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}"#
+            ?? #"{"messages":[{"content":"\#(Self.defaultUserText)","role":"user"}],"model":"local","stream":false}"#
 
         var lines = [
             "curl -fsS --max-time \(timeoutSeconds) \(ShellQuoter.quote(chatCompletionsURL)) \\"

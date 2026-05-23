@@ -97,6 +97,9 @@ Implemented scope:
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, so local smoke evidence is easier to share without adding logs or
   persistence.
+- Smoke Console now opens with the same bounded local smoke prompt used by the
+  copyable OpenAI-compatible curl command, keeping the explicit prompt editable
+  while avoiding a blank first run.
 - The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
   started time, elapsed time, output character count, runtime-reported usage
   when available, explicitly approximate fallback output token count/rate,
