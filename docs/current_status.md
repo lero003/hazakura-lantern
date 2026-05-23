@@ -126,6 +126,9 @@ Implemented scope:
 - Smoke Console now promotes runtime-reported or approximate output TPS ahead
   of the response body, and can display compatible `reasoning_content` output
   or text-part `message.content` arrays from OpenAI-compatible local runtimes.
+- Compatible `reasoning_content` smoke output is trimmed before display and
+  copy, keeping last-run smoke evidence tidy without adding conversation
+  history or persistence.
 - Smoke Console Run, Copy Result, and Clear Result controls now expose localized
   accessibility hints that keep the surface framed as an explicit endpoint
   smoke, not saved conversation history.
@@ -301,6 +304,10 @@ Implemented scope:
   `swift build --disable-sandbox`. App-bundle helper smoke was not rerun
   because there was no fresh Launch Services hypothesis or normal desktop
   verification environment.
+- Local source verification passed again on 2026-05-23 during the
+  `reasoning_content` smoke-evidence trim pass with `git diff --check`,
+  English/Japanese `Localizable.strings` lint, `swift test` (221 XCTest tests,
+  0 failures), and `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -469,6 +476,11 @@ Current source-verification status (2026-05-23 30-minute automation evidence ref
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.
+
+Current source-verification status (2026-05-23 `reasoning_content`
+smoke-evidence trim pass): `git diff --check`, English/Japanese
+`Localizable.strings` lint, `swift test` (221 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

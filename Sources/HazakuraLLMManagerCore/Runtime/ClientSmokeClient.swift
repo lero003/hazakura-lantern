@@ -321,7 +321,10 @@ private struct ChatCompletionsResponse: Decodable {
                 return content
             }
 
-            if let reasoningContent, !reasoningContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if
+                let reasoningContent = reasoningContent?.trimmingCharacters(in: .whitespacesAndNewlines),
+                !reasoningContent.isEmpty
+            {
                 return reasoningContent
             }
 

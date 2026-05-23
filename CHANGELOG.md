@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Trimmed surrounding whitespace from compatible `reasoning_content` smoke
+  responses before display or copy, keeping Smoke Console evidence tidy without
+  changing the non-streaming request boundary.
 - Added a clearer Dashboard server summary with the managed process PID and
   current resident memory when `llama-server` is running, without adding CPU,
   request, or benchmark tracking.

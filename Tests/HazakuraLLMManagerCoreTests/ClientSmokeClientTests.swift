@@ -76,7 +76,7 @@ final class ClientSmokeClientTests: XCTestCase {
     func testRunUsesReasoningContentWhenMessageContentIsEmpty() async throws {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 200,
-            body: #"{"choices":[{"message":{"content":"","reasoning_content":"Decoded reasoning text"}}],"usage":{"completion_tokens":4}}"#
+            body: #"{"choices":[{"message":{"content":"","reasoning_content":"  Decoded reasoning text\n"}}],"usage":{"completion_tokens":4}}"#
         )
         let client = ClientSmokeClient(session: makeSession())
         let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")

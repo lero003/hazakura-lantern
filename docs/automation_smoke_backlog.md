@@ -81,6 +81,9 @@ Latest source-verification result (2026-05-23 30-minute automation evidence refr
   text-part `message.content` arrays from OpenAI-compatible local runtimes, and
   the app-side port availability probe no longer treats recently closed local
   ports as indefinitely unavailable.
+- Compatible `reasoning_content` smoke output is now trimmed before display and
+  copy, so shared last-run evidence does not include accidental surrounding
+  whitespace from local runtime payloads.
 - Smoke Console now preserves OpenAI-compatible `finish_reason` values such as
   `stop` or `length` in displayed and copied metrics, so bounded local smoke
   evidence shows whether the runtime stopped naturally or hit the request cap.
