@@ -467,6 +467,20 @@ private struct ChatCompletionsResponse: Decodable {
         var type: String?
         var text: String?
 
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+
+            if let text = try? container.decode(String.self) {
+                self.type = nil
+                self.text = text
+                return
+            }
+
+            let payload = try container.decode(Payload.self)
+            self.type = payload.type
+            self.text = payload.text
+        }
+
         var displayText: String? {
             if
                 let type = type?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
@@ -480,6 +494,11 @@ private struct ChatCompletionsResponse: Decodable {
             }
 
             return text
+        }
+
+        private struct Payload: Decodable {
+            var type: String?
+            var text: String?
         }
     }
 

@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added Smoke Console response parsing for compatible `message.content` arrays
+  that mix plain string parts with typed text parts, keeping readable local
+  smoke evidence from becoming a malformed-response error.
 - Normalized compatible Smoke Console text-part content types before response
   parsing, so `message.content` parts marked like `" Text "` are still treated
   as readable local smoke output.
