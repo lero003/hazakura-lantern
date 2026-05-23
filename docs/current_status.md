@@ -109,8 +109,8 @@ Implemented scope:
   `detail`, and FastAPI-style detail-array payloads before falling back to raw
   bounded response bodies.
 - Smoke Console HTTP error snippets now also read code-only structured error
-  objects, keeping compatible local endpoint failures readable when no message
-  field is present.
+  objects and blank-message objects with fallback codes, keeping compatible
+  local endpoint failures readable when the message field is missing or empty.
 - Smoke Console result copy now copies the latest success response with the
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, so local smoke evidence is easier to share without adding logs or
@@ -516,15 +516,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console single-content-part pass):
+Current source-verification status (2026-05-24 Smoke Console blank-message error-code pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (234 XCTest tests, 0 failures), and
+`swift test` (235 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available. Smoke Console response parsing now
-accepts compatible single text-part `message.content` objects in addition to
-plain strings, text-part arrays, `reasoning_content`, and legacy
-`choices[0].text` fallback output.
+verification environment was available. Smoke Console HTTP error snippets now
+prefer readable fallback codes when a structured error object has a blank
+`message` field, avoiding raw JSON in that local endpoint failure case.
 
 Current Codex launch-smoke status (2026-05-21 current run):
 `./script/build_and_run.sh --verify` builds the bundle, but Launch Services

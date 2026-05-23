@@ -347,7 +347,7 @@ private struct OpenAIErrorResponse: Decodable {
             }
 
             let payload = try container.decode(MessagePayload.self)
-            self = .message(payload.message ?? payload.detail ?? payload.msg ?? payload.code)
+            self = .message(payload.displayMessage)
         }
 
         private struct MessagePayload: Decodable {
@@ -355,6 +355,12 @@ private struct OpenAIErrorResponse: Decodable {
             var detail: String?
             var msg: String?
             var code: String?
+
+            var displayMessage: String? {
+                [message, detail, msg, code]
+                    .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+                    .first { !$0.isEmpty }
+            }
         }
     }
 }
