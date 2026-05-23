@@ -295,6 +295,12 @@ Implemented scope:
   source-checkpoint prep with `git diff --check`, English/Japanese
   `Localizable.strings` lint, `swift test` (219 XCTest tests, 0 failures), and
   `swift build --disable-sandbox`.
+- Local source verification passed again on 2026-05-23 during the 30-minute
+  automation evidence refresh with `git diff --check`, English/Japanese
+  `Localizable.strings` lint, `swift test` (221 XCTest tests, 0 failures), and
+  `swift build --disable-sandbox`. App-bundle helper smoke was not rerun
+  because there was no fresh Launch Services hypothesis or normal desktop
+  verification environment.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
   can close a leftover `HazakuraLLMManager` process.
@@ -457,9 +463,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console TPS/manual-review polish pass):
+Current source-verification status (2026-05-23 30-minute automation evidence refresh):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (218 XCTest tests, 0 failures), and
+`swift test` (221 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.
