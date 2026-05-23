@@ -113,7 +113,7 @@ Implemented scope:
   evidence honest without adding benchmark claims.
 - Smoke Console now promotes runtime-reported or approximate output TPS ahead
   of the response body, and can display compatible `reasoning_content` output
-  when the returned message `content` is empty.
+  or text-part `message.content` arrays from OpenAI-compatible local runtimes.
 - Smoke Console Run, Copy Result, and Clear Result controls now expose localized
   accessibility hints that keep the surface framed as an explicit endpoint
   smoke, not saved conversation history.

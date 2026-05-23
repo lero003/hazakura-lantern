@@ -249,7 +249,7 @@ private struct ChatCompletionsResponse: Decodable {
     }
 
     struct Message: Decodable {
-        var content: String?
+        var content: MessageContent?
         var reasoningContent: String?
 
         enum CodingKeys: String, CodingKey {
@@ -258,7 +258,7 @@ private struct ChatCompletionsResponse: Decodable {
         }
 
         var displayText: String? {
-            if let content, !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if let content = content?.displayText, !content.isEmpty {
                 return content
             }
 
@@ -267,6 +267,53 @@ private struct ChatCompletionsResponse: Decodable {
             }
 
             return nil
+        }
+    }
+
+    enum MessageContent: Decodable {
+        case string(String)
+        case parts([ContentPart])
+
+        var displayText: String {
+            switch self {
+            case .string(let content):
+                return content.trimmingCharacters(in: .whitespacesAndNewlines)
+            case .parts(let parts):
+                return parts
+                    .compactMap(\.displayText)
+                    .joined(separator: "\n")
+            }
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+
+            if let content = try? container.decode(String.self) {
+                self = .string(content)
+                return
+            }
+
+            self = .parts(try container.decode([ContentPart].self))
+        }
+    }
+
+    struct ContentPart: Decodable {
+        var type: String?
+        var text: String?
+
+        var displayText: String? {
+            if
+                let type,
+                type != "text"
+            {
+                return nil
+            }
+
+            guard let text = text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else {
+                return nil
+            }
+
+            return text
         }
     }
 

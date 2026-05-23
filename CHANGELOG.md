@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Hardened Smoke Console response parsing for OpenAI-compatible runtimes that
+  return assistant text as `message.content` text parts instead of a plain
+  string, while keeping the surface non-persistent and smoke-only.
 - Adjusted Smoke Console after manual review: the sidebar now uses the shorter
   Japanese label, response metrics appear above the response body with TPS
   first and prominent, the prompt area is shorter, the response area/page can

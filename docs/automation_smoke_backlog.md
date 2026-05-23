@@ -74,9 +74,10 @@ Latest source-verification result (2026-05-23 Smoke Console TPS/manual-review po
   "Approx Output Tokens", "TPS", "Approx TPS", "Request Mode", and "Timeout
   Used" in localized UI copy, so copied smoke evidence is clearer about
   reported versus approximate values.
-- Smoke Console can now display compatible `reasoning_content` output when the
-  returned message `content` is empty, and the app-side port availability probe
-  no longer treats recently closed local ports as indefinitely unavailable.
+- Smoke Console can now display compatible `reasoning_content` output and
+  text-part `message.content` arrays from OpenAI-compatible local runtimes, and
+  the app-side port availability probe no longer treats recently closed local
+  ports as indefinitely unavailable.
 
 Latest app-bundle helper smoke result (2026-05-21 current run):
 
