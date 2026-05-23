@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Changed Smoke Console copy behavior so the result copy button copies the
+  currently displayed success response or error message, making failed local
+  endpoint smoke evidence easier to share.
 - Normalized and bounded Smoke Console HTTP error snippets so multiline runtime
   error bodies stay readable in the local smoke error surface.
 - Aligned post-public automation guidance with the current `v1.0.0-rc.2`

@@ -84,12 +84,15 @@ Implemented scope:
   HTTP status, and malformed-response failures through focused core tests.
 - The first v1.1 Local Smoke Console UI slice now adds a separate sidebar
   destination for a user-triggered local endpoint smoke request with prompt,
-  run state, response display, copy response, clear result, and localized
+  run state, response display, copy result, clear result, and localized
   app-owned UI strings.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
   into a bounded readable summary before showing them in the error surface.
+- Smoke Console result copy now copies either the latest success response or
+  the displayed error message, so failed local smoke evidence is easier to
+  share without adding logs or persistence.
 - The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
   elapsed time, output character count, runtime-reported usage when available,
   explicitly approximate fallback output token count/rate, request mode, and
@@ -415,7 +418,7 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 10:33 JST Smoke Console HTTP error-snippet readability pass):
+Current source-verification status (2026-05-23 Smoke Console copy-result pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (214 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun

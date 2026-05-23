@@ -114,12 +114,12 @@ struct SmokeConsoleView: View {
             .disabled(!canRunSmoke)
 
             Button {
-                copyResponse()
+                copyResult()
             } label: {
-                Label("Copy Response", systemImage: didCopy ? "checkmark.circle" : "doc.on.doc")
+                Label("Copy Result", systemImage: didCopy ? "checkmark.circle" : "doc.on.doc")
             }
             .buttonStyle(SecondaryButtonStyle())
-            .disabled(responseText == nil)
+            .disabled(copyableResult == nil)
 
             Button {
                 clearResult()
@@ -305,12 +305,16 @@ struct SmokeConsoleView: View {
         }
     }
 
-    private func copyResponse() {
-        guard let responseText else {
+    private var copyableResult: String? {
+        responseText ?? errorMessage
+    }
+
+    private func copyResult() {
+        guard let copyableResult else {
             return
         }
 
-        PasteboardWriter.copy(responseText)
+        PasteboardWriter.copy(copyableResult)
         copyGeneration += 1
         let generation = copyGeneration
 

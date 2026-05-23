@@ -229,7 +229,7 @@
 "Approx Tokens" = "概算トークン";
 "Clear Result" = "結果を消去";
 "Characters" = "文字数";
-"Copy Response" = "応答をコピー";
+"Copy Result" = "結果をコピー";
 "Elapsed" = "経過時間";
 "Enter a smoke prompt before running." = "実行する前に確認プロンプトを入力してください。";
 "Enter a short smoke prompt." = "短い確認プロンプトを入力してください。";
