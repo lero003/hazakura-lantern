@@ -138,10 +138,10 @@ The project has reached a public source-only `v1.2.0` checkpoint for
 personal/local use. It keeps the existing `llama-server` control boundary and
 does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
 binary distribution artifacts. The previous public source-only checkpoint was
-`v1.0.0-rc.2`. The 2026-05-21 automated
-app-bundle helper smoke has mixed evidence and currently regresses with
-`kLSNoExecutableErr`, so a normal desktop/manual UI pass is still required
-before any packaged app release.
+`v1.0.0-rc.2`. The 2026-05-24 automated app-bundle helper smoke can still
+reproduce `kLSNoExecutableErr` in the Codex environment even though SwiftPM
+source verification passes, so a normal desktop/manual UI pass is still
+required before any packaged app release.
 
 Packaged release work remains separate from source milestones. Automation
 should keep code quality boring, close small verified `llama-server` daily-use

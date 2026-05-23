@@ -176,6 +176,9 @@ Implemented scope:
   when a local `/v1/chat/completions` endpoint omits
   `choices[0].message.content`, keeping the same non-streaming smoke boundary
   while widening response-shape tolerance.
+- Smoke Console metric badges now use an adaptive grid with stable badge
+  heights and a shorter response pane, keeping dense v1.2 evidence readable in
+  narrower windows without adding benchmark, history, or persistence behavior.
 - Smoke Console can now read compatible single text-part `message.content`
   objects from local `/v1/chat/completions` responses, keeping odd but readable
   smoke evidence from being reported as malformed JSON.
@@ -363,12 +366,11 @@ Implemented scope:
   TPS/manual-review polish pass with
   `git diff --check`, localization lint, `swift test` (218 XCTest tests,
   0 failures), and
-  `swift build --disable-sandbox`; the current 2026-05-21
-  local app-bundle helper smoke still stands as regressed with
-  `kLSNoExecutableErr` in this Codex environment. The previous 2026-05-23
-  Smoke Console HTTP-snippet, disabled-run feedback, and v1.2 metrics passes
-  also had passing
-  source-verification results.
+  `swift build --disable-sandbox`. The 2026-05-24 local app-bundle helper
+  smoke later reproduced `kLSNoExecutableErr` in this Codex environment even
+  though the generated bundle contained the expected executable and resources.
+  The previous 2026-05-23 Smoke Console HTTP-snippet, disabled-run feedback,
+  and v1.2 metrics passes also had passing source-verification results.
 - Local source verification passed again on 2026-05-23 during process
   termination hardening with `git diff --check`, `swift test` (219 XCTest tests,
   0 failures), and `swift build --disable-sandbox`.
@@ -568,23 +570,20 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 Smoke Console `message.reasoning` fallback pass):
+Current source-verification status (2026-05-24 Smoke Console metric-layout pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (249 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
-that slice because no fresh Launch Services hypothesis or normal desktop
-verification environment was available. Smoke Console response parsing now
-accepts compatible `message.reasoning` fallback text when `message.content` is
-blank.
+`swift build --disable-sandbox` passed. Smoke Console metric badges now use an
+adaptive grid with stable badge heights and a shorter response pane, keeping
+dense v1.2 evidence readable in narrower windows.
 
-Current Codex launch-smoke status (2026-05-21 current run):
-`./script/build_and_run.sh --verify` builds the bundle, but Launch Services
-returns `kLSNoExecutableErr`. `./script/build_and_run.sh --stop` completes
-afterward; a follow-up `pgrep -fl HazakuraLLMManager` check could not read the
-process list because `sysmond` was unavailable in this environment. The
-generated bundle contains `Info.plist`, the `HazakuraLLMManager` executable,
-and English/Japanese localization resources under
-`dist/Hazakura Lantern.app/Contents`.
+Current Codex launch-smoke status (2026-05-24 current run):
+`./script/build_and_run.sh --verify` builds the bundle but Launch Services
+returns `kLSNoExecutableErr`. The generated bundle contains `Info.plist`, the
+`HazakuraLLMManager` executable, and English/Japanese localization resources
+under `dist/Hazakura Lantern.app/Contents`. A follow-up
+`pgrep -fl HazakuraLLMManager` check could not read the process list because
+`sysmond` was unavailable in this environment.
 
 Treat this as an automation-level launch-smoke regression, not a source-build
 failure. It does not prove packaged-release readiness, and it should not block
@@ -601,10 +600,9 @@ bundle rather than a blanket inability to call Launch Services.
 Additional historical 2026-05-17 diagnostics: signing the completed bundle can make
 `codesign --verify --deep --strict` pass, and a top-level
 `open -n /absolute/path/to/Hazakura Lantern.app` launch request can be accepted.
-However, the helper can still fail when `open` is invoked from inside the shell
-script after rebuilding the bundle. The 2026-05-21 current run reproduced that
-failure even though the bundle executable and `CFBundleExecutable` value
-matched.
+However, the helper can still fail when `open` is invoked after rebuilding the
+bundle. The 2026-05-21 and 2026-05-24 runs reproduced that failure even though
+the bundle executable and `CFBundleExecutable` value matched.
 
 ## Known Constraints
 

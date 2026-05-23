@@ -41,14 +41,21 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-24 Smoke Console `message.reasoning` fallback pass):
+Latest source-verification result (2026-05-24 Smoke Console metric-layout pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
 - `swift test` passed: 249 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
-- App-bundle helper smoke was not rerun in this slice because no fresh Launch
-  Services hypothesis or normal desktop verification environment was available.
+- App-bundle helper smoke was rerun afterward in the 2026-05-24 current run:
+  `./script/build_and_run.sh --verify` built the local bundle but Launch
+  Services returned `kLSNoExecutableErr`. The generated bundle contained
+  `Info.plist`, the `HazakuraLLMManager` executable, and English/Japanese
+  localization resources. A follow-up process-list check could not confirm
+  cleanup because `sysmond` was unavailable in this environment.
+- Smoke Console metric badges now use an adaptive grid with stable badge
+  heights and a shorter response pane, keeping dense v1.2 evidence readable in
+  narrower windows without adding benchmark, history, or persistence behavior.
 - Smoke Console response parsing now accepts compatible `message.reasoning`
   fallback text when `message.content` is blank, keeping reasoning-style local
   smoke output readable without adding chat history, persistence, or benchmark
@@ -171,23 +178,25 @@ Latest source-verification result (2026-05-24 Smoke Console `message.reasoning` 
   metrics, so shared smoke results identify the tested local endpoint without
   adding logs or history.
 
-Latest app-bundle helper smoke result (2026-05-21 current run):
+Latest app-bundle helper smoke result (2026-05-24 current run):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 180 XCTest tests, 0 failures.
+- `swift test` passed: 249 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - `./script/build_and_run.sh --verify` built the local bundle but Launch
   Services returned `kLSNoExecutableErr`.
-- `./script/build_and_run.sh --stop` completed afterward. A follow-up
-  `pgrep -fl HazakuraLLMManager` check could not read the process list because
+- The generated bundle contains `Info.plist`, the `HazakuraLLMManager`
+  executable, and English/Japanese localization resources.
+- `./script/build_and_run.sh --stop` completed afterward, but
+  `pgrep -fl HazakuraLLMManager` could not read the process list because
   `sysmond` was unavailable in this environment.
 
 Treat the helper launch path as a current automation-level regression again.
-The generated bundle still contains `Info.plist`, the `HazakuraLLMManager`
-executable, and English/Japanese localization resources, so this remains a
-Launch Services smoke issue rather than source-build proof. It is not a manual
-UI smoke pass and should not be treated as packaged release evidence.
+The generated bundle still contains the expected executable and resources, so
+this remains a Launch Services smoke issue rather than a SwiftPM source-build
+failure. It is not a manual UI smoke pass and should not be treated as
+packaged-release evidence.
 
 ## Manual UI Smoke Targets
 

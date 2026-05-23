@@ -67,12 +67,13 @@ Verify launch:
 ./script/build_and_run.sh --verify
 ```
 
-As of the current 2026-05-21 automation run, this helper smoke has mixed
-evidence and can return Launch Services `kLSNoExecutableErr` in the Codex
-environment. Treat it as automation-level launch evidence only, not as proof
-that a user-facing packaged `.app` release is ready. A normal desktop/manual
-launch and clean-quit pass is still required before app-bundle, zip, dmg,
-signing, or notarization release work.
+As of the current 2026-05-24 automation run, this helper smoke can still return
+Launch Services `kLSNoExecutableErr` in the Codex environment even when SwiftPM
+build and test pass and the generated bundle contains the expected executable.
+Treat it as automation-level launch evidence only, not as proof that a
+user-facing packaged `.app` release is ready. A normal desktop/manual launch and
+clean-quit pass is still required before app-bundle, zip, dmg, signing, or
+notarization release work.
 
 Project planning and automation docs:
 

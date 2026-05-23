@@ -4,6 +4,10 @@ import HazakuraLLMManagerCore
 struct SmokeConsoleView: View {
     @ObservedObject var controller: ServerController
 
+    private let metricGridColumns = [
+        GridItem(.adaptive(minimum: 150, maximum: 260), spacing: 8, alignment: .topLeading)
+    ]
+
     @State private var prompt = ClientSmokeRequest.defaultUserText
     @State private var responseText: String?
     @State private var resultMetrics: ClientSmokeResult?
@@ -178,7 +182,7 @@ struct SmokeConsoleView: View {
                     .font(.system(.body, design: .monospaced))
                     .textSelection(.enabled)
                     .padding(10)
-                    .frame(maxWidth: .infinity, minHeight: 260, alignment: .topLeading)
+                    .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
                     .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 6))
                     .overlay(
                         RoundedRectangle(cornerRadius: 6)
@@ -209,27 +213,17 @@ struct SmokeConsoleView: View {
     @ViewBuilder
     private var metricsSummary: some View {
         if let resultMetrics {
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 8) {
-                    metricsBadges(for: resultMetrics)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    metricsBadges(for: resultMetrics)
-                }
+            LazyVGrid(columns: metricGridColumns, alignment: .leading, spacing: 8) {
+                metricsBadges(for: resultMetrics)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .font(.caption)
             .foregroundStyle(.secondary)
         } else if let failureMetrics {
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 8) {
-                    metricsBadges(for: failureMetrics)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    metricsBadges(for: failureMetrics)
-                }
+            LazyVGrid(columns: metricGridColumns, alignment: .leading, spacing: 8) {
+                metricsBadges(for: failureMetrics)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .font(.caption)
             .foregroundStyle(.secondary)
         }
@@ -303,6 +297,7 @@ struct SmokeConsoleView: View {
         }
         .padding(.horizontal, isProminent ? 10 : 8)
         .padding(.vertical, isProminent ? 7 : 5)
+        .frame(maxWidth: .infinity, minHeight: isProminent ? 52 : 48, alignment: .leading)
         .background((isProminent ? Color.accentColor.opacity(0.22) : Color.black.opacity(0.14)), in: RoundedRectangle(cornerRadius: 6))
         .overlay(
             RoundedRectangle(cornerRadius: 6)

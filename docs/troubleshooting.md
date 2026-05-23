@@ -66,13 +66,14 @@ Symptoms:
 
 Current status:
 
-- The current 2026-05-21 Codex helper smoke has mixed evidence and the latest
-  automation run reproduced `kLSNoExecutableErr` even though SwiftPM tests and
-  build pass.
-- Treat earlier passing helper-smoke results as historical evidence only. The
-  current release posture is: source verification passes, helper launch smoke
-  is not reliable enough for packaged-release proof, and normal desktop/manual
-  launch and clean quit are still required.
+- The current 2026-05-24 Codex helper smoke reproduced `kLSNoExecutableErr`
+  even though SwiftPM tests and build passed and the generated bundle contained
+  `Info.plist`, the `HazakuraLLMManager` executable, and English/Japanese
+  localization resources.
+- Treat helper-smoke results as automation evidence only. The current release
+  posture is: source verification passes, helper launch smoke is not reliable
+  enough for packaged-release proof, and normal desktop/manual launch and clean
+  quit are still required before packaged-release work.
 - Do not treat helper smoke as packaged-release proof. A normal desktop/manual
   launch and clean-quit pass is still required before app-bundle distribution
   work.
