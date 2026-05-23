@@ -255,9 +255,6 @@ struct SmokeConsoleView: View {
             if let approximateOutputTokenCount = result.approximateOutputTokenCount {
                 metricBadge(title: "Approx Output Tokens", value: "\(approximateOutputTokenCount)")
             }
-            if let approximateOutputTokensPerSecond = result.approximateOutputTokensPerSecond {
-                metricBadge(title: "Approx Decode Rate", value: formattedApproximateRate(approximateOutputTokensPerSecond))
-            }
         }
         metricBadge(title: "Request Mode", value: displayRequestMode(result.requestMode))
         metricBadge(title: "Timeout Used", value: "\(result.timeoutSeconds)s")
@@ -424,9 +421,6 @@ struct SmokeConsoleView: View {
         } else {
             if let approximateOutputTokenCount = result.approximateOutputTokenCount {
                 lines.append("\(String(localized: "Approx Output Tokens")): \(approximateOutputTokenCount)")
-            }
-            if let approximateOutputTokensPerSecond = result.approximateOutputTokensPerSecond {
-                lines.append("\(String(localized: "Approx Decode Rate")): \(formattedApproximateRate(approximateOutputTokensPerSecond))")
             }
         }
         lines.append("\(String(localized: "Request Mode")): \(displayRequestMode(result.requestMode))")

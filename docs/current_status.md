@@ -78,9 +78,9 @@ Implemented scope:
 - AI Mobile / OpenAI-compatible chat-completions smoke command display.
 - Copied AI Mobile / OpenAI-compatible client smoke commands are fail-fast and
   timeout-bounded so a local client check does not hang indefinitely.
-- OpenAI-compatible smoke requests also include a small `max_tokens` cap, so
-  user-triggered local smoke stays output-bounded without becoming a benchmark
-  or chat surface.
+- OpenAI-compatible smoke requests also include a bounded 2,048-token cap and
+  180-second timeout, so user-triggered local smoke has room for
+  thinking-capable runtimes without becoming a benchmark or chat surface.
 - The first v1.1 Local Smoke Console core client slice can now send a
   user-triggered, timeout-bounded, non-streaming OpenAI-compatible
   `/v1/chat/completions` request and map invalid endpoint, connection, timeout,
@@ -106,11 +106,14 @@ Implemented scope:
 - The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
   started time, elapsed time, output character count, runtime-reported usage
   when available, explicitly approximate fallback output token count/rate,
-  request mode, and timeout used, then shows those values under the response
+  request mode, and timeout used, then shows those values with the response
   with localized app-owned labels.
 - Smoke Console metric labels now explicitly distinguish usage reported by the
   runtime from approximate output-token fallback metrics, keeping copied smoke
   evidence honest without adding benchmark claims.
+- Smoke Console now promotes runtime-reported or approximate output TPS ahead
+  of the response body, and can display compatible `reasoning_content` output
+  when the returned message `content` is empty.
 - Smoke Console Run, Copy Result, and Clear Result controls now expose localized
   accessibility hints that keep the surface framed as an explicit endpoint
   smoke, not saved conversation history.
@@ -264,8 +267,8 @@ Implemented scope:
   distribution claims, and release-asset claims without changing remote GitHub
   settings.
 - Local source verification passed on 2026-05-23 during the Smoke Console
-  failed-attempt metrics pass with
-  `git diff --check`, localization lint, `swift test` (216 XCTest tests,
+  TPS/manual-review polish pass with
+  `git diff --check`, localization lint, `swift test` (218 XCTest tests,
   0 failures), and
   `swift build --disable-sandbox`; the current 2026-05-21
   local app-bundle helper smoke still stands as regressed with
@@ -435,9 +438,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console failed-attempt metrics pass):
+Current source-verification status (2026-05-23 Smoke Console TPS/manual-review polish pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (216 XCTest tests, 0 failures), and
+`swift test` (218 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun
 in that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.

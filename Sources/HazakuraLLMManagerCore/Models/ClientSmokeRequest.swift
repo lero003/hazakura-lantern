@@ -2,8 +2,8 @@ import Foundation
 
 public struct ClientSmokeRequest: Equatable, Sendable {
     public static let defaultUserText = "Hazakura AI Mobile runtime smoke. Reply with OK."
-    public static let defaultTimeoutSeconds = 1_000
-    public static let defaultMaxTokens = 100_000
+    public static let defaultTimeoutSeconds = 180
+    public static let defaultMaxTokens = 2_048
 
     public var baseURL: String
     public var apiKey: String?

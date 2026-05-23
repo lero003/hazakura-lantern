@@ -24,9 +24,9 @@ final class ClientSmokeRequestTests: XCTestCase {
         XCTAssertEqual(
             request.curlCommand,
             """
-            curl -fsS --max-time 1000 http://localhost:9876/v1/chat/completions \\
+            curl -fsS --max-time 180 http://localhost:9876/v1/chat/completions \\
               -H 'Content-Type: application/json' \\
-              -d '{"max_tokens":100000,"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
+              -d '{"max_tokens":2048,"messages":[{"content":"Hazakura AI Mobile runtime smoke. Reply with OK.","role":"user"}],"model":"local","stream":false}'
             """
         )
     }

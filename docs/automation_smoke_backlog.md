@@ -41,17 +41,17 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-23 Smoke Console failed-attempt metrics run):
+Latest source-verification result (2026-05-23 Smoke Console TPS/manual-review polish run):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 216 XCTest tests, 0 failures.
+- `swift test` passed: 218 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - App-bundle helper smoke was not rerun in this slice because no fresh Launch
   Services hypothesis or normal desktop verification environment was available.
-- OpenAI-compatible smoke requests now include a small `max_tokens` cap, keeping
-  local smoke output bounded without adding chat history, prompt libraries, or
-  benchmark behavior.
+- OpenAI-compatible smoke requests now include a bounded 2,048-token cap and
+  180-second timeout, keeping local smoke output bounded while giving
+  thinking-capable runtimes more room during an explicit smoke run.
 - Smoke Console now opens with the same bounded default local smoke prompt used
   by the copyable curl command, so a running server can execute a first smoke
   request without inventing prompt text.
@@ -71,9 +71,12 @@ Latest source-verification result (2026-05-23 Smoke Console failed-attempt metri
   manual reports to fix one concrete rough edge without turning metrics into
   benchmarking.
 - Smoke Console metric labels now say "Usage Reported by Runtime",
-  "Approx Output Tokens", "Request Mode", and "Timeout Used" in localized UI
-  copy, so copied smoke evidence is clearer about reported versus approximate
-  values.
+  "Approx Output Tokens", "TPS", "Approx TPS", "Request Mode", and "Timeout
+  Used" in localized UI copy, so copied smoke evidence is clearer about
+  reported versus approximate values.
+- Smoke Console can now display compatible `reasoning_content` output when the
+  returned message `content` is empty, and the app-side port availability probe
+  no longer treats recently closed local ports as indefinitely unavailable.
 
 Latest app-bundle helper smoke result (2026-05-21 current run):
 

@@ -781,12 +781,12 @@ Candidate work:
   character count, request mode, and timeout used under the response
 - prefer API-provided usage fields when present
 - when usage is missing, show explicitly approximate output token count and
-  approximate decode rate only when enough data exists
+  approximate TPS only when enough data exists
 - show first-response latency only if streaming is implemented safely
 - keep metrics in memory or in a small bounded non-persistent recent-results
   list
 - use careful wording such as "Last local test", "Smoke metric", "Approx
-  output tokens", "Approx decode rate", and "Usage reported by runtime"
+  output tokens", "Approx TPS", and "Usage reported by runtime"
 
 Completion criteria:
 

@@ -225,7 +225,6 @@
 "validation.runtime.directory" = "Runtime path is a folder.";
 "validation.runtime.missing" = "Runtime executable does not exist.";
 "validation.runtime.not_executable" = "Runtime executable is not executable.";
-"Approx Decode Rate" = "Approx Decode Rate";
 "Approx Output Tokens" = "Approx Output Tokens";
 "Clear Result" = "Clear Result";
 "Clear the displayed smoke response, error, and metrics." = "Clear the displayed smoke response, error, and metrics.";
