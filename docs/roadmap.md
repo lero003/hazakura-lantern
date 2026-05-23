@@ -777,6 +777,8 @@ Candidate work:
 
 - show started time, total elapsed time, output character count, request mode,
   and timeout used for the last smoke run
+- successful Smoke Console results now show started time, elapsed time, output
+  character count, request mode, and timeout used under the response
 - prefer API-provided usage fields when present
 - when usage is missing, show explicitly approximate output token count and
   approximate decode rate only when enough data exists

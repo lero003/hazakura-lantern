@@ -247,6 +247,7 @@
 "Smoke Prompt" = "確認プロンプト";
 "Smoke Response" = "確認応答";
 "Start the server before running Smoke Console." = "Smoke Console を実行する前にサーバーを開始してください。";
+"Started" = "開始時刻";
 "Timeout" = "タイムアウト";
 "smoke.metric.unavailable" = "なし";
 "smoke.usage.summary" = "入力 %@ / 出力 %@ / 合計 %@";

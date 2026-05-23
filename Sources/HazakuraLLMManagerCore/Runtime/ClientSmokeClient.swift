@@ -22,6 +22,7 @@ public struct ClientSmokeResult: Equatable, Sendable {
     }
 
     public var responseText: String
+    public var startedAt: Date?
     public var elapsedSeconds: Double
     public var outputCharacterCount: Int
     public var requestMode: RequestMode
@@ -32,12 +33,14 @@ public struct ClientSmokeResult: Equatable, Sendable {
 
     public init(
         responseText: String,
+        startedAt: Date? = nil,
         elapsedSeconds: Double = 0,
         requestMode: RequestMode = .nonStreaming,
         timeoutSeconds: Int = 60,
         runtimeUsage: Usage? = nil
     ) {
         self.responseText = responseText
+        self.startedAt = startedAt
         self.elapsedSeconds = max(0, elapsedSeconds)
         self.outputCharacterCount = responseText.count
         self.requestMode = requestMode
@@ -147,6 +150,7 @@ public struct ClientSmokeClient: ClientSmokeRunning, Sendable {
             let decodedResponse = try Self.decodeResponse(from: data)
             return ClientSmokeResult(
                 responseText: decodedResponse.responseText,
+                startedAt: startedAt,
                 elapsedSeconds: Date().timeIntervalSince(startedAt),
                 requestMode: .nonStreaming,
                 timeoutSeconds: request.timeoutSeconds,

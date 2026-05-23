@@ -216,6 +216,9 @@ struct SmokeConsoleView: View {
 
     @ViewBuilder
     private func metricsBadges(for result: ClientSmokeResult) -> some View {
+        if let startedAt = result.startedAt {
+            metricBadge(title: "Started", value: formattedStartedAt(startedAt))
+        }
         metricBadge(title: "Elapsed", value: formattedElapsed(result.elapsedSeconds))
         metricBadge(title: "Characters", value: "\(result.outputCharacterCount)")
         if let runtimeUsage = result.runtimeUsage {
@@ -342,6 +345,10 @@ struct SmokeConsoleView: View {
 
     private func formattedElapsed(_ seconds: Double) -> String {
         String(format: "%.2fs", seconds)
+    }
+
+    private func formattedStartedAt(_ date: Date) -> String {
+        DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
     }
 
     private func formattedRuntimeUsage(_ usage: ClientSmokeResult.Usage) -> String {

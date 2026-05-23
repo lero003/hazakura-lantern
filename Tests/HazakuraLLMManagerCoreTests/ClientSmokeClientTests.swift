@@ -22,10 +22,14 @@ final class ClientSmokeClientTests: XCTestCase {
             userText: "Reply OK.",
             timeoutSeconds: 9
         )
+        let beforeRun = Date()
 
         let result = try await client.run(request)
 
         XCTAssertEqual(result.responseText, "OK from local runtime")
+        let startedAt = try XCTUnwrap(result.startedAt)
+        XCTAssertGreaterThanOrEqual(startedAt.timeIntervalSince1970, beforeRun.timeIntervalSince1970)
+        XCTAssertLessThanOrEqual(startedAt.timeIntervalSince1970, Date().timeIntervalSince1970)
         XCTAssertGreaterThanOrEqual(result.elapsedSeconds, 0)
         XCTAssertEqual(result.outputCharacterCount, 21)
         XCTAssertEqual(result.requestMode, .nonStreaming)
@@ -67,8 +71,10 @@ final class ClientSmokeClientTests: XCTestCase {
     }
 
     func testApproximateTokenMetricsAreOnlyReportedWhenUsageIsMissing() {
-        let result = ClientSmokeResult(responseText: "abcdefgh", elapsedSeconds: 2)
+        let startedAt = Date(timeIntervalSince1970: 1_779_501_600)
+        let result = ClientSmokeResult(responseText: "abcdefgh", startedAt: startedAt, elapsedSeconds: 2)
 
+        XCTAssertEqual(result.startedAt, startedAt)
         XCTAssertNil(result.runtimeUsage)
         XCTAssertEqual(result.approximateOutputTokenCount, 2)
         XCTAssertEqual(result.approximateOutputTokensPerSecond, 1)

@@ -94,10 +94,10 @@ Implemented scope:
   the displayed error message, so failed local smoke evidence is easier to
   share without adding logs or persistence.
 - The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
-  elapsed time, output character count, runtime-reported usage when available,
-  explicitly approximate fallback output token count/rate, request mode, and
-  timeout used, then shows those values under the response with localized
-  app-owned labels.
+  started time, elapsed time, output character count, runtime-reported usage
+  when available, explicitly approximate fallback output token count/rate,
+  request mode, and timeout used, then shows those values under the response
+  with localized app-owned labels.
 - Local endpoint health-check URL and timeout-bounded copyable curl smoke
   command display.
 - Manual endpoint health status check using the local health-check URL.
@@ -418,7 +418,7 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 Smoke Console copy-result pass):
+Current source-verification status (2026-05-23 Smoke Console started-time metrics pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (214 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun

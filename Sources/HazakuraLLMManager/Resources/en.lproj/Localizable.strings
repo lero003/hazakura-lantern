@@ -247,6 +247,7 @@
 "Smoke Prompt" = "Smoke Prompt";
 "Smoke Response" = "Smoke Response";
 "Start the server before running Smoke Console." = "Start the server before running Smoke Console.";
+"Started" = "Started";
 "Timeout" = "Timeout";
 "smoke.metric.unavailable" = "n/a";
 "smoke.usage.summary" = "prompt %@ / output %@ / total %@";
