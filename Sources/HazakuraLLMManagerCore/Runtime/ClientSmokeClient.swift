@@ -357,13 +357,13 @@ private struct OpenAIErrorResponse: Decodable {
         }
 
         private struct MessagePayload: Decodable {
-            var message: String?
-            var detail: String?
-            var msg: String?
-            var code: String?
+            var message: ErrorPayload?
+            var detail: ErrorPayload?
+            var msg: ErrorPayload?
+            var code: ErrorPayload?
 
             var displayMessage: String? {
-                [message, detail, msg, code]
+                [message?.message, detail?.message, msg?.message, code?.message]
                     .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
                     .first { !$0.isEmpty }
             }

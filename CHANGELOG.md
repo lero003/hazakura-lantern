@@ -6,6 +6,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Improved Smoke Console HTTP error snippets so structured `error.message`,
+  `detail`, `msg`, or `code` fields that contain compatible message arrays can
+  still collapse into readable bounded evidence instead of raw JSON.
 - Reconnected localized accessibility hints to the menu bar copy actions for
   endpoint, launch command, environment snippet, health-check curl, and AI
   Mobile smoke curl copies.

@@ -480,6 +480,24 @@ final class ClientSmokeClientTests: XCTestCase {
         )
     }
 
+    func testRunMapsStructuredMessageArrayErrorSnippet() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 400,
+            body: #"{"error":{"message":["context window exceeded",{"msg":"reduce max_tokens"}]}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(
+                400,
+                url: "http://localhost:1234/v1/chat/completions",
+                bodySnippet: "context window exceeded; reduce max_tokens"
+            )
+        )
+    }
+
     func testRunMapsNestedDetailMessageSnippet() async {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 503,
