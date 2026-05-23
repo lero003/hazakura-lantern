@@ -6,9 +6,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
-- Improved Smoke Console HTTP error snippets so structured top-level `detail`
-  or `message` payloads from compatible local endpoints are shown as readable
-  bounded messages instead of raw JSON.
+- Improved Smoke Console HTTP error snippets so structured `error`, `detail`,
+  or `message` payloads from compatible local endpoints, including
+  FastAPI-style detail arrays, are shown as readable bounded messages instead
+  of raw JSON.
 - Added Smoke Console support for compatible `llama-server`
   `timings.cache_n`, `timings.prompt_n`, and `timings.predicted_n` token counts
   when standard `usage` is missing, keeping runtime-reported smoke evidence

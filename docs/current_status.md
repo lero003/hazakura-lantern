@@ -105,6 +105,9 @@ Implemented scope:
 - Smoke Console HTTP error snippets now also prefer structured top-level
   `detail` or `message` payloads when present, keeping compatible local
   endpoint failures readable without adding logs, history, or persistence.
+- Smoke Console HTTP error snippets also read compatible structured `error`,
+  `detail`, and FastAPI-style detail-array payloads before falling back to raw
+  bounded response bodies.
 - Smoke Console result copy now copies the latest success response with the
   displayed v1.2 metrics, or the displayed error message when a smoke request
   fails, so local smoke evidence is easier to share without adding logs or
@@ -496,9 +499,9 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-23 runtime timing token usage pass):
+Current source-verification status (2026-05-23 structured HTTP-error detail pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (225 XCTest tests, 0 failures), and
+`swift test` (229 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. App-bundle helper smoke was not rerun in
 that slice because no fresh Launch Services hypothesis or normal desktop
 verification environment was available.

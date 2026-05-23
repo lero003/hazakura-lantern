@@ -290,11 +290,18 @@ private struct OpenAIErrorResponse: Decodable {
 
     enum ErrorPayload: Decodable {
         case message(String?)
+        case messages([String])
 
         var message: String? {
             switch self {
             case .message(let message):
                 return message
+            case .messages(let messages):
+                let joinedMessages = messages
+                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                    .filter { !$0.isEmpty }
+                    .joined(separator: "; ")
+                return joinedMessages.nilIfEmpty
             }
         }
 
@@ -306,12 +313,19 @@ private struct OpenAIErrorResponse: Decodable {
                 return
             }
 
+            if let payloads = try? container.decode([ErrorPayload].self) {
+                self = .messages(payloads.compactMap(\.message))
+                return
+            }
+
             let payload = try container.decode(MessagePayload.self)
-            self = .message(payload.message)
+            self = .message(payload.message ?? payload.detail ?? payload.msg)
         }
 
         private struct MessagePayload: Decodable {
             var message: String?
+            var detail: String?
+            var msg: String?
         }
     }
 }

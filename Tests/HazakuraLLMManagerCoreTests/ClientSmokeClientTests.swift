@@ -292,6 +292,34 @@ final class ClientSmokeClientTests: XCTestCase {
         )
     }
 
+    func testRunMapsFastAPIDetailArrayErrorSnippet() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 422,
+            body: #"{"detail":[{"loc":["body","messages"],"msg":"messages field is required"},{"message":"model is still loading"}]}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(422, bodySnippet: "messages field is required; model is still loading")
+        )
+    }
+
+    func testRunMapsNestedDetailMessageSnippet() async {
+        ClientSmokeURLProtocol.result = .success(
+            statusCode: 503,
+            body: #"{"error":{"detail":"runtime queue is full"}}"#
+        )
+        let client = ClientSmokeClient(session: makeSession())
+        let request = ClientSmokeRequest(baseURL: "http://localhost:1234/v1")
+
+        await XCTAssertThrowsClientSmokeError(
+            try await client.run(request),
+            equals: .httpStatus(503, bodySnippet: "runtime queue is full")
+        )
+    }
+
     func testRunMapsTopLevelMessageErrorSnippet() async {
         ClientSmokeURLProtocol.result = .success(
             statusCode: 404,
