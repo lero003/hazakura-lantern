@@ -7,10 +7,10 @@ Last reviewed: 2026-05-24
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v1.2.0` is a public source-only checkpoint for
+Current release checkpoint: `v1.5.0` is a public source-only checkpoint for
 personal/local use. It keeps the existing `llama-server` control boundary and
 is not a packaged app release. The previous public source-only checkpoint was
-`v1.0.0-rc.2`.
+`v1.2.0`.
 
 Implemented scope:
 
@@ -31,6 +31,10 @@ Implemented scope:
   opening the separate macOS Settings scene.
 - The embedded sidebar Settings view and Setup Guide inspector use compact
   widths so those utility surfaces do not crowd the main window.
+- When the Setup Guide inspector is visible, the main window synchronizes its
+  SwiftUI and `NSWindow` minimum size to keep the sidebar, main content, and
+  inspector from clipping or sliding offscreen during narrow-window smoke
+  checks.
 - Settings now shows the current source checkpoint and makes the source-only,
   no-packaged-app boundary visible inside the app without adding release assets.
 - The in-app source checkpoint identifier now comes from a tested core metadata
@@ -127,9 +131,19 @@ Implemented scope:
   started time, elapsed time, request URL, request mode, and timeout used,
   keeping failure evidence shareable without adding logs, history, or
   benchmark claims.
+- Smoke Console now localizes app-owned failure messages for invalid endpoint,
+  connection, timeout, HTTP status, malformed-response, and request failures,
+  keeping Japanese UI smoke evidence readable while leaving core adapter and
+  runtime boundaries unchanged.
 - Smoke Console now opens with the same bounded local smoke prompt used by the
   copyable OpenAI-compatible curl command, keeping the explicit prompt editable
   while avoiding a blank first run.
+- Smoke Console now keeps the empty result state compact, and the endpoint/model
+  summary plus run/copy/clear actions can fall back to narrower stacks instead
+  of forcing a single wide row in Japanese UI.
+- The main window minimum width is now 860 pt instead of 980 pt, allowing the
+  Smoke Console compact layout to be exercised in a narrower release-smoke
+  window without changing packaging or distribution scope.
 - The v1.2 Runtime Smoke Metrics path now records successful Smoke Console
   started time, elapsed time, output character count, runtime-reported usage
   when available, explicitly approximate fallback output token count/rate,
@@ -410,7 +424,9 @@ Implemented scope:
   0 failures), and `swift build --disable-sandbox`.
 - App bundle launch helper at `script/build_and_run.sh`.
 - App smoke cleanup helper: `--verify` closes the app on exit, and `--stop`
-  can close a leftover `HazakuraLLMManager` process.
+  closes a leftover `HazakuraLLMManager` process plus any direct child runtime
+  process captured from that app instance, without killing unrelated external
+  `llama-server` processes.
 - Compact troubleshooting guide for setup, endpoint health, app-bundle smoke,
   and source-only release boundaries.
 - Troubleshooting now includes local file checks for confirming the selected
@@ -570,24 +586,42 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 Smoke Console metric-layout pass):
+Current source-verification status (2026-05-24 v1.5 release-prep pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (249 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. Smoke Console metric badges now use an
-adaptive grid with stable badge heights and a shorter response pane, keeping
-dense v1.2 evidence readable in narrower windows.
+`swift build --disable-sandbox` passed. A real local endpoint smoke pass against
+the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model ran with the Setup
+Guide inspector visible, showed the in-app source checkpoint as `v1.5.0`,
+expanded a requested 860 pt window to the 1320 pt guide-safe minimum, and
+returned an `OK` Smoke Console response with visible runtime TPS, start time,
+elapsed time, output character count, finish reason, and timeout metrics.
+The same pass verified Stop leaves the app running while removing the managed
+`llama-server`, and Quit removes both `HazakuraLLMManager` and the managed
+runtime.
 
-Current Codex launch-smoke status (2026-05-24 current run):
-`./script/build_and_run.sh --verify` builds the bundle but Launch Services
-returns `kLSNoExecutableErr`. The generated bundle contains `Info.plist`, the
-`HazakuraLLMManager` executable, and English/Japanese localization resources
-under `dist/Hazakura Lantern.app/Contents`. A follow-up
-`pgrep -fl HazakuraLLMManager` check could not read the process list because
-`sysmond` was unavailable in this environment.
+Current Codex launch-smoke status (2026-05-24 verify hardening pass):
+`./script/build_and_run.sh --verify` builds the local bundle, requests launch
+through Launch Services, confirms a `HazakuraLLMManager` process id, and closes
+the app before the script exits. A follow-up process and port check found no
+remaining `HazakuraLLMManager`, managed `llama-server`, or `9993` listener.
+After the helper change, the normal `./script/build_and_run.sh` path also
+opened the app, started the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL`
+runtime, completed a short in-app Japanese Smoke Console request, and
+`./script/build_and_run.sh --stop` left no app, managed runtime, or `9993/9994`
+listener behind.
 
-Treat this as an automation-level launch-smoke regression, not a source-build
-failure. It does not prove packaged-release readiness, and it should not block
-source-only work that is verified through SwiftPM.
+Final Smoke Console goal audit on 2026-05-24 re-ran the current worktree at an
+860 pt window width with the selected lightweight model: short Japanese prompt,
+medium two-sentence Japanese prompt, and an error-path request against unused
+`9994` all produced readable Smoke Console evidence through the app UI. The
+short success view was also captured by screenshot, showing the prompt,
+run/copy/clear buttons, adaptive metrics, endpoint/model labels, and response
+without visible clipping.
+
+Treat this as automation-level launch evidence, not packaged-release proof. It
+is enough to keep recurring local smoke honest, but a normal desktop/manual
+launch and clean-quit pass is still required before app-bundle, zip, dmg,
+signing, or notarization release work.
 
 Historical 2026-05-17 diagnostics: re-signing the generated bundle with
 `codesign --force --sign -`, adding standard bundle metadata, adding
@@ -600,9 +634,9 @@ bundle rather than a blanket inability to call Launch Services.
 Additional historical 2026-05-17 diagnostics: signing the completed bundle can make
 `codesign --verify --deep --strict` pass, and a top-level
 `open -n /absolute/path/to/Hazakura Lantern.app` launch request can be accepted.
-However, the helper can still fail when `open` is invoked after rebuilding the
-bundle. The 2026-05-21 and 2026-05-24 runs reproduced that failure even though
-the bundle executable and `CFBundleExecutable` value matched.
+However, the helper could still fail when `open` was invoked after rebuilding
+the bundle. The 2026-05-21 and earlier 2026-05-24 runs reproduced that failure
+even though the bundle executable and `CFBundleExecutable` value matched.
 
 ## Known Constraints
 
@@ -632,9 +666,9 @@ queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
 Current human direction: continue automated development and manual device
-verification after the `v1.2.0` source-only checkpoint, then fix one
-smoke-observed rough edge at a time before a later source-stable checkpoint
-around `v1.3`. Packaged app release remains separate: automation should
+verification after the `v1.5.0` source-only checkpoint, then fix one
+smoke-observed rough edge at a time before any later source checkpoint.
+Packaged app release remains separate: automation should
 continue code-quality checks, narrow verified improvements, and
 packaged-release readiness evidence, but should not create packaged artifacts,
 change GitHub settings, mutate public issues, or decide packaged-release
@@ -689,7 +723,7 @@ adapter, custom command implementation, profile schema version, dependencies,
 runtime installation/update, model download, or hidden auto-optimization
 without an explicit human handoff. The current human handoff explicitly allows
 the saved Lantern development automation to continue every 30 minutes for
-smoke-driven `v1.3` polish after the `v1.2.0` source checkpoint.
+smoke-driven post-`v1.5` polish after the `v1.5.0` source checkpoint.
 
 ## Next Best Slice
 
@@ -697,7 +731,7 @@ Good next automated candidates:
 
 - fix any failing `swift test`, `swift build --disable-sandbox`, localization
   lint, or `git diff --check` result before picking a polish slice
-- after v1.2, run smoke and fix one concrete rough edge at a time while keeping
+- after v1.5, run smoke and fix one concrete rough edge at a time while keeping
   conversation history, prompt libraries, RAG/tools, benchmark rankings, and
   runtime optimization out of scope
 - make one small code-quality improvement inside the current `llama-server`

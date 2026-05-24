@@ -12,7 +12,7 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v1.2.0` is a public source-only checkpoint for
+Current checkpoint: `v1.5.0` is a public source-only checkpoint for
 personal/local use. It keeps the existing `llama-server` control boundary and
 does not include a packaged `.app`, zip, dmg, signing, notarization, checksum,
 or binary distribution artifact.
@@ -67,11 +67,12 @@ Verify launch:
 ./script/build_and_run.sh --verify
 ```
 
-As of the current 2026-05-24 automation run, this helper smoke can still return
-Launch Services `kLSNoExecutableErr` in the Codex environment even when SwiftPM
-build and test pass and the generated bundle contains the expected executable.
-Treat it as automation-level launch evidence only, not as proof that a
-user-facing packaged `.app` release is ready. A normal desktop/manual launch and
+As of the current 2026-05-24 automation run, this helper smoke builds the local
+bundle, verifies that the `HazakuraLLMManager` process appears, and closes it
+before exiting. Treat it as automation-level launch evidence only, not as proof
+that a user-facing packaged `.app` release is ready.
+`./script/build_and_run.sh --stop` also cleans up a managed runtime child
+process that was launched by the app, but a normal desktop/manual launch and
 clean-quit pass is still required before app-bundle, zip, dmg, signing, or
 notarization release work.
 

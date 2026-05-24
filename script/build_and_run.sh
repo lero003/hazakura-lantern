@@ -20,8 +20,75 @@ INFO_PLIST="$APP_CONTENTS/Info.plist"
 
 SWIFT_BUILD_FLAGS=(--disable-sandbox)
 
+wait_for_exit() {
+  local pid
+  local attempt
+
+  for attempt in {1..30}; do
+    local any_running=0
+
+    for pid in "$@"; do
+      if kill -0 "$pid" >/dev/null 2>&1; then
+        any_running=1
+        break
+      fi
+    done
+
+    if [[ "$any_running" == "0" ]]; then
+      return 0
+    fi
+
+    sleep 0.1
+  done
+
+  return 1
+}
+
+terminate_pids() {
+  local pid
+  local live_pids=()
+
+  for pid in "$@"; do
+    if kill -0 "$pid" >/dev/null 2>&1; then
+      live_pids+=("$pid")
+    fi
+  done
+
+  if [[ "${#live_pids[@]}" == "0" ]]; then
+    return 0
+  fi
+
+  kill -TERM "${live_pids[@]}" >/dev/null 2>&1 || true
+  if ! wait_for_exit "${live_pids[@]}"; then
+    kill -KILL "${live_pids[@]}" >/dev/null 2>&1 || true
+    wait_for_exit "${live_pids[@]}" || true
+  fi
+}
+
 stop_app() {
-  pkill -x "$APP_EXECUTABLE" >/dev/null 2>&1 || true
+  local app_pid
+  local child_pid
+  local app_pids=()
+  local child_pids=()
+
+  while IFS= read -r app_pid; do
+    [[ -n "$app_pid" ]] || continue
+    app_pids+=("$app_pid")
+
+    while IFS= read -r child_pid; do
+      [[ -n "$child_pid" ]] || continue
+      child_pids+=("$child_pid")
+    done < <(pgrep -P "$app_pid" || true)
+  done < <(pgrep -x "$APP_EXECUTABLE" || true)
+
+  if [[ "${#app_pids[@]}" == "0" ]]; then
+    return 0
+  fi
+
+  terminate_pids "${app_pids[@]}"
+  if [[ "${#child_pids[@]}" != "0" ]]; then
+    terminate_pids "${child_pids[@]}"
+  fi
 }
 
 stop_app
@@ -77,15 +144,25 @@ open_app() {
   sleep 0.2
   (
     cd "$ROOT_DIR"
-    /usr/bin/open -W -n "$APP_BUNDLE_RELATIVE" &
-    OPEN_PID=$!
-    sleep 1
-    if kill -0 "$OPEN_PID" >/dev/null 2>&1; then
-      kill "$OPEN_PID" >/dev/null 2>&1 || true
+    /usr/bin/open -n "$APP_BUNDLE_RELATIVE"
+  )
+}
+
+wait_for_app_launch() {
+  local attempt
+  local app_pid
+
+  for attempt in {1..50}; do
+    app_pid="$(pgrep -x "$APP_EXECUTABLE" | head -n 1 || true)"
+    if [[ -n "$app_pid" ]]; then
+      echo "$app_pid"
       return 0
     fi
-    wait "$OPEN_PID"
-  )
+
+    sleep 0.1
+  done
+
+  return 1
 }
 
 case "$MODE" in
@@ -108,7 +185,8 @@ case "$MODE" in
   --verify|verify)
     trap stop_app EXIT
     open_app
-    echo "$APP_DISPLAY_NAME launch request completed."
+    APP_PID="$(wait_for_app_launch)"
+    echo "$APP_DISPLAY_NAME launch verified with pid $APP_PID."
     ;;
   *)
     echo "usage: $0 [run|--debug|--logs|--telemetry|--verify|--stop]" >&2

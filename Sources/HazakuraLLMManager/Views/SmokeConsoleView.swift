@@ -51,19 +51,16 @@ struct SmokeConsoleView: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
 
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(endpoint.apiBaseURLString)
-                        .font(.system(.body, design: .monospaced))
-                        .textSelection(.enabled)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        endpointURLText(endpoint.apiBaseURLString)
+                        modelIDChip(endpoint.modelID)
+                    }
 
-                    Text(endpoint.modelID)
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(.black.opacity(0.18), in: Capsule())
+                    VStack(alignment: .leading, spacing: 6) {
+                        endpointURLText(endpoint.apiBaseURLString)
+                        modelIDChip(endpoint.modelID)
+                    }
                 }
             }
         } else {
@@ -74,6 +71,25 @@ struct SmokeConsoleView: View {
             .font(.caption)
             .foregroundStyle(.secondary)
         }
+    }
+
+    private func endpointURLText(_ url: String) -> some View {
+        Text(url)
+            .font(.system(.body, design: .monospaced))
+            .textSelection(.enabled)
+            .lineLimit(1)
+            .truncationMode(.middle)
+    }
+
+    private func modelIDChip(_ modelID: String) -> some View {
+        Text(modelID)
+            .font(.system(.caption, design: .monospaced))
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+            .truncationMode(.middle)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(.black.opacity(0.18), in: Capsule())
     }
 
     private var promptEditor: some View {
@@ -106,38 +122,58 @@ struct SmokeConsoleView: View {
     }
 
     private var smokeActions: some View {
-        HStack(spacing: 10) {
-            Button {
-                runSmoke()
-            } label: {
-                Label {
-                    Text(LocalizedStringKey(isRunning ? "Running Smoke" : "Run Smoke"))
-                } icon: {
-                    Image(systemName: "paperplane")
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 10) {
+                runSmokeButton
+                copyResultButton
+                clearResultButton
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                runSmokeButton
+                HStack(spacing: 10) {
+                    copyResultButton
+                    clearResultButton
                 }
             }
-            .buttonStyle(PrimaryButtonStyle())
-            .disabled(!canRunSmoke)
-            .accessibilityHint(Text("Send the prompt to the selected local endpoint without saving a conversation."))
-
-            Button {
-                copyResult()
-            } label: {
-                Label("Copy Result", systemImage: didCopy ? "checkmark.circle" : "doc.on.doc")
-            }
-            .buttonStyle(SecondaryButtonStyle())
-            .disabled(copyableResult == nil)
-            .accessibilityHint(Text("Copy the latest smoke response or error with visible metrics."))
-
-            Button {
-                clearResult()
-            } label: {
-                Label("Clear Result", systemImage: "xmark.circle")
-            }
-            .buttonStyle(SecondaryButtonStyle())
-            .disabled(responseText == nil && errorMessage == nil)
-            .accessibilityHint(Text("Clear the displayed smoke response, error, and metrics."))
         }
+    }
+
+    private var runSmokeButton: some View {
+        Button {
+            runSmoke()
+        } label: {
+            Label {
+                Text(LocalizedStringKey(isRunning ? "Running Smoke" : "Run Smoke"))
+            } icon: {
+                Image(systemName: "paperplane")
+            }
+        }
+        .buttonStyle(PrimaryButtonStyle())
+        .disabled(!canRunSmoke)
+        .accessibilityHint(Text("Send the prompt to the selected local endpoint without saving a conversation."))
+    }
+
+    private var copyResultButton: some View {
+        Button {
+            copyResult()
+        } label: {
+            Label("Copy Result", systemImage: didCopy ? "checkmark.circle" : "doc.on.doc")
+        }
+        .buttonStyle(SecondaryButtonStyle())
+        .disabled(copyableResult == nil)
+        .accessibilityHint(Text("Copy the latest smoke response or error with visible metrics."))
+    }
+
+    private var clearResultButton: some View {
+        Button {
+            clearResult()
+        } label: {
+            Label("Clear Result", systemImage: "xmark.circle")
+        }
+        .buttonStyle(SecondaryButtonStyle())
+        .disabled(responseText == nil && errorMessage == nil)
+        .accessibilityHint(Text("Clear the displayed smoke response, error, and metrics."))
     }
 
     @ViewBuilder
@@ -201,13 +237,28 @@ struct SmokeConsoleView: View {
                     .background(.red.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
             }
         } else {
-            ContentUnavailableView(
-                "No Smoke Result",
-                systemImage: "checkmark.circle",
-                description: Text("Run a local endpoint smoke request to show the latest response here.")
-            )
-            .frame(maxWidth: .infinity, minHeight: 180)
+            emptyResponsePlaceholder
         }
+    }
+
+    private var emptyResponsePlaceholder: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label {
+                Text("No Smoke Result")
+                    .font(.callout.weight(.semibold))
+            } icon: {
+                Image(systemName: "checkmark.circle")
+                    .foregroundStyle(.secondary)
+            }
+
+            Text("Run a local endpoint smoke request to show the latest response here.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, minHeight: 104, alignment: .leading)
+        .background(.black.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
     }
 
     @ViewBuilder
@@ -363,7 +414,7 @@ struct SmokeConsoleView: View {
                         requestURL: smokeError.requestURL ?? request.chatCompletionsURL,
                         modelID: request.model
                     )
-                    errorMessage = smokeError.message
+                    errorMessage = smokeError.smokeConsoleMessage
                     isRunning = false
                 }
             } catch {
@@ -570,4 +621,32 @@ private struct SmokeFailureMetrics: Equatable {
     var timeoutSeconds: Int
     var requestURL: String?
     var modelID: String?
+}
+
+private extension ClientSmokeError {
+    var smokeConsoleMessage: String {
+        switch self {
+        case .invalidEndpoint(let endpoint):
+            return String(format: String(localized: "smoke.error.invalid_endpoint"), endpoint)
+        case .connectionFailed(let url):
+            return String(format: String(localized: "smoke.error.connection_failed"), url)
+        case .timedOut(let seconds, let url):
+            return String(format: String(localized: "smoke.error.timed_out"), seconds, url)
+        case .httpStatus(let statusCode, let url, let bodySnippet):
+            if let bodySnippet, !bodySnippet.isEmpty {
+                return String(format: String(localized: "smoke.error.http_status.body"), statusCode, url, bodySnippet)
+            }
+            return String(format: String(localized: "smoke.error.http_status"), statusCode, url)
+        case .malformedResponse(let detail, let url):
+            if let url, !url.isEmpty {
+                return String(format: String(localized: "smoke.error.malformed_response.url"), url, detail)
+            }
+            return String(format: String(localized: "smoke.error.malformed_response"), detail)
+        case .requestFailed(let detail, let url):
+            if let url, !url.isEmpty {
+                return String(format: String(localized: "smoke.error.request_failed.url"), url, detail)
+            }
+            return String(format: String(localized: "smoke.error.request_failed"), detail)
+        }
+    }
 }

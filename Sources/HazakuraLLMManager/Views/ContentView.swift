@@ -8,6 +8,10 @@ struct ContentView: View {
     @State private var didCopyFromToolbar = false
     @State private var toolbarCopyGeneration = 0
 
+    private var minimumWindowWidth: CGFloat {
+        showSetupGuide ? 1_320 : 860
+    }
+
     private enum SidebarItem: String, CaseIterable, Identifiable {
         case dashboard = "Dashboard"
         case configuration = "Configuration"
@@ -36,6 +40,7 @@ struct ContentView: View {
                 }
             }
             .frame(minWidth: 160)
+            .navigationSplitViewColumnWidth(min: 160, ideal: 176, max: 220)
         } detail: {
             ZStack {
                 AuroraBackgroundView(status: controller.status)
@@ -186,7 +191,8 @@ struct ContentView: View {
                 showSetupGuide = true
             }
         }
-        .frame(minWidth: 980, minHeight: 640)
+        .frame(minWidth: minimumWindowWidth, minHeight: 680)
+        .lanternWindowMinimumSize(width: minimumWindowWidth, height: 680)
     }
 
     private func exportRuntimeProfile() {

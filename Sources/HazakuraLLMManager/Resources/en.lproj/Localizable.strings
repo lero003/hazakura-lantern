@@ -262,5 +262,14 @@
 "TPS" = "TPS";
 "Timeout Used" = "Timeout Used";
 "Usage Reported by Runtime" = "Usage Reported by Runtime";
+"smoke.error.connection_failed" = "No server responded at %@. Start the runtime or verify the configured port.";
+"smoke.error.http_status" = "Smoke request returned HTTP %d for %@.";
+"smoke.error.http_status.body" = "Smoke request returned HTTP %d for %@: %@";
+"smoke.error.invalid_endpoint" = "Smoke request endpoint is invalid: %@.";
+"smoke.error.malformed_response" = "Smoke response could not be read: %@";
+"smoke.error.malformed_response.url" = "Smoke response from %@ could not be read: %@";
+"smoke.error.request_failed" = "Smoke request failed: %@";
+"smoke.error.request_failed.url" = "Smoke request failed for %@: %@";
+"smoke.error.timed_out" = "Smoke request timed out after %d seconds for %@.";
 "smoke.metric.unavailable" = "n/a";
 "smoke.usage.summary" = "prompt %@ / output %@ / total %@";

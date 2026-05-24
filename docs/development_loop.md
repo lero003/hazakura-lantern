@@ -27,15 +27,15 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Automation Focus
 
-The project has a public source-only `v1.2.0` checkpoint for personal/local
+The project has a public source-only `v1.5.0` checkpoint for personal/local
 use. It keeps the existing `llama-server` control boundary and does not include
 packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
 distribution artifacts. Treat exact v0.x numbers as release history, not as the
 next work selector.
 
 Current human direction: continue automated development and manual device
-verification after the `v1.2.0` source-only checkpoint, fixing smoke-observed
-rough edges until a later source-stable polish checkpoint around `v1.3`.
+verification after the `v1.5.0` source-only checkpoint, fixing smoke-observed
+rough edges one at a time before any later source checkpoint.
 Packaged app release work remains a separate future handoff. Automation should
 keep progressing small verified slices without creating packaged artifacts,
 mutating runtime installs, changing GitHub settings, or deciding
@@ -52,8 +52,8 @@ unfinished gates are:
 
 - fix failing `swift test`, `swift build --disable-sandbox`, localization lint,
   or `git diff --check` results before choosing polish
-- after v1.2: use smoke runs and manual evidence to fix one concrete rough edge
-  at a time before considering a source-stable checkpoint around v1.3
+- after v1.5: use smoke runs and manual evidence to fix one concrete rough edge
+  at a time before considering another source checkpoint
 - make one small code-quality improvement inside the current `llama-server`
   boundary when it supports the smoke lane and is covered by the same run's
   verification
@@ -131,7 +131,7 @@ source-checkpoint centralization. Health checks now follow the chosen rule:
 the action is disabled unless the server is running. Toolbar scope is also
 decided for now: keep only Setup Guide, profile import/export, and copy
 actions. The current source release posture is also decided for now:
-`v1.2.0` is a source-only checkpoint, while packaged release remains a later
+`v1.5.0` is a source-only checkpoint, while packaged release remains a later
 handoff. Keep Hugging Face setup guidance, Homebrew copy
 placement, runtime breadth, and packaged-release work as human-decision items.
 
@@ -234,12 +234,12 @@ Saved Codex automation:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.
-- Choose at most one small v1.1/v1.2 smoke-console, smoke-metrics,
+- Choose at most one small smoke-console, smoke-metrics,
   code-quality, release-quality, or post-checkpoint readiness slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
   clear and verification passes.
 - Keep runs quiet, but progress-biased. A verified no-op is valid when no
-  failing quality check, v1.1/v1.2 smoke-lane slice, concrete rough edge, or
+  failing quality check, smoke-lane slice, concrete rough edge, or
   post-checkpoint readiness prep is safely actionable in this run.
 
 Preferred order:
@@ -251,7 +251,7 @@ Preferred order:
 4. Build v1.2 Smoke Metrics in small slices: elapsed time first, then
    runtime-reported usage, explicitly approximate fallback counts/rates, and
    streaming/first-token latency only if the slice remains small and safe.
-5. Fix smoke-observed rough edges after v1.2 without turning the surface into
+5. Fix smoke-observed rough edges after v1.5 without turning the surface into
    chat, saved history, benchmark ranking, or runtime optimization.
 6. Make one small verified code-quality improvement inside the current
    `llama-server` boundary.
@@ -274,7 +274,7 @@ Preferred order:
 14. Refine presets, runtime capability advisories, or update-readiness wording
    only when it reduces a concrete release-quality risk and remains
    non-mutating.
-15. End as a verified no-op only when no safe quality, v1.1/v1.2 smoke-lane,
+15. End as a verified no-op only when no safe quality, smoke-lane,
    release-quality, smoke-backlog, feedback-triage, test, or automation-doc
    slice is justified.
 

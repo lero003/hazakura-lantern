@@ -132,16 +132,16 @@ Use `docs/external_review_flow.md` when asking outside reviewers whether this
 multimedia direction should stay separate, become a sibling project, or later
 share a local-runtime control contract with Lantern.
 
-## Current Source Lane: v1.2 Source-Only Checkpoint
+## Current Source Lane: v1.5 Source-Only Checkpoint
 
-The project has reached a public source-only `v1.2.0` checkpoint for
+The project has reached a public source-only `v1.5.0` checkpoint for
 personal/local use. It keeps the existing `llama-server` control boundary and
 does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
 binary distribution artifacts. The previous public source-only checkpoint was
-`v1.0.0-rc.2`. The 2026-05-24 automated app-bundle helper smoke can still
-reproduce `kLSNoExecutableErr` in the Codex environment even though SwiftPM
-source verification passes, so a normal desktop/manual UI pass is still
-required before any packaged app release.
+`v1.2.0`. The 2026-05-24 helper and desktop smoke passes now verify source
+builds, app launch cleanup, Setup Guide narrow-window behavior, and real local
+Smoke Console requests. This remains source-only evidence; a separate normal
+desktop release pass is still required before any packaged app release.
 
 Packaged release work remains separate from source milestones. Automation
 should keep code quality boring, close small verified `llama-server` daily-use
@@ -150,14 +150,14 @@ packaging-prep checks, and guarded update-workflow planning. This preparation
 must not create packaged artifacts, mutate runtimes, or change GitHub settings
 without a new human handoff.
 
-Use v0 through v1.2 notes below as foundation and backlog context, not as a
+Use v0 through v1.5 notes below as foundation and backlog context, not as a
 reason to reopen closed work without a concrete ambiguity. The next useful
 source work should fix failing checks, improve one smoke-observed rough edge,
 classify post-public feedback, tighten automation-safe triage, prepare
 packaged-release evidence without artifact mutation, or address a specific
 `llama-server` reliability issue only when it is concrete and testable. The
-next planned source milestone is `v1.3`, after automated and manual device
-smoke confirm the v1.2 console and metrics path is quiet enough.
+next source milestone should be chosen from new evidence rather than the older
+v1.3 planning label.
 
 Do not loop on historical `kLSNoExecutableErr` diagnostics without a fresh
 Launch Services hypothesis. Continue with release-quality source work that can
@@ -814,6 +814,32 @@ Candidate work:
   aligned on source-only versus packaged-release status
 - avoid new feature breadth unless a later human handoff reopens scope
 
+Status:
+
+The useful v1.3 polish lane has been absorbed into the `v1.5.0` source-only
+checkpoint after repeated Smoke Console and Setup Guide smoke passes. Treat
+v1.3 as historical planning context, not as the current target.
+
+## v1.5 - Source-Only Release-Quality Checkpoint
+
+Purpose:
+
+Publish the smoke-driven source checkpoint after the Smoke Console metrics path,
+Setup Guide inspector layout, localized Japanese UI evidence, and app cleanup
+helpers are quiet enough for personal/local source use.
+
+Completion criteria:
+
+- app source checkpoint metadata says `v1.5.0`
+- README, changelog, current status, roadmap, and external review guidance
+  agree that v1.5 is source-only and not a packaged app release
+- Smoke Console and Setup Guide have current real-device or automation-level
+  smoke evidence recorded
+- Start, Stop, Quit, and helper cleanup checks leave no managed app or
+  `llama-server` process behind
+- `swift test`, `swift build --disable-sandbox`, localization lint, and
+  `git diff --check` pass
+
 ## v1.x - Second Runtime Design
 
 After v1.0, revisit whether a second runtime is still the next smallest risk.
@@ -878,7 +904,7 @@ Do not use this project for:
 
 Automated development should pick one small verified slice. The active lane is
 `v1.1` Local Smoke Console, then `v1.2` Runtime Smoke Metrics, then
-smoke-driven rough-edge fixes toward a possible `v1.3` source-stable
+smoke-driven rough-edge fixes that culminated in the `v1.5.0` source-only
 checkpoint. Prefer work that proves the selected local runtime is actually
 usable after launch over work that merely advances a version label.
 
@@ -901,7 +927,7 @@ Good next slices:
   models and timeout/error/response parsing tests before UI
 - add or harden one v1.2 Smoke Metrics slice with careful approximate wording
   and no benchmark claims
-- after v1.2, use Smoke Console evidence or manual reports to fix one concrete
+- after v1.5, use Smoke Console evidence or manual reports to fix one concrete
   rough edge at a time
 - expose or fix one concrete rough edge from `docs/automation_smoke_backlog.md`
   when it can be verified without broad restyling, runtime mutation, packaging

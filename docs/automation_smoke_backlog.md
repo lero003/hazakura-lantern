@@ -41,18 +41,39 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-24 Smoke Console metric-layout pass):
+Latest source-verification result (2026-05-24 v1.5 release-prep pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
 - `swift test` passed: 249 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
-- App-bundle helper smoke was rerun afterward in the 2026-05-24 current run:
-  `./script/build_and_run.sh --verify` built the local bundle but Launch
-  Services returned `kLSNoExecutableErr`. The generated bundle contained
-  `Info.plist`, the `HazakuraLLMManager` executable, and English/Japanese
-  localization resources. A follow-up process-list check could not confirm
-  cleanup because `sysmond` was unavailable in this environment.
+- A real local endpoint smoke pass against the selected lightweight
+  `gemma-4-E2B-it-UD-Q3_K_XL` model ran with the Setup Guide inspector visible,
+  showed the in-app source checkpoint as `v1.5.0`, expanded a requested 860 pt
+  window to the 1320 pt guide-safe minimum, and returned an `OK` Smoke Console
+  response with visible runtime TPS, start time, elapsed time, output character
+  count, finish reason, and timeout metrics.
+- The same pass verified Stop leaves the app running while removing the managed
+  `llama-server`, and Quit removes both `HazakuraLLMManager` and the managed
+  runtime.
+- Smoke Console compact layout polish now keeps the empty result state smaller
+  and lets endpoint/model plus run/copy/clear controls fall back instead of
+  forcing one wide row.
+- The app window minimum width is now 860 pt, and a 2026-05-24 manual Smoke
+  Console pass at that width ran a short prompt through the in-app button while
+  keeping metrics and response content readable.
+- The 2026-05-24 app stop cleanup pass launched Lantern, started the selected
+  lightweight `gemma-4-E2B-it-UD-Q3_K_XL` runtime as a direct child process,
+  then verified `./script/build_and_run.sh --stop` removed both the app process
+  and that managed child `llama-server` without leaving port `9993` occupied.
+- The 2026-05-24 manual narrow-window pass also exercised a real in-app error
+  smoke by leaving the lightweight runtime on `9993`, temporarily pointing
+  Smoke Console at unused `9994`, confirming compact failure metrics plus a
+  Japanese app-owned error message, then restoring `9993` and rerunning a
+  successful short Japanese smoke through the button.
+- App-bundle helper smoke was hardened afterward in the 2026-05-24 verify pass:
+  `./script/build_and_run.sh --verify` now builds the local bundle, confirms a
+  `HazakuraLLMManager` process id, and closes the app before exiting.
 - Smoke Console metric badges now use an adaptive grid with stable badge
   heights and a shorter response pane, keeping dense v1.2 evidence readable in
   narrower windows without adding benchmark, history, or persistence behavior.
@@ -178,25 +199,30 @@ Latest source-verification result (2026-05-24 Smoke Console metric-layout pass):
   metrics, so shared smoke results identify the tested local endpoint without
   adding logs or history.
 
-Latest app-bundle helper smoke result (2026-05-24 current run):
+Latest app-bundle helper smoke result (2026-05-24 verify hardening pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
 - `swift test` passed: 249 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
-- `./script/build_and_run.sh --verify` built the local bundle but Launch
-  Services returned `kLSNoExecutableErr`.
-- The generated bundle contains `Info.plist`, the `HazakuraLLMManager`
-  executable, and English/Japanese localization resources.
-- `./script/build_and_run.sh --stop` completed afterward, but
-  `pgrep -fl HazakuraLLMManager` could not read the process list because
-  `sysmond` was unavailable in this environment.
+- `./script/build_and_run.sh --verify` built the local bundle, requested launch
+  through Launch Services, confirmed a `HazakuraLLMManager` process id, and
+  closed the app before exiting.
+- After the helper change, `./script/build_and_run.sh` also opened the app,
+  started the selected lightweight runtime, completed a short in-app Japanese
+  Smoke Console request, and `./script/build_and_run.sh --stop` left no app,
+  managed runtime, or `9993/9994` listener behind.
+- Final Smoke Console goal audit on 2026-05-24 re-ran the current worktree at
+  860 pt width with the selected lightweight model: short Japanese prompt,
+  medium two-sentence Japanese prompt, and an unused-`9994` error path all
+  produced readable in-app evidence; the short success view was also captured
+  by screenshot without visible clipping.
+- A follow-up check found no remaining `HazakuraLLMManager`, managed
+  `llama-server`, or `9993` listener.
 
-Treat the helper launch path as a current automation-level regression again.
-The generated bundle still contains the expected executable and resources, so
-this remains a Launch Services smoke issue rather than a SwiftPM source-build
-failure. It is not a manual UI smoke pass and should not be treated as
-packaged-release evidence.
+Treat the helper launch path as current automation-level evidence again. It is
+still not a manual UI smoke pass and should not be treated as packaged-release
+evidence.
 
 ## Manual UI Smoke Targets
 
@@ -219,12 +245,14 @@ observed the app or the user supplied specific visual evidence.
 
 ## Smoke Console And Metrics Targets
 
-Use these targets for the v1.1/v1.2 automation lane:
+Use these targets for post-v1.5 smoke polish:
 
 - core request and result model for explicit `/v1/chat/completions` smoke
 - timeout-bounded local client with focused error mapping
 - separate Smoke Console destination, not a chat page
 - prompt input, run state, response output, copy response, and clear result
+- compact empty-result display plus narrow-width endpoint/model and action
+  controls
 - last-run elapsed time, output character count, request mode, and timeout used
 - runtime-reported usage when available
 - explicitly approximate token count and decode rate when usage is unavailable
@@ -267,8 +295,8 @@ were already covered on `main` after the reviewed snapshot: copy feedback,
 running-only health checks, Setup Guide no-runtime wording, endpoint copy
 accessibility, logs retention wording, source-checkpoint centralization,
 localized preset descriptions, duplicate localization key cleanup, and toolbar
-reduction. The current source posture is now decided: `v1.2.0` is the current
-source-only checkpoint, while `v1.0.0-rc.2` is the previous source-only
+reduction. The current source posture is now decided: `v1.5.0` is the current
+source-only checkpoint, while `v1.2.0` is the previous source-only
 checkpoint and packaged release remains a later handoff. Keep the
 remaining current signals narrow: normal desktop/manual UI smoke is still
 missing, helper launch smoke is still not packaged-release proof, and Hugging

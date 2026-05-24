@@ -12,11 +12,11 @@ outside release-readiness or future-direction review.
 
 ## Operating Posture
 
-Hazakura Lantern is currently public as a source-only `v1.2.0` checkpoint for
-personal/local use. The previous source-only checkpoint was `v1.0.0-rc.2`.
+Hazakura Lantern is currently public as a source-only `v1.5.0` checkpoint for
+personal/local use. The previous source-only checkpoint was `v1.2.0`.
 Automated work should keep the project understandable, narrow, and easy to
 review while the near-term source lane improves the existing `llama-server`
-path toward a later `v1.3` polish checkpoint.
+path through post-checkpoint smoke polish.
 
 Post-public stewardship is a guardrail now and the formal v0.5 lane later.
 Automation may start v0.5 docs and triage improvements when v0.4 has no

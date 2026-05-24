@@ -3,7 +3,7 @@
 "API Health:" = "API状態:";
 "API key is not required unless llama-server is started with --api-key." = "llama-server を --api-key 付きで起動していない限り、API key は不要です。";
 "Apply Preset" = "プリセットを適用";
-"Apply to Configuration" = "設定に適用";
+"Apply to Configuration" = "構成に適用";
 "Check Health" = "接続確認";
 "Check for Updates" = "アップデート確認";
 "Check Runtime" = "ランタイム確認";
@@ -16,7 +16,7 @@
 "Client Connection URL:" = "クライアント接続URL:";
 "Client Connection curl" = "クライアント接続 curl";
 "Collapsed" = "折りたたみ";
-"Configuration" = "設定";
+"Configuration" = "構成";
 "Context" = "コンテキスト";
 "Copy" = "コピー";
 "Copied!" = "コピー済み";
@@ -262,5 +262,14 @@
 "TPS" = "TPS";
 "Timeout Used" = "使用タイムアウト";
 "Usage Reported by Runtime" = "ランタイム報告の使用量";
+"smoke.error.connection_failed" = "%@ から応答がありません。ランタイムの起動状態または設定ポートを確認してください。";
+"smoke.error.http_status" = "HTTP %d が返りました。対象: %@";
+"smoke.error.http_status.body" = "HTTP %d が返りました。対象: %@: %@";
+"smoke.error.invalid_endpoint" = "動作確認リクエストのエンドポイントが不正です: %@";
+"smoke.error.malformed_response" = "動作確認応答を読み取れませんでした: %@";
+"smoke.error.malformed_response.url" = "%@ からの動作確認応答を読み取れませんでした: %@";
+"smoke.error.request_failed" = "動作確認リクエストに失敗しました: %@";
+"smoke.error.request_failed.url" = "%@ への動作確認リクエストに失敗しました: %@";
+"smoke.error.timed_out" = "%d 秒でタイムアウトしました。対象: %@";
 "smoke.metric.unavailable" = "なし";
 "smoke.usage.summary" = "入力 %@ / 出力 %@ / 合計 %@";

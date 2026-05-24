@@ -4,8 +4,30 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+No unreleased changes yet.
+
+## v1.5.0 - 2026-05-24
+
 ### Changed
 
+- Released a source-only v1.5 checkpoint for personal/local use, with no
+  packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
+  distribution artifact.
+- Guarded the main window minimum size while the Setup Guide inspector is
+  visible, so the sidebar, content, and guide do not clip or slide offscreen
+  during narrow-window smoke checks.
+- Renamed the Japanese sidebar Configuration label to "構成" so it no longer
+  duplicates the app Settings label.
+- Recorded v1.5 release-prep smoke evidence: in-app Source Checkpoint shows
+  `v1.5.0`, Setup Guide stays visible without clipping after a narrow-window
+  resize attempt, a real local Smoke Console request returns `OK` with metrics,
+  and Stop/Quit cleanup leaves no managed `llama-server` behind.
+- Localized Smoke Console app-owned error messages for endpoint, timeout, HTTP,
+  and malformed-response failures, keeping Japanese UI smoke evidence readable
+  without changing the core `llama-server` request boundary.
+- Hardened `./script/build_and_run.sh --verify` so the helper confirms a
+  launched `HazakuraLLMManager` process before reporting success, then cleans up
+  the app through the existing stop path.
 - Added Smoke Console response parsing for compatible `message.reasoning`
   fallback text when `message.content` is blank, keeping local smoke evidence
   readable without adding chat history or benchmark behavior.

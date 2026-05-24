@@ -26,15 +26,15 @@ there is a human handoff for that exact action.
 
 Before asking for current release feedback, gather:
 
-- latest checkpoint: `v1.2.0`
+- latest checkpoint: `v1.5.0`
 - branch and working-tree state: `git status --short --branch`
-- recent commits since the previous checkpoint: `git log --oneline v1.0.0-rc.2..HEAD`
+- recent commits since the previous checkpoint: `git log --oneline v1.2.0..HEAD`
 - verification results: `swift test`, `swift build --disable-sandbox`,
   localization lint if resources changed, and `git diff --check`
 - current release gates from `docs/current_status.md` and `docs/roadmap.md`
-- known packaged-release blocker: helper launch smoke has mixed/failing
-  Launch Services evidence, and normal desktop/manual launch plus clean quit
-  remain required before packaged release
+- known packaged-release boundary: helper and desktop smoke evidence is current
+  for source-only confidence, but no packaged `.app`, zip, dmg, signing,
+  notarization, checksum, or release asset claim is included
 
 For future-direction feedback, send the product boundary from
 `docs/roadmap.md` and the non-goals from `README.md` instead of a feature wish
@@ -47,11 +47,11 @@ I want an external release-readiness review for Hazakura Lantern.
 
 Project state:
 - macOS SwiftUI source-only checkpoint
-- latest checkpoint: v1.2.0
+- latest checkpoint: v1.5.0
 - no packaged .app, zip, dmg, signing, notarization, checksum, or binary
   distribution claim
-- current lane: source-only v1.3 polish, manual device smoke evidence, and
-  packaged-release readiness separation
+- current lane: source-only post-v1.5 polish and packaged-release readiness
+  separation
 
 Product boundary:
 - Lantern supervises an existing local llama-server process.
@@ -63,10 +63,10 @@ Product boundary:
 
 Known evidence:
 - SwiftPM verification should be evaluated from the latest local/CI results.
-- Helper app-bundle launch smoke has mixed/failing Launch Services evidence in
-  the Codex environment.
-- Normal desktop/manual launch and clean quit are still required before any
-  packaged app release.
+- Helper launch verification, Setup Guide narrow-window checks, real local
+  Smoke Console requests, and cleanup checks have current local evidence.
+- Packaged `.app`, zip, dmg, signing, notarization, checksum, and GitHub
+  Release assets remain out of scope for this checkpoint.
 
 Please review:
 1. Are the source-only checkpoint claims honest and understandable?

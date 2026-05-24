@@ -60,20 +60,19 @@ checkpoint.
 
 Symptoms:
 
-- `./script/build_and_run.sh --verify` fails with Launch Services
-  `kLSNoExecutableErr`.
+- Historical runs of `./script/build_and_run.sh --verify` failed with Launch
+  Services `kLSNoExecutableErr`.
 - SwiftPM build and tests still pass.
 
 Current status:
 
-- The current 2026-05-24 Codex helper smoke reproduced `kLSNoExecutableErr`
-  even though SwiftPM tests and build passed and the generated bundle contained
-  `Info.plist`, the `HazakuraLLMManager` executable, and English/Japanese
-  localization resources.
+- The current 2026-05-24 verify hardening pass builds the local bundle,
+  requests launch through Launch Services, confirms a `HazakuraLLMManager`
+  process id, and closes the app before exiting.
 - Treat helper-smoke results as automation evidence only. The current release
-  posture is: source verification passes, helper launch smoke is not reliable
-  enough for packaged-release proof, and normal desktop/manual launch and clean
-  quit are still required before packaged-release work.
+  posture is: source verification passes, helper launch smoke can prove a local
+  process launch, and normal desktop/manual launch and clean quit are still
+  required before packaged-release work.
 - Do not treat helper smoke as packaged-release proof. A normal desktop/manual
   launch and clean-quit pass is still required before app-bundle distribution
   work.
