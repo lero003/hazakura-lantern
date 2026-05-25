@@ -128,3 +128,12 @@ only a client compatibility setting, not Lantern authentication.
 - The app does not copy model files.
 - Logs are shown in memory and are not persisted automatically.
 - The launch command is displayed before start so it can be inspected.
+
+## License
+
+Hazakura Lantern source code is licensed under the MIT License. See
+`LICENSE`.
+
+External runtimes and model files, including `llama.cpp` / `llama-server` and
+local GGUF models, are not bundled by this repository and remain under their
+own licenses.

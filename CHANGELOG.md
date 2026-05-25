@@ -4,7 +4,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-No unreleased changes yet.
+### Added
+
+- Added the top-level MIT `LICENSE` file and README license note for the
+  source-only repository, while keeping external runtimes and model files under
+  their own licenses.
 
 ## v1.5.0 - 2026-05-24
 

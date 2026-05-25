@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-24
+Last reviewed: 2026-05-25
 
 ## Project State
 
@@ -11,6 +11,11 @@ Current release checkpoint: `v1.5.0` is a public source-only checkpoint for
 personal/local use. It keeps the existing `llama-server` control boundary and
 is not a packaged app release. The previous public source-only checkpoint was
 `v1.2.0`.
+
+Repository licensing is now explicit on `main`: Hazakura Lantern source code is
+MIT-licensed through the top-level `LICENSE` file and README license section.
+External runtimes and local model files are not bundled and remain under their
+own licenses.
 
 Implemented scope:
 

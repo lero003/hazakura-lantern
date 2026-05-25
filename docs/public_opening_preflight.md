@@ -80,6 +80,8 @@ Before asking a human to make the repository public, confirm:
 - `git diff --check` passes
 - README states the current source-only checkpoint and does not imply a packaged
   app artifact exists
+- README and the top-level `LICENSE` state the repository source license, while
+  external runtimes and local model files remain under their own licenses
 - CHANGELOG has an `Unreleased` section and latest source checkpoint entry
 - docs clearly separate source-only checkpoints or release candidates from
   packaged releases
