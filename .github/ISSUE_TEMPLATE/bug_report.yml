@@ -10,7 +10,7 @@ body:
         home-directory names, tokens, model names, and other sensitive local
         paths before posting logs or command previews.
 
-        Hazakura Lantern currently ships as a source-only alpha. It does not
+        Hazakura Lantern currently ships as a source-only checkpoint. It does not
         provide a packaged app artifact, model download, runtime installer,
         proxy, chat UI, LAN exposure, or authentication layer.
 
@@ -35,7 +35,7 @@ body:
     attributes:
       label: Lantern version or commit
       description: Use the tag, release checkpoint, or commit hash you tested.
-      placeholder: "v0.2.0-alpha.1 or commit hash"
+      placeholder: "v1.5.1 or commit hash"
     validations:
       required: true
 

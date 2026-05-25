@@ -12,10 +12,11 @@ runtime so other apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v1.5.0` is a public source-only checkpoint for
-personal/local use. It keeps the existing `llama-server` control boundary and
-does not include a packaged `.app`, zip, dmg, signing, notarization, checksum,
-or binary distribution artifact.
+Current checkpoint: `v1.5.1` is a public source-only checkpoint for
+personal/local use. It adds explicit MIT license and contribution metadata on
+top of the `v1.5.0` Smoke Console / Setup Guide checkpoint, keeps the existing
+`llama-server` control boundary, and does not include a packaged `.app`, zip,
+dmg, signing, notarization, checksum, or binary distribution artifact.
 
 ## Current Source Scope
 
@@ -90,6 +91,12 @@ Project planning and automation docs:
 - `docs/post_public_operations.md`
 - `docs/public_opening_preflight.md`
 - `docs/external_review_flow.md`
+
+Public project files:
+
+- `LICENSE`
+- `SECURITY.md`
+- `CONTRIBUTING.md`
 
 ## Runtime Contract
 

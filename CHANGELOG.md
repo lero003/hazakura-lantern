@@ -4,11 +4,24 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+No unreleased changes yet.
+
+## v1.5.1 - 2026-05-25
+
 ### Added
 
 - Added the top-level MIT `LICENSE` file and README license note for the
   source-only repository, while keeping external runtimes and model files under
   their own licenses.
+- Added `CONTRIBUTING.md` with source-only contribution boundaries, local
+  verification commands, and safe reporting guidance.
+
+### Changed
+
+- Updated the in-app Source Checkpoint metadata and public docs from `v1.5.0`
+  to `v1.5.1` so the license-bearing source tag is self-consistent.
+- Updated the public bug-report template placeholder from the old alpha example
+  to the current source-checkpoint shape.
 
 ## v1.5.0 - 2026-05-24
 

@@ -134,11 +134,12 @@ share a local-runtime control contract with Lantern.
 
 ## Current Source Lane: v1.5 Source-Only Checkpoint
 
-The project has reached a public source-only `v1.5.0` checkpoint for
-personal/local use. It keeps the existing `llama-server` control boundary and
+The project has reached a public source-only `v1.5.1` checkpoint for
+personal/local use. It keeps the existing `llama-server` control boundary,
+adds explicit public license and contribution metadata on top of `v1.5.0`, and
 does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
 binary distribution artifacts. The previous public source-only checkpoint was
-`v1.2.0`. The 2026-05-24 helper and desktop smoke passes now verify source
+`v1.5.0`. The 2026-05-24 helper and desktop smoke passes now verify source
 builds, app launch cleanup, Setup Guide narrow-window behavior, and real local
 Smoke Console requests. This remains source-only evidence; a separate normal
 desktop release pass is still required before any packaged app release.
@@ -817,8 +818,9 @@ Candidate work:
 Status:
 
 The useful v1.3 polish lane has been absorbed into the `v1.5.0` source-only
-checkpoint after repeated Smoke Console and Setup Guide smoke passes. Treat
-v1.3 as historical planning context, not as the current target.
+checkpoint after repeated Smoke Console and Setup Guide smoke passes. The
+`v1.5.1` patch only aligns public license, contribution, and checkpoint
+metadata. Treat v1.3 as historical planning context, not as the current target.
 
 ## v1.5 - Source-Only Release-Quality Checkpoint
 
@@ -830,7 +832,7 @@ helpers are quiet enough for personal/local source use.
 
 Completion criteria:
 
-- app source checkpoint metadata says `v1.5.0`
+- app source checkpoint metadata says `v1.5.1`
 - README, changelog, current status, roadmap, and external review guidance
   agree that v1.5 is source-only and not a packaged app release
 - Smoke Console and Setup Guide have current real-device or automation-level
@@ -904,8 +906,8 @@ Do not use this project for:
 
 Automated development should pick one small verified slice. The active lane is
 `v1.1` Local Smoke Console, then `v1.2` Runtime Smoke Metrics, then
-smoke-driven rough-edge fixes that culminated in the `v1.5.0` source-only
-checkpoint. Prefer work that proves the selected local runtime is actually
+smoke-driven rough-edge fixes that culminated in the `v1.5.x` source-only
+checkpoints. Prefer work that proves the selected local runtime is actually
 usable after launch over work that merely advances a version label.
 
 The open release-quality gates are the menu bar daily-use verification, reduced

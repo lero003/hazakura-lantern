@@ -27,14 +27,15 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Automation Focus
 
-The project has a public source-only `v1.5.0` checkpoint for personal/local
-use. It keeps the existing `llama-server` control boundary and does not include
-packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
-distribution artifacts. Treat exact v0.x numbers as release history, not as the
-next work selector.
+The project has a public source-only `v1.5.1` checkpoint for personal/local
+use. It keeps the existing `llama-server` control boundary, adds explicit
+public license and contribution metadata, and does not include packaged
+`.app`, zip, dmg, signing, notarization, checksum, or binary distribution
+artifacts. Treat exact v0.x numbers as release history, not as the next work
+selector.
 
 Current human direction: continue automated development and manual device
-verification after the `v1.5.0` source-only checkpoint, fixing smoke-observed
+verification after the `v1.5.1` source-only checkpoint, fixing smoke-observed
 rough edges one at a time before any later source checkpoint.
 Packaged app release work remains a separate future handoff. Automation should
 keep progressing small verified slices without creating packaged artifacts,
@@ -131,7 +132,7 @@ source-checkpoint centralization. Health checks now follow the chosen rule:
 the action is disabled unless the server is running. Toolbar scope is also
 decided for now: keep only Setup Guide, profile import/export, and copy
 actions. The current source release posture is also decided for now:
-`v1.5.0` is a source-only checkpoint, while packaged release remains a later
+`v1.5.1` is a source-only checkpoint, while packaged release remains a later
 handoff. Keep Hugging Face setup guidance, Homebrew copy
 placement, runtime breadth, and packaged-release work as human-decision items.
 

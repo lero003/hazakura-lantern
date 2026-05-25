@@ -7,15 +7,16 @@ Last reviewed: 2026-05-25
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v1.5.0` is a public source-only checkpoint for
-personal/local use. It keeps the existing `llama-server` control boundary and
-is not a packaged app release. The previous public source-only checkpoint was
-`v1.2.0`.
+Current release checkpoint: `v1.5.1` is a public source-only checkpoint for
+personal/local use. It keeps the existing `llama-server` control boundary, adds
+explicit public license and contribution metadata on top of `v1.5.0`, and is
+not a packaged app release. The previous public source-only checkpoint was
+`v1.5.0`.
 
-Repository licensing is now explicit on `main`: Hazakura Lantern source code is
-MIT-licensed through the top-level `LICENSE` file and README license section.
-External runtimes and local model files are not bundled and remain under their
-own licenses.
+Repository licensing is explicit: Hazakura Lantern source code is MIT-licensed
+through the top-level `LICENSE` file and README license section. External
+runtimes and local model files are not bundled and remain under their own
+licenses.
 
 Implemented scope:
 
@@ -671,7 +672,7 @@ queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
 Current human direction: continue automated development and manual device
-verification after the `v1.5.0` source-only checkpoint, then fix one
+verification after the `v1.5.1` source-only checkpoint, then fix one
 smoke-observed rough edge at a time before any later source checkpoint.
 Packaged app release remains separate: automation should
 continue code-quality checks, narrow verified improvements, and
@@ -728,7 +729,7 @@ adapter, custom command implementation, profile schema version, dependencies,
 runtime installation/update, model download, or hidden auto-optimization
 without an explicit human handoff. The current human handoff explicitly allows
 the saved Lantern development automation to continue every 30 minutes for
-smoke-driven post-`v1.5` polish after the `v1.5.0` source checkpoint.
+smoke-driven post-`v1.5` polish after the `v1.5.1` source checkpoint.
 
 ## Next Best Slice
 
