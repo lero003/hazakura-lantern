@@ -59,6 +59,10 @@ GGUF acquisition. A user can search public GGUF repositories, pick a repository
 file, choose a download directory, and save the file as
 `<download-directory>/<owner>/<repo>/<file.gguf>`.
 
+Repository tree parsing accepts ordinary nested `.gguf` paths but ignores unsafe
+file paths with empty, current-directory, parent-directory, absolute, or
+backslash-style components before a download candidate is shown.
+
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file
 and server `Range` behavior line up. Completion offers a follow-up action to set

@@ -64,7 +64,8 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         let response: [TreeEntryResponse] = try await decode(components)
         let files = response.compactMap { entry -> HuggingFaceGGUFFile? in
             guard entry.type == "file",
-                  entry.path.lowercased().hasSuffix(".gguf")
+                  entry.path.lowercased().hasSuffix(".gguf"),
+                  Self.isSafeTreeFilePath(entry.path)
             else {
                 return nil
             }
@@ -85,6 +86,20 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         }
 
         return files
+    }
+
+    private static func isSafeTreeFilePath(_ path: String) -> Bool {
+        let components = path.split(separator: "/", omittingEmptySubsequences: false)
+        guard !components.isEmpty else {
+            return false
+        }
+
+        return components.allSatisfy { component in
+            !component.isEmpty
+                && component != "."
+                && component != ".."
+                && !component.contains("\\")
+        }
     }
 
     private func decode<Value: Decodable>(_ components: URLComponents) async throws -> Value {

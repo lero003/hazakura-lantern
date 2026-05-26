@@ -110,6 +110,9 @@ Implemented scope:
   download into `<owner>/<repo>/<file.gguf>` under a user-selected directory,
   visible progress/cancel/failure state, best-effort partial-file resume, and a
   completion action that sets the downloaded file as the active model path.
+- GGUF Acquisition tree parsing now ignores unsafe `.gguf` paths containing
+  empty, current-directory, parent-directory, absolute, or backslash-style path
+  components before building download candidates.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies

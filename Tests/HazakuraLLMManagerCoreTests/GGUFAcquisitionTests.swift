@@ -124,6 +124,34 @@ final class GGUFAcquisitionTests: XCTestCase {
         )
     }
 
+    func testClientIgnoresUnsafeGGUFTreePaths() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"type": "file", "path": "../escape.gguf", "size": 10},
+                  {"type": "file", "path": "/absolute.gguf", "size": 11},
+                  {"type": "file", "path": "nested//empty.gguf", "size": 12},
+                  {"type": "file", "path": "nested/./dot.gguf", "size": 13},
+                  {"type": "file", "path": "nested/../parent.gguf", "size": 14},
+                  {"type": "file", "path": "nested\\\\slash.gguf", "size": 15},
+                  {"type": "file", "path": "nested/model-Q4.gguf", "size": 1234}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let files = try await client.listGGUFFiles(repoID: "owner/model-GGUF")
+
+        XCTAssertEqual(files.map(\.path), ["nested/model-Q4.gguf"])
+    }
+
     func testDownloaderResumesExistingPartialFileWithRangeRequest() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
