@@ -527,6 +527,42 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "short")
     }
 
+    func testDownloaderRejectsEmptySuccessResponseWithoutCompletingDestination() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+
+        let session = makeSession { request in
+            XCTAssertNil(request.value(forHTTPHeaderField: "Range"))
+            return (
+                200,
+                Data(),
+                [
+                    "Content-Length": "0"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination
+                )
+            ) { _ in }
+            XCTFail("Expected empty GGUF responses to fail instead of completing.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .emptyDownload)
+        }
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: partial.path))
+    }
+
     func testDownloaderRemovesStalePartialWhenDestinationIsAlreadyComplete() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

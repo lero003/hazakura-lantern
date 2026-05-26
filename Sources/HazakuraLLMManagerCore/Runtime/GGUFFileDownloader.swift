@@ -117,6 +117,11 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
                 )
             }
 
+            if writtenBytes == 0 {
+                try? fileManager.removeItem(at: partialURL)
+                throw GGUFAcquisitionError.emptyDownload
+            }
+
             if fileManager.fileExists(atPath: request.destinationURL.path) {
                 try fileManager.removeItem(at: request.destinationURL)
             }

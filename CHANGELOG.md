@@ -24,6 +24,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition downloads so a response shorter than the expected
   file size remains as a resumable `.part` file instead of being promoted to a
   completed `.gguf`.
+- Hardened GGUF Acquisition downloads so empty successful responses fail
+  clearly instead of creating an empty completed `.gguf` file.
 - Added focused GGUF Acquisition downloader coverage proving cancellation keeps
   the partial `.part` file for an explicit retry instead of completing the
   final `.gguf` destination.
