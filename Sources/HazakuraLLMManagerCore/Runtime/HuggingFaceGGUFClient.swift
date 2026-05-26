@@ -64,17 +64,18 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         let response: [TreeEntryResponse] = try await decode(components)
         let files = response.compactMap { entry -> HuggingFaceGGUFFile? in
             guard entry.type == "file",
-                  entry.path.lowercased().hasSuffix(".gguf"),
-                  Self.isSafeTreeFilePath(entry.path)
+                  let path = entry.path,
+                  path.lowercased().hasSuffix(".gguf"),
+                  Self.isSafeTreeFilePath(path)
             else {
                 return nil
             }
 
             return HuggingFaceGGUFFile(
                 repoID: normalizedRepoID,
-                path: entry.path,
+                path: path,
                 sizeBytes: entry.size,
-                downloadURL: downloadURL(repoID: normalizedRepoID, filePath: entry.path)
+                downloadURL: downloadURL(repoID: normalizedRepoID, filePath: path)
             )
         }
         .sorted { lhs, rhs in
@@ -161,8 +162,8 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
     }
 
     private struct TreeEntryResponse: Decodable {
-        var type: String
-        var path: String
+        var type: String?
+        var path: String?
         var size: Int64?
     }
 }

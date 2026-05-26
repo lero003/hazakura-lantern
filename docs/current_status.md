@@ -113,6 +113,9 @@ Implemented scope:
 - GGUF Acquisition tree parsing now ignores unsafe `.gguf` paths containing
   empty, current-directory, parent-directory, absolute, or backslash-style path
   components before building download candidates.
+- GGUF Acquisition tree parsing now also skips incomplete Hugging Face file
+  entries that lack a usable type or path while keeping valid `.gguf` entries
+  selectable.
 - GGUF Acquisition search results now normalize repository ids with the same
   owner/repository safety rule used before listing files, so unsupported ids
   are filtered before they can become selectable download candidates.
@@ -613,12 +616,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF non-file success rejection pass):
+Current source-verification status (2026-05-27 GGUF incomplete tree entry pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (262 XCTest tests, 0 failures), and
+`swift test` (264 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage for rejecting non-file HTTP success statuses such as `204` without
-turning a saved `.part` resume file into a completed `.gguf`.
+coverage for skipping incomplete Hugging Face tree entries while still listing
+valid `.gguf` files.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

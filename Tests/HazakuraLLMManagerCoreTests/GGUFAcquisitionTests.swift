@@ -225,6 +225,30 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(files.map(\.path), ["nested/model-Q4.gguf"])
     }
 
+    func testClientIgnoresIncompleteTreeEntries() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"type": "file", "size": 100},
+                  {"path": "missing-type.gguf", "size": 101},
+                  {"type": "file", "path": "nested/model-Q4.gguf", "size": 1234}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let files = try await client.listGGUFFiles(repoID: "owner/model-GGUF")
+
+        XCTAssertEqual(files.map(\.path), ["nested/model-Q4.gguf"])
+    }
+
     func testClientRejectsUnsafeRepoIDsBeforeListingFiles() async throws {
         let session = makeSession { _ in
             XCTFail("Unsafe repository ids should not reach the public API request.")
