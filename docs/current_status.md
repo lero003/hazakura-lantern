@@ -116,6 +116,9 @@ Implemented scope:
 - GGUF Acquisition tree parsing now also skips incomplete Hugging Face file
   entries that lack a usable type or path while keeping valid `.gguf` entries
   selectable.
+- GGUF Acquisition public API fixtures now cover empty/no-supported-`.gguf`
+  repository trees and Hugging Face HTTP failures, keeping those failure paths
+  typed before any live public API smoke is needed.
 - GGUF Acquisition search results now normalize repository ids with the same
   owner/repository safety rule used before listing files, so unsupported ids
   are filtered before they can become selectable download candidates.
@@ -619,12 +622,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF incomplete tree entry pass):
+Current source-verification status (2026-05-27 GGUF API failure fixture pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (264 XCTest tests, 0 failures), and
+`swift test` (267 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage for skipping incomplete Hugging Face tree entries while still listing
-valid `.gguf` files.
+coverage for no-supported-`.gguf` repository trees and Hugging Face HTTP
+failures, building on the previous incomplete-tree-entry fixture coverage.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

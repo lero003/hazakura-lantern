@@ -249,6 +249,57 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(files.map(\.path), ["nested/model-Q4.gguf"])
     }
 
+    func testClientReportsNoGGUFFilesWhenRepositoryTreeHasNoSupportedFiles() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"type": "file", "path": "README.md", "size": 100},
+                  {"type": "directory", "path": "nested"},
+                  {"type": "file", "path": "nested/model.bin", "size": 200},
+                  {"type": "file", "path": "../unsafe.gguf", "size": 300}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        do {
+            _ = try await client.listGGUFFiles(repoID: "owner/model-GGUF")
+            XCTFail("Expected repositories without supported .gguf files to fail clearly.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .noGGUFFilesFound("owner/model-GGUF"))
+        }
+    }
+
+    func testClientMapsHuggingFaceHTTPFailures() async throws {
+        let session = makeSession { _ in
+            (
+                503,
+                Data("""
+                {"error": "temporarily unavailable"}
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        do {
+            _ = try await client.searchRepositories(query: "qwen", limit: 10)
+            XCTFail("Expected HTTP failures to map to a typed GGUF acquisition error.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .invalidHTTPStatus(503))
+        }
+    }
+
     func testClientRejectsUnsafeRepoIDsBeforeListingFiles() async throws {
         let session = makeSession { _ in
             XCTFail("Unsafe repository ids should not reach the public API request.")
