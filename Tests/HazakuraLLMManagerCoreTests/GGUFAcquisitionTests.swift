@@ -328,6 +328,42 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: partial.path))
     }
 
+    func testDownloaderRejectsNonFileSuccessStatusWithoutCompletingPartial() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+        try Data("partial".utf8).write(to: partial)
+
+        let session = makeSession { request in
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Range"), "bytes=7-")
+            return (
+                204,
+                Data(),
+                [:]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination,
+                    expectedBytes: 42
+                )
+            ) { _ in }
+            XCTFail("Expected non-file success status to be rejected.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .invalidHTTPStatus(204))
+        }
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "partial")
+    }
+
     func testDownloaderRemovesStalePartialWhenDestinationIsAlreadyComplete() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

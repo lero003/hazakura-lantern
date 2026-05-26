@@ -122,6 +122,9 @@ Implemented scope:
 - GGUF Acquisition downloads now remove a stale `.part` resume file when the
   completed destination already matches the expected file size, avoiding an
   unnecessary network request while keeping the completed `.gguf` file intact.
+- GGUF Acquisition downloads now reject non-file success statuses such as HTTP
+  `204` instead of completing an empty or partial `.gguf`, keeping the partial
+  resume file available for a later explicit retry.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
@@ -610,12 +613,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF stale-part cleanup pass):
+Current source-verification status (2026-05-27 GGUF non-file success rejection pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (262 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage for clearing stale `.part` resume files when the completed destination
-already matches the expected size, without issuing a new network request.
+coverage for rejecting non-file HTTP success statuses such as `204` without
+turning a saved `.part` resume file into a completed `.gguf`.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

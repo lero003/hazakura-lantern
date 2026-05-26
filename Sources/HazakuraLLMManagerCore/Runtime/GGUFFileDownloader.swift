@@ -64,9 +64,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             try? fileManager.removeItem(at: partialURL)
             throw GGUFAcquisitionError.invalidHTTPStatus(httpResponse.statusCode)
         default:
-            guard (200...299).contains(httpResponse.statusCode) else {
-                throw GGUFAcquisitionError.invalidHTTPStatus(httpResponse.statusCode)
-            }
+            throw GGUFAcquisitionError.invalidHTTPStatus(httpResponse.statusCode)
         }
 
         if !fileManager.fileExists(atPath: partialURL.path) {
