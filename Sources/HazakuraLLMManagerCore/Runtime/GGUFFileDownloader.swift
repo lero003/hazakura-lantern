@@ -30,13 +30,14 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             withIntermediateDirectories: true
         )
 
+        let partialURL = GGUFDownloadDestination.partialURL(for: request.destinationURL)
         if let expectedBytes = request.expectedBytes,
            existingFileSize(at: request.destinationURL) == expectedBytes {
+            try? fileManager.removeItem(at: partialURL)
             progress(GGUFDownloadProgress(bytesWritten: expectedBytes, totalBytes: expectedBytes))
             return request.destinationURL
         }
 
-        let partialURL = GGUFDownloadDestination.partialURL(for: request.destinationURL)
         var partialBytes = existingFileSize(at: partialURL) ?? 0
         var urlRequest = URLRequest(url: request.remoteURL)
         if partialBytes > 0 {
