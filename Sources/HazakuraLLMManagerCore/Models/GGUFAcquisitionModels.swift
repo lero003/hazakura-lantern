@@ -84,6 +84,7 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
     case emptySearchQuery
     case invalidBaseURL
     case invalidRepositoryID(String)
+    case invalidGGUFFilePath(String)
     case invalidDownloadDirectory(String)
     case invalidHTTPStatus(Int)
     case noGGUFFilesFound(String)
@@ -97,6 +98,8 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
             return "Hugging Face API URL could not be built."
         case .invalidRepositoryID(let repoID):
             return "Repository id is not supported: \(repoID)."
+        case .invalidGGUFFilePath(let path):
+            return "GGUF file path is not supported: \(path)."
         case .invalidDownloadDirectory(let path):
             return "Download directory is not available: \(path)."
         case .invalidHTTPStatus(let statusCode):
@@ -117,10 +120,12 @@ public enum GGUFDownloadDestination {
         let components = file.repoID.split(separator: "/", omittingEmptySubsequences: false)
         guard components.count == 2,
               let owner = sanitizedPathComponent(String(components[0])),
-              let repo = sanitizedPathComponent(String(components[1])),
-              let fileName = sanitizedFileName(file.fileName)
+              let repo = sanitizedPathComponent(String(components[1]))
         else {
             throw GGUFAcquisitionError.invalidRepositoryID(file.repoID)
+        }
+        guard let fileName = sanitizedFileName(fromPath: file.path) else {
+            throw GGUFAcquisitionError.invalidGGUFFilePath(file.path)
         }
 
         return downloadDirectory
@@ -139,7 +144,8 @@ public enum GGUFDownloadDestination {
         guard !trimmed.isEmpty,
               trimmed != ".",
               trimmed != "..",
-              !trimmed.contains("/")
+              !trimmed.contains("/"),
+              !trimmed.contains("\\")
         else {
             return nil
         }
@@ -147,8 +153,16 @@ public enum GGUFDownloadDestination {
         return trimmed.replacingOccurrences(of: ":", with: "-")
     }
 
-    private static func sanitizedFileName(_ value: String) -> String? {
-        guard let fileName = sanitizedPathComponent(value),
+    private static func sanitizedFileName(fromPath path: String) -> String? {
+        let components = path.split(separator: "/", omittingEmptySubsequences: false)
+        guard let lastComponent = components.last,
+              components.allSatisfy({ component in
+                  !component.isEmpty
+                      && component != "."
+                      && component != ".."
+                      && !component.contains("\\")
+              }),
+              let fileName = sanitizedPathComponent(String(lastComponent)),
               fileName.lowercased().hasSuffix(".gguf")
         else {
             return nil

@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-26
+Last reviewed: 2026-05-27
 
 ## Project State
 
@@ -113,6 +113,9 @@ Implemented scope:
 - GGUF Acquisition tree parsing now ignores unsafe `.gguf` paths containing
   empty, current-directory, parent-directory, absolute, or backslash-style path
   components before building download candidates.
+- GGUF Acquisition destination construction now revalidates repository and
+  file-path components before creating the local `<owner>/<repo>/<file.gguf>`
+  path, so unsafe paths are rejected even if they bypass the tree parser.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
@@ -601,13 +604,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-26 GGUF Acquisition pass):
+Current source-verification status (2026-05-27 GGUF destination-safety pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (256 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. A no-download Hugging Face API smoke
-found public repo `unsloth/Qwen3.6-27B-MTP-GGUF` and 26 `.gguf` files through
-the same search/tree endpoint shape used by the app. App-bundle and real
-runtime smoke were not rerun for this source/UI slice.
+`swift test` (259 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
+coverage for destination path construction rejecting unsafe repository and
+file-path components before any local download path is created. App-bundle,
+real runtime smoke, and no-download public Hugging Face API smoke were not
+rerun for this source/core slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with

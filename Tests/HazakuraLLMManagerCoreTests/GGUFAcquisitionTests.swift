@@ -32,6 +32,52 @@ final class GGUFAcquisitionTests: XCTestCase {
         )
     }
 
+    func testDestinationURLRejectsBackslashStyleRepoID() {
+        let file = HuggingFaceGGUFFile(
+            repoID: "owner\\name/model-GGUF",
+            path: "model.gguf",
+            downloadURL: URL(string: "https://example.com/model.gguf")!
+        )
+
+        XCTAssertThrowsError(
+            try GGUFDownloadDestination.destinationURL(
+                for: file,
+                in: URL(fileURLWithPath: "/Models")
+            )
+        ) { error in
+            XCTAssertEqual(error as? GGUFAcquisitionError, .invalidRepositoryID("owner\\name/model-GGUF"))
+        }
+    }
+
+    func testDestinationURLRejectsUnsafeGGUFFilePaths() {
+        let unsafePaths = [
+            "../escape.gguf",
+            "/absolute.gguf",
+            "nested//empty.gguf",
+            "nested/./dot.gguf",
+            "nested/../parent.gguf",
+            "nested\\slash.gguf",
+            "not-a-gguf.txt"
+        ]
+
+        for path in unsafePaths {
+            let file = HuggingFaceGGUFFile(
+                repoID: "owner/model-GGUF",
+                path: path,
+                downloadURL: URL(string: "https://example.com/model.gguf")!
+            )
+
+            XCTAssertThrowsError(
+                try GGUFDownloadDestination.destinationURL(
+                    for: file,
+                    in: URL(fileURLWithPath: "/Models")
+                )
+            ) { error in
+                XCTAssertEqual(error as? GGUFAcquisitionError, .invalidGGUFFilePath(path))
+            }
+        }
+    }
+
     func testConfigurationStorePersistsGGUFDownloadDirectory() {
         let suiteName = "HazakuraLLMManagerTests-\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
