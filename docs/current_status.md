@@ -128,6 +128,9 @@ Implemented scope:
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
+- GGUF Acquisition downloader cancellation now has focused coverage proving the
+  partially written `.part` file remains available for an explicit retry,
+  without moving an incomplete file into the final `.gguf` destination.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies

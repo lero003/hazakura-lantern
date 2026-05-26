@@ -352,6 +352,57 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: partial.path))
     }
 
+    func testDownloaderCancellationKeepsPartialFileForResume() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+        let flushedBytes = 64 * 1_024
+        let responseBody = Data(repeating: 0x41, count: flushedBytes + 10)
+
+        let session = makeSession { request in
+            XCTAssertNil(request.value(forHTTPHeaderField: "Range"))
+            return (
+                200,
+                responseBody,
+                [
+                    "Content-Length": String(responseBody.count)
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+        var progressValues: [GGUFDownloadProgress] = []
+        var downloadTask: Task<URL, Error>!
+
+        downloadTask = Task {
+            try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination,
+                    expectedBytes: Int64(responseBody.count)
+                )
+            ) { progress in
+                progressValues.append(progress)
+                if progress.bytesWritten >= Int64(flushedBytes) {
+                    downloadTask.cancel()
+                }
+            }
+        }
+
+        do {
+            _ = try await downloadTask.value
+            XCTFail("Expected cancellation to stop the active GGUF download.")
+        } catch is CancellationError {
+        }
+
+        let partialSize = try FileManager.default.attributesOfItem(atPath: partial.path)[.size] as? NSNumber
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertEqual(partialSize?.int64Value, Int64(flushedBytes))
+        XCTAssertEqual(progressValues.last?.bytesWritten, Int64(flushedBytes))
+    }
+
     func testDownloaderRejectsNonFileSuccessStatusWithoutCompletingPartial() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

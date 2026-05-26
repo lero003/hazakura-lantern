@@ -21,6 +21,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   are skipped while valid `.gguf` files remain selectable.
 - Hardened GGUF Acquisition downloads so a completed destination file clears a
   stale `.part` resume file without making another network request.
+- Added focused GGUF Acquisition downloader coverage proving cancellation keeps
+  the partial `.part` file for an explicit retry instead of completing the
+  final `.gguf` destination.
 - Localized app-owned endpoint health status titles and healthy/checking/
   unchecked details in Dashboard, Endpoint, and Setup Guide surfaces, keeping
   Japanese desktop smoke evidence readable without changing runtime-owned
