@@ -34,9 +34,10 @@ public license and contribution metadata, and does not include packaged
 artifacts. Treat exact v0.x numbers as release history, not as the next work
 selector.
 
-Current human direction: continue automated development and manual device
-verification after the `v1.5.1` source-only checkpoint, fixing smoke-observed
-rough edges one at a time before any later source checkpoint.
+Current human direction: continue automated development and manual verification
+after the `v1.5.1` source-only checkpoint and the first GGUF Acquisition slice,
+fixing one quality or smoke-observed rough edge at a time before any later
+source checkpoint.
 Packaged app release work remains a separate future handoff. Automation should
 keep progressing small verified slices without creating packaged artifacts,
 mutating runtime installs, changing GitHub settings, or deciding
@@ -47,14 +48,18 @@ The default question for each automation run is:
 > Does this make Lantern closer to release-quality daily use without expanding
 > scope?
 
-Prefer failing quality checks, runtime usability polish, and post-checkpoint
-smoke evidence over packaged-release work. The currently useful
-unfinished gates are:
+Prefer failing quality checks, runtime usability polish, GGUF Acquisition
+hardening, and post-checkpoint smoke evidence over packaged-release work. The
+currently useful unfinished gates are:
 
 - fix failing `swift test`, `swift build --disable-sandbox`, localization lint,
   or `git diff --check` results before choosing polish
-- after v1.5: use smoke runs and manual evidence to fix one concrete rough edge
-  at a time before considering another source checkpoint
+- after v1.5 and the first GGUF Acquisition slice: use smoke runs, fake-client
+  tests, and manual evidence to fix one concrete rough edge at a time before
+  considering another source checkpoint
+- harden GGUF Acquisition only as acquisition quality: public API parsing,
+  `.gguf` file listing, destination-path safety, partial resume/cancel/failure
+  behavior, localized UI copy, and completion-to-model-path handoff
 - make one small code-quality improvement inside the current `llama-server`
   boundary when it supports the smoke lane and is covered by the same run's
   verification
@@ -94,8 +99,10 @@ Do not expand into chat, conversation history, prompt libraries, RAG, tools,
 attachments, model library management, model download history, model ranking,
 model conversion, proxy behavior, remote exposure, bundled inference,
 second-runtime work, automatic benchmarking, benchmark leaderboards, or real
-runtime installation/update. User-triggered GGUF search/download work is allowed
-only inside the bounded acquisition lane in `docs/gguf_acquisition.md`.
+runtime installation/update. User-triggered GGUF search/download work is
+implemented only inside the bounded acquisition lane in
+`docs/gguf_acquisition.md`; follow-up automation may harden that lane but must
+not turn it into model management.
 The current networked update check is limited to explicit user-triggered
 `llama.cpp` latest-release metadata and must remain advisory.
 
@@ -254,11 +261,11 @@ Preferred order:
 
 1. Fix a failing test or build.
 2. Fix a failing localization lint or `git diff --check` result.
-3. Build v1.1 Smoke Console in small slices: core request/result/error models,
-   timeout-bounded client, focused tests, then compact Mac-native UI.
-4. Build v1.2 Smoke Metrics in small slices: elapsed time first, then
-   runtime-reported usage, explicitly approximate fallback counts/rates, and
-   streaming/first-token latency only if the slice remains small and safe.
+3. Harden the existing Smoke Console and Smoke Metrics surfaces from observed
+   evidence, without turning them into chat, history, or benchmarks.
+4. Harden GGUF Acquisition in one small slice when evidence exists: fake API
+   coverage, downloader resume/cancel/failure behavior, path validation,
+   localized UI copy, no-download public API smoke, or model-path handoff.
 5. Fix smoke-observed rough edges after v1.5 without turning the surface into
    chat, saved history, benchmark ranking, or runtime optimization.
 6. Make one small verified code-quality improvement inside the current
@@ -283,8 +290,8 @@ Preferred order:
    only when it reduces a concrete release-quality risk and remains
    non-mutating.
 15. End as a verified no-op only when no safe quality, smoke-lane,
-   release-quality, smoke-backlog, feedback-triage, test, or automation-doc
-   slice is justified.
+   GGUF-acquisition hardening, release-quality, smoke-backlog,
+   feedback-triage, test, or automation-doc slice is justified.
 
 Avoid broad refactors, dependency changes, generated artifacts, UI restyling, or
 new feature areas unless the current status and roadmap both support them.
@@ -294,9 +301,10 @@ custom command profile implementation, profile schema version change, packaged
 artifact, GitHub settings or release mutation, public issue mutation, automation
 cadence change, dependency or lockfile mutation, endpoint auto-polling,
 real runtime install/update execution, model library management, download
-history, model ranking, conversation history, prompt library, RAG/tools,
-attachment support, automatic benchmark/optimization, benchmark leaderboard,
-multiple-profile management,
+history, model ranking, Hugging Face token storage, gated-model workflow,
+background download queue, LM Studio internal metadata integration,
+conversation history, prompt library, RAG/tools, attachment support, automatic
+benchmark/optimization, benchmark leaderboard, multiple-profile management,
 launch-at-login, automatic restart policy, or update checks for runtimes beyond
 the current `llama.cpp` target.
 

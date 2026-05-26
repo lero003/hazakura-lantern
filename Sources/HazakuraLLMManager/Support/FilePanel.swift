@@ -16,6 +16,17 @@ enum FilePanel {
         return panel.runModal() == .OK ? panel.url?.path : nil
     }
 
+    static func chooseDirectory() -> String? {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.canCreateDirectories = true
+        panel.resolvesAliases = true
+
+        return panel.runModal() == .OK ? panel.url?.path : nil
+    }
+
     static func chooseProfileImportFile() -> URL? {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false

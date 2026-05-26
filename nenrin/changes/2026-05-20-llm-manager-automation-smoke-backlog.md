@@ -39,6 +39,11 @@ review_after:
   automation to a 30-minute cadence and aim it through `v1.1` Local Smoke
   Console, `v1.2` Runtime Smoke Metrics, and immediate smoke-driven rough-edge
   fixes before a possible `v1.3` source-stable checkpoint.
+- Recorded the 2026-05-26 post-GGUF automation shift: Smoke Console and
+  Metrics are existing surfaces to harden from evidence, and GGUF Acquisition
+  is now an implemented bounded lane that automation may harden only through
+  tests, no-download API shape checks, UI copy/accessibility, and focused
+  download-state fixes.
 
 ## Reason
 
@@ -61,13 +66,20 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
   code-quality, release-quality, or post-RC readiness slice; they should not
   create packaged artifacts, mutate runtime installs, or decide packaged-release
   readiness without an explicit human handoff.
-- Future runs should prefer the active smoke lane before generic polish:
-  implement v1.1 as explicit, user-triggered, non-persistent endpoint smoke
-  testing, then v1.2 as careful last-run smoke metrics with approximate wording,
-  then fix one smoke-observed rough edge at a time.
+- Future runs should prefer evidence-backed quality work before generic polish:
+  harden the existing explicit, user-triggered Smoke Console and last-run Smoke
+  Metrics surfaces, then fix one smoke-observed rough edge at a time.
+- Future runs may harden GGUF Acquisition inside `docs/gguf_acquisition.md`
+  with fake Hugging Face fixtures, destination-path tests, resume/cancel/failure
+  coverage, localized UI/accessibility polish, no-download public API shape
+  checks, or completion-to-model-path handoff fixes.
 - Future runs should not turn Smoke Console into chat, saved conversation
-  history, prompt libraries, RAG/tools, attachments, model catalog/download,
+  history, prompt libraries, RAG/tools, attachments, model catalog management,
   automatic endpoint polling, benchmark ranking, or runtime optimization.
+- Future runs should not turn GGUF Acquisition into a model database, download
+  history, ranking/recommendation surface, deletion manager, background
+  downloader, token store, gated-model account flow, or LM Studio metadata
+  integration.
 
 ## Review After
 
@@ -77,8 +89,9 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 ## Success Signals
 
 - Automation reports one concrete smoke/backlog slice with verification, or a clear no-op when no safe release-quality slice exists.
-- Automation reports one concrete v1.1/v1.2 smoke-lane slice with verification,
-  or a clear no-op when no safe smoke-lane or release-quality slice exists.
+- Automation reports one concrete Smoke Console, Smoke Metrics, GGUF
+  Acquisition, or release-quality slice with verification, or a clear no-op
+  when no safe quality slice exists.
 - Source verification remains boring: `git diff --check`, localization lint, `swift test`, and `swift build --disable-sandbox` pass even when Launch Services helper smoke is blocked.
 
 ## Failure Signals
@@ -87,6 +100,9 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 - Automation loops on historical `kLSNoExecutableErr` without a fresh hypothesis or without keeping source work moving separately.
 - Automation builds chat history, benchmark dashboards, or runtime breadth while
   claiming to implement smoke verification.
+- Automation expands GGUF Acquisition into persistent model management,
+  unattended downloads, token storage, gated-account flows, or LM Studio
+  internal metadata mutation.
 
 ## Result
 

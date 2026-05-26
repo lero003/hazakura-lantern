@@ -31,7 +31,7 @@ They are not install, update, or model-conversion steps.
 
 Do not add installer behavior, model-library management, or hidden downloads to
 fix these cases. Lantern should point to the missing local setup step and remain
-advisory. The separate GGUF acquisition lane may help the user fetch a selected
+advisory. The separate GGUF acquisition lane can help the user fetch a selected
 file, but launch preflight should still fail clearly when the configured local
 file is missing.
 

@@ -41,9 +41,10 @@ dmg, signing, notarization, checksum, or binary distribution artifact.
 - No LAN exposure by default.
 - No API key/authentication gate in the current source checkpoint.
 
-Future planning allows a narrow, user-triggered Hugging Face GGUF acquisition
-page that downloads a selected `.gguf` file into a user-selected local
-directory. See `docs/gguf_acquisition.md`.
+Lantern includes a narrow, user-triggered Hugging Face GGUF acquisition page
+that downloads a selected public `.gguf` file into a user-selected local
+directory. This stays outside persistent model library management; see
+`docs/gguf_acquisition.md`.
 
 ## Local Development
 

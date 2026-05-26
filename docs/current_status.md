@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-25
+Last reviewed: 2026-05-26
 
 ## Project State
 
@@ -105,6 +105,11 @@ Implemented scope:
   destination for a user-triggered local endpoint smoke request with prompt,
   run state, response display, copy result, clear result, and localized
   app-owned UI strings.
+- GGUF Acquisition now adds a separate sidebar destination for user-triggered
+  Hugging Face public GGUF search, repository file selection, foreground
+  download into `<owner>/<repo>/<file.gguf>` under a user-selected directory,
+  visible progress/cancel/failure state, best-effort partial-file resume, and a
+  completion action that sets the downloaded file as the active model path.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
@@ -593,15 +598,20 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-24 v1.5 release-prep pass):
+Current source-verification status (2026-05-26 GGUF Acquisition pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (249 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. A real local endpoint smoke pass against
-the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model ran with the Setup
-Guide inspector visible, showed the in-app source checkpoint as `v1.5.0`,
-expanded a requested 860 pt window to the 1320 pt guide-safe minimum, and
-returned an `OK` Smoke Console response with visible runtime TPS, start time,
-elapsed time, output character count, finish reason, and timeout metrics.
+`swift test` (256 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed. A no-download Hugging Face API smoke
+found public repo `unsloth/Qwen3.6-27B-MTP-GGUF` and 26 `.gguf` files through
+the same search/tree endpoint shape used by the app. App-bundle and real
+runtime smoke were not rerun for this source/UI slice.
+
+The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
+smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with
+the Setup Guide inspector visible, showed the in-app source checkpoint as
+`v1.5.0`, expanded a requested 860 pt window to the 1320 pt guide-safe minimum,
+and returned an `OK` Smoke Console response with visible runtime TPS, start
+time, elapsed time, output character count, finish reason, and timeout metrics.
 The same pass verified Stop leaves the app running while removing the managed
 `llama-server`, and Quit removes both `HazakuraLLMManager` and the managed
 runtime.
@@ -690,9 +700,10 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: continue automated development and manual device
-verification after the `v1.5.1` source-only checkpoint, then fix one
-smoke-observed rough edge at a time before any later source checkpoint.
+Current human direction: continue automated development and manual desktop
+verification after the `v1.5.1` source-only checkpoint and the first GGUF
+Acquisition slice, then fix one quality or smoke-observed rough edge at a time
+before any later source checkpoint.
 Packaged app release remains separate: automation should
 continue code-quality checks, narrow verified improvements, and
 packaged-release readiness evidence, but should not create packaged artifacts,
@@ -747,11 +758,13 @@ initial menu bar/toolbar/setup-guide surfaces.
 Automation must not change GitHub visibility, settings, tags, releases, release
 assets, repository packages, public issue state, a new
 adapter, custom command implementation, profile schema version, dependencies,
-runtime installation/update, model library management, download history, or
-hidden auto-optimization without an explicit human handoff. The current human
-handoff allows a future bounded GGUF acquisition lane, but no implementation is
-present yet; until that work starts, ordinary automation should keep prioritizing
-smoke-driven post-`v1.5` polish after the `v1.5.1` source checkpoint.
+runtime installation/update, model library management, download history, hidden
+auto-optimization, Hugging Face token storage, gated-model workflow, background
+download queue, or LM Studio internal metadata integration without an explicit
+human handoff. Bounded GGUF Acquisition is now implemented as a foreground
+search/download lane, so ordinary automation may harden that lane only through
+tests, no-download public API smoke, UI copy/accessibility, and focused
+download-state fixes inside `docs/gguf_acquisition.md`.
 
 ## Next Best Slice
 
@@ -762,6 +775,10 @@ Good next automated candidates:
 - after v1.5, run smoke and fix one concrete rough edge at a time while keeping
   conversation history, prompt libraries, RAG/tools, benchmark rankings, and
   runtime optimization out of scope
+- harden GGUF Acquisition in one bounded slice: fake Hugging Face responses,
+  `.gguf` tree parsing, destination-path safety, partial resume/cancel/failure
+  states, localized UI copy, completion-to-model-path handoff, or a no-download
+  public API shape check
 - make one small code-quality improvement inside the current `llama-server`
   boundary, with tests or build verification in the same run
 - use `docs/automation_smoke_backlog.md` to expose or fix one concrete
@@ -841,8 +858,8 @@ Good next automated candidates:
 Do not begin endpoint auto-polling, multiple-profile management, adapter
 expansion, custom command implementation, MLX implementation, model management,
 download history, unattended runtime installation/update, automatic
-benchmarking, or chat features during this handoff. Bounded GGUF acquisition
-work should start only from `docs/gguf_acquisition.md` and should not become a
+benchmarking, or chat features during this handoff. Any follow-up to GGUF
+Acquisition should stay inside `docs/gguf_acquisition.md` and must not become a
 model database or background downloader. Runtime version and option checks are
 allowed only as local, timeout-bounded, read-only advisory work that improves
 release quality. Guarded update execution must be opt-in and user-confirmed.

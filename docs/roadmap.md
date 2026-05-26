@@ -64,7 +64,7 @@ quiet and a design note fixes the next runtime boundary.
 ### Lantern owns
 
 - profile storage
-- a narrow, user-triggered GGUF acquisition page when implemented
+- a narrow, user-triggered GGUF acquisition page
 - command construction and command preview
 - path validation for user-selected files and executables
 - direct process lifecycle control where applicable
@@ -948,12 +948,14 @@ runtime mutation, or release packaging.
 
 Good next slices:
 
-- add or harden one v1.1 Smoke Console slice, starting with core request/result
-  models and timeout/error/response parsing tests before UI
-- add or harden one v1.2 Smoke Metrics slice with careful approximate wording
-  and no benchmark claims
-- after v1.5, use Smoke Console evidence or manual reports to fix one concrete
-  rough edge at a time
+- harden one existing Smoke Console or Smoke Metrics behavior with careful
+  approximate wording and no chat/history/benchmark claims
+- harden one GGUF Acquisition behavior inside `docs/gguf_acquisition.md`,
+  preferably with fake Hugging Face responses, downloader state tests,
+  destination-path checks, no-download API shape smoke, or UI copy/accessibility
+  polish
+- after v1.5, use Smoke Console, GGUF Acquisition, or manual reports to fix one
+  concrete rough edge at a time
 - expose or fix one concrete rough edge from `docs/automation_smoke_backlog.md`
   when it can be verified without broad restyling, runtime mutation, packaging
   publication, or GitHub mutation

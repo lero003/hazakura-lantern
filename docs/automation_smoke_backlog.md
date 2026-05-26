@@ -12,10 +12,12 @@ Use this after reading `docs/current_status.md`, `docs/roadmap.md`, and
 Automation should help expose and fix small product-quality issues while the app
 is source-only and not yet packaged:
 
-- v1.1 Local Smoke Console slices that prove the selected endpoint can answer a
+- Local Smoke Console hardening that proves the selected endpoint can answer a
   small explicit local test request without becoming chat
-- v1.2 Runtime Smoke Metrics slices that show honest last-run evidence without
+- Runtime Smoke Metrics hardening that shows honest last-run evidence without
   becoming a benchmark suite
+- GGUF Acquisition hardening that keeps Hugging Face search/download bounded to
+  one user-selected public `.gguf` file and one foreground download task
 - UI labels that are confusing, clipped, duplicated, or stale
 - menu bar, toolbar, and Setup Guide flows that mirror existing behavior poorly
 - setup, health, copy, profile, and localization rough edges
@@ -263,6 +265,34 @@ catalog-ownership, model conversion, cloud model support, automatic endpoint
 polling, benchmark ranking, or runtime optimization. User-triggered GGUF
 search/download belongs to the bounded acquisition lane in
 `docs/gguf_acquisition.md`, not the Smoke Console lane.
+
+## GGUF Acquisition Quality Targets
+
+Use these targets only for the bounded acquisition lane in
+`docs/gguf_acquisition.md`. Each run should choose one narrow behavior and
+verify it without downloading a large model unless the user explicitly asks for
+that manual smoke.
+
+Automatable targets:
+
+- fake Hugging Face search/tree fixtures for public repo parsing, missing
+  fields, empty results, HTTP failures, and no-`.gguf` repositories
+- destination-path and filename safety for `<owner>/<repo>/<file.gguf>`
+- downloader resume behavior when the server honors `Range`, restart behavior
+  when it ignores `Range`, cancellation leaving `.part`, and visible failure
+  state
+- foreground UI state for searching, file loading, downloading, cancellation,
+  completion, and "Use as Model"
+- English/Japanese localization and accessibility for the new page's visible
+  controls
+- no-download public API shape smoke that confirms search/tree endpoints still
+  return at least one public repo and `.gguf` file
+- docs sync when the implemented behavior changes the next automation choice
+
+Do not add model databases, download history, deletion/cleanup management,
+ratings, ranking, recommendations, automatic sync, background download queues,
+Hugging Face token storage, gated-model account flows, LM Studio internal
+metadata mutation, or large unattended model downloads.
 
 ## External Proposal Intake
 

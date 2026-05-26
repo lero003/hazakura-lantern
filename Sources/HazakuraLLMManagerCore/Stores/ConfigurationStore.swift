@@ -8,6 +8,7 @@ public final class ConfigurationStore {
     private let key = "dev.hazakura.llmmanager.runtimeConfiguration.v1"
     private let runtimeProfileKey = "dev.hazakura.llmmanager.runtimeProfile.v1"
     private let recentPathsKey = "dev.hazakura.llmmanager.recentRuntimePaths.v1"
+    private let ggufDownloadDirectoryKey = "dev.hazakura.llmmanager.ggufDownloadDirectory.v1"
 
     public init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -67,6 +68,19 @@ public final class ConfigurationStore {
             return try JSONDecoder().decode(RecentRuntimePaths.self, from: data)
         } catch {
             return .empty
+        }
+    }
+
+    public func loadGGUFDownloadDirectory() -> String {
+        defaults.string(forKey: ggufDownloadDirectoryKey) ?? ""
+    }
+
+    public func saveGGUFDownloadDirectory(_ path: String) {
+        let trimmed = path.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            defaults.removeObject(forKey: ggufDownloadDirectoryKey)
+        } else {
+            defaults.set(trimmed, forKey: ggufDownloadDirectoryKey)
         }
     }
 

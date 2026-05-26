@@ -52,12 +52,28 @@ write into a user-selected directory that also happens to be used by LM Studio,
 but it should not require LM Studio, inspect private LM Studio state, or mutate
 LM Studio-specific metadata.
 
+## Current Implementation
+
+The first implementation adds a separate sidebar page for public Hugging Face
+GGUF acquisition. A user can search public GGUF repositories, pick a repository
+file, choose a download directory, and save the file as
+`<download-directory>/<owner>/<repo>/<file.gguf>`.
+
+Downloads are explicit foreground tasks with visible progress, cancellation,
+failure display, and a best-effort `.part` resume when the local partial file
+and server `Range` behavior line up. Completion offers a follow-up action to set
+the downloaded file as Lantern's active model path.
+
+Lantern persists only the chosen default download directory. It does not persist
+a model database, download history, token, Hugging Face account state, LM Studio
+metadata, or background sync queue.
+
 ## First Slice
 
-The first implementation should avoid network breadth where possible:
+The first implementation intentionally avoids network breadth where possible:
 
 1. Add a configurable default GGUF download directory.
-2. Add the separate page shell and empty/manual URL state.
+2. Add the separate page shell and explicit download-directory state.
 3. Add a focused search result model for public Hugging Face GGUF repository
    metadata.
 4. Download one selected `.gguf` file with visible progress and cancel/failure

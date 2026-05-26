@@ -4,6 +4,14 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Added a bounded GGUF Acquisition page that searches public Hugging Face GGUF
+  repositories, lists `.gguf` files, downloads a selected file into a
+  user-selected `<owner>/<repo>/<file.gguf>` path with progress/cancel/failure
+  state and best-effort resume, and can set the completed file as the active
+  Lantern model path.
+
 ### Changed
 
 - Localized app-owned endpoint health status titles and healthy/checking/

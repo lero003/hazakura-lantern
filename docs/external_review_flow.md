@@ -59,8 +59,8 @@ Product boundary:
   endpoint, profile import/export, and copyable client snippets.
 - It does not provide chat, model library management, model conversion, proxy
   behavior, runtime installation, automatic runtime updates, LAN/auth, or
-  bundled inference. A future bounded GGUF acquisition page may download one
-  user-selected file into a user-selected directory.
+  bundled inference. The bounded GGUF Acquisition page may download one
+  user-selected public `.gguf` file into a user-selected directory.
 
 Known evidence:
 - SwiftPM verification should be evaluated from the latest local/CI results.
