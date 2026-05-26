@@ -490,6 +490,43 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "partial")
     }
 
+    func testDownloaderRejectsIncompleteExpectedDownloadWithoutCompletingPartial() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+
+        let session = makeSession { request in
+            XCTAssertNil(request.value(forHTTPHeaderField: "Range"))
+            return (
+                200,
+                Data("short".utf8),
+                [
+                    "Content-Length": "5"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination,
+                    expectedBytes: 11
+                )
+            ) { _ in }
+            XCTFail("Expected incomplete GGUF downloads to stay partial.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .incompleteDownload(expectedBytes: 11, actualBytes: 5))
+        }
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "short")
+    }
+
     func testDownloaderRemovesStalePartialWhenDestinationIsAlreadyComplete() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

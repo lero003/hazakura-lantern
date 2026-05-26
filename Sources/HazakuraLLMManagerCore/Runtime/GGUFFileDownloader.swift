@@ -109,6 +109,14 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
 
             try handle.close()
 
+            if let expectedBytes = request.expectedBytes,
+               writtenBytes != expectedBytes {
+                throw GGUFAcquisitionError.incompleteDownload(
+                    expectedBytes: expectedBytes,
+                    actualBytes: writtenBytes
+                )
+            }
+
             if fileManager.fileExists(atPath: request.destinationURL.path) {
                 try fileManager.removeItem(at: request.destinationURL)
             }
@@ -117,6 +125,8 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             return request.destinationURL
         } catch is CancellationError {
             throw CancellationError()
+        } catch let error as GGUFAcquisitionError {
+            throw error
         } catch {
             throw GGUFAcquisitionError.fileSystem(error.localizedDescription)
         }

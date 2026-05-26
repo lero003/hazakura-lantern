@@ -131,6 +131,9 @@ Implemented scope:
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
+- GGUF Acquisition downloads now verify the completed byte count when an
+  expected file size is known, so short responses remain resumable `.part`
+  files instead of being promoted to final `.gguf` files.
 - GGUF Acquisition downloader cancellation now has focused coverage proving the
   partially written `.part` file remains available for an explicit retry,
   without moving an incomplete file into the final `.gguf` destination.
@@ -622,12 +625,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF API failure fixture pass):
+Current source-verification status (2026-05-27 GGUF incomplete-download pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (267 XCTest tests, 0 failures), and
+`swift test` (268 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage for no-supported-`.gguf` repository trees and Hugging Face HTTP
-failures, building on the previous incomplete-tree-entry fixture coverage.
+coverage for expected-size mismatches so incomplete responses stay in the
+resumable `.part` file instead of being promoted to a final `.gguf`.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

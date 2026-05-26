@@ -65,8 +65,10 @@ backslash-style components before a download candidate is shown.
 
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file
-and server `Range` behavior line up. Completion offers a follow-up action to set
-the downloaded file as Lantern's active model path.
+and server `Range` behavior line up. When the expected file size is known,
+Lantern keeps an incomplete response as `.part` instead of promoting it to a
+final `.gguf`. Completion offers a follow-up action to set the downloaded file
+as Lantern's active model path.
 
 Lantern persists only the chosen default download directory. It does not persist
 a model database, download history, token, Hugging Face account state, LM Studio

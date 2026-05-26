@@ -87,6 +87,7 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
     case invalidGGUFFilePath(String)
     case invalidDownloadDirectory(String)
     case invalidHTTPStatus(Int)
+    case incompleteDownload(expectedBytes: Int64, actualBytes: Int64)
     case noGGUFFilesFound(String)
     case fileSystem(String)
 
@@ -104,6 +105,8 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
             return "Download directory is not available: \(path)."
         case .invalidHTTPStatus(let statusCode):
             return "Hugging Face request returned HTTP \(statusCode)."
+        case .incompleteDownload(let expectedBytes, let actualBytes):
+            return "Downloaded file size did not match the expected size: expected \(expectedBytes) bytes, got \(actualBytes) bytes."
         case .noGGUFFilesFound(let repoID):
             return "No .gguf files were found in \(repoID)."
         case .fileSystem(let message):
