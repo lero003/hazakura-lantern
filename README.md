@@ -6,9 +6,9 @@ Hazakura Lantern is a macOS-only app that lights up a local LLM runtime at the
 user's desk. It makes the model path, server command, logs, and local endpoint
 visible without becoming a chat app or model platform.
 
-It does not implement inference, model download, chat, RAG, tools, or an
-OpenAI-compatible proxy. The app starts and supervises an existing local server
-runtime so other apps can use a stable local endpoint.
+It does not implement inference, chat, RAG, tools, or an OpenAI-compatible
+proxy. The app starts and supervises an existing local server runtime so other
+apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
@@ -34,11 +34,16 @@ dmg, signing, notarization, checksum, or binary distribution artifact.
 ## Non-Goals
 
 - No bundled inference engine.
-- No model search, download, conversion, or marketplace.
+- No persistent model library management, conversion, marketplace, ranking, or
+  download history.
 - No chat UI.
 - No proxy layer or OpenAI API compatibility shim.
 - No LAN exposure by default.
 - No API key/authentication gate in the current source checkpoint.
+
+Future planning allows a narrow, user-triggered Hugging Face GGUF acquisition
+page that downloads a selected `.gguf` file into a user-selected local
+directory. See `docs/gguf_acquisition.md`.
 
 ## Local Development
 
@@ -86,6 +91,7 @@ Project planning and automation docs:
 - `docs/troubleshooting.md`
 - `docs/runtime_profiles.md`
 - `docs/runtime_adapters.md`
+- `docs/gguf_acquisition.md`
 - `docs/llama_server_presets.md`
 - `docs/toolbar_and_navigation.md`
 - `docs/post_public_operations.md`

@@ -29,8 +29,9 @@ An automated run may complete one small, verifiable preparation slice:
   docs agree on the source-only checkpoint and packaged-app blocker
 - keep install and build instructions honest: SwiftPM source build is supported;
   packaged app distribution is not yet claimed
-- keep non-goals visible: no chat, model download, proxy, LAN exposure,
-  authentication, runtime installer, updater, bundled inference, or marketplace
+- keep non-goals visible: no chat, model-library management, hidden downloads,
+  proxy, LAN exposure, authentication, runtime installer, updater, bundled
+  inference, or marketplace
 - inspect workflow files statically for surprising triggers, broad token
   permissions, unpinned or unexpected external actions, or secret-printing
   patterns

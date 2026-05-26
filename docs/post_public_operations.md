@@ -31,7 +31,8 @@ concrete safe `llama-server` reliability slice:
 
 Do not treat public interest as permission to turn Lantern into a chat app,
 model manager, runtime installer, proxy, marketplace, or general command
-runner.
+runner. The bounded GGUF acquisition lane is a user-triggered file download
+helper only; it is not a model library or marketplace.
 
 ## Issue Triage Taxonomy
 
@@ -56,7 +57,8 @@ Classify incoming issues or review notes before choosing work:
 - G. `adjacent-product request`: image, audio, video, or other multimedia
   generation workflows that may fit the broader Hazakura ecosystem but do not
   yet fit Lantern's current local-runtime supervision boundary.
-- H. `out-of-scope request`: chat, model downloads, model conversion, RAG,
+- H. `out-of-scope request`: chat, model library management, download history,
+  model ranking, model conversion, RAG,
   tools, proxy behavior, LAN exposure, authentication, runtime installation,
   automatic updates, package-manager mutation, marketplace behavior, multiple
   profile management, launch-at-login, or automatic restart policy.
@@ -210,9 +212,10 @@ Require explicit human handoff before:
 - changing the saved automation cadence
 - adding networked runtime version checks or runtime update checks beyond the
   current explicit `llama.cpp` release-metadata check
-- adding unattended runtime install/update execution, model download, model
-  catalog, multimedia generation workflow, proxy, LAN exposure, authentication,
-  multiple-profile management, launch-at-login, or automatic restart behavior
+- adding unattended runtime install/update execution, model library management,
+  download history, model catalog ownership, multimedia generation workflow,
+  proxy, LAN exposure, authentication, multiple-profile management,
+  launch-at-login, or automatic restart behavior
 - mutating dependencies, lockfiles, package managers, or version-manager files
 
 ## Packaged-Release Boundary

@@ -42,6 +42,13 @@
 "Endpoint" = "エンドポイント";
 "Endpoint Health" = "エンドポイント状態";
 "Endpoint is not available for the current configuration." = "現在の設定ではエンドポイントを表示できません。";
+"endpoint_health.checking.detail" = "ローカルのヘルスチェックエンドポイントを確認しています...";
+"endpoint_health.checking.title" = "確認中";
+"endpoint_health.healthy.detail" = "手動ヘルスチェックに成功しました。これはその時点の確認で、自動監視ではありません。";
+"endpoint_health.healthy.title" = "正常 (HTTP %d)";
+"endpoint_health.unchecked.detail" = "サーバー開始後に手動で接続確認を実行してください。";
+"endpoint_health.unchecked.title" = "未確認";
+"endpoint_health.unhealthy.title" = "異常";
 "English" = "英語";
 "Environment Variables" = "環境変数";
 "Export" = "書き出し";

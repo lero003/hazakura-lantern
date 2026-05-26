@@ -1,8 +1,8 @@
 # Troubleshooting
 
 Hazakura Lantern supervises an existing local runtime. It does not install
-runtimes, download models, or proxy requests. Use this page to sort common setup
-and smoke-check failures before widening scope.
+runtimes, manage model libraries, or proxy requests. Use this page to sort
+common setup and smoke-check failures before widening scope.
 
 ## Runtime Or Model Path
 
@@ -29,8 +29,11 @@ file /path/to/llama-server
 Use these only to confirm that the selected files already exist on this Mac.
 They are not install, update, or model-conversion steps.
 
-Do not add installer or model-download behavior to fix these cases. Lantern
-should point to the missing local setup step and remain advisory.
+Do not add installer behavior, model-library management, or hidden downloads to
+fix these cases. Lantern should point to the missing local setup step and remain
+advisory. The separate GGUF acquisition lane may help the user fetch a selected
+file, but launch preflight should still fail clearly when the configured local
+file is missing.
 
 ## Endpoint Health
 
@@ -69,13 +72,20 @@ Current status:
 - The current 2026-05-24 verify hardening pass builds the local bundle,
   requests launch through Launch Services, confirms a `HazakuraLLMManager`
   process id, and closes the app before exiting.
-- Treat helper-smoke results as automation evidence only. The current release
-  posture is: source verification passes, helper launch smoke can prove a local
-  process launch, and normal desktop/manual launch and clean quit are still
-  required before packaged-release work.
-- Do not treat helper smoke as packaged-release proof. A normal desktop/manual
-  launch and clean-quit pass is still required before app-bundle distribution
-  work.
+- A 2026-05-25 normal desktop smoke pass launched the local bundle, exercised
+  Setup Guide, Dashboard health, Smoke Console, toolbar profile panel
+  presentation, menu-bar Stop, and clean quit, then found no remaining managed
+  app or runtime process.
+- Post-smoke launch hardening keeps the main window recoverable from
+  menu-bar-only states through the app-owned Open Window presenter. Treat a
+  fresh no-window launch as a regression, not as expected menu-bar behavior.
+- Treat helper-smoke and normal desktop smoke results as source-confidence
+  evidence only. They are not packaged-release proof for a distributed app
+  artifact.
+- Do not treat helper smoke as packaged-release proof. A packaged-release pass
+  still needs the actual distributed `.app`/archive path, signing/notarization
+  decisions, checksum/release-note checks, and final full-route manual UI
+  review.
 - Do not keep retrying historical Launch Services diagnostics without a fresh
   regression or hypothesis.
 
@@ -88,8 +98,8 @@ Useful fresh hypotheses:
   environment-mutating diagnostics, not as an hourly automation default.
 
 Before a user-facing `.app`, zip, dmg, signing, or notarization release, record
-a normal desktop/manual launch and clean-quit pass and update
-`docs/current_status.md`.
+a packaged-artifact-specific launch, full-route manual UI review, clean quit,
+and update `docs/current_status.md`.
 
 ## Release Boundary
 
@@ -104,5 +114,6 @@ Not allowed yet:
 - User-facing packaged `.app` release.
 - zip/dmg artifacts.
 - Signing or notarization work as a release claim.
-- Any workaround that expands Lantern into chat, model download, proxy, LAN
-  exposure, auth, updater, or adapter breadth.
+- Any workaround that expands Lantern into chat, model-library management,
+  hidden download behavior, proxy, LAN exposure, auth, updater, or adapter
+  breadth.

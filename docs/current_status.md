@@ -375,8 +375,9 @@ Implemented scope:
   change remote repository settings or apply public labels.
 - Public bug-report guidance now asks for reproduction steps, runtime adapter
   id, profile schema version, command previews, and redacted logs while keeping
-  chat, model download, proxy, LAN exposure, authentication, runtime installer,
-  and packaged-app requests outside the current source-only checkpoint boundary.
+  chat, model library management, proxy, LAN exposure, authentication, runtime
+  installer, and packaged-app requests outside the current source-only
+  checkpoint boundary.
 - Local/static public-opening review has checked workflow, issue-template,
   manifest, script, README, changelog, and docs guidance for surprising CI
   triggers or permissions, `curl | sh`, package-manager mutation, packaged-app
@@ -624,10 +625,27 @@ short success view was also captured by screenshot, showing the prompt,
 run/copy/clear buttons, adaptive metrics, endpoint/model labels, and response
 without visible clipping.
 
-Treat this as automation-level launch evidence, not packaged-release proof. It
-is enough to keep recurring local smoke honest, but a normal desktop/manual
-launch and clean-quit pass is still required before app-bundle, zip, dmg,
-signing, or notarization release work.
+Post-`v1.5.1` normal desktop smoke on 2026-05-25 launched the local bundle via
+`./script/build_and_run.sh`, used the selected lightweight
+`gemma-4-E2B-it-UD-Q3_K_XL` runtime, opened Setup Guide without clipping,
+confirmed Dashboard health status in Japanese, ran a Smoke Console request that
+returned `OK` with runtime TPS/elapsed/finish/usage evidence, opened and
+cancelled toolbar Profile export/import panels, inspected the Server menu, used
+the menu-bar Stop command, and then quit the app. Follow-up process checks
+found no `HazakuraLLMManager` or managed `llama-server` process.
+
+Follow-up launch probing also exposed a fragile main-window presentation path
+after the menu-bar-only state was reached. The app now keeps one shared
+`ServerController`, routes Open Window through an app-owned presenter, and
+uses a small AppKit fallback only to present the existing SwiftUI `ContentView`
+when SwiftUI scene restoration reports no usable main window. This is still
+source-confidence evidence; full visual confirmation of every Settings/control
+surface remains part of the final packaged-release UI pass.
+
+Treat these as source-confidence and normal desktop smoke evidence, not
+packaged-release proof. A packaged-release pass still needs artifact-specific
+review for a distributed `.app`, zip/dmg, signing, notarization, checksum,
+release notes, and final full-route manual UI review.
 
 Historical 2026-05-17 diagnostics: re-signing the generated bundle with
 `codesign --force --sign -`, adding standard bundle metadata, adding
@@ -657,8 +675,9 @@ even though the bundle executable and `CFBundleExecutable` value matched.
 - Model-family presets should remain advisory and visible. They may suggest
   `llama-server` settings or additional arguments, but they must not hide
   command construction or infer unsupported options silently.
-- The app does not manage multiple profiles, launch-at-login, YAML import/export,
-  auto restart, model downloads, chat, RAG, or proxy behavior.
+- The app does not manage multiple profiles, launch-at-login, YAML
+  import/export, auto restart, model libraries, download history, chat, RAG, or
+  proxy behavior.
 - Runtime update availability checks are advisory and networked only when the
   user presses Check for Updates. Lantern does not run package-manager, Git,
   download, or binary replacement commands.
@@ -685,24 +704,26 @@ quality gates below are resolved or explicitly deferred by a human.
 
 Open release-quality gates:
 
-- restore or externally verify the local app-bundle helper launch path, then
-  complete a normal desktop/manual launch and clean-quit pass
+- keep the normal desktop smoke fresh after UI or lifecycle changes; the
+  2026-05-25 pass covers launch, Setup Guide, Smoke Console, toolbar
+  import/export panel presentation, menu-bar Stop, and clean quit
 - keep release-evidence docs aligned so README, current status,
   troubleshooting, automation backlog, and roadmap all describe the same
   helper-smoke/manual-smoke boundary
-- verify app-language switching on the highest-traffic UI surfaces, especially
-  menu bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip
+- verify app-language switching on the remaining high-traffic UI surfaces,
+  especially menu bar, Settings, Endpoint advanced details, and HelpTooltip
   copy; fix one concrete mismatch at a time
-- verify profile file-flow feedback on a normal macOS desktop, especially
-  toolbar and menu bar import/export actions when the Profile panel is not
-  visible
+- verify profile file-flow completion on a normal macOS desktop, especially
+  successful export/import round trips with safe temporary files when that
+  local file mutation is explicitly in scope
 - verify the most visible UI-localization surfaces after the recent preset,
   Endpoint, and HelpTooltip cleanup; fix one concrete mismatch at a time
-- verify the menu bar daily-use path on a normal macOS desktop, including
-  status visibility, lifecycle actions, copy actions, and `Open Window`
-  behavior from hidden or backgrounded window states
-- verify the reduced toolbar on a normal macOS desktop, especially Setup Guide,
-  profile import/export, copy actions, and title-bar crowding
+- verify the remaining menu bar daily-use path on a normal macOS desktop,
+  especially copy actions and a final `Open Window` regression check from
+  hidden or backgrounded window states
+- verify the remaining reduced-toolbar copy menu actions on a normal macOS
+  desktop; Setup Guide and profile panel presentation have current smoke
+  evidence
 - review the Setup Guide inspector against the normal configuration flow so
   onboarding help does not duplicate or obscure the main window controls
 - perform one manual UI smoke pass that covers main-window launch, Setup Guide
@@ -726,9 +747,10 @@ initial menu bar/toolbar/setup-guide surfaces.
 Automation must not change GitHub visibility, settings, tags, releases, release
 assets, repository packages, public issue state, a new
 adapter, custom command implementation, profile schema version, dependencies,
-runtime installation/update, model download, or hidden auto-optimization
-without an explicit human handoff. The current human handoff explicitly allows
-the saved Lantern development automation to continue every 30 minutes for
+runtime installation/update, model library management, download history, or
+hidden auto-optimization without an explicit human handoff. The current human
+handoff allows a future bounded GGUF acquisition lane, but no implementation is
+present yet; until that work starts, ordinary automation should keep prioritizing
 smoke-driven post-`v1.5` polish after the `v1.5.1` source checkpoint.
 
 ## Next Best Slice
@@ -818,7 +840,9 @@ Good next automated candidates:
 
 Do not begin endpoint auto-polling, multiple-profile management, adapter
 expansion, custom command implementation, MLX implementation, model management,
-unattended runtime installation/update, model download, automatic benchmarking,
-or chat features during this handoff. Runtime version and option checks are
+download history, unattended runtime installation/update, automatic
+benchmarking, or chat features during this handoff. Bounded GGUF acquisition
+work should start only from `docs/gguf_acquisition.md` and should not become a
+model database or background downloader. Runtime version and option checks are
 allowed only as local, timeout-bounded, read-only advisory work that improves
 release quality. Guarded update execution must be opt-in and user-confirmed.

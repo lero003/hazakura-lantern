@@ -58,14 +58,19 @@ unfinished gates are:
 - make one small code-quality improvement inside the current `llama-server`
   boundary when it supports the smoke lane and is covered by the same run's
   verification
-- restore or externally verify the app-bundle helper launch path, then complete
-  normal desktop/manual launch and clean quit smoke
-- app-language switching verification for high-traffic surfaces such as menu
-  bar, toolbar, sidebar, Settings, Setup Guide, Endpoint, and HelpTooltip copy
-- menu bar daily-use verification for status, lifecycle, copy, and Open Window
-  behavior
-- normal-desktop verification of the reduced toolbar: Setup Guide,
-  import/export, and copy actions only, with no title-bar crowding
+- keep the 2026-05-25 normal desktop smoke fresh after UI/lifecycle changes;
+  it covers launch, Setup Guide, Dashboard health, Smoke Console, toolbar
+  profile panel presentation, menu-bar Stop, and clean quit
+- app-language switching verification for remaining high-traffic surfaces such
+  as menu bar, Settings, Endpoint advanced details, and HelpTooltip copy
+- remaining menu bar daily-use verification for copy actions and a final Open
+  Window regression check from hidden or backgrounded window states
+- remaining reduced-toolbar verification for copy menu actions and title-bar
+  crowding after future toolbar changes
+- profile export/import round-trip smoke with safe temporary files when local
+  file mutation is explicitly in scope
+- packaged-artifact-specific launch/clean-quit smoke before any distributed
+  app-bundle release
 - Setup Guide inspector review against the normal Configuration flow
 - one manual UI smoke pass covering main window, Setup Guide, menu bar,
   toolbar, logs, and clean quit
@@ -86,9 +91,11 @@ notes as background context. Reopen one only when a concrete, release-quality
 risk is visible and testable.
 
 Do not expand into chat, conversation history, prompt libraries, RAG, tools,
-attachments, model download, model catalog/search, model conversion, proxy
-behavior, remote exposure, bundled inference, second-runtime work, automatic
-benchmarking, benchmark leaderboards, or real runtime installation/update.
+attachments, model library management, model download history, model ranking,
+model conversion, proxy behavior, remote exposure, bundled inference,
+second-runtime work, automatic benchmarking, benchmark leaderboards, or real
+runtime installation/update. User-triggered GGUF search/download work is allowed
+only inside the bounded acquisition lane in `docs/gguf_acquisition.md`.
 The current networked update check is limited to explicit user-triggered
 `llama.cpp` latest-release metadata and must remain advisory.
 
@@ -156,8 +163,8 @@ next.
   client smoke evidence, copy flows, and common failure messages are covered by
   tests or docs.
 - v0.2 work must stay on local profile contract and portability. Do not use the
-  handoff as permission for model download, runtime install/update, chat,
-  proxy, LAN exposure, or adapter breadth.
+  handoff as permission for model-library management, runtime install/update,
+  chat, proxy, LAN exposure, or adapter breadth.
 - v0.2 -> v0.3: allowed when local profile contract, persistence, and
   import/export helpers are covered well enough that the next risk is adapter
   boundary clarity. v0.3 work should tighten protocols, tests, and docs before
@@ -286,9 +293,10 @@ Human approval is required before automation starts a new runtime adapter,
 custom command profile implementation, profile schema version change, packaged
 artifact, GitHub settings or release mutation, public issue mutation, automation
 cadence change, dependency or lockfile mutation, endpoint auto-polling,
-real runtime install/update execution, model download, model catalog/search,
-conversation history, prompt library, RAG/tools, attachment support, automatic
-benchmark/optimization, benchmark leaderboard, multiple-profile management,
+real runtime install/update execution, model library management, download
+history, model ranking, conversation history, prompt library, RAG/tools,
+attachment support, automatic benchmark/optimization, benchmark leaderboard,
+multiple-profile management,
 launch-at-login, automatic restart policy, or update checks for runtimes beyond
 the current `llama.cpp` target.
 

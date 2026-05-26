@@ -1,0 +1,69 @@
+# GGUF Acquisition
+
+This note defines the narrow model-download lane that may be added to
+Hazakura Lantern without turning it into a model manager.
+
+Lantern may provide a separate page that helps a user search Hugging Face for
+GGUF files and download one selected file into a user-selected local directory.
+This is acquisition, not library management.
+
+## Allowed Scope
+
+- user-triggered Hugging Face GGUF search
+- listing GGUF files from a selected repository when the public API shape is
+  still compatible enough for Lantern's simple parser
+- choosing a local download directory, including an LM Studio-style shared
+  models directory when the user wants that layout
+- saving files under a predictable owner/repository/file path, such as
+  `<models>/<owner>/<repo>/<file.gguf>`
+- showing in-progress download state, progress when available, cancel/failure
+  state, and completion state
+- attempting resume when the local partial file and server behavior make that
+  practical
+- setting the completed GGUF path as the active Lantern model path when the
+  user explicitly chooses that follow-up action
+
+## Out Of Scope
+
+- persistent model database
+- download history
+- model ratings, rankings, recommendations, or usage tracking
+- model deletion, cleanup, or storage management
+- automatic sync with Hugging Face or LM Studio
+- model conversion, quantization, merging, or repair
+- license judgment on behalf of the user
+- storing Hugging Face access tokens in the first implementation
+- gated-model workflows beyond clear failure wording
+- LM Studio internal database or metadata mutation
+- unattended background downloads
+
+## Product Boundary
+
+The downloader is allowed because it prepares a local `.gguf` file for the
+existing `llama-server` control loop. It must not hide the selected file path or
+make Lantern responsible for a user's model collection.
+
+If Hugging Face changes its API, page shape, auth behavior, or file metadata
+format, Lantern may fail clearly. The feature is a convenience path, not a
+stable model marketplace contract.
+
+LM Studio compatibility is best-effort and directory-layout based. Lantern may
+write into a user-selected directory that also happens to be used by LM Studio,
+but it should not require LM Studio, inspect private LM Studio state, or mutate
+LM Studio-specific metadata.
+
+## First Slice
+
+The first implementation should avoid network breadth where possible:
+
+1. Add a configurable default GGUF download directory.
+2. Add the separate page shell and empty/manual URL state.
+3. Add a focused search result model for public Hugging Face GGUF repository
+   metadata.
+4. Download one selected `.gguf` file with visible progress and cancel/failure
+   handling.
+5. Offer a post-download action to use the completed file as the active model
+   path.
+
+Do not add download history, model cleanup, account settings, or background
+sync in the same slice.

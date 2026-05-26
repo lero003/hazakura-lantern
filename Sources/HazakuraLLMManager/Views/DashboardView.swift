@@ -249,17 +249,17 @@ private struct DashboardHealthCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.xl) {
-            Label("Endpoint Health", systemImage: "heart.pulsewave")
+            Label("Endpoint Health", systemImage: "heart")
                 .font(DesignTokens.Font.subheading)
                 .foregroundStyle(.primary.opacity(DesignTokens.Opacity.textPrimary))
 
             HStack(alignment: .top, spacing: DesignTokens.Spacing.xl) {
                 Label {
                     VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
-                        Text(controller.endpointHealthStatus.title)
+                        Text(controller.endpointHealthStatus.localizedTitle)
                             .font(DesignTokens.Font.body)
 
-                        if let detail = controller.endpointHealthStatus.detail {
+                        if let detail = controller.endpointHealthStatus.localizedDetail {
                             Text(detail)
                                 .font(DesignTokens.Font.caption)
                                 .foregroundStyle(.secondary)

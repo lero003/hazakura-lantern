@@ -82,6 +82,6 @@ ready until these are checked or explicitly deferred:
 - launch-at-login
 - menu-bar-only lifecycle changes
 - automatic restart policy
-- model download or runtime install/update
+- model acquisition or runtime install/update
 - hidden command changes
 - multiple-profile management

@@ -64,6 +64,7 @@ quiet and a design note fixes the next runtime boundary.
 ### Lantern owns
 
 - profile storage
+- a narrow, user-triggered GGUF acquisition page when implemented
 - command construction and command preview
 - path validation for user-selected files and executables
 - direct process lifecycle control where applicable
@@ -76,7 +77,8 @@ quiet and a design note fixes the next runtime boundary.
 
 ### Lantern does not own
 
-- model search or downloads
+- persistent model library management, download history, model ranking, or
+  marketplace behavior
 - model conversion
 - bundled inference engines
 - runtime installation or updates
@@ -97,6 +99,19 @@ quiet and a design note fixes the next runtime boundary.
 - runtime-specific endpoints when documented
 - runtime-specific health URLs when adapter-scoped
 - one explicitly designed second runtime lane after `llama-server` is quiet
+
+### Lantern may acquire
+
+- one user-selected GGUF file from Hugging Face into a user-selected local
+  directory
+- a best-effort LM Studio-style directory layout such as
+  `<models>/<owner>/<repo>/<file.gguf>` without depending on LM Studio internals
+- visible download progress, cancellation, failure wording, and best-effort
+  resume for the active task
+
+Acquisition is not management. Lantern should not keep a model database,
+download history, ratings, usage tracking, cleanup policy, automatic sync, or
+background downloader. See `docs/gguf_acquisition.md`.
 
 Pass-through is not ownership. If a runtime changes, Lantern should fail clearly,
 not silently invent behavior.
@@ -139,10 +154,11 @@ personal/local use. It keeps the existing `llama-server` control boundary,
 adds explicit public license and contribution metadata on top of `v1.5.0`, and
 does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
 binary distribution artifacts. The previous public source-only checkpoint was
-`v1.5.0`. The 2026-05-24 helper and desktop smoke passes now verify source
-builds, app launch cleanup, Setup Guide narrow-window behavior, and real local
-Smoke Console requests. This remains source-only evidence; a separate normal
-desktop release pass is still required before any packaged app release.
+`v1.5.0`. The 2026-05-24 helper smoke and 2026-05-25 normal desktop smoke now
+verify source builds, local bundle launch cleanup, Setup Guide behavior, real
+local Smoke Console requests, toolbar profile panel presentation, and menu-bar
+Stop/quit cleanup. This remains source-only evidence; a packaged-release pass
+still needs the actual distributed artifact path and full release review.
 
 Packaged release work remains separate from source milestones. Automation
 should keep code quality boring, close small verified `llama-server` daily-use
@@ -331,12 +347,15 @@ Already done or mostly done:
 
 Remaining before a packaged app release:
 
-- restore or externally verify the app-bundle helper launch path, then record a
-  normal desktop/manual launch and clean-quit pass
+- keep the normal desktop/manual launch and clean-quit smoke fresh after
+  UI/lifecycle changes, then repeat it against the actual distributed
+  packaged-artifact path when packaging work is explicitly in scope
 - resolve the pre-release UI blockers for the menu bar, toolbar, and Setup
   Guide additions:
-  - verify menu bar daily-use behavior on a normal macOS desktop
-  - verify the reduced toolbar after the menu bar becomes the resident surface
+  - verify remaining menu bar copy behavior and one final Open Window
+    regression check on a normal macOS desktop
+  - verify remaining reduced-toolbar copy menu behavior after future toolbar
+    changes
   - confirm the Setup Guide inspector helps onboarding without crowding the
     main flow
   - run a manual UI smoke pass across main window, Setup Guide inspector, menu
@@ -540,9 +559,9 @@ Completion criteria:
   misleading UI
 - profile portability warnings are advisory and clear
 - README, troubleshooting, current status, and changelog match behavior
-- no new adapter, custom command profile, endpoint auto-polling, model download,
-  runtime install/update, multiple-profile management, LAN/auth, chat, proxy,
-  or packaged artifact work starts in this lane
+- no new adapter, custom command profile, endpoint auto-polling, model library
+  management, runtime install/update, multiple-profile management, LAN/auth,
+  chat, proxy, or packaged artifact work starts in this lane
 
 ## v0.5 - Post-Public Issue Triage And Automation Discipline
 
@@ -597,9 +616,9 @@ Completion criteria:
 - presets are advisory and user-reviewable
 - speculative decoding stays off unless a future preset or user explicitly
   marks the selected model as compatible
-- no model download, conversion, catalog, benchmark UI, runtime install/update,
-  endpoint auto-polling, multiple-profile management, or adapter expansion is
-  introduced
+- no model library management, download history, conversion, catalog ownership,
+  benchmark UI, runtime install/update, endpoint auto-polling,
+  multiple-profile management, or adapter expansion is introduced
 - profile schema version `1` remains valid unless a concrete migration design
   is accepted
 
@@ -667,9 +686,9 @@ Completion criteria:
 - toolbar actions remain limited to Setup Guide, profile import/export, and
   copy behavior without adding hidden side effects
 - menu bar actions mirror existing behavior and do not add hidden side effects
-- no endpoint auto-polling, launch-at-login, automatic restart, model download,
-  runtime install/update, menu-bar-only lifecycle change, multiple-profile
-  management, or adapter expansion is introduced
+- no endpoint auto-polling, launch-at-login, automatic restart, model library
+  management, runtime install/update, menu-bar-only lifecycle change,
+  multiple-profile management, or adapter expansion is introduced
 - automation may complete v0.8 without another human prompt if each slice stays
   within these constraints
 
@@ -700,7 +719,7 @@ Completion criteria:
   metadata and local build-number evidence are comparable
 - no package manager, git checkout, download, file replacement, or install
   command is executed
-- update work remains separate from model downloads and packaged app release
+- update work remains separate from GGUF acquisition and packaged app release
 - automation may complete v0.9 without another human prompt if it remains
   non-mutating and advisory
 
@@ -877,7 +896,8 @@ These may become useful, but they should not slip into earlier lanes casually:
 - LAN exposure controls
 - optional local authentication guidance
 - metrics or benchmark display
-- richer runtime setup assistant that remains documentation-first
+- richer runtime setup assistant that remains documentation-first, except for
+  the explicitly bounded GGUF acquisition page
 - custom command profiles
 - Ollama or other daemon-style adapters
 - agent-facing integration notes
@@ -889,7 +909,7 @@ Treat each as a design decision with its own trade-offs, not incidental polish.
 Do not use this project for:
 
 - chat UI
-- model search or downloads
+- model library management, ranking, catalog ownership, or download history
 - model conversion
 - bundled inference engines
 - runtime installer or updater
@@ -910,10 +930,13 @@ smoke-driven rough-edge fixes that culminated in the `v1.5.x` source-only
 checkpoints. Prefer work that proves the selected local runtime is actually
 usable after launch over work that merely advances a version label.
 
-The open release-quality gates are the menu bar daily-use verification, reduced
-toolbar verification, Setup Guide inspector review, app launch/clean-quit
-smoke, and one manual UI smoke pass that covers the main window, Setup Guide,
-menu bar, toolbar, logs, and quit behavior.
+The open release-quality gates are the remaining menu bar copy verification,
+one final Open Window regression check, reduced-toolbar copy menu verification,
+successful profile export/import round-trip smoke when local file mutation is
+in scope, Setup Guide inspector review against configuration flow,
+packaged-artifact-specific launch/clean-quit smoke, and one final manual UI
+smoke pass that covers the main window, Setup Guide, menu bar, toolbar, logs,
+and quit behavior.
 
 For pre-release rough-edge discovery that does not fit the smoke lane, use
 `docs/automation_smoke_backlog.md`; it is the allowed source for one small
@@ -991,7 +1014,8 @@ Rules for automated work:
   boundaries are intentionally revisited
 - do not add multiple-profile management while the source-only checkpoint only
   promises active-profile import/export
-- do not add model download or install flows
+- do not expand GGUF acquisition beyond the bounded page in
+  `docs/gguf_acquisition.md`
 - do not turn advisory runtime/version status into unattended update execution
 - do not add automatic benchmarking or hidden optimal-setting discovery
 - do not mutate GitHub settings, secrets, collaborators, branch protection,
@@ -1017,7 +1041,8 @@ Evaluate new ideas with these questions:
 2. Does this make endpoint reuse easier?
 3. Does this reduce surprise around process state, logs, or restart behavior?
 4. Does this preserve the existing-runtime boundary?
-5. Can it be tested without requiring a real model download?
+5. If it touches GGUF acquisition, can search/download behavior be tested with
+   fakes or fixtures before any real network download?
 6. Can it be documented without turning Lantern into a runtime tutorial?
 7. If it checks runtime versions or update availability, is that advisory and
    adapter-scoped?

@@ -32,21 +32,23 @@ Only `LlamaServerAdapter` is implemented for the current source release
 candidate.
 
 Near-term work should keep improving the existing `llama-server` path before
-adding runtime breadth. The next product value is model-family guidance for
-existing GGUF models: visible recommended settings, option compatibility, and
-advisory presets that help a user start from a sensible configuration without
-making Lantern a model manager.
+adding runtime breadth. The next product value is model-family guidance and
+small acquisition help for GGUF models: visible recommended settings, option
+compatibility, advisory presets, and a separate user-triggered Hugging Face GGUF
+download page that saves one selected `.gguf` into a user-selected directory.
+This should help a user start from a sensible configuration without making
+Lantern a model manager.
 
 A second runtime such as an MLX-based server is deferred until after the
 `llama-server` preset, runtime-advisory, toolbar, and guarded update lanes are
 useful. It still requires a design note that fixes the command, model
 reference, endpoint, health, and profile boundaries before implementation.
 
-Custom command profiles, Ollama, runtime catalogs, model downloads, unattended
-package-manager mutation, and broad adapter expansion are not current roadmap
-lanes. A guarded `llama-server` update workflow is allowed only after Lantern
-can explain the selected runtime source, show what will change, and require
-user confirmation.
+Custom command profiles, Ollama, runtime catalogs, model library management,
+download history, unattended model downloads, unattended package-manager
+mutation, and broad adapter expansion are not current roadmap lanes. A guarded
+`llama-server` update workflow is allowed only after Lantern can explain the
+selected runtime source, show what will change, and require user confirmation.
 
 ## Deferred Work
 

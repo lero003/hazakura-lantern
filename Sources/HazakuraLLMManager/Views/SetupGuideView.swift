@@ -297,7 +297,7 @@ struct SetupGuideView: View {
                                 Text("API Health:")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
-                                Text(controller.endpointHealthStatus.title)
+                                Text(controller.endpointHealthStatus.localizedTitle)
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(healthColor(controller.endpointHealthStatus))
                             }
@@ -566,11 +566,7 @@ struct SetupGuideView: View {
     }
 
     private var healthAccessibilityValue: String {
-        if let detail = controller.endpointHealthStatus.detail {
-            "\(controller.endpointHealthStatus.title). \(detail)"
-        } else {
-            controller.endpointHealthStatus.title
-        }
+        controller.endpointHealthStatus.localizedAccessibilityValue
     }
 }
 

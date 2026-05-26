@@ -258,8 +258,11 @@ Use these targets for post-v1.5 smoke polish:
 - explicitly approximate token count and decode rate when usage is unavailable
 
 Do not add saved conversations, multi-turn history, prompt libraries, RAG/tools,
-attachments, model catalog/search/download/conversion, cloud model support,
-automatic endpoint polling, benchmark ranking, or runtime optimization.
+attachments, model library management, download history, model
+catalog-ownership, model conversion, cloud model support, automatic endpoint
+polling, benchmark ranking, or runtime optimization. User-triggered GGUF
+search/download belongs to the bounded acquisition lane in
+`docs/gguf_acquisition.md`, not the Smoke Console lane.
 
 ## External Proposal Intake
 
@@ -441,8 +444,8 @@ Already covered on current `main`:
 
 Human decision:
 
-- decide whether the in-app Hugging Face search link stays, is demoted to docs,
-  or gets stronger no-download/no-catalog wording
+- the in-app Hugging Face direction is now a bounded GGUF acquisition lane, not
+  a model catalog or persistent manager
 - decide whether the Homebrew command copy button remains in Setup Guide or
   moves to docs-only setup guidance
 
@@ -489,7 +492,7 @@ behavior, or one testable controller boundary:
   Japanese app UI resources is covered; revisit only when a new localization
   resource class appears
 - endpoint-use guidance that stays local and does not introduce chat, proxy,
-  model download, or remote exposure behavior
+  unbounded model management, or remote exposure behavior
 - fake-driven `ServerController` state-transition tests for existing start,
   stop, restart, early-crash, or port-conflict-like behavior
 - lightweight `Logger` instrumentation for app lifecycle or controller events
@@ -679,8 +682,8 @@ A good automated polish slice should answer all of these:
 - What exact rough edge is being fixed?
 - Which view, command, or doc owns it?
 - How was it verified?
-- Did it avoid runtime installs, package-manager mutation, model downloads,
-  GitHub mutation, and hidden background behavior?
+- Did it avoid runtime installs, package-manager mutation, unbounded model
+  management, GitHub mutation, and hidden background behavior?
 - Is the remaining risk recorded if verification was only source-level?
 
 If these cannot be answered, do a verified no-op or update this backlog with

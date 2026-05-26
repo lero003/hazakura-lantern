@@ -43,8 +43,8 @@ struct EndpointView: View {
                     HStack(alignment: .top, spacing: DesignTokens.Spacing.xl) {
                         Label {
                             VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
-                                Text(controller.endpointHealthStatus.title)
-                                if let detail = controller.endpointHealthStatus.detail {
+                                Text(controller.endpointHealthStatus.localizedTitle)
+                                if let detail = controller.endpointHealthStatus.localizedDetail {
                                     Text(detail)
                                         .font(DesignTokens.Font.caption)
                                         .foregroundStyle(.secondary)
@@ -183,11 +183,7 @@ struct EndpointView: View {
     }
 
     private var healthAccessibilityValue: String {
-        if let detail = controller.endpointHealthStatus.detail {
-            "\(controller.endpointHealthStatus.title). \(detail)"
-        } else {
-            controller.endpointHealthStatus.title
-        }
+        controller.endpointHealthStatus.localizedAccessibilityValue
     }
 }
 

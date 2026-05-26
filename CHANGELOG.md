@@ -4,7 +4,22 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
-No unreleased changes yet.
+### Changed
+
+- Localized app-owned endpoint health status titles and healthy/checking/
+  unchecked details in Dashboard, Endpoint, and Setup Guide surfaces, keeping
+  Japanese desktop smoke evidence readable without changing runtime-owned
+  error messages.
+- Hardened main-window presentation for the menu-bar/desktop lifecycle by
+  keeping a single shared server controller, routing Open Window through an
+  app-owned presenter, and avoiding an unavailable SF Symbol in the Dashboard
+  health card.
+- Recorded post-`v1.5.1` normal desktop smoke evidence and updated packaged
+  release gates to separate source confidence from remaining packaged-release
+  review work.
+- Documented the bounded future GGUF acquisition lane: Lantern may add a
+  user-triggered Hugging Face GGUF search/download page without becoming a
+  persistent model manager.
 
 ## v1.5.1 - 2026-05-25
 

@@ -42,6 +42,13 @@
 "Endpoint" = "Endpoint";
 "Endpoint Health" = "Endpoint Health";
 "Endpoint is not available for the current configuration." = "Endpoint is not available for the current configuration.";
+"endpoint_health.checking.detail" = "Requesting the local health endpoint...";
+"endpoint_health.checking.title" = "Checking";
+"endpoint_health.healthy.detail" = "Manual health check passed. This is a snapshot, not automatic polling.";
+"endpoint_health.healthy.title" = "Healthy (HTTP %d)";
+"endpoint_health.unchecked.detail" = "Run a manual check after the server is started.";
+"endpoint_health.unchecked.title" = "Not checked";
+"endpoint_health.unhealthy.title" = "Unhealthy";
 "English" = "English";
 "Environment Variables" = "Environment Variables";
 "Export" = "Export";

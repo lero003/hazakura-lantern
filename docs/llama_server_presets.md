@@ -117,7 +117,8 @@ but the user must be able to review and edit the resulting configuration.
 
 ## Non-Goals
 
-- model search, download, conversion, or catalog behavior
+- model library management, download history, conversion, ranking, or catalog
+  ownership
 - automatic benchmarking
 - automatic optimal-setting discovery
 - runtime installation or update

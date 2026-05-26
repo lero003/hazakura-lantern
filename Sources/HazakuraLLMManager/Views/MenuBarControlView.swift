@@ -4,7 +4,6 @@ import HazakuraLLMManagerCore
 
 struct MenuBarControlView: View {
     @ObservedObject var controller: ServerController
-    @Environment(\.openWindow) private var openWindow
     @State private var didCopyFromMenuBar = false
     @State private var menuBarCopyGeneration = 0
 
@@ -180,12 +179,7 @@ struct MenuBarControlView: View {
     }
 
     private func openMainWindow() {
-        if let window = NSApplication.shared.windows.first(where: { $0.canBecomeMain }) {
-            window.makeKeyAndOrderFront(nil)
-        } else {
-            openWindow(id: "main")
-        }
-
+        NotificationCenter.default.post(name: .hazakuraShowMainWindow, object: nil)
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
     }

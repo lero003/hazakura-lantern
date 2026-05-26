@@ -32,9 +32,9 @@ Before asking for current release feedback, gather:
 - verification results: `swift test`, `swift build --disable-sandbox`,
   localization lint if resources changed, and `git diff --check`
 - current release gates from `docs/current_status.md` and `docs/roadmap.md`
-- known packaged-release boundary: helper and desktop smoke evidence is current
-  for source-only confidence, but no packaged `.app`, zip, dmg, signing,
-  notarization, checksum, or release asset claim is included
+- known packaged-release boundary: helper and normal desktop smoke evidence is
+  current for source-only confidence, but no packaged `.app`, zip, dmg,
+  signing, notarization, checksum, or release asset claim is included
 
 For future-direction feedback, send the product boundary from
 `docs/roadmap.md` and the non-goals from `README.md` instead of a feature wish
@@ -57,14 +57,16 @@ Product boundary:
 - Lantern supervises an existing local llama-server process.
 - It shows selected paths, command preview, process status, bounded logs, local
   endpoint, profile import/export, and copyable client snippets.
-- It does not provide chat, model download, model conversion, proxy behavior,
-  runtime installation, automatic runtime updates, LAN/auth, or bundled
-  inference.
+- It does not provide chat, model library management, model conversion, proxy
+  behavior, runtime installation, automatic runtime updates, LAN/auth, or
+  bundled inference. A future bounded GGUF acquisition page may download one
+  user-selected file into a user-selected directory.
 
 Known evidence:
 - SwiftPM verification should be evaluated from the latest local/CI results.
 - Helper launch verification, Setup Guide narrow-window checks, real local
-  Smoke Console requests, and cleanup checks have current local evidence.
+  Smoke Console requests, toolbar profile panel presentation, menu-bar Stop,
+  and cleanup checks have current local evidence.
 - Packaged `.app`, zip, dmg, signing, notarization, checksum, and GitHub
   Release assets remain out of scope for this checkpoint.
 
@@ -76,9 +78,9 @@ Please review:
 5. Are there small release-quality improvements that fit the current
    llama-server boundary?
 
-Please avoid recommending chat, model download, proxy behavior, runtime
-installer/updater execution, public GitHub mutation, or packaged release actions
-unless you classify them as future/human-decision work.
+Please avoid recommending chat, model library management, proxy behavior,
+runtime installer/updater execution, public GitHub mutation, or packaged release
+actions unless you classify them as future/human-decision work.
 ```
 
 ## Paste-Ready Future Direction Request
