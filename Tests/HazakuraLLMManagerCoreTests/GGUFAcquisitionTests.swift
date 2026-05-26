@@ -138,6 +138,33 @@ final class GGUFAcquisitionTests: XCTestCase {
         )
     }
 
+    func testClientSearchFiltersUnsupportedRepositoryIDs() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"id": "owner/model-GGUF", "author": "owner"},
+                  {"id": "owner", "author": "owner"},
+                  {"id": "owner//model-GGUF", "author": "owner"},
+                  {"id": "owner/../model-GGUF", "author": "owner"},
+                  {"id": "owner\\\\name/model-GGUF", "author": "owner"},
+                  {"modelId": "fallback/model-GGUF", "author": "fallback"}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "qwen", limit: 10)
+
+        XCTAssertEqual(results.map(\.id), ["owner/model-GGUF", "fallback/model-GGUF"])
+    }
+
     func testClientListsGGUFFilesWithSizesAndDownloadURLs() async throws {
         let session = makeSession { request in
             XCTAssertEqual(request.url?.path, "/api/models/owner/model-GGUF/tree/main")
@@ -196,6 +223,34 @@ final class GGUFAcquisitionTests: XCTestCase {
         let files = try await client.listGGUFFiles(repoID: "owner/model-GGUF")
 
         XCTAssertEqual(files.map(\.path), ["nested/model-Q4.gguf"])
+    }
+
+    func testClientRejectsUnsafeRepoIDsBeforeListingFiles() async throws {
+        let session = makeSession { _ in
+            XCTFail("Unsafe repository ids should not reach the public API request.")
+            return (200, Data("[]".utf8), [:])
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let unsafeRepoIDs = [
+            "owner",
+            "owner//model-GGUF",
+            "owner/./model-GGUF",
+            "owner/../model-GGUF",
+            "owner\\name/model-GGUF"
+        ]
+
+        for repoID in unsafeRepoIDs {
+            do {
+                _ = try await client.listGGUFFiles(repoID: repoID)
+                XCTFail("Expected \(repoID) to be rejected.")
+            } catch let error as GGUFAcquisitionError {
+                XCTAssertEqual(error, .invalidRepositoryID(repoID))
+            }
+        }
     }
 
     func testDownloaderResumesExistingPartialFileWithRangeRequest() async throws {

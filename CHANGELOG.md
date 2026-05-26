@@ -14,6 +14,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Hardened GGUF Acquisition repository-id handling so unsupported Hugging Face
+  search-result ids are filtered before selection, and unsafe ids are rejected
+  before listing repository files.
 - Localized app-owned endpoint health status titles and healthy/checking/
   unchecked details in Dashboard, Endpoint, and Setup Guide surfaces, keeping
   Japanese desktop smoke evidence readable without changing runtime-owned

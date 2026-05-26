@@ -35,13 +35,13 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         let response: [ModelSearchResponse] = try await decode(components)
         return response.compactMap { item in
             guard let id = item.id ?? item.modelId,
-                  id.contains("/")
+                  let normalizedID = try? normalizeRepoID(id)
             else {
                 return nil
             }
 
             return HuggingFaceGGUFRepository(
-                id: id,
+                id: normalizedID,
                 author: item.author,
                 lastModified: item.lastModified ?? item.createdAt,
                 tags: item.tags ?? [],
@@ -128,7 +128,12 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
     private func normalizeRepoID(_ repoID: String) throws -> String {
         let components = repoID.split(separator: "/", omittingEmptySubsequences: false)
         guard components.count == 2,
-              components.allSatisfy({ !$0.isEmpty && $0 != "." && $0 != ".." })
+              components.allSatisfy({
+                  !$0.isEmpty
+                      && $0 != "."
+                      && $0 != ".."
+                      && !$0.contains("\\")
+              })
         else {
             throw GGUFAcquisitionError.invalidRepositoryID(repoID)
         }
