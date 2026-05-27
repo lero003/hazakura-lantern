@@ -138,6 +138,9 @@ Implemented scope:
 - GGUF Acquisition search parsing now also treats malformed advisory
   repository metadata such as `author`, dates, and `tags` as optional, so a
   compatible safe repository id remains selectable when display metadata drifts.
+- GGUF Acquisition public API parsing now also skips malformed search identity
+  fields and repository tree entry type/path fields per entry, so compatible
+  repositories and `.gguf` files in the same response remain selectable.
 - GGUF Acquisition search parsing now also treats negative advisory
   `downloads` / `likes` counts as unknown metadata, keeping compatible public
   repository results selectable without trusting impossible count values.
@@ -689,13 +692,13 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF advisory metadata parsing pass):
+Current source-verification status (2026-05-28 malformed GGUF public API entry parsing pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (289 XCTest tests, 0 failures), and
+`swift test` (291 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so malformed advisory Hugging Face search metadata such as `author`,
-dates, and `tags` is ignored while compatible safe repository ids remain
-selectable.
+coverage so malformed Hugging Face search identity fields and repository tree
+entry type/path fields are skipped per entry while compatible repositories and
+`.gguf` files in the same fake API response remain selectable.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

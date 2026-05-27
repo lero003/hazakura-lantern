@@ -76,7 +76,10 @@ numeric-string shaped and ignored when malformed or negative so compatible
 repositories and files remain selectable.
 Other search-result display metadata, such as `author`, dates, and `tags`, is
 also advisory: malformed values are ignored instead of rejecting an otherwise
-compatible safe repository id.
+compatible safe repository id. Malformed search identity fields and repository
+tree entry type/path fields are skipped per entry, so one incompatible public
+API item does not hide other compatible repositories or `.gguf` files in the
+same response.
 
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file

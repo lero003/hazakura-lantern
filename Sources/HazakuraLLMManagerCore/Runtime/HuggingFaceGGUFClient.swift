@@ -198,8 +198,8 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            id = try container.decodeIfPresent(String.self, forKey: .id)
-            modelId = try container.decodeIfPresent(String.self, forKey: .modelId)
+            id = Self.decodeOptionalString(from: container, forKey: .id)
+            modelId = Self.decodeOptionalString(from: container, forKey: .modelId)
             author = Self.decodeOptionalString(from: container, forKey: .author)
             lastModified = Self.decodeOptionalString(from: container, forKey: .lastModified)
             createdAt = Self.decodeOptionalString(from: container, forKey: .createdAt)
@@ -279,9 +279,16 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            type = try container.decodeIfPresent(String.self, forKey: .type)
-            path = try container.decodeIfPresent(String.self, forKey: .path)
+            type = Self.decodeOptionalString(from: container, forKey: .type)
+            path = Self.decodeOptionalString(from: container, forKey: .path)
             size = Self.decodeOptionalInt64(from: container, forKey: .size)
+        }
+
+        private static func decodeOptionalString(
+            from container: KeyedDecodingContainer<CodingKeys>,
+            forKey key: CodingKeys
+        ) -> String? {
+            try? container.decodeIfPresent(String.self, forKey: key)
         }
 
         private static func decodeOptionalInt64(

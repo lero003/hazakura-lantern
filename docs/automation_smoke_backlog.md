@@ -43,12 +43,16 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF advisory metadata parsing pass):
+Latest source-verification result (2026-05-28 malformed GGUF public API entry parsing pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 289 XCTest tests, 0 failures.
+- `swift test` passed: 291 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
+- GGUF Acquisition public API parsing now skips malformed search identity
+  fields and repository tree entry type/path fields per entry, so compatible
+  repositories and `.gguf` files in the same fake API response remain
+  selectable without starting a live download.
 - GGUF Acquisition search parsing now treats malformed advisory repository
   metadata such as `author`, dates, and `tags` as optional, keeping compatible
   safe repository ids selectable without starting a live download.

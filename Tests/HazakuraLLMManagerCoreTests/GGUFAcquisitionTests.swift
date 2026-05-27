@@ -339,6 +339,30 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(results[1].tags, ["gguf", "qwen"])
     }
 
+    func testClientSearchSkipsMalformedIdentityFieldsWithoutDroppingCompatibleResults() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"id": 42, "modelId": ["owner/model-GGUF"]},
+                  {"id": "owner/valid-GGUF"},
+                  {"id": {"name": "bad"}, "modelId": "fallback/valid-GGUF"}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "qwen", limit: 10)
+
+        XCTAssertEqual(results.map(\.id), ["owner/valid-GGUF", "fallback/valid-GGUF"])
+    }
+
     func testClientListsGGUFFilesWithSizesAndDownloadURLs() async throws {
         let session = makeSession { request in
             XCTAssertEqual(request.url?.path, "/api/models/owner/model-GGUF/tree/main")
@@ -409,6 +433,30 @@ final class GGUFAcquisitionTests: XCTestCase {
                 [
                   {"type": "file", "size": 100},
                   {"path": "missing-type.gguf", "size": 101},
+                  {"type": "file", "path": "nested/model-Q4.gguf", "size": 1234}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let files = try await client.listGGUFFiles(repoID: "owner/model-GGUF")
+
+        XCTAssertEqual(files.map(\.path), ["nested/model-Q4.gguf"])
+    }
+
+    func testClientIgnoresMalformedTreeIdentityFields() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"type": 42, "path": "numeric-type.gguf", "size": 100},
+                  {"type": "file", "path": ["array-path.gguf"], "size": 101},
                   {"type": "file", "path": "nested/model-Q4.gguf", "size": 1234}
                 ]
                 """.utf8),

@@ -29,6 +29,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition search parsing so malformed advisory repository
   metadata such as `author`, dates, and `tags` does not reject otherwise safe
   compatible repository results.
+- Hardened GGUF Acquisition public API parsing so malformed search identity
+  fields and tree entry type/path fields are skipped without dropping otherwise
+  compatible repository or `.gguf` file results.
 - Hardened GGUF Acquisition search parsing so negative advisory `downloads` /
   `likes` counts are treated as unknown metadata instead of breaking or
   polluting compatible public repository results.
