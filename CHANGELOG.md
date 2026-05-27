@@ -82,6 +82,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added focused GGUF Acquisition downloader coverage proving cancellation keeps
   the partial `.part` file for an explicit retry instead of completing the
   final `.gguf` destination.
+- Localized GGUF Acquisition status/progress copy so Japanese UI no longer
+  shows English-only download progress wording or "partial file" text.
 - Localized app-owned endpoint health status titles and healthy/checking/
   unchecked details in Dashboard, Endpoint, and Setup Guide surfaces, keeping
   Japanese desktop smoke evidence readable without changing runtime-owned

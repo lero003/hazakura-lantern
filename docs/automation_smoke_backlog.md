@@ -43,12 +43,15 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF lossy public API item parsing pass):
+Latest source-verification result (2026-05-28 GGUF localized progress copy pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
 - `swift test` passed: 294 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
+- GGUF Acquisition status/progress copy now keeps static status rows and
+  known-size progress wording on the app UI localization path, and Japanese
+  cancellation copy no longer shows "partial file" in English.
 - GGUF Acquisition public API parsing now skips malformed non-object items in
   Hugging Face search and repository tree arrays, so compatible repositories
   and `.gguf` files in the same fake API response remain selectable without

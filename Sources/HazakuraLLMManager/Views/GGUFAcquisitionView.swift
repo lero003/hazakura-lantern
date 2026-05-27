@@ -246,7 +246,11 @@ struct GGUFAcquisitionView: View {
             downloadStatus
 
             if let message = acquisition.message {
-                Label(message, systemImage: messageSystemImage)
+                Label {
+                    Text(verbatim: message)
+                } icon: {
+                    Image(systemName: messageSystemImage)
+                }
                     .font(.caption)
                     .foregroundStyle(messageForegroundStyle)
                     .fixedSize(horizontal: false, vertical: true)
@@ -309,11 +313,11 @@ struct GGUFAcquisitionView: View {
                     .lineLimit(2)
             }
         case .completed(let url):
-            statusRow(localized("Completed: %@", url.path), systemImage: "checkmark.circle")
+            verbatimStatusRow(localized("Completed: %@", url.path), systemImage: "checkmark.circle")
         case .failed(let message):
-            statusRow(message, systemImage: "exclamationmark.triangle")
+            verbatimStatusRow(message, systemImage: "exclamationmark.triangle")
         case .cancelled(let url):
-            statusRow(
+            verbatimStatusRow(
                 localized("Cancelled. Resume will use the partial file near %@.", url.lastPathComponent),
                 systemImage: "pause.circle"
             )
@@ -338,17 +342,32 @@ struct GGUFAcquisitionView: View {
         let written = ByteCountFormatter.string(fromByteCount: progress.bytesWritten, countStyle: .file)
         if let totalBytes = progress.totalBytes {
             let total = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
-            return "\(written) of \(total) -> \(destination.path)"
+            return localized("%@ of %@ -> %@", written, total, destination.path)
         }
 
-        return "\(written) -> \(destination.path)"
+        return localized("%@ -> %@", written, destination.path)
     }
 
-    private func statusRow(_ text: String, systemImage: String) -> some View {
-        Label(text, systemImage: systemImage)
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
+    private func statusRow(_ key: LocalizedStringKey, systemImage: String) -> some View {
+        Label {
+            Text(key)
+        } icon: {
+            Image(systemName: systemImage)
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func verbatimStatusRow(_ text: String, systemImage: String) -> some View {
+        Label {
+            Text(verbatim: text)
+        } icon: {
+            Image(systemName: systemImage)
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private func metadataChip(_ text: String) -> some View {

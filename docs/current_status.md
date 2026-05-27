@@ -208,6 +208,9 @@ Implemented scope:
 - GGUF Acquisition downloader cancellation now has focused coverage proving the
   partially written `.part` file remains available for an explicit retry,
   without moving an incomplete file into the final `.gguf` destination.
+- GGUF Acquisition download status and progress copy now stays localized for
+  app-owned Japanese UI, including known-size progress wording and partial-file
+  cancellation text.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
@@ -696,13 +699,13 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF lossy public API item parsing pass):
+Current source-verification status (2026-05-28 GGUF localized progress copy pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (294 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so malformed non-object items inside Hugging Face search and tree
-arrays are skipped while compatible repository and `.gguf` file entries remain
-selectable.
+`swift build --disable-sandbox` passed. The pass localized GGUF Acquisition
+status/progress copy so static status rows and known-size progress wording
+follow the selected app UI language, and Japanese cancellation copy no longer
+shows "partial file" in English.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

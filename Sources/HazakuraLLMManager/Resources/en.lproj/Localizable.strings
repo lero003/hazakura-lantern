@@ -297,6 +297,8 @@
 "Searching Hugging Face..." = "Searching Hugging Face...";
 "Select a public GGUF file, then download it into your local models directory." = "Select a public GGUF file, then download it into your local models directory.";
 "Use as Model" = "Use as Model";
+"%@ -> %@" = "%@ -> %@";
+"%@ of %@ -> %@" = "%@ of %@ -> %@";
 "smoke.error.connection_failed" = "No server responded at %@. Start the runtime or verify the configured port.";
 "smoke.error.http_status" = "Smoke request returned HTTP %d for %@.";
 "smoke.error.http_status.body" = "Smoke request returned HTTP %d for %@: %@";
