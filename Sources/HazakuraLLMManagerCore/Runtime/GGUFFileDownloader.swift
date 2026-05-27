@@ -134,7 +134,10 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
 
             try handle.close()
 
-            if let expectedBytes = request.expectedBytes,
+            if let expectedBytes = completionExpectedBytes(
+                httpResponse: httpResponse,
+                fallbackExpectedBytes: request.expectedBytes
+            ),
                writtenBytes != expectedBytes {
                 throw GGUFAcquisitionError.incompleteDownload(
                     expectedBytes: expectedBytes,
@@ -192,6 +195,23 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         }
 
         return nil
+    }
+
+    private func completionExpectedBytes(
+        httpResponse: HTTPURLResponse,
+        fallbackExpectedBytes: Int64?
+    ) -> Int64? {
+        if let fallbackExpectedBytes {
+            return fallbackExpectedBytes
+        }
+
+        guard httpResponse.statusCode == 206,
+              let contentRange = httpResponse.value(forHTTPHeaderField: "Content-Range")
+        else {
+            return nil
+        }
+
+        return Self.totalBytes(fromContentRange: contentRange)
     }
 
     static func totalBytes(fromContentRange contentRange: String) -> Int64? {
