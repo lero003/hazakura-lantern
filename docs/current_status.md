@@ -141,6 +141,9 @@ Implemented scope:
 - GGUF Acquisition public API parsing now also skips malformed search identity
   fields and repository tree entry type/path fields per entry, so compatible
   repositories and `.gguf` files in the same response remain selectable.
+- GGUF Acquisition repository tree parsing now normalizes compatible file-entry
+  type values such as `" FILE "` before accepting `.gguf` files, while still
+  ignoring non-file entries.
 - GGUF Acquisition search parsing now also treats negative advisory
   `downloads` / `likes` counts as unknown metadata, keeping compatible public
   repository results selectable without trusting impossible count values.
@@ -692,13 +695,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 malformed GGUF public API entry parsing pass):
+Current source-verification status (2026-05-28 GGUF tree file-type normalization pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (291 XCTest tests, 0 failures), and
+`swift test` (292 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so malformed Hugging Face search identity fields and repository tree
-entry type/path fields are skipped per entry while compatible repositories and
-`.gguf` files in the same fake API response remain selectable.
+coverage so compatible Hugging Face repository tree file-entry type values are
+trimmed and matched case-insensitively while non-file entries remain ignored.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

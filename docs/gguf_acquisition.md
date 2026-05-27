@@ -80,6 +80,9 @@ compatible safe repository id. Malformed search identity fields and repository
 tree entry type/path fields are skipped per entry, so one incompatible public
 API item does not hide other compatible repositories or `.gguf` files in the
 same response.
+Repository tree file-entry `type` values are trimmed and matched
+case-insensitively when they are otherwise compatible, while non-file entries
+remain ignored.
 
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file
