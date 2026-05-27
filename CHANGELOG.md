@@ -34,6 +34,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition downloads so invalid `Content-Range` totals are
   rejected before appending resume bytes, keeping the existing `.part` file
   available for an explicit retry.
+- Hardened GGUF Acquisition downloads so a complete `.part` file can still be
+  promoted when Hugging Face reports the resume range is already satisfied with
+  `416 Content-Range: bytes */N`.
 - Hardened GGUF Acquisition downloads so a response shorter than the expected
   file size remains as a resumable `.part` file instead of being promoted to a
   completed `.gguf`.

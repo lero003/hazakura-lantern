@@ -85,6 +85,15 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
                 _ = fileManager.createFile(atPath: partialURL.path, contents: Data())
             }
         case 416:
+            if partialBytes > 0,
+               Self.unsatisfiedRangeTotal(from: httpResponse.value(forHTTPHeaderField: "Content-Range")) == partialBytes {
+                if fileManager.fileExists(atPath: request.destinationURL.path) {
+                    try fileManager.removeItem(at: request.destinationURL)
+                }
+                try fileManager.moveItem(at: partialURL, to: request.destinationURL)
+                progress(GGUFDownloadProgress(bytesWritten: partialBytes, totalBytes: partialBytes))
+                return request.destinationURL
+            }
             try? fileManager.removeItem(at: partialURL)
             throw GGUFAcquisitionError.invalidHTTPStatus(httpResponse.statusCode)
         default:
@@ -228,6 +237,24 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
 
     static func resumeStart(fromContentRange contentRange: String?) -> Int64? {
         Self.contentRange(from: contentRange)?.start
+    }
+
+    private static func unsatisfiedRangeTotal(from contentRange: String?) -> Int64? {
+        guard let contentRange else {
+            return nil
+        }
+
+        let trimmed = contentRange.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.lowercased().hasPrefix("bytes */") else {
+            return nil
+        }
+
+        let total = trimmed[trimmed.index(trimmed.startIndex, offsetBy: 8)...]
+        guard let totalBytes = Int64(total), totalBytes > 0 else {
+            return nil
+        }
+
+        return totalBytes
     }
 
     private static func contentRange(from contentRange: String?) -> ContentRange? {

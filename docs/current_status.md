@@ -150,6 +150,9 @@ Implemented scope:
 - GGUF Acquisition resumed downloads now reject invalid `Content-Range` totals
   before appending bytes, so a malformed resume header cannot contaminate the
   existing `.part` retry file.
+- GGUF Acquisition resumed downloads now promote a complete `.part` file when
+  Hugging Face reports the requested resume range is not satisfiable because
+  the local partial already matches the server byte count.
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
@@ -650,12 +653,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF invalid content-range total pass):
+Current source-verification status (2026-05-27 GGUF 416 complete-partial resume pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (276 XCTest tests, 0 failures), and
+`swift test` (277 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so resumed `206 Content-Range` responses with invalid total byte
-counts fail before appending bytes to the existing `.part` file. App-bundle,
+coverage so a complete `.part` file is promoted when a resumed request receives
+`416 Content-Range: bytes */N` with a matching server byte count. App-bundle,
 real runtime smoke, and live public Hugging Face API smoke were not rerun for
 this source/core slice.
 
