@@ -74,6 +74,9 @@ Advisory numeric metadata from the public API, such as search `downloads` /
 `likes` and repository tree `size`, is accepted when it is numeric or
 numeric-string shaped and ignored when malformed or negative so compatible
 repositories and files remain selectable.
+Other search-result display metadata, such as `author`, dates, and `tags`, is
+also advisory: malformed values are ignored instead of rejecting an otherwise
+compatible safe repository id.
 
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file

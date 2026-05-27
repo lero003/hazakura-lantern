@@ -299,6 +299,46 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(results.map(\.likes), [3, nil, nil])
     }
 
+    func testClientSearchTreatsMalformedAdvisoryMetadataAsOptional() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {
+                    "id": "owner/malformed-advisory-GGUF",
+                    "author": {"name": "owner"},
+                    "lastModified": 42,
+                    "createdAt": ["2026-05-28"],
+                    "tags": [{"name": "gguf"}]
+                  },
+                  {
+                    "id": "owner/valid-advisory-GGUF",
+                    "author": "owner",
+                    "lastModified": "2026-05-28T00:00:00.000Z",
+                    "tags": ["gguf", "qwen"]
+                  }
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "qwen", limit: 10)
+
+        XCTAssertEqual(results.map(\.id), ["owner/malformed-advisory-GGUF", "owner/valid-advisory-GGUF"])
+        XCTAssertNil(results[0].author)
+        XCTAssertNil(results[0].lastModified)
+        XCTAssertEqual(results[0].tags, [])
+        XCTAssertEqual(results[1].author, "owner")
+        XCTAssertEqual(results[1].lastModified, "2026-05-28T00:00:00.000Z")
+        XCTAssertEqual(results[1].tags, ["gguf", "qwen"])
+    }
+
     func testClientListsGGUFFilesWithSizesAndDownloadURLs() async throws {
         let session = makeSession { request in
             XCTAssertEqual(request.url?.path, "/api/models/owner/model-GGUF/tree/main")

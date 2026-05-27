@@ -200,10 +200,10 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = try container.decodeIfPresent(String.self, forKey: .id)
             modelId = try container.decodeIfPresent(String.self, forKey: .modelId)
-            author = try container.decodeIfPresent(String.self, forKey: .author)
-            lastModified = try container.decodeIfPresent(String.self, forKey: .lastModified)
-            createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
-            tags = try container.decodeIfPresent([String].self, forKey: .tags)
+            author = Self.decodeOptionalString(from: container, forKey: .author)
+            lastModified = Self.decodeOptionalString(from: container, forKey: .lastModified)
+            createdAt = Self.decodeOptionalString(from: container, forKey: .createdAt)
+            tags = Self.decodeOptionalStringArray(from: container, forKey: .tags)
             gated = Self.decodeGatedValue(from: container)
             downloads = Self.decodeOptionalInt(from: container, forKey: .downloads)
             likes = Self.decodeOptionalInt(from: container, forKey: .likes)
@@ -226,6 +226,20 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             default:
                 return nil
             }
+        }
+
+        private static func decodeOptionalString(
+            from container: KeyedDecodingContainer<CodingKeys>,
+            forKey key: CodingKeys
+        ) -> String? {
+            try? container.decodeIfPresent(String.self, forKey: key)
+        }
+
+        private static func decodeOptionalStringArray(
+            from container: KeyedDecodingContainer<CodingKeys>,
+            forKey key: CodingKeys
+        ) -> [String]? {
+            try? container.decodeIfPresent([String].self, forKey: key)
         }
 
         private static func decodeOptionalInt(
