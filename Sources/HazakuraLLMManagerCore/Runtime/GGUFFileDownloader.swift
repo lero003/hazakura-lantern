@@ -87,6 +87,13 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         case 416:
             if partialBytes > 0,
                Self.unsatisfiedRangeTotal(from: httpResponse.value(forHTTPHeaderField: "Content-Range")) == partialBytes {
+                if let expectedBytes = request.expectedBytes,
+                   expectedBytes != partialBytes {
+                    throw GGUFAcquisitionError.incompleteDownload(
+                        expectedBytes: expectedBytes,
+                        actualBytes: partialBytes
+                    )
+                }
                 if fileManager.fileExists(atPath: request.destinationURL.path) {
                     try fileManager.removeItem(at: request.destinationURL)
                 }

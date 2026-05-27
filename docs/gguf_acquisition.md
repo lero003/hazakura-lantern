@@ -80,7 +80,8 @@ metadata. Resumed downloads also use a valid `Content-Range` total as a
 completion check when repository tree metadata did not include a file size.
 If a resumed request receives `416 Content-Range: bytes */N` and the local
 `.part` file already matches that server byte count, Lantern promotes the
-partial file instead of discarding the completed bytes.
+partial file instead of discarding the completed bytes, unless known expected
+file metadata disagrees with that byte count.
 Completion offers a follow-up action to set the downloaded file as Lantern's
 active model path.
 

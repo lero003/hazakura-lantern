@@ -43,15 +43,19 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-27 GGUF download-directory safety pass):
+Latest source-verification result (2026-05-27 GGUF 416 resume-size safety pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 281 XCTest tests, 0 failures.
+- `swift test` passed: 282 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - GGUF Acquisition download-directory handling now rejects typed relative paths
   instead of interpreting them from Lantern's current working directory, while
   still allowing `~` to expand to the user's home directory.
+- GGUF Acquisition resumed downloader coverage now rejects a range-not-satisfiable
+  completion response when the server byte count disagrees with known expected
+  file metadata, keeping the `.part` retry file instead of promoting a
+  mismatched final `.gguf`.
 - GGUF Acquisition search parsing now tolerates string-valued Hugging Face
   `gated` metadata such as `auto`, `manual`, or `false`, keeping compatible
   public API results selectable without adding gated-account workflow.

@@ -988,6 +988,44 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(progressValues, [GGUFDownloadProgress(bytesWritten: 8, totalBytes: 8)])
     }
 
+    func testDownloaderRejectsRangeNotSatisfiableWhenExpectedSizeDisagrees() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+        try Data("complete".utf8).write(to: partial)
+
+        let session = makeSession { request in
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Range"), "bytes=8-")
+            return (
+                416,
+                Data(),
+                [
+                    "Content-Range": "bytes */8"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination,
+                    expectedBytes: 10
+                )
+            ) { _ in }
+            XCTFail("Expected 416 completion to fail when server total disagrees with expected size.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .incompleteDownload(expectedBytes: 10, actualBytes: 8))
+        }
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "complete")
+    }
+
     func testDownloaderRestartsOversizedPartialFileWithoutRangeRequest() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

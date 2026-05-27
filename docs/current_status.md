@@ -168,6 +168,10 @@ Implemented scope:
 - GGUF Acquisition resumed downloads now promote a complete `.part` file when
   Hugging Face reports the requested resume range is not satisfiable because
   the local partial already matches the server byte count.
+- GGUF Acquisition resumed downloads now reject that `416` completion path when
+  the server byte count disagrees with known expected file metadata, keeping the
+  `.part` file available for an explicit retry instead of promoting a mismatched
+  final `.gguf`.
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
