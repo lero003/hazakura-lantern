@@ -64,6 +64,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw GGUFAcquisitionError.invalidHTTPStatus(-1)
         }
+        let contentRange = Self.contentRange(from: httpResponse.value(forHTTPHeaderField: "Content-Range"))
 
         switch httpResponse.statusCode {
         case 200:
@@ -73,7 +74,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             }
             _ = fileManager.createFile(atPath: partialURL.path, contents: Data())
         case 206:
-            let resumeStart = Self.resumeStart(fromContentRange: httpResponse.value(forHTTPHeaderField: "Content-Range"))
+            let resumeStart = contentRange?.start
             guard resumeStart == partialBytes else {
                 throw GGUFAcquisitionError.invalidResumeRange(
                     expectedStart: partialBytes,
@@ -132,6 +133,15 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
 
             try handle.close()
 
+            if httpResponse.statusCode == 206,
+               let responseEnd = contentRange?.end,
+               writtenBytes != responseEnd + 1 {
+                throw GGUFAcquisitionError.incompleteDownload(
+                    expectedBytes: responseEnd + 1,
+                    actualBytes: writtenBytes
+                )
+            }
+
             if let expectedBytes = completionExpectedBytes(
                 httpResponse: httpResponse,
                 fallbackExpectedBytes: request.expectedBytes
@@ -182,8 +192,8 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             return expectedBytes
         }
 
-        if let contentRange = httpResponse.value(forHTTPHeaderField: "Content-Range"),
-           let total = Self.totalBytes(fromContentRange: contentRange) {
+        if let contentRange = Self.contentRange(from: httpResponse.value(forHTTPHeaderField: "Content-Range")),
+           let total = contentRange.totalBytes {
             return total
         }
 
@@ -204,36 +214,53 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         }
 
         guard httpResponse.statusCode == 206,
-              let contentRange = httpResponse.value(forHTTPHeaderField: "Content-Range")
+              let contentRange = Self.contentRange(from: httpResponse.value(forHTTPHeaderField: "Content-Range"))
         else {
             return nil
         }
 
-        return Self.totalBytes(fromContentRange: contentRange)
+        return contentRange.totalBytes
     }
 
     static func totalBytes(fromContentRange contentRange: String) -> Int64? {
-        guard let slashIndex = contentRange.lastIndex(of: "/") else {
-            return nil
-        }
-
-        let total = contentRange[contentRange.index(after: slashIndex)...]
-        return Int64(total)
+        Self.contentRange(from: contentRange)?.totalBytes
     }
 
     static func resumeStart(fromContentRange contentRange: String?) -> Int64? {
+        Self.contentRange(from: contentRange)?.start
+    }
+
+    private static func contentRange(from contentRange: String?) -> ContentRange? {
         guard let contentRange else {
             return nil
         }
 
         let trimmed = contentRange.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.lowercased().hasPrefix("bytes "),
-              let dashIndex = trimmed.firstIndex(of: "-")
+              let dashIndex = trimmed.firstIndex(of: "-"),
+              let slashIndex = trimmed.lastIndex(of: "/"),
+              dashIndex < slashIndex
         else {
             return nil
         }
 
         let start = trimmed[trimmed.index(trimmed.startIndex, offsetBy: 6)..<dashIndex]
-        return Int64(start)
+        let end = trimmed[trimmed.index(after: dashIndex)..<slashIndex]
+        let total = trimmed[trimmed.index(after: slashIndex)...]
+        guard let startBytes = Int64(start),
+              let endBytes = Int64(end),
+              endBytes >= startBytes
+        else {
+            return nil
+        }
+
+        let totalBytes = total == "*" ? nil : Int64(total)
+        return ContentRange(start: startBytes, end: endBytes, totalBytes: totalBytes)
+    }
+
+    private struct ContentRange {
+        var start: Int64
+        var end: Int64
+        var totalBytes: Int64?
     }
 }

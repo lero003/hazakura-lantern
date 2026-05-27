@@ -483,6 +483,44 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "hello worl")
     }
 
+    func testDownloaderRejectsShortResumeWhenContentRangeEndIsKnown() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+        try Data("hello ".utf8).write(to: partial)
+
+        let session = makeSession { request in
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Range"), "bytes=6-")
+            return (
+                206,
+                Data("worl".utf8),
+                [
+                    "Content-Range": "bytes 6-10/*",
+                    "Content-Length": "4"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination
+                )
+            ) { _ in }
+            XCTFail("Expected a short resumed response to stay partial when Content-Range declares the response end.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .incompleteDownload(expectedBytes: 11, actualBytes: 10))
+        }
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "hello worl")
+    }
+
     func testDownloaderRestartsPartialFileWhenServerIgnoresRangeRequest() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

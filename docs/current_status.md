@@ -144,6 +144,9 @@ Implemented scope:
   a valid `Content-Range` header when Hugging Face tree metadata did not provide
   a file size, keeping short resumed responses as `.part` files instead of
   promoting incomplete `.gguf` files.
+- GGUF Acquisition resumed downloads now also validate the byte count implied
+  by the `Content-Range` end byte, so short range bodies stay as `.part` files
+  even when the total size is unknown.
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
