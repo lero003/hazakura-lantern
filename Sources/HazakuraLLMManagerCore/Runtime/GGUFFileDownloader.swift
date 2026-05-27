@@ -73,14 +73,12 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             }
             _ = fileManager.createFile(atPath: partialURL.path, contents: Data())
         case 206:
-            if partialBytes > 0 {
-                let resumeStart = Self.resumeStart(fromContentRange: httpResponse.value(forHTTPHeaderField: "Content-Range"))
-                guard resumeStart == partialBytes else {
-                    throw GGUFAcquisitionError.invalidResumeRange(
-                        expectedStart: partialBytes,
-                        actualStart: resumeStart
-                    )
-                }
+            let resumeStart = Self.resumeStart(fromContentRange: httpResponse.value(forHTTPHeaderField: "Content-Range"))
+            guard resumeStart == partialBytes else {
+                throw GGUFAcquisitionError.invalidResumeRange(
+                    expectedStart: partialBytes,
+                    actualStart: resumeStart
+                )
             }
             if !fileManager.fileExists(atPath: partialURL.path) {
                 _ = fileManager.createFile(atPath: partialURL.path, contents: Data())
