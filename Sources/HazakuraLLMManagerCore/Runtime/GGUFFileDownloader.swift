@@ -31,6 +31,8 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         )
 
         let partialURL = GGUFDownloadDestination.partialURL(for: request.destinationURL)
+        try rejectDirectory(at: request.destinationURL)
+        try rejectDirectory(at: partialURL)
         if let expectedBytes = request.expectedBytes,
            existingFileSize(at: request.destinationURL) == expectedBytes {
             try? fileManager.removeItem(at: partialURL)
@@ -196,6 +198,17 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         }
 
         return size.int64Value
+    }
+
+    private func rejectDirectory(at url: URL) throws {
+        var isDirectory = ObjCBool(false)
+        guard fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory),
+              isDirectory.boolValue
+        else {
+            return
+        }
+
+        throw GGUFAcquisitionError.fileSystem("Download path is a directory: \(url.path)")
     }
 
     private func totalBytes(

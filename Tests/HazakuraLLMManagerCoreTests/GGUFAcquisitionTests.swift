@@ -1157,6 +1157,80 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "partial")
     }
 
+    func testDownloaderRejectsDirectoryDestinationWithoutDeletingIt() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+
+        let session = makeSession { _ in
+            XCTFail("Directory destinations should fail before starting a network request.")
+            return (200, Data("fresh".utf8), [:])
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination,
+                    expectedBytes: 5
+                )
+            ) { _ in }
+            XCTFail("Expected existing destination directories to be rejected.")
+        } catch let error as GGUFAcquisitionError {
+            guard case .fileSystem(let message) = error else {
+                XCTFail("Expected fileSystem error, got \(error).")
+                return
+            }
+            XCTAssertTrue(message.contains(destination.path))
+        }
+
+        var isDirectory = ObjCBool(false)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: destination.path, isDirectory: &isDirectory))
+        XCTAssertTrue(isDirectory.boolValue)
+    }
+
+    func testDownloaderRejectsDirectoryPartialFileWithoutDeletingIt() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+        try FileManager.default.createDirectory(at: partial, withIntermediateDirectories: true)
+
+        let session = makeSession { _ in
+            XCTFail("Directory partial files should fail before starting a network request.")
+            return (200, Data("fresh".utf8), [:])
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination,
+                    expectedBytes: 5
+                )
+            ) { _ in }
+            XCTFail("Expected existing partial-file directories to be rejected.")
+        } catch let error as GGUFAcquisitionError {
+            guard case .fileSystem(let message) = error else {
+                XCTFail("Expected fileSystem error, got \(error).")
+                return
+            }
+            XCTAssertTrue(message.contains(partial.path))
+        }
+
+        var isDirectory = ObjCBool(false)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: partial.path, isDirectory: &isDirectory))
+        XCTAssertTrue(isDirectory.boolValue)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+    }
+
     func testDownloaderRestartsOversizedPartialFileWithoutRangeRequest() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

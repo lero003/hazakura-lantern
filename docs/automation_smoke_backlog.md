@@ -43,12 +43,16 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF Content-Length completion pass):
+Latest source-verification result (2026-05-28 GGUF directory destination safety pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 286 XCTest tests, 0 failures.
+- `swift test` passed: 288 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
+- GGUF Acquisition downloads now reject existing directory paths at the final
+  `.gguf` destination or its `.part` resume path before starting a network
+  request, keeping those directories intact instead of treating them as
+  replaceable download files.
 - GGUF Acquisition downloads now reject short successful responses when
   `Content-Length` declares a larger file size, even when Hugging Face tree
   metadata did not provide expected bytes, keeping the `.part` file available

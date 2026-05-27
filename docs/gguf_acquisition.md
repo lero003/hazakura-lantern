@@ -85,6 +85,9 @@ completion check when repository tree metadata did not include a file size.
 Fresh successful downloads also treat a positive `Content-Length` as a
 completion check, keeping short responses resumable instead of promoting a
 misleading completed `.gguf`.
+If the final `.gguf` destination path or its `.part` resume path already exists
+as a directory, Lantern fails before starting the network request and does not
+delete that directory.
 If a resumed request receives `416 Content-Range: bytes */N` and the local
 `.part` file already matches that server byte count, Lantern promotes the
 partial file instead of discarding the completed bytes, unless known expected

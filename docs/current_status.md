@@ -686,12 +686,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF 416 retry-file safety pass):
+Current source-verification status (2026-05-28 GGUF directory destination safety pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (285 XCTest tests, 0 failures), and
+`swift test` (288 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so unusable `416 Range Not Satisfiable` resume responses fail without
-deleting the existing `.part` retry file.
+coverage so existing directory paths at the final `.gguf` destination or its
+`.part` resume path fail before any network request and are not deleted.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 
