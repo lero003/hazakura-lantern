@@ -73,6 +73,15 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             }
             _ = fileManager.createFile(atPath: partialURL.path, contents: Data())
         case 206:
+            if partialBytes > 0 {
+                let resumeStart = Self.resumeStart(fromContentRange: httpResponse.value(forHTTPHeaderField: "Content-Range"))
+                guard resumeStart == partialBytes else {
+                    throw GGUFAcquisitionError.invalidResumeRange(
+                        expectedStart: partialBytes,
+                        actualStart: resumeStart
+                    )
+                }
+            }
             if !fileManager.fileExists(atPath: partialURL.path) {
                 _ = fileManager.createFile(atPath: partialURL.path, contents: Data())
             }
@@ -192,5 +201,21 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
 
         let total = contentRange[contentRange.index(after: slashIndex)...]
         return Int64(total)
+    }
+
+    static func resumeStart(fromContentRange contentRange: String?) -> Int64? {
+        guard let contentRange else {
+            return nil
+        }
+
+        let trimmed = contentRange.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.lowercased().hasPrefix("bytes "),
+              let dashIndex = trimmed.firstIndex(of: "-")
+        else {
+            return nil
+        }
+
+        let start = trimmed[trimmed.index(trimmed.startIndex, offsetBy: 6)..<dashIndex]
+        return Int64(start)
     }
 }

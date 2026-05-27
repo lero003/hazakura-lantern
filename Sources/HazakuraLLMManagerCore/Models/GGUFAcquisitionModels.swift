@@ -87,6 +87,7 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
     case invalidGGUFFilePath(String)
     case invalidDownloadDirectory(String)
     case invalidHTTPStatus(Int)
+    case invalidResumeRange(expectedStart: Int64, actualStart: Int64?)
     case emptyDownload
     case incompleteDownload(expectedBytes: Int64, actualBytes: Int64)
     case noGGUFFilesFound(String)
@@ -106,6 +107,11 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
             return "Download directory is not available: \(path)."
         case .invalidHTTPStatus(let statusCode):
             return "Hugging Face request returned HTTP \(statusCode)."
+        case .invalidResumeRange(let expectedStart, let actualStart):
+            if let actualStart {
+                return "Hugging Face resume response started at byte \(actualStart), expected byte \(expectedStart)."
+            }
+            return "Hugging Face resume response did not include a usable Content-Range header."
         case .emptyDownload:
             return "Downloaded GGUF response was empty."
         case .incompleteDownload(let expectedBytes, let actualBytes):

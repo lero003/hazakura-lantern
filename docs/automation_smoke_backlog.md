@@ -43,14 +43,15 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-27 GGUF oversized-partial pass):
+Latest source-verification result (2026-05-27 GGUF resume-range pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 271 XCTest tests, 0 failures.
+- `swift test` passed: 272 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
-- GGUF Acquisition downloader coverage now proves an oversized stale `.part`
-  resume file is discarded before retrying without a misleading Range request.
+- GGUF Acquisition downloader coverage now proves a mismatched `Content-Range`
+  resume response fails before appending bytes, keeping the existing `.part`
+  file available for an explicit retry.
 - A real local endpoint smoke pass against the selected lightweight
   `gemma-4-E2B-it-UD-Q3_K_XL` model ran with the Setup Guide inspector visible,
   showed the in-app source checkpoint as `v1.5.0`, expanded a requested 860 pt
