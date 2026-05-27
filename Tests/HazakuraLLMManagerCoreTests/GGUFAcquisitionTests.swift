@@ -165,6 +165,32 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(results.map(\.id), ["owner/model-GGUF", "fallback/model-GGUF"])
     }
 
+    func testClientSearchFallsBackToModelIDWhenIDIsUnsupported() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {
+                    "id": "owner//model-GGUF",
+                    "modelId": "fallback/model-GGUF",
+                    "author": "fallback"
+                  }
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "qwen", limit: 10)
+
+        XCTAssertEqual(results.map(\.id), ["fallback/model-GGUF"])
+    }
+
     func testClientListsGGUFFilesWithSizesAndDownloadURLs() async throws {
         let session = makeSession { request in
             XCTAssertEqual(request.url?.path, "/api/models/owner/model-GGUF/tree/main")

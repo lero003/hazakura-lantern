@@ -34,9 +34,7 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
 
         let response: [ModelSearchResponse] = try await decode(components)
         return response.compactMap { item in
-            guard let id = item.id ?? item.modelId,
-                  let normalizedID = try? normalizeRepoID(id)
-            else {
+            guard let normalizedID = normalizedRepoID(from: [item.id, item.modelId]) else {
                 return nil
             }
 
@@ -50,6 +48,20 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
                 likes: item.likes
             )
         }
+    }
+
+    private func normalizedRepoID(from candidates: [String?]) -> String? {
+        for candidate in candidates {
+            guard let candidate,
+                  let normalizedID = try? normalizeRepoID(candidate)
+            else {
+                continue
+            }
+
+            return normalizedID
+        }
+
+        return nil
     }
 
     public func listGGUFFiles(repoID: String) async throws -> [HuggingFaceGGUFFile] {

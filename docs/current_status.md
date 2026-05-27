@@ -122,6 +122,9 @@ Implemented scope:
 - GGUF Acquisition search results now normalize repository ids with the same
   owner/repository safety rule used before listing files, so unsupported ids
   are filtered before they can become selectable download candidates.
+- GGUF Acquisition search parsing now falls back to a supported `modelId` when
+  a public Hugging Face search result also includes an unsupported `id`, keeping
+  compatible public API results selectable without widening download scope.
 - GGUF Acquisition destination construction now revalidates repository and
   file-path components before creating the local `<owner>/<repo>/<file.gguf>`
   path, so unsafe paths are rejected even if they bypass the tree parser.
@@ -653,14 +656,13 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF 416 complete-partial resume pass):
+Current source-verification status (2026-05-27 GGUF search modelId fallback pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (277 XCTest tests, 0 failures), and
+`swift test` (278 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so a complete `.part` file is promoted when a resumed request receives
-`416 Content-Range: bytes */N` with a matching server byte count. App-bundle,
-real runtime smoke, and live public Hugging Face API smoke were not rerun for
-this source/core slice.
+coverage so search responses can fall back to a supported `modelId` when the
+same result includes an unsupported `id`. App-bundle, real runtime smoke, and
+live public Hugging Face API smoke were not rerun for this source/core slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with
