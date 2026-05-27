@@ -101,7 +101,6 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
                 progress(GGUFDownloadProgress(bytesWritten: partialBytes, totalBytes: partialBytes))
                 return request.destinationURL
             }
-            try? fileManager.removeItem(at: partialURL)
             throw GGUFAcquisitionError.invalidHTTPStatus(httpResponse.statusCode)
         default:
             throw GGUFAcquisitionError.invalidHTTPStatus(httpResponse.statusCode)

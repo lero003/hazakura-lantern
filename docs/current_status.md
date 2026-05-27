@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-27
+Last reviewed: 2026-05-28
 
 ## Project State
 
@@ -179,6 +179,9 @@ Implemented scope:
   the server byte count disagrees with known expected file metadata, keeping the
   `.part` file available for an explicit retry instead of promoting a mismatched
   final `.gguf`.
+- GGUF Acquisition resumed downloads now also keep the existing `.part` retry
+  file when a `416 Range Not Satisfiable` response does not include a usable
+  server byte count, failing clearly without discarding retry bytes.
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
@@ -679,13 +682,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF numeric metadata safety pass):
+Current source-verification status (2026-05-28 GGUF 416 retry-file safety pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (284 XCTest tests, 0 failures), and
+`swift test` (285 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so string-valued or malformed advisory numeric metadata from Hugging
-Face search and tree responses no longer breaks otherwise compatible GGUF
-search/file results.
+coverage so unusable `416 Range Not Satisfiable` resume responses fail without
+deleting the existing `.part` retry file.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

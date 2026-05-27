@@ -1084,6 +1084,43 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "complete")
     }
 
+    func testDownloaderKeepsPartialFileWhenRangeNotSatisfiableHasNoUsableTotal() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+        try Data("partial".utf8).write(to: partial)
+
+        let session = makeSession { request in
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Range"), "bytes=7-")
+            return (
+                416,
+                Data(),
+                [
+                    "Content-Range": "bytes */*"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination
+                )
+            ) { _ in }
+            XCTFail("Expected unusable 416 resume responses to fail without deleting retry bytes.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .invalidHTTPStatus(416))
+        }
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "partial")
+    }
+
     func testDownloaderRestartsOversizedPartialFileWithoutRangeRequest() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
