@@ -19,6 +19,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   before listing repository files.
 - Hardened GGUF Acquisition search parsing so a supported `modelId` can still
   be used when a public API search result also includes an unsupported `id`.
+- Hardened GGUF Acquisition search parsing so string-valued Hugging Face
+  `gated` metadata such as `auto`, `manual`, or `false` does not break public
+  repository search results.
 - Hardened GGUF Acquisition repository and file-path safety so leading or
   trailing whitespace in Hugging Face path components is rejected instead of
   being silently normalized into a local destination.

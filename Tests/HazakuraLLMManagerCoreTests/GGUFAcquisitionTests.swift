@@ -207,6 +207,40 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(results.map(\.id), ["fallback/model-GGUF"])
     }
 
+    func testClientSearchToleratesStringGatedValues() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"id": "owner/auto-gated-GGUF", "gated": "auto"},
+                  {"id": "owner/manual-gated-GGUF", "gated": "manual"},
+                  {"id": "owner/open-GGUF", "gated": "false"},
+                  {"id": "owner/unknown-gated-GGUF", "gated": "unexpected"}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "qwen", limit: 10)
+
+        XCTAssertEqual(
+            results.map(\.id),
+            [
+                "owner/auto-gated-GGUF",
+                "owner/manual-gated-GGUF",
+                "owner/open-GGUF",
+                "owner/unknown-gated-GGUF"
+            ]
+        )
+        XCTAssertEqual(results.map(\.isGated), [true, true, false, nil])
+    }
+
     func testClientListsGGUFFilesWithSizesAndDownloadURLs() async throws {
         let session = makeSession { request in
             XCTAssertEqual(request.url?.path, "/api/models/owner/model-GGUF/tree/main")

@@ -128,6 +128,9 @@ Implemented scope:
 - GGUF Acquisition search parsing now falls back to a supported `modelId` when
   a public Hugging Face search result also includes an unsupported `id`, keeping
   compatible public API results selectable without widening download scope.
+- GGUF Acquisition search parsing now tolerates string-valued Hugging Face
+  `gated` metadata such as `auto`, `manual`, or `false`, keeping compatible
+  public API search results selectable without adding gated-account workflow.
 - GGUF Acquisition repository and file-path safety now rejects leading or
   trailing whitespace in Hugging Face path components instead of silently
   normalizing those values into local destinations.
@@ -662,14 +665,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF whitespace-component safety pass):
+Current source-verification status (2026-05-27 GGUF gated search parsing pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (279 XCTest tests, 0 failures), and
+`swift test` (280 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so whitespace-padded Hugging Face repository and file-path components
-are rejected before listing files or constructing local destinations. App-bundle,
-real runtime smoke, and live public Hugging Face API smoke were not rerun for
-this source/core slice.
+coverage so string-valued Hugging Face `gated` metadata such as `auto`,
+`manual`, or `false` does not break public repository search parsing.
+App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
+rerun for this source/core slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with

@@ -183,6 +183,50 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         var gated: Bool?
         var downloads: Int?
         var likes: Int?
+
+        enum CodingKeys: String, CodingKey {
+            case id
+            case modelId
+            case author
+            case lastModified
+            case createdAt
+            case tags
+            case gated
+            case downloads
+            case likes
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            id = try container.decodeIfPresent(String.self, forKey: .id)
+            modelId = try container.decodeIfPresent(String.self, forKey: .modelId)
+            author = try container.decodeIfPresent(String.self, forKey: .author)
+            lastModified = try container.decodeIfPresent(String.self, forKey: .lastModified)
+            createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
+            tags = try container.decodeIfPresent([String].self, forKey: .tags)
+            gated = Self.decodeGatedValue(from: container)
+            downloads = try container.decodeIfPresent(Int.self, forKey: .downloads)
+            likes = try container.decodeIfPresent(Int.self, forKey: .likes)
+        }
+
+        private static func decodeGatedValue(from container: KeyedDecodingContainer<CodingKeys>) -> Bool? {
+            if let value = try? container.decodeIfPresent(Bool.self, forKey: .gated) {
+                return value
+            }
+
+            guard let rawValue = try? container.decodeIfPresent(String.self, forKey: .gated) else {
+                return nil
+            }
+
+            switch rawValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+            case "true", "manual", "auto":
+                return true
+            case "false":
+                return false
+            default:
+                return nil
+            }
+        }
     }
 
     private struct TreeEntryResponse: Decodable {

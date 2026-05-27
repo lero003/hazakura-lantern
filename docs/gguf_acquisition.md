@@ -64,6 +64,10 @@ file paths with empty, current-directory, parent-directory, absolute, or
 backslash-style components, or components with leading/trailing whitespace,
 before a download candidate is shown.
 
+Public repository search parsing accepts ordinary Boolean `gated` metadata and
+compatible string forms such as `auto`, `manual`, or `false` without starting a
+gated-account workflow.
+
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file
 and server `Range` behavior line up. When the expected file size is known,
