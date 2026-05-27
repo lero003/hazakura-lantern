@@ -131,6 +131,10 @@ Implemented scope:
 - GGUF Acquisition search parsing now tolerates string-valued Hugging Face
   `gated` metadata such as `auto`, `manual`, or `false`, keeping compatible
   public API search results selectable without adding gated-account workflow.
+- GGUF Acquisition public API parsing now treats string-valued or malformed
+  advisory numeric metadata such as search `downloads` / `likes` and tree
+  `size` as optional, so compatible repositories and `.gguf` files remain
+  selectable when those metadata fields drift.
 - GGUF Acquisition repository and file-path safety now rejects leading or
   trailing whitespace in Hugging Face path components instead of silently
   normalizing those values into local destinations.
@@ -672,13 +676,13 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF download-directory safety pass):
+Current source-verification status (2026-05-27 GGUF numeric metadata safety pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (281 XCTest tests, 0 failures), and
+`swift test` (284 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so typed relative download-directory paths are rejected instead of
-being interpreted from Lantern's current working directory, while `~` paths
-still expand to the user's home directory.
+coverage so string-valued or malformed advisory numeric metadata from Hugging
+Face search and tree responses no longer breaks otherwise compatible GGUF
+search/file results.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

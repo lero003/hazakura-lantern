@@ -266,6 +266,31 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(results.map(\.isGated), [true, true, false, nil])
     }
 
+    func testClientSearchToleratesStringAndMalformedNumericMetadata() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"id": "owner/string-counts-GGUF", "downloads": "12", "likes": " 3 "},
+                  {"id": "owner/malformed-counts-GGUF", "downloads": "many", "likes": {"count": 1}}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "qwen", limit: 10)
+
+        XCTAssertEqual(results.map(\.id), ["owner/string-counts-GGUF", "owner/malformed-counts-GGUF"])
+        XCTAssertEqual(results.map(\.downloads), [12, nil])
+        XCTAssertEqual(results.map(\.likes), [3, nil])
+    }
+
     func testClientListsGGUFFilesWithSizesAndDownloadURLs() async throws {
         let session = makeSession { request in
             XCTAssertEqual(request.url?.path, "/api/models/owner/model-GGUF/tree/main")
@@ -377,6 +402,31 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertNil(files[0].sizeBytes)
         XCTAssertEqual(files[1].sizeBytes, 1234)
         XCTAssertNil(files[2].sizeBytes)
+    }
+
+    func testClientTreatsStringAndMalformedTreeSizesAsMetadataOnly() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"type": "file", "path": "malformed.gguf", "size": "many"},
+                  {"type": "file", "path": "numeric-string.gguf", "size": " 1234 "}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let files = try await client.listGGUFFiles(repoID: "owner/model-GGUF")
+
+        XCTAssertEqual(files.map(\.path), ["malformed.gguf", "numeric-string.gguf"])
+        XCTAssertNil(files[0].sizeBytes)
+        XCTAssertEqual(files[1].sizeBytes, 1234)
     }
 
     func testClientReportsNoGGUFFilesWhenRepositoryTreeHasNoSupportedFiles() async throws {

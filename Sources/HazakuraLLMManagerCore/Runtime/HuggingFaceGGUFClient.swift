@@ -205,8 +205,8 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
             tags = try container.decodeIfPresent([String].self, forKey: .tags)
             gated = Self.decodeGatedValue(from: container)
-            downloads = try container.decodeIfPresent(Int.self, forKey: .downloads)
-            likes = try container.decodeIfPresent(Int.self, forKey: .likes)
+            downloads = Self.decodeOptionalInt(from: container, forKey: .downloads)
+            likes = Self.decodeOptionalInt(from: container, forKey: .likes)
         }
 
         private static func decodeGatedValue(from container: KeyedDecodingContainer<CodingKeys>) -> Bool? {
@@ -227,11 +227,54 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
                 return nil
             }
         }
+
+        private static func decodeOptionalInt(
+            from container: KeyedDecodingContainer<CodingKeys>,
+            forKey key: CodingKeys
+        ) -> Int? {
+            if let value = try? container.decodeIfPresent(Int.self, forKey: key) {
+                return value
+            }
+
+            guard let rawValue = try? container.decodeIfPresent(String.self, forKey: key) else {
+                return nil
+            }
+
+            return Int(rawValue.trimmingCharacters(in: .whitespacesAndNewlines))
+        }
     }
 
     private struct TreeEntryResponse: Decodable {
         var type: String?
         var path: String?
         var size: Int64?
+
+        enum CodingKeys: String, CodingKey {
+            case type
+            case path
+            case size
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            type = try container.decodeIfPresent(String.self, forKey: .type)
+            path = try container.decodeIfPresent(String.self, forKey: .path)
+            size = Self.decodeOptionalInt64(from: container, forKey: .size)
+        }
+
+        private static func decodeOptionalInt64(
+            from container: KeyedDecodingContainer<CodingKeys>,
+            forKey key: CodingKeys
+        ) -> Int64? {
+            if let value = try? container.decodeIfPresent(Int64.self, forKey: key) {
+                return value
+            }
+
+            guard let rawValue = try? container.decodeIfPresent(String.self, forKey: key) else {
+                return nil
+            }
+
+            return Int64(rawValue.trimmingCharacters(in: .whitespacesAndNewlines))
+        }
     }
 }

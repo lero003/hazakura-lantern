@@ -22,6 +22,10 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition search parsing so string-valued Hugging Face
   `gated` metadata such as `auto`, `manual`, or `false` does not break public
   repository search results.
+- Hardened GGUF Acquisition public API parsing so string-valued or malformed
+  advisory numeric metadata such as search `downloads` / `likes` and tree
+  `size` values do not break otherwise compatible GGUF search and file-list
+  results.
 - Hardened GGUF Acquisition repository and file-path safety so leading or
   trailing whitespace in Hugging Face path components is rejected instead of
   being silently normalized into a local destination.
