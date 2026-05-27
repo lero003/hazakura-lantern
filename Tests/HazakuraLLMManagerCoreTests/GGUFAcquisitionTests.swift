@@ -275,6 +275,33 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(files.map(\.path), ["nested/model-Q4.gguf"])
     }
 
+    func testClientTreatsNonPositiveTreeSizesAsUnknown() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {"type": "file", "path": "zero.gguf", "size": 0},
+                  {"type": "file", "path": "negative.gguf", "size": -1},
+                  {"type": "file", "path": "positive.gguf", "size": 1234}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let files = try await client.listGGUFFiles(repoID: "owner/model-GGUF")
+
+        XCTAssertEqual(files.map(\.path), ["negative.gguf", "positive.gguf", "zero.gguf"])
+        XCTAssertNil(files[0].sizeBytes)
+        XCTAssertEqual(files[1].sizeBytes, 1234)
+        XCTAssertNil(files[2].sizeBytes)
+    }
+
     func testClientReportsNoGGUFFilesWhenRepositoryTreeHasNoSupportedFiles() async throws {
         let session = makeSession { _ in
             (

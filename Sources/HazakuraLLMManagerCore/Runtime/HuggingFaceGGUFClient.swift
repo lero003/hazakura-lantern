@@ -86,7 +86,7 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             return HuggingFaceGGUFFile(
                 repoID: normalizedRepoID,
                 path: path,
-                sizeBytes: entry.size,
+                sizeBytes: Self.normalizedFileSize(entry.size),
                 downloadURL: downloadURL(repoID: normalizedRepoID, filePath: path)
             )
         }
@@ -99,6 +99,14 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         }
 
         return files
+    }
+
+    private static func normalizedFileSize(_ size: Int64?) -> Int64? {
+        guard let size, size > 0 else {
+            return nil
+        }
+
+        return size
     }
 
     private static func isSafeTreeFilePath(_ path: String) -> Bool {

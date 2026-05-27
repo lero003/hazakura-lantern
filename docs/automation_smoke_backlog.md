@@ -52,6 +52,9 @@ Latest source-verification result (2026-05-27 GGUF search modelId fallback pass)
 - GGUF Acquisition search parsing now falls back to a supported `modelId` when
   a public Hugging Face search result also includes an unsupported `id`, keeping
   compatible fake API results selectable without starting a download.
+- GGUF Acquisition tree parsing now treats non-positive Hugging Face file sizes
+  as unknown metadata instead of expected download lengths, keeping malformed
+  size values out of progress and completion checks.
 - GGUF Acquisition downloader coverage now proves a complete `.part` file is
   promoted when a resumed request receives `416 Content-Range: bytes */N` with
   a matching server byte count, avoiding deletion of already-complete bytes.

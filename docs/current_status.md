@@ -116,6 +116,9 @@ Implemented scope:
 - GGUF Acquisition tree parsing now also skips incomplete Hugging Face file
   entries that lack a usable type or path while keeping valid `.gguf` entries
   selectable.
+- GGUF Acquisition tree parsing now treats non-positive Hugging Face file sizes
+  as unknown metadata instead of expected download lengths, so malformed size
+  values do not poison progress or completion checks.
 - GGUF Acquisition public API fixtures now cover empty/no-supported-`.gguf`
   repository trees and Hugging Face HTTP failures, keeping those failure paths
   typed before any live public API smoke is needed.
