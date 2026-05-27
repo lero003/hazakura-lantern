@@ -376,10 +376,10 @@ final class GGUFAcquisitionTests: XCTestCase {
         try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
         let destination = workspace.appendingPathComponent("model.gguf")
         let partial = GGUFDownloadDestination.partialURL(for: destination)
-        try Data("stale ".utf8).write(to: partial)
+        try Data("old".utf8).write(to: partial)
 
         let session = makeSession { request in
-            XCTAssertEqual(request.value(forHTTPHeaderField: "Range"), "bytes=6-")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Range"), "bytes=3-")
             return (
                 200,
                 Data("fresh".utf8),
@@ -626,6 +626,45 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: destination, encoding: .utf8), "complete")
         XCTAssertFalse(FileManager.default.fileExists(atPath: partial.path))
         XCTAssertEqual(progressValues, [GGUFDownloadProgress(bytesWritten: 8, totalBytes: 8)])
+    }
+
+    func testDownloaderRestartsOversizedPartialFileWithoutRangeRequest() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+        try Data("oversized partial".utf8).write(to: partial)
+
+        let session = makeSession { request in
+            XCTAssertNil(request.value(forHTTPHeaderField: "Range"))
+            return (
+                200,
+                Data("fresh".utf8),
+                [
+                    "Content-Length": "5"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+        var progressValues: [GGUFDownloadProgress] = []
+
+        let downloadedURL = try await downloader.download(
+            GGUFDownloadRequest(
+                remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                destinationURL: destination,
+                expectedBytes: 5
+            )
+        ) { progress in
+            progressValues.append(progress)
+        }
+
+        XCTAssertEqual(downloadedURL, destination)
+        XCTAssertEqual(try String(contentsOf: destination, encoding: .utf8), "fresh")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: partial.path))
+        XCTAssertEqual(progressValues.first, GGUFDownloadProgress(bytesWritten: 0, totalBytes: 5))
+        XCTAssertEqual(progressValues.last, GGUFDownloadProgress(bytesWritten: 5, totalBytes: 5))
     }
 
     private func makeSession(

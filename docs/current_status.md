@@ -131,6 +131,9 @@ Implemented scope:
 - GGUF Acquisition downloads now promote a complete `.part` resume file to the
   final `.gguf` destination when it already matches the expected file size,
   avoiding a redundant Range request and preserving the completed bytes.
+- GGUF Acquisition downloads now discard an oversized stale `.part` resume file
+  before retrying without a misleading Range request, so corrupt partial state
+  can recover through a fresh explicit download.
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
@@ -631,12 +634,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF complete-partial pass):
+Current source-verification status (2026-05-27 GGUF oversized-partial pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (270 XCTest tests, 0 failures), and
+`swift test` (271 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so a complete `.part` resume file is promoted to the final `.gguf`
-path without a redundant Range request.
+coverage so an oversized stale `.part` resume file is discarded and retried
+without a misleading Range request.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

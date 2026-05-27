@@ -49,6 +49,11 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             progress(GGUFDownloadProgress(bytesWritten: expectedBytes, totalBytes: expectedBytes))
             return request.destinationURL
         }
+        if let expectedBytes = request.expectedBytes,
+           partialBytes > expectedBytes {
+            try fileManager.removeItem(at: partialURL)
+            partialBytes = 0
+        }
 
         var urlRequest = URLRequest(url: request.remoteURL)
         if partialBytes > 0 {
