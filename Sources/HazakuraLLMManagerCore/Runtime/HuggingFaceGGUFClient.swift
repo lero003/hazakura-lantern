@@ -233,14 +233,22 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             forKey key: CodingKeys
         ) -> Int? {
             if let value = try? container.decodeIfPresent(Int.self, forKey: key) {
-                return value
+                return normalizedCount(value)
             }
 
             guard let rawValue = try? container.decodeIfPresent(String.self, forKey: key) else {
                 return nil
             }
 
-            return Int(rawValue.trimmingCharacters(in: .whitespacesAndNewlines))
+            return normalizedCount(Int(rawValue.trimmingCharacters(in: .whitespacesAndNewlines)))
+        }
+
+        private static func normalizedCount(_ value: Int?) -> Int? {
+            guard let value, value >= 0 else {
+                return nil
+            }
+
+            return value
         }
     }
 

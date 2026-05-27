@@ -72,8 +72,8 @@ compatible string forms such as `auto`, `manual`, or `false` without starting a
 gated-account workflow.
 Advisory numeric metadata from the public API, such as search `downloads` /
 `likes` and repository tree `size`, is accepted when it is numeric or
-numeric-string shaped and ignored when malformed so compatible repositories and
-files remain selectable.
+numeric-string shaped and ignored when malformed or negative so compatible
+repositories and files remain selectable.
 
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file

@@ -135,6 +135,9 @@ Implemented scope:
   advisory numeric metadata such as search `downloads` / `likes` and tree
   `size` as optional, so compatible repositories and `.gguf` files remain
   selectable when those metadata fields drift.
+- GGUF Acquisition search parsing now also treats negative advisory
+  `downloads` / `likes` counts as unknown metadata, keeping compatible public
+  repository results selectable without trusting impossible count values.
 - GGUF Acquisition repository and file-path safety now rejects leading or
   trailing whitespace in Hugging Face path components instead of silently
   normalizing those values into local destinations.

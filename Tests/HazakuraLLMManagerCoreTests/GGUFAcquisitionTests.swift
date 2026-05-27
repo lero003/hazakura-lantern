@@ -273,7 +273,8 @@ final class GGUFAcquisitionTests: XCTestCase {
                 Data("""
                 [
                   {"id": "owner/string-counts-GGUF", "downloads": "12", "likes": " 3 "},
-                  {"id": "owner/malformed-counts-GGUF", "downloads": "many", "likes": {"count": 1}}
+                  {"id": "owner/malformed-counts-GGUF", "downloads": "many", "likes": {"count": 1}},
+                  {"id": "owner/negative-counts-GGUF", "downloads": -1, "likes": "-2"}
                 ]
                 """.utf8),
                 [:]
@@ -286,9 +287,16 @@ final class GGUFAcquisitionTests: XCTestCase {
 
         let results = try await client.searchRepositories(query: "qwen", limit: 10)
 
-        XCTAssertEqual(results.map(\.id), ["owner/string-counts-GGUF", "owner/malformed-counts-GGUF"])
-        XCTAssertEqual(results.map(\.downloads), [12, nil])
-        XCTAssertEqual(results.map(\.likes), [3, nil])
+        XCTAssertEqual(
+            results.map(\.id),
+            [
+                "owner/string-counts-GGUF",
+                "owner/malformed-counts-GGUF",
+                "owner/negative-counts-GGUF"
+            ]
+        )
+        XCTAssertEqual(results.map(\.downloads), [12, nil, nil])
+        XCTAssertEqual(results.map(\.likes), [3, nil, nil])
     }
 
     func testClientListsGGUFFilesWithSizesAndDownloadURLs() async throws {
