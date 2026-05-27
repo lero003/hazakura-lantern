@@ -132,10 +132,9 @@ final class GGUFAcquisitionController: ObservableObject {
             return
         }
 
-        configurationStore.saveGGUFDownloadDirectory(directoryPath)
-        let directoryURL = URL(fileURLWithPath: directoryPath, isDirectory: true)
         let destinationURL: URL
         do {
+            let directoryURL = try GGUFDownloadDestination.downloadDirectoryURL(fromPath: directoryPath)
             destinationURL = try GGUFDownloadDestination.destinationURL(
                 for: selectedFile,
                 in: directoryURL
@@ -144,6 +143,7 @@ final class GGUFAcquisitionController: ObservableObject {
             message = error.localizedDescription
             return
         }
+        configurationStore.saveGGUFDownloadDirectory(directoryPath)
 
         downloadTask?.cancel()
         message = nil

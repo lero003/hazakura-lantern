@@ -91,6 +91,31 @@ final class GGUFAcquisitionTests: XCTestCase {
         }
     }
 
+    func testDownloadDirectoryURLRequiresAbsoluteOrTildeExpandedPath() throws {
+        let absoluteURL = try GGUFDownloadDestination.downloadDirectoryURL(
+            fromPath: "  /Users/me/Models  "
+        )
+        XCTAssertEqual(absoluteURL.path, "/Users/me/Models")
+
+        let tildeURL = try GGUFDownloadDestination.downloadDirectoryURL(
+            fromPath: "~/Models"
+        )
+        XCTAssertEqual(
+            tildeURL.path,
+            URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+                .appendingPathComponent("Models", isDirectory: true)
+                .path
+        )
+
+        for path in ["", "   ", "Models", "nested/Models"] {
+            XCTAssertThrowsError(
+                try GGUFDownloadDestination.downloadDirectoryURL(fromPath: path)
+            ) { error in
+                XCTAssertEqual(error as? GGUFAcquisitionError, .invalidDownloadDirectory(path))
+            }
+        }
+    }
+
     func testConfigurationStorePersistsGGUFDownloadDirectory() {
         let suiteName = "HazakuraLLMManagerTests-\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!

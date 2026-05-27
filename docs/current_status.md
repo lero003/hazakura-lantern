@@ -137,6 +137,9 @@ Implemented scope:
 - GGUF Acquisition destination construction now revalidates repository and
   file-path components before creating the local `<owner>/<repo>/<file.gguf>`
   path, so unsafe paths are rejected even if they bypass the tree parser.
+- GGUF Acquisition download-directory handling now rejects typed relative paths
+  instead of interpreting them from Lantern's current working directory, while
+  still allowing `~` to expand to the user's home directory.
 - GGUF Acquisition downloads now remove a stale `.part` resume file when the
   completed destination already matches the expected file size, avoiding an
   unnecessary network request while keeping the completed `.gguf` file intact.
@@ -665,12 +668,13 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF gated search parsing pass):
+Current source-verification status (2026-05-27 GGUF download-directory safety pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (280 XCTest tests, 0 failures), and
+`swift test` (281 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so string-valued Hugging Face `gated` metadata such as `auto`,
-`manual`, or `false` does not break public repository search parsing.
+coverage so typed relative download-directory paths are rejected instead of
+being interpreted from Lantern's current working directory, while `~` paths
+still expand to the user's home directory.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

@@ -58,6 +58,9 @@ The first implementation adds a separate sidebar page for public Hugging Face
 GGUF acquisition. A user can search public GGUF repositories, pick a repository
 file, choose a download directory, and save the file as
 `<download-directory>/<owner>/<repo>/<file.gguf>`.
+Typed download-directory paths must resolve to an absolute local path; `~` is
+expanded, while relative paths are rejected instead of being interpreted from
+Lantern's current working directory.
 
 Repository tree parsing accepts ordinary nested `.gguf` paths but ignores unsafe
 file paths with empty, current-directory, parent-directory, absolute, or

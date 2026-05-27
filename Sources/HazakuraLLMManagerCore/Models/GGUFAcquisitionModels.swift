@@ -125,6 +125,18 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
 }
 
 public enum GGUFDownloadDestination {
+    public static func downloadDirectoryURL(fromPath path: String) throws -> URL {
+        let trimmedPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
+        let expandedPath = (trimmedPath as NSString).expandingTildeInPath
+        guard !expandedPath.isEmpty,
+              expandedPath.hasPrefix("/")
+        else {
+            throw GGUFAcquisitionError.invalidDownloadDirectory(path)
+        }
+
+        return URL(fileURLWithPath: expandedPath, isDirectory: true)
+    }
+
     public static func destinationURL(
         for file: HuggingFaceGGUFFile,
         in downloadDirectory: URL
