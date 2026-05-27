@@ -32,8 +32,8 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             URLQueryItem(name: "limit", value: String(max(1, min(limit, 50))))
         ]
 
-        let response: [ModelSearchResponse] = try await decode(components)
-        return response.compactMap { item in
+        let response: LossyDecodableArray<ModelSearchResponse> = try await decode(components)
+        return response.elements.compactMap { item in
             guard let normalizedID = normalizedRepoID(from: [item.id, item.modelId]) else {
                 return nil
             }
@@ -73,8 +73,8 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             URLQueryItem(name: "expand", value: "false")
         ]
 
-        let response: [TreeEntryResponse] = try await decode(components)
-        let files = response.compactMap { entry -> HuggingFaceGGUFFile? in
+        let response: LossyDecodableArray<TreeEntryResponse> = try await decode(components)
+        let files = response.elements.compactMap { entry -> HuggingFaceGGUFFile? in
             guard Self.isFileTreeEntry(entry.type),
                   let path = entry.path,
                   path.lowercased().hasSuffix(".gguf"),
@@ -175,6 +175,69 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         components.path = "/" + (repoID.split(separator: "/").map(String.init) + ["resolve", "main"] + filePath.split(separator: "/").map(String.init))
             .joined(separator: "/")
         return components.url!
+    }
+
+    private struct LossyDecodableArray<Element: Decodable>: Decodable {
+        var elements: [Element]
+
+        init(from decoder: Decoder) throws {
+            var container = try decoder.unkeyedContainer()
+            var elements: [Element] = []
+
+            while !container.isAtEnd {
+                if let element = try? container.decode(Element.self) {
+                    elements.append(element)
+                } else {
+                    _ = try container.decode(DiscardedJSONValue.self)
+                }
+            }
+
+            self.elements = elements
+        }
+    }
+
+    private struct DiscardedJSONValue: Decodable {
+        init(from decoder: Decoder) throws {
+            if var container = try? decoder.unkeyedContainer() {
+                while !container.isAtEnd {
+                    _ = try container.decode(DiscardedJSONValue.self)
+                }
+                return
+            }
+
+            if let container = try? decoder.container(keyedBy: DiscardedCodingKey.self) {
+                for key in container.allKeys {
+                    _ = try container.decode(DiscardedJSONValue.self, forKey: key)
+                }
+                return
+            }
+
+            let container = try decoder.singleValueContainer()
+            if container.decodeNil() {
+                return
+            }
+            if (try? container.decode(Bool.self)) != nil {
+                return
+            }
+            if (try? container.decode(Double.self)) != nil {
+                return
+            }
+            _ = try container.decode(String.self)
+        }
+    }
+
+    private struct DiscardedCodingKey: CodingKey {
+        var stringValue: String
+        var intValue: Int?
+
+        init?(stringValue: String) {
+            self.stringValue = stringValue
+        }
+
+        init?(intValue: Int) {
+            self.stringValue = String(intValue)
+            self.intValue = intValue
+        }
     }
 
     private struct ModelSearchResponse: Decodable {
