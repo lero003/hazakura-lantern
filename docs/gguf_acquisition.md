@@ -61,7 +61,8 @@ file, choose a download directory, and save the file as
 
 Repository tree parsing accepts ordinary nested `.gguf` paths but ignores unsafe
 file paths with empty, current-directory, parent-directory, absolute, or
-backslash-style components before a download candidate is shown.
+backslash-style components, or components with leading/trailing whitespace,
+before a download candidate is shown.
 
 Downloads are explicit foreground tasks with visible progress, cancellation,
 failure display, and a best-effort `.part` resume when the local partial file

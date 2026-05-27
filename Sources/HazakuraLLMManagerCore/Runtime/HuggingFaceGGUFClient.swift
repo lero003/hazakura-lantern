@@ -116,10 +116,7 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         }
 
         return components.allSatisfy { component in
-            !component.isEmpty
-                && component != "."
-                && component != ".."
-                && !component.contains("\\")
+            isSafePathComponent(String(component))
         }
     }
 
@@ -150,16 +147,23 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         let components = repoID.split(separator: "/", omittingEmptySubsequences: false)
         guard components.count == 2,
               components.allSatisfy({
-                  !$0.isEmpty
-                      && $0 != "."
-                      && $0 != ".."
-                      && !$0.contains("\\")
+                  Self.isSafePathComponent(String($0))
               })
         else {
             throw GGUFAcquisitionError.invalidRepositoryID(repoID)
         }
 
         return components.joined(separator: "/")
+    }
+
+    private static func isSafePathComponent(_ value: String) -> Bool {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !value.isEmpty
+            && value == trimmed
+            && value != "."
+            && value != ".."
+            && !value.contains("/")
+            && !value.contains("\\")
     }
 
     private func downloadURL(repoID: String, filePath: String) -> URL {

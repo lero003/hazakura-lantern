@@ -128,6 +128,9 @@ Implemented scope:
 - GGUF Acquisition search parsing now falls back to a supported `modelId` when
   a public Hugging Face search result also includes an unsupported `id`, keeping
   compatible public API results selectable without widening download scope.
+- GGUF Acquisition repository and file-path safety now rejects leading or
+  trailing whitespace in Hugging Face path components instead of silently
+  normalizing those values into local destinations.
 - GGUF Acquisition destination construction now revalidates repository and
   file-path components before creating the local `<owner>/<repo>/<file.gguf>`
   path, so unsafe paths are rejected even if they bypass the tree parser.
@@ -659,13 +662,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF search modelId fallback pass):
+Current source-verification status (2026-05-27 GGUF whitespace-component safety pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (278 XCTest tests, 0 failures), and
+`swift test` (279 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so search responses can fall back to a supported `modelId` when the
-same result includes an unsupported `id`. App-bundle, real runtime smoke, and
-live public Hugging Face API smoke were not rerun for this source/core slice.
+coverage so whitespace-padded Hugging Face repository and file-path components
+are rejected before listing files or constructing local destinations. App-bundle,
+real runtime smoke, and live public Hugging Face API smoke were not rerun for
+this source/core slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with

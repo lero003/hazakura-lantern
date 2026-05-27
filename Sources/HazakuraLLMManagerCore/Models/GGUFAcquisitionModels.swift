@@ -152,27 +152,18 @@ public enum GGUFDownloadDestination {
     }
 
     private static func sanitizedPathComponent(_ value: String) -> String? {
-        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty,
-              trimmed != ".",
-              trimmed != "..",
-              !trimmed.contains("/"),
-              !trimmed.contains("\\")
-        else {
+        guard isSupportedPathComponent(value) else {
             return nil
         }
 
-        return trimmed.replacingOccurrences(of: ":", with: "-")
+        return value.replacingOccurrences(of: ":", with: "-")
     }
 
     private static func sanitizedFileName(fromPath path: String) -> String? {
         let components = path.split(separator: "/", omittingEmptySubsequences: false)
         guard let lastComponent = components.last,
               components.allSatisfy({ component in
-                  !component.isEmpty
-                      && component != "."
-                      && component != ".."
-                      && !component.contains("\\")
+                  isSupportedPathComponent(String(component))
               }),
               let fileName = sanitizedPathComponent(String(lastComponent)),
               fileName.lowercased().hasSuffix(".gguf")
@@ -181,5 +172,15 @@ public enum GGUFDownloadDestination {
         }
 
         return fileName
+    }
+
+    private static func isSupportedPathComponent(_ value: String) -> Bool {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !value.isEmpty
+            && value == trimmed
+            && value != "."
+            && value != ".."
+            && !value.contains("/")
+            && !value.contains("\\")
     }
 }

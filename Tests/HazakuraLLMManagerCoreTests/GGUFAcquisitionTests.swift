@@ -18,18 +18,29 @@ final class GGUFAcquisitionTests: XCTestCase {
     }
 
     func testDestinationURLRejectsInvalidRepoID() {
-        let file = HuggingFaceGGUFFile(
-            repoID: "owner",
-            path: "model.gguf",
-            downloadURL: URL(string: "https://example.com/model.gguf")!
-        )
+        let invalidRepoIDs = [
+            "owner",
+            " owner/model-GGUF",
+            "owner/model-GGUF ",
+            "owner /model-GGUF"
+        ]
 
-        XCTAssertThrowsError(
-            try GGUFDownloadDestination.destinationURL(
-                for: file,
-                in: URL(fileURLWithPath: "/Models")
+        for repoID in invalidRepoIDs {
+            let file = HuggingFaceGGUFFile(
+                repoID: repoID,
+                path: "model.gguf",
+                downloadURL: URL(string: "https://example.com/model.gguf")!
             )
-        )
+
+            XCTAssertThrowsError(
+                try GGUFDownloadDestination.destinationURL(
+                    for: file,
+                    in: URL(fileURLWithPath: "/Models")
+                )
+            ) { error in
+                XCTAssertEqual(error as? GGUFAcquisitionError, .invalidRepositoryID(repoID))
+            }
+        }
     }
 
     func testDestinationURLRejectsBackslashStyleRepoID() {
@@ -56,6 +67,8 @@ final class GGUFAcquisitionTests: XCTestCase {
             "nested//empty.gguf",
             "nested/./dot.gguf",
             "nested/../parent.gguf",
+            " nested/model.gguf",
+            "nested/model.gguf ",
             "nested\\slash.gguf",
             "not-a-gguf.txt"
         ]
@@ -145,6 +158,9 @@ final class GGUFAcquisitionTests: XCTestCase {
                 Data("""
                 [
                   {"id": "owner/model-GGUF", "author": "owner"},
+                  {"id": " owner/model-GGUF", "author": "owner"},
+                  {"id": "owner/model-GGUF ", "author": "owner"},
+                  {"id": "owner /model-GGUF", "author": "owner"},
                   {"id": "owner", "author": "owner"},
                   {"id": "owner//model-GGUF", "author": "owner"},
                   {"id": "owner/../model-GGUF", "author": "owner"},
@@ -234,6 +250,8 @@ final class GGUFAcquisitionTests: XCTestCase {
                   {"type": "file", "path": "nested//empty.gguf", "size": 12},
                   {"type": "file", "path": "nested/./dot.gguf", "size": 13},
                   {"type": "file", "path": "nested/../parent.gguf", "size": 14},
+                  {"type": "file", "path": " nested/model.gguf", "size": 15},
+                  {"type": "file", "path": "nested/model.gguf ", "size": 16},
                   {"type": "file", "path": "nested\\\\slash.gguf", "size": 15},
                   {"type": "file", "path": "nested/model-Q4.gguf", "size": 1234}
                 ]
@@ -368,6 +386,9 @@ final class GGUFAcquisitionTests: XCTestCase {
             "owner//model-GGUF",
             "owner/./model-GGUF",
             "owner/../model-GGUF",
+            " owner/model-GGUF",
+            "owner/model-GGUF ",
+            "owner /model-GGUF",
             "owner\\name/model-GGUF"
         ]
 
