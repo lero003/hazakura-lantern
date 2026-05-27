@@ -908,6 +908,42 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "short")
     }
 
+    func testDownloaderRejectsShortContentLengthDownloadWithoutExpectedSize() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+        let partial = GGUFDownloadDestination.partialURL(for: destination)
+
+        let session = makeSession { request in
+            XCTAssertNil(request.value(forHTTPHeaderField: "Range"))
+            return (
+                200,
+                Data("short".utf8),
+                [
+                    "Content-Length": "11"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+
+        do {
+            _ = try await downloader.download(
+                GGUFDownloadRequest(
+                    remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                    destinationURL: destination
+                )
+            ) { _ in }
+            XCTFail("Expected short Content-Length downloads to stay partial.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .incompleteDownload(expectedBytes: 11, actualBytes: 5))
+        }
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        XCTAssertEqual(try String(contentsOf: partial, encoding: .utf8), "short")
+    }
+
     func testDownloaderRejectsEmptySuccessResponseWithoutCompletingDestination() async throws {
         let workspace = FileManager.default.temporaryDirectory
             .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)

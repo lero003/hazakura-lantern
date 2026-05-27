@@ -191,6 +191,10 @@ Implemented scope:
 - GGUF Acquisition downloads now verify the completed byte count when an
   expected file size is known, so short responses remain resumable `.part`
   files instead of being promoted to final `.gguf` files.
+- GGUF Acquisition downloads now also verify successful `Content-Length`
+  responses when Hugging Face tree metadata did not provide a file size, so a
+  short public file response remains a resumable `.part` instead of becoming a
+  misleading completed `.gguf`.
 - GGUF Acquisition downloader cancellation now has focused coverage proving the
   partially written `.part` file remains available for an explicit retry,
   without moving an incomplete file into the final `.gguf` destination.

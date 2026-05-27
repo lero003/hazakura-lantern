@@ -43,12 +43,16 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF 416 retry-file safety pass):
+Latest source-verification result (2026-05-28 GGUF Content-Length completion pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 285 XCTest tests, 0 failures.
+- `swift test` passed: 286 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
+- GGUF Acquisition downloads now reject short successful responses when
+  `Content-Length` declares a larger file size, even when Hugging Face tree
+  metadata did not provide expected bytes, keeping the `.part` file available
+  for an explicit retry.
 - GGUF Acquisition resumed downloads now keep the existing `.part` retry file
   when a `416 Range Not Satisfiable` response does not include a usable server
   byte count, failing clearly without discarding retry bytes.

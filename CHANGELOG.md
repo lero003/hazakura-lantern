@@ -65,6 +65,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition downloads so a response shorter than the expected
   file size remains as a resumable `.part` file instead of being promoted to a
   completed `.gguf`.
+- Hardened GGUF Acquisition downloads so short successful responses are also
+  rejected when `Content-Length` declares a larger file size, even when
+  Hugging Face tree metadata did not provide an expected byte count.
 - Hardened GGUF Acquisition downloads so empty successful responses fail
   clearly instead of creating an empty completed `.gguf` file.
 - Added focused GGUF Acquisition downloader coverage proving cancellation keeps

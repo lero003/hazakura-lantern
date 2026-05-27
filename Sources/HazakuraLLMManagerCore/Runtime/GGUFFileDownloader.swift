@@ -231,10 +231,22 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         guard httpResponse.statusCode == 206,
               let contentRange = Self.contentRange(from: httpResponse.value(forHTTPHeaderField: "Content-Range"))
         else {
-            return nil
+            return Self.contentLength(from: httpResponse)
         }
 
         return contentRange.totalBytes
+    }
+
+    private static func contentLength(from httpResponse: HTTPURLResponse) -> Int64? {
+        guard httpResponse.statusCode == 200,
+              let contentLength = httpResponse.value(forHTTPHeaderField: "Content-Length"),
+              let length = Int64(contentLength),
+              length > 0
+        else {
+            return nil
+        }
+
+        return length
     }
 
     static func totalBytes(fromContentRange contentRange: String) -> Int64? {
