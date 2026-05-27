@@ -39,6 +39,17 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         }
 
         var partialBytes = existingFileSize(at: partialURL) ?? 0
+        if let expectedBytes = request.expectedBytes,
+           partialBytes == expectedBytes,
+           partialBytes > 0 {
+            if fileManager.fileExists(atPath: request.destinationURL.path) {
+                try fileManager.removeItem(at: request.destinationURL)
+            }
+            try fileManager.moveItem(at: partialURL, to: request.destinationURL)
+            progress(GGUFDownloadProgress(bytesWritten: expectedBytes, totalBytes: expectedBytes))
+            return request.destinationURL
+        }
+
         var urlRequest = URLRequest(url: request.remoteURL)
         if partialBytes > 0 {
             urlRequest.setValue("bytes=\(partialBytes)-", forHTTPHeaderField: "Range")

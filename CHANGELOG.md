@@ -21,6 +21,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
   are skipped while valid `.gguf` files remain selectable.
 - Hardened GGUF Acquisition downloads so a completed destination file clears a
   stale `.part` resume file without making another network request.
+- Hardened GGUF Acquisition downloads so a complete `.part` resume file is
+  promoted to the final `.gguf` path without making a redundant Range request.
 - Hardened GGUF Acquisition downloads so a response shorter than the expected
   file size remains as a resumable `.part` file instead of being promoted to a
   completed `.gguf`.
