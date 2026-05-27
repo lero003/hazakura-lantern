@@ -147,6 +147,9 @@ Implemented scope:
 - GGUF Acquisition resumed downloads now also validate the byte count implied
   by the `Content-Range` end byte, so short range bodies stay as `.part` files
   even when the total size is unknown.
+- GGUF Acquisition resumed downloads now reject invalid `Content-Range` totals
+  before appending bytes, so a malformed resume header cannot contaminate the
+  existing `.part` retry file.
 - GGUF Acquisition downloads now reject non-file success statuses such as HTTP
   `204` instead of completing an empty or partial `.gguf`, keeping the partial
   resume file available for a later explicit retry.
@@ -647,14 +650,14 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-27 GGUF unexpected-partial pass):
+Current source-verification status (2026-05-27 GGUF invalid content-range total pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (274 XCTest tests, 0 failures), and
+`swift test` (276 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass added focused GGUF Acquisition
-coverage so unexpected `206 Content-Range` responses that start after byte `0`
-fail before creating a misleading `.part` suffix when no resume file exists.
-App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
-rerun for this source/core slice.
+coverage so resumed `206 Content-Range` responses with invalid total byte
+counts fail before appending bytes to the existing `.part` file. App-bundle,
+real runtime smoke, and live public Hugging Face API smoke were not rerun for
+this source/core slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with

@@ -254,7 +254,15 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             return nil
         }
 
-        let totalBytes = total == "*" ? nil : Int64(total)
+        let totalBytes: Int64?
+        if total == "*" {
+            totalBytes = nil
+        } else if let parsedTotal = Int64(total), parsedTotal > endBytes {
+            totalBytes = parsedTotal
+        } else {
+            return nil
+        }
+
         return ContentRange(start: startBytes, end: endBytes, totalBytes: totalBytes)
     }
 

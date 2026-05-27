@@ -43,12 +43,15 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-27 GGUF content-range length pass):
+Latest source-verification result (2026-05-27 GGUF invalid content-range total pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 275 XCTest tests, 0 failures.
+- `swift test` passed: 276 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
+- GGUF Acquisition resumed downloader coverage now proves invalid
+  `Content-Range` total byte counts are rejected before appending bytes,
+  leaving the existing `.part` file available for an explicit retry.
 - GGUF Acquisition resumed downloader coverage now proves a short `206`
   response is rejected when its valid `Content-Range` end byte declares more
   bytes than the body provided, even when the total byte count is unknown.
