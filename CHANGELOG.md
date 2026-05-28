@@ -6,6 +6,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Added connection preflight badges plus copyable OpenCode, Hazakura Note, and
+  generic local endpoint JSON snippets so other local clients can point at the
+  selected Lantern endpoint without turning Lantern into an agent or proxy.
+- Resumed the saved Codex automation as a 2-hour stability-only quality loop
+  focused on local reliability, smoke evidence, and verified no-op outcomes.
 - Published the `warning-expected-dmg-preview-2026-05-28` prerelease with
   warning-expected DMG and `.sha256` assets.
 - Added a repo-local warning-expected DMG preview lane with a plain

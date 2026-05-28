@@ -1,6 +1,6 @@
 # Current Status
 
-Last reviewed: 2026-05-28
+Last reviewed: 2026-05-29
 
 ## Project State
 
@@ -70,6 +70,10 @@ Implemented scope:
 - Settings now includes a System / Japanese / English language toggle for UI
   labels and controls only; runtime logs, command text, profile data, and
   adapter-owned messages remain outside the localization scope.
+- Endpoint details now include connection preflight badges plus copyable
+  OpenCode, Hazakura Note, and generic local endpoint JSON snippets. This keeps
+  Lantern focused on exposing the selected local runtime endpoint rather than
+  becoming an agent runner, proxy, or chat surface.
 - The same language toggle is reachable inside the main window through the
   sidebar Settings destination, so changing app UI language does not require
   opening the separate macOS Settings scene.
@@ -771,15 +775,24 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 no-download GGUF public API
-smoke pass):
+Current source-verification status (2026-05-29 stability automation pass):
+`git diff --check`, English/Japanese `Localizable.strings` lint,
+`swift test` (306 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed against the already-dirty working tree.
+`./script/build_and_run.sh --verify` could not provide app-launch evidence in
+this host session because Launch Services returned `kLSNoExecutableErr`; a
+control launch of `/System/Applications/Calculator.app` failed with the same
+error, so this run treats the helper smoke result as an environment-level
+Launch Services blocker rather than a Lantern-specific bundle regression.
+`./script/build_and_run.sh --stop` was run after probing.
+
+Previous 2026-05-28 no-download GGUF public API smoke passed
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (303 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. A no-download live Hugging Face API
-shape smoke searched public GGUF repositories for
-`Qwen2.5-0.5B-Instruct-GGUF`, observed selectable results including
-`Qwen/Qwen2.5-0.5B-Instruct-GGUF`, then listed that repository tree and
-observed multiple `.gguf` files including
+`swift build --disable-sandbox`. A no-download live Hugging Face API shape
+smoke searched public GGUF repositories for `Qwen2.5-0.5B-Instruct-GGUF`,
+observed selectable results including `Qwen/Qwen2.5-0.5B-Instruct-GGUF`, then
+listed that repository tree and observed multiple `.gguf` files including
 `qwen2.5-0.5b-instruct-q4_k_m.gguf`. No model file was downloaded, app-bundle
 smoke was not rerun, and real local runtime smoke was not rerun for this
 API-shape evidence slice.
@@ -826,7 +839,16 @@ The same pass verified Stop leaves the app running while removing the managed
 `llama-server`, and Quit removes both `HazakuraLLMManager` and the managed
 runtime.
 
-Current Codex launch-smoke status (2026-05-24 verify hardening pass):
+Current Codex launch-smoke status:
+
+The 2026-05-29 stability automation pass could not use Launch Services as a
+valid app-launch signal: `./script/build_and_run.sh --verify` failed with
+`kLSNoExecutableErr`, and `/System/Applications/Calculator.app` failed with the
+same error in the same host session. In this condition, prefer SwiftPM source
+verification and do not treat helper-smoke failure alone as a Lantern-specific
+regression unless a normal app can launch in the same environment.
+
+Previous 2026-05-24 verify hardening pass:
 `./script/build_and_run.sh --verify` builds the local bundle, requests launch
 through Launch Services, confirms a `HazakuraLLMManager` process id, and closes
 the app before the script exits. A follow-up process and port check found no
@@ -871,9 +893,11 @@ Historical 2026-05-17 diagnostics: re-signing the generated bundle with
 `codesign --force --sign -`, adding standard bundle metadata, adding
 `Contents/Resources`, and registering the app with `lsregister -f` did not
 clear the Launch Services failure. `lsregister` still fails to scan the bundle
-with `-10822`, while `open -W -n /System/Applications/Calculator.app` works in
-the same environment. The blocker appears specific to the generated Lantern
-bundle rather than a blanket inability to call Launch Services.
+with `-10822`, while `open -W -n /System/Applications/Calculator.app` worked in
+that older environment. A later 2026-05-29 automation session saw Calculator
+fail with the same `kLSNoExecutableErr` as Lantern, so future runs should first
+establish whether Launch Services can open any normal app before classifying a
+helper-smoke failure as bundle-specific.
 
 Additional historical 2026-05-17 diagnostics: signing the completed bundle can make
 `codesign --verify --deep --strict` pass, and a top-level
@@ -910,12 +934,12 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: the automated development loop is paused after the
-`v1.7.0` source-only checkpoint while release and packaged-artifact
-expectations are reviewed manually. If automation is resumed, it should
-continue with one small quality, smoke, or post-checkpoint readiness slice at a
-time. If the current checks and smoke evidence do not justify a small change, a
-verified no-op is the expected outcome rather than a failure.
+Current human direction: the automated development loop is active again as a
+2-hour stability-only quality loop after the `v1.7.0` source-only checkpoint
+and warning-expected DMG preview. It should continue with one small quality,
+smoke, or post-checkpoint readiness slice at a time. If the current checks and
+smoke evidence do not justify a small change, a verified no-op is the expected
+outcome rather than a failure.
 Packaged app release remains separate: automation should not create packaged
 artifacts, change GitHub settings, mutate public issues, or decide
 packaged-release readiness by itself.

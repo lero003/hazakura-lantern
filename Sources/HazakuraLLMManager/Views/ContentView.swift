@@ -161,6 +161,24 @@ struct ContentView: View {
                             }
 
                             Button {
+                                copyFromToolbar(endpoint.openCodeConfigSnippet)
+                            } label: {
+                                Label("Copy OpenCode Config", systemImage: "curlybraces")
+                            }
+
+                            Button {
+                                copyFromToolbar(endpoint.hazakuraNoteConnectionSnippet)
+                            } label: {
+                                Label("Copy Hazakura Note JSON", systemImage: "note.text")
+                            }
+
+                            Button {
+                                copyFromToolbar(endpoint.connectionSnapshotSnippet)
+                            } label: {
+                                Label("Copy Connection JSON", systemImage: "point.3.connected.trianglepath.dotted")
+                            }
+
+                            Button {
                                 if let healthCurlCommand = endpoint.endpointHealthCurlCommand {
                                     copyFromToolbar(healthCurlCommand)
                                 }

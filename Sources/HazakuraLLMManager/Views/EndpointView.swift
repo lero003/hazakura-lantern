@@ -69,6 +69,8 @@ struct EndpointView: View {
                         .disabled(!controller.canCheckEndpointHealth)
                     }
 
+                    connectionPreflight(endpoint)
+
                     Divider()
 
                     DisclosureSectionHeader(
@@ -99,6 +101,27 @@ struct EndpointView: View {
                 value: endpoint.environmentSnippet,
                 copyTitle: "Copy Environment",
                 copyIcon: "terminal"
+            )
+
+            codeSnippetBlock(
+                label: "OpenCode opencode.json",
+                value: endpoint.openCodeConfigSnippet,
+                copyTitle: "Copy OpenCode Config",
+                copyIcon: "curlybraces"
+            )
+
+            codeSnippetBlock(
+                label: "Hazakura Note Connection JSON",
+                value: endpoint.hazakuraNoteConnectionSnippet,
+                copyTitle: "Copy Hazakura Note JSON",
+                copyIcon: "note.text"
+            )
+
+            codeSnippetBlock(
+                label: "Connection Snapshot JSON",
+                value: endpoint.connectionSnapshotSnippet,
+                copyTitle: "Copy Connection JSON",
+                copyIcon: "point.3.connected.trianglepath.dotted"
             )
 
             codeSnippetBlock(
@@ -145,6 +168,84 @@ struct EndpointView: View {
         }
     }
 
+    private func connectionPreflight(_ endpoint: RuntimeEndpoint) -> some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
+            Text("Connection Preflight")
+                .font(DesignTokens.Font.caption)
+                .foregroundStyle(.secondary)
+
+            LazyVGrid(
+                columns: [
+                    GridItem(
+                        .adaptive(minimum: 150, maximum: 260),
+                        spacing: DesignTokens.Spacing.sm,
+                        alignment: .topLeading
+                    )
+                ],
+                alignment: .leading,
+                spacing: DesignTokens.Spacing.sm
+            ) {
+                preflightBadge(
+                    title: "Server",
+                    value: isServerRunning ? "Running" : "Not running",
+                    systemImage: isServerRunning ? "checkmark.circle" : "stop.circle",
+                    tone: isServerRunning ? .success : .neutral
+                )
+
+                preflightBadge(
+                    title: "Endpoint",
+                    value: endpoint.apiBaseURLString,
+                    systemImage: "link",
+                    tone: .success,
+                    valueLineLimit: 1
+                )
+
+                preflightBadge(
+                    title: "Model ID",
+                    value: endpoint.modelID,
+                    systemImage: endpoint.modelID.isEmpty ? "exclamationmark.triangle" : "tag",
+                    tone: endpoint.modelID.isEmpty ? .failure : .success,
+                    valueLineLimit: 1
+                )
+
+                preflightBadge(
+                    title: "Health",
+                    value: controller.endpointHealthStatus.localizedTitle,
+                    systemImage: controller.endpointHealthStatus.systemImageName,
+                    tone: controller.endpointHealthStatus.tone
+                )
+            }
+        }
+    }
+
+    private func preflightBadge(
+        title: LocalizedStringKey,
+        value: String,
+        systemImage: String,
+        tone: EndpointHealthStatusTone,
+        valueLineLimit: Int? = nil
+    ) -> some View {
+        Label {
+            VStack(alignment: .leading, spacing: DesignTokens.Spacing.xxs) {
+                Text(title)
+                    .font(DesignTokens.Font.captionSmall.weight(.semibold))
+                    .textCase(.uppercase)
+                Text(value)
+                    .font(DesignTokens.Font.codeCaption)
+                    .lineLimit(valueLineLimit)
+                    .truncationMode(.middle)
+                    .textSelection(.enabled)
+            }
+        } icon: {
+            Image(systemName: systemImage)
+                .foregroundStyle(preflightColor(for: tone))
+        }
+        .padding(.horizontal, DesignTokens.Spacing.sm)
+        .padding(.vertical, DesignTokens.Spacing.sm)
+        .frame(maxWidth: .infinity, minHeight: 54, alignment: .leading)
+        .background(preflightColor(for: tone).opacity(0.10), in: RoundedRectangle(cornerRadius: 6))
+    }
+
     private func endpointDetailRow(
         title: LocalizedStringKey,
         value: String,
@@ -184,6 +285,23 @@ struct EndpointView: View {
 
     private var healthAccessibilityValue: String {
         controller.endpointHealthStatus.localizedAccessibilityValue
+    }
+
+    private var isServerRunning: Bool {
+        if case .running = controller.status {
+            return true
+        }
+
+        return false
+    }
+
+    private func preflightColor(for tone: EndpointHealthStatusTone) -> Color {
+        switch tone {
+        case .neutral: .secondary
+        case .inProgress: .orange
+        case .success: .green
+        case .failure: .red
+        }
     }
 }
 

@@ -35,14 +35,14 @@ bounded GGUF Acquisition lane, and does not include packaged `.app`, zip, dmg,
 signing, notarization, checksum, or binary distribution artifacts. Treat exact
 version numbers as release history, not as the next work selector.
 
-Current human direction: the automated development loop is paused after the
-`v1.7.0` source-only checkpoint while release and packaged-artifact
-expectations are reviewed manually. If automation is resumed, it should fix one
-quality or smoke-observed rough edge at a time. It is acceptable to spend runs
-on smoke verification and fix the first concrete rough edge found, as long as
-the fix stays small and verifiable. It is also acceptable to make no code
-change when checks and smoke evidence do not point to a justified slice; report
-that verified no-op plainly instead of inventing work.
+Current human direction: the automated development loop is resumed as a
+stability-only quality loop after the `v1.7.0` source-only checkpoint and the
+warning-expected DMG preview. It should fix one quality or smoke-observed rough
+edge at a time. It is acceptable to spend runs on smoke verification and fix
+the first concrete rough edge found, as long as the fix stays small and
+verifiable. It is also acceptable to make no code change when checks and smoke
+evidence do not point to a justified slice; report that verified no-op plainly
+instead of inventing work.
 Packaged app release work remains a separate future handoff. Automation should
 not create packaged artifacts, mutate runtime installs, change GitHub settings,
 or decide packaged-release readiness by itself.
@@ -246,25 +246,28 @@ implemented, verified, and reported in the same run.
 
 Saved Codex automation:
 
-- name: Hazakura Lantern development loop
+- name: Hazakura Lantern stability loop
 - id: `hazakura-llm-manager`
-- cadence: every 30 minutes in the user's local timezone
+- cadence: every 2 hours in the user's local timezone
 - environment: local execution in this project directory
 
-30-minute posture:
+2-hour stability posture:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.
-- Choose at most one small smoke-console, smoke-metrics,
-  code-quality, release-quality, or post-checkpoint readiness slice.
+- Choose at most one small stability, smoke, code-quality, release-quality, or
+  post-checkpoint readiness slice.
 - Prefer implementation, tests, docs, commit, and push only when the slice is
-  clear and verification passes.
+  clear, genuinely improves local stability/quality, and verification passes.
 - Keep runs quiet, but progress-biased. A verified no-op is valid when no
   failing quality check, smoke-lane slice, concrete rough edge, or
   post-checkpoint readiness prep is safely actionable in this run.
 - Smoke-first runs are allowed: run a bounded manual or scripted smoke path,
   fix one concrete issue if it appears, and otherwise close with the smoke
   evidence and no code change.
+- Do not add product features merely because the automation woke up. The loop
+  acts as a local stability inspector for launch, stop, endpoint, copy, smoke,
+  localization, path-validation, and docs correctness.
 
 Preferred order:
 

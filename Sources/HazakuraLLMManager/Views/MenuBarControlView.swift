@@ -130,6 +130,21 @@ struct MenuBarControlView: View {
                 }
                 .accessibilityHint(Text("Copy OpenAI-compatible environment variables to the clipboard."))
 
+                Button("Copy OpenCode Config") {
+                    copyFromMenuBar(endpoint.openCodeConfigSnippet)
+                }
+                .accessibilityHint(Text("Copy the OpenCode provider config for the selected local endpoint."))
+
+                Button("Copy Hazakura Note JSON") {
+                    copyFromMenuBar(endpoint.hazakuraNoteConnectionSnippet)
+                }
+                .accessibilityHint(Text("Copy the Hazakura Note local endpoint connection JSON."))
+
+                Button("Copy Connection JSON") {
+                    copyFromMenuBar(endpoint.connectionSnapshotSnippet)
+                }
+                .accessibilityHint(Text("Copy a generic local endpoint connection snapshot as JSON."))
+
                 Button("Copy Health Check") {
                     if let cmd = endpoint.endpointHealthCurlCommand {
                         copyFromMenuBar(cmd)

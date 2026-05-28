@@ -26,6 +26,8 @@ artifact.
 - Start, stop, and restart the server process.
 - Show stdout/stderr logs in memory.
 - Show and copy the selected local OpenAI-compatible endpoint.
+- Show connection preflight status and copy OpenCode, Hazakura Note, and
+  generic local endpoint JSON snippets for other local clients.
 - Show and copy the generated launch command for inspection.
 - Check the local endpoint health manually.
 - Export and import the active runtime profile as `.lantern-profile.json`.

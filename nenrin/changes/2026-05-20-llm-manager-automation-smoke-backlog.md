@@ -48,6 +48,14 @@ review_after:
   acceptable: run a bounded smoke or inspection path, fix one concrete issue if
   it appears, and otherwise close as a verified no-op instead of inventing
   speculative cleanup.
+- Recorded the 2026-05-29 human direction to resume the saved Lantern
+  automation as a 2-hour stability-only quality loop, focused on local
+  reliability, smoke evidence, small verifiable fixes, and verified no-op
+  outcomes rather than feature growth.
+- Recorded the 2026-05-29 stability run finding that Launch Services returned
+  `kLSNoExecutableErr` for both Lantern's helper bundle and Calculator in the
+  same host session, so future runs should classify that condition as a host
+  smoke blocker before treating it as a Lantern bundle regression.
 
 ## Reason
 
@@ -87,6 +95,14 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 - Future runs may start from smoke or inspection evidence, then either fix one
   concrete release-quality rough edge or report a verified no-op when no small
   justified change appears.
+- Future runs should treat the resumed 2-hour cadence as a stability inspector
+  loop. It should protect launch, stop, endpoint, copy, smoke, localization,
+  path-validation, and docs correctness without adding new product surfaces
+  merely because the automation woke up.
+- Future runs should control-check Launch Services with a normal system app
+  when `./script/build_and_run.sh --verify` fails with `kLSNoExecutableErr`;
+  if the control app also fails, use SwiftPM verification as the source signal
+  and report helper smoke as environment-blocked.
 
 ## Review After
 
@@ -101,6 +117,8 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
   when no safe quality slice exists.
 - Smoke-first runs report the smoke path and either one verified fix or a
   clear no-op when the evidence stays quiet.
+- Resumed stability-loop runs either fix one small observed reliability or
+  quality issue with verification, or report a verified no-op.
 - Source verification remains boring: `git diff --check`, localization lint, `swift test`, and `swift build --disable-sandbox` pass even when Launch Services helper smoke is blocked.
 
 ## Failure Signals

@@ -16,6 +16,8 @@
 "Client Connection URL:" = "クライアント接続URL:";
 "Client Connection curl" = "クライアント接続 curl";
 "Collapsed" = "折りたたみ";
+"Connection Preflight" = "接続前確認";
+"Connection Snapshot JSON" = "接続スナップショットJSON";
 "Configuration" = "構成";
 "Context" = "コンテキスト";
 "Copy" = "コピー";
@@ -32,10 +34,16 @@
 "Copy OpenAI-compatible environment variables to the clipboard." = "OpenAI互換の環境変数をクリップボードへコピーします。";
 "Copy the generated launch command to the clipboard." = "生成された起動コマンドをクリップボードへコピーします。";
 "Copy Health Check" = "ヘルスチェックをコピー";
+"Copy Hazakura Note JSON" = "Hazakura Note JSONをコピー";
 "Copy Launch Command" = "起動コマンドをコピー";
+"Copy Connection JSON" = "接続JSONをコピー";
 "Copy Model ID" = "モデルIDをコピー";
+"Copy OpenCode Config" = "OpenCode設定をコピー";
 "Description" = "説明";
+"Copy a generic local endpoint connection snapshot as JSON." = "汎用のローカルエンドポイント接続スナップショットをJSONとしてコピーします。";
+"Copy the Hazakura Note local endpoint connection JSON." = "Hazakura Note向けのローカルエンドポイント接続JSONをコピーします。";
 "Copy the client connection URL to the clipboard." = "クライアント接続URLをクリップボードへコピーします。";
+"Copy the OpenCode provider config for the selected local endpoint." = "選択中のローカルエンドポイント向けOpenCode provider設定をコピーします。";
 "Copy the timeout-bounded AI Mobile smoke curl command to the clipboard." = "タイムアウト付きのAI Mobile動作確認curlコマンドをクリップボードへコピーします。";
 "Copy the timeout-bounded health-check curl command to the clipboard." = "タイムアウト付きのヘルスチェックcurlコマンドをクリップボードへコピーします。";
 "Dashboard" = "ダッシュボード";
@@ -61,7 +69,9 @@
 "GPU Layers" = "GPUレイヤー";
 "Error" = "エラー";
 "Hazakura Lantern" = "Hazakura Lantern";
+"Health" = "ヘルス";
 "Health Check curl" = "ヘルスチェック curl";
+"Hazakura Note Connection JSON" = "Hazakura Note接続JSON";
 "Health check is not available for this adapter." = "このアダプタではヘルスチェックを利用できません。";
 "Hide Runtime Arguments" = "引数一覧を隠す";
 "If not installed, run this command via Terminal:" = "未インストールの場合は、ターミナルで次を実行してください:";
@@ -90,6 +100,7 @@
 "Not running" = "未実行";
 "Open Setup Guide" = "セットアップガイドを開く";
 "Open copy options for the launch command, endpoint, environment, and smoke commands." = "起動コマンド、エンドポイント、環境変数、動作確認コマンドのコピー項目を開きます。";
+"OpenCode opencode.json" = "OpenCode opencode.json";
 "Open Window" = "ウィンドウを開く";
 "Port" = "ポート";
 "Prepare GGUF Model" = "GGUFモデルを準備";

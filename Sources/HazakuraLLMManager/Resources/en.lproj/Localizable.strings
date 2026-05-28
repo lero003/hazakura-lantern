@@ -16,6 +16,8 @@
 "Client Connection URL:" = "Client Connection URL:";
 "Client Connection curl" = "Client Connection curl";
 "Collapsed" = "Collapsed";
+"Connection Preflight" = "Connection Preflight";
+"Connection Snapshot JSON" = "Connection Snapshot JSON";
 "Configuration" = "Configuration";
 "Context" = "Context";
 "Copy" = "Copy";
@@ -32,10 +34,16 @@
 "Copy OpenAI-compatible environment variables to the clipboard." = "Copy OpenAI-compatible environment variables to the clipboard.";
 "Copy the generated launch command to the clipboard." = "Copy the generated launch command to the clipboard.";
 "Copy Health Check" = "Copy Health Check";
+"Copy Hazakura Note JSON" = "Copy Hazakura Note JSON";
 "Copy Launch Command" = "Copy Launch Command";
+"Copy Connection JSON" = "Copy Connection JSON";
 "Copy Model ID" = "Copy Model ID";
+"Copy OpenCode Config" = "Copy OpenCode Config";
 "Description" = "Description";
+"Copy a generic local endpoint connection snapshot as JSON." = "Copy a generic local endpoint connection snapshot as JSON.";
+"Copy the Hazakura Note local endpoint connection JSON." = "Copy the Hazakura Note local endpoint connection JSON.";
 "Copy the client connection URL to the clipboard." = "Copy the client connection URL to the clipboard.";
+"Copy the OpenCode provider config for the selected local endpoint." = "Copy the OpenCode provider config for the selected local endpoint.";
 "Copy the timeout-bounded AI Mobile smoke curl command to the clipboard." = "Copy the timeout-bounded AI Mobile smoke curl command to the clipboard.";
 "Copy the timeout-bounded health-check curl command to the clipboard." = "Copy the timeout-bounded health-check curl command to the clipboard.";
 "Dashboard" = "Dashboard";
@@ -61,7 +69,9 @@
 "GPU Layers" = "GPU Layers";
 "Error" = "Error";
 "Hazakura Lantern" = "Hazakura Lantern";
+"Health" = "Health";
 "Health Check curl" = "Health Check curl";
+"Hazakura Note Connection JSON" = "Hazakura Note Connection JSON";
 "Health check is not available for this adapter." = "Health check is not available for this adapter.";
 "Hide Runtime Arguments" = "Hide Runtime Arguments";
 "If not installed, run this command via Terminal:" = "If not installed, run this command via Terminal:";
@@ -90,6 +100,7 @@
 "Not running" = "Not running";
 "Open Setup Guide" = "Open Setup Guide";
 "Open copy options for the launch command, endpoint, environment, and smoke commands." = "Open copy options for the launch command, endpoint, environment, and smoke commands.";
+"OpenCode opencode.json" = "OpenCode opencode.json";
 "Open Window" = "Open Window";
 "Port" = "Port";
 "Prepare GGUF Model" = "Prepare GGUF Model";
