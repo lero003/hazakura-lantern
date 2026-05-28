@@ -3,7 +3,7 @@ public struct SourceCheckpointInfo: Equatable, Sendable {
     public let includesPackagedAppArtifact: Bool
 
     public static let current = SourceCheckpointInfo(
-        identifier: "v1.5.1",
+        identifier: "v1.7.0",
         includesPackagedAppArtifact: false
     )
 }

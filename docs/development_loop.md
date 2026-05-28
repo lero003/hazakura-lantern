@@ -27,25 +27,23 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Automation Focus
 
-The project has a public source-only `v1.5.1` checkpoint for personal/local
-use. It keeps the existing `llama-server` control boundary, adds explicit
-public license and contribution metadata, and does not include packaged
-`.app`, zip, dmg, signing, notarization, checksum, or binary distribution
-artifacts. Treat exact v0.x numbers as release history, not as the next work
-selector.
+The project has a public source-only `v1.7.0` checkpoint for personal/local
+use. It keeps the existing `llama-server` control boundary, includes the
+bounded GGUF Acquisition lane, and does not include packaged `.app`, zip, dmg,
+signing, notarization, checksum, or binary distribution artifacts. Treat exact
+version numbers as release history, not as the next work selector.
 
-Current human direction: continue automated development and manual verification
-after the `v1.5.1` source-only checkpoint and the first GGUF Acquisition slice,
-fixing one quality or smoke-observed rough edge at a time before any later
-source checkpoint. It is acceptable to spend runs on smoke verification and fix
-the first concrete rough edge found, as long as the fix stays small and
-verifiable. It is also acceptable to make no code change when checks and smoke
-evidence do not point to a justified slice; report that verified no-op plainly
-instead of inventing work.
+Current human direction: the automated development loop is paused after the
+`v1.7.0` source-only checkpoint while release and packaged-artifact
+expectations are reviewed manually. If automation is resumed, it should fix one
+quality or smoke-observed rough edge at a time. It is acceptable to spend runs
+on smoke verification and fix the first concrete rough edge found, as long as
+the fix stays small and verifiable. It is also acceptable to make no code
+change when checks and smoke evidence do not point to a justified slice; report
+that verified no-op plainly instead of inventing work.
 Packaged app release work remains a separate future handoff. Automation should
-keep progressing small verified slices without creating packaged artifacts,
-mutating runtime installs, changing GitHub settings, or deciding
-packaged-release readiness by itself.
+not create packaged artifacts, mutate runtime installs, change GitHub settings,
+or decide packaged-release readiness by itself.
 
 The default question for each automation run is:
 
@@ -58,7 +56,7 @@ currently useful unfinished gates are:
 
 - fix failing `swift test`, `swift build --disable-sandbox`, localization lint,
   or `git diff --check` results before choosing polish
-- after v1.5 and the first GGUF Acquisition slice: use smoke runs, fake-client
+- after v1.7: use smoke runs, fake-client
   tests, and manual evidence to fix one concrete rough edge at a time before
   considering another source checkpoint
 - when a smoke or inspection run finds no concrete release-quality rough edge,
@@ -152,7 +150,7 @@ source-checkpoint centralization. Health checks now follow the chosen rule:
 the action is disabled unless the server is running. Toolbar scope is also
 decided for now: keep only Setup Guide, profile import/export, and copy
 actions. The current source release posture is also decided for now:
-`v1.5.1` is a source-only checkpoint, while packaged release remains a later
+`v1.7.0` is a source-only checkpoint, while packaged release remains a later
 handoff. Keep Hugging Face setup guidance, Homebrew copy
 placement, runtime breadth, and packaged-release work as human-decision items.
 
@@ -275,7 +273,7 @@ Preferred order:
 4. Harden GGUF Acquisition in one small slice when evidence exists: fake API
    coverage, downloader resume/cancel/failure behavior, path validation,
    localized UI copy, no-download public API smoke, or model-path handoff.
-5. Fix smoke-observed rough edges after v1.5 without turning the surface into
+5. Fix smoke-observed rough edges after v1.7 without turning the surface into
    chat, saved history, benchmark ranking, or runtime optimization.
 6. Make one small verified code-quality improvement inside the current
    `llama-server` boundary.

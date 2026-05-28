@@ -147,18 +147,17 @@ Use `docs/external_review_flow.md` when asking outside reviewers whether this
 multimedia direction should stay separate, become a sibling project, or later
 share a local-runtime control contract with Lantern.
 
-## Current Source Lane: v1.5 Source-Only Checkpoint
+## Current Source Lane: v1.7 Source-Only Checkpoint
 
-The project has reached a public source-only `v1.5.1` checkpoint for
+The project has reached a public source-only `v1.7.0` checkpoint for
 personal/local use. It keeps the existing `llama-server` control boundary,
-adds explicit public license and contribution metadata on top of `v1.5.0`, and
-does not include packaged `.app`, zip, dmg, signing, notarization, checksum, or
-binary distribution artifacts. The previous public source-only checkpoint was
-`v1.5.0`. The 2026-05-24 helper smoke and 2026-05-25 normal desktop smoke now
-verify source builds, local bundle launch cleanup, Setup Guide behavior, real
-local Smoke Console requests, toolbar profile panel presentation, and menu-bar
-Stop/quit cleanup. This remains source-only evidence; a packaged-release pass
-still needs the actual distributed artifact path and full release review.
+includes the bounded GGUF Acquisition lane, and does not include packaged
+`.app`, zip, dmg, signing, notarization, checksum, or binary distribution
+artifacts. The previous public source-only checkpoint was `v1.5.1`. The
+2026-05-24 helper smoke, 2026-05-25 normal desktop smoke, and GGUF Acquisition
+hardening checks provide source confidence. This remains source-only evidence;
+a packaged-release pass still needs the actual distributed artifact path and
+full release review.
 
 Packaged release work remains separate from source milestones. Automation
 should keep code quality boring, close small verified `llama-server` daily-use
@@ -167,7 +166,7 @@ packaging-prep checks, and guarded update-workflow planning. This preparation
 must not create packaged artifacts, mutate runtimes, or change GitHub settings
 without a new human handoff.
 
-Use v0 through v1.5 notes below as foundation and backlog context, not as a
+Use v0 through v1.7 notes below as foundation and backlog context, not as a
 reason to reopen closed work without a concrete ambiguity. The next useful
 source work should fix failing checks, improve one smoke-observed rough edge,
 classify post-public feedback, tighten automation-safe triage, prepare
@@ -861,6 +860,30 @@ Completion criteria:
 - `swift test`, `swift build --disable-sandbox`, localization lint, and
   `git diff --check` pass
 
+Status:
+
+Completed by the `v1.5.1` source-only checkpoint. Later source checkpoints,
+including `v1.7.0`, build on this evidence without changing the packaged
+release boundary.
+
+## v1.7 - GGUF Acquisition Source Checkpoint
+
+Purpose:
+
+Publish the bounded GGUF Acquisition source checkpoint after public API parsing,
+safe local destination construction, resumable download behavior, localized
+status copy, accessibility hints, and no-download public API smoke evidence are
+quiet enough for personal/local source use.
+
+Completion criteria:
+
+- app source checkpoint metadata says `v1.7.0`
+- README, changelog, current status, roadmap, and automation guidance agree
+  that v1.7 is source-only and not a packaged app release
+- GGUF Acquisition remains a user-triggered public `.gguf` file helper, not a
+  model library, background downloader, ranking system, or gated-account flow
+- `swift test`, `swift build --disable-sandbox`, and `git diff --check` pass
+
 ## v1.x - Second Runtime Design
 
 After v1.0, revisit whether a second runtime is still the next smallest risk.
@@ -954,7 +977,7 @@ Good next slices:
   preferably with fake Hugging Face responses, downloader state tests,
   destination-path checks, no-download API shape smoke, or UI copy/accessibility
   polish
-- after v1.5, use Smoke Console, GGUF Acquisition, or manual reports to fix one
+- after v1.7, use Smoke Console, GGUF Acquisition, or manual reports to fix one
   concrete rough edge at a time
 - expose or fix one concrete rough edge from `docs/automation_smoke_backlog.md`
   when it can be verified without broad restyling, runtime mutation, packaging

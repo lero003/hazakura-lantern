@@ -35,7 +35,7 @@ body:
     attributes:
       label: Lantern version or commit
       description: Use the tag, release checkpoint, or commit hash you tested.
-      placeholder: "v1.5.1 or commit hash"
+      placeholder: "v1.7.0 or commit hash"
     validations:
       required: true
 

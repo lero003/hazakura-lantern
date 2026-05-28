@@ -366,7 +366,7 @@ observed the app or the user supplied specific visual evidence.
 
 ## Smoke Console And Metrics Targets
 
-Use these targets for post-v1.5 smoke polish:
+Use these targets for post-v1.7 smoke polish:
 
 - core request and result model for explicit `/v1/chat/completions` smoke
 - timeout-bounded local client with focused error mapping
@@ -447,13 +447,13 @@ were already covered on `main` after the reviewed snapshot: copy feedback,
 running-only health checks, Setup Guide no-runtime wording, endpoint copy
 accessibility, logs retention wording, source-checkpoint centralization,
 localized preset descriptions, duplicate localization key cleanup, and toolbar
-reduction. The current source posture is now decided: `v1.5.1` is the current
-source-only checkpoint, while `v1.5.0` is the previous source-only smoke
-checkpoint and packaged release remains a later handoff. Keep the remaining
-current signals narrow: `v1.5.1` is only a license/contribution metadata patch
-on top of that checkpoint; normal desktop/manual UI smoke is still missing,
-helper launch smoke is still not packaged-release proof, and Hugging Face setup
-guidance / Homebrew command placement remain human-decision items.
+reduction. The current source posture is now decided: `v1.7.0` is the current
+source-only checkpoint, while `v1.5.1` is the previous source-only checkpoint.
+Packaged release remains a later handoff. Keep the remaining current signals
+narrow: `v1.7.0` adds the bounded GGUF Acquisition lane on top of the earlier
+source checkpoints, but helper launch smoke is still not packaged-release
+proof and Hugging Face setup guidance / Homebrew command placement remain
+human-decision items.
 
 ### 2026-05-21 Gemini Intake
 

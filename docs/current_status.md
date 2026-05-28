@@ -7,11 +7,10 @@ Last reviewed: 2026-05-28
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v1.5.1` is a public source-only checkpoint for
-personal/local use. It keeps the existing `llama-server` control boundary, adds
-explicit public license and contribution metadata on top of `v1.5.0`, and is
-not a packaged app release. The previous public source-only checkpoint was
-`v1.5.0`.
+Current release checkpoint: `v1.7.0` is a public source-only checkpoint for
+personal/local use. It keeps the existing `llama-server` control boundary,
+includes the bounded GGUF Acquisition lane, and is not a packaged app release.
+The previous public source-only checkpoint was `v1.5.1`.
 
 Repository licensing is explicit: Hazakura Lantern source code is MIT-licensed
 through the top-level `LICENSE` file and README license section. External
@@ -872,18 +871,15 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: continue automated development and manual desktop
-verification after the `v1.5.1` source-only checkpoint and the first GGUF
-Acquisition slice, then fix one quality or smoke-observed rough edge at a time
-before any later source checkpoint. A run may focus on smoke verification first,
-then fix the first concrete issue it exposes. If the current checks and smoke
-evidence do not justify a small change, a verified no-op is the expected
-outcome rather than a failure.
-Packaged app release remains separate: automation should
-continue code-quality checks, narrow verified improvements, and
-packaged-release readiness evidence, but should not create packaged artifacts,
-change GitHub settings, mutate public issues, or decide packaged-release
-readiness by itself.
+Current human direction: the automated development loop is paused after the
+`v1.7.0` source-only checkpoint while release and packaged-artifact
+expectations are reviewed manually. If automation is resumed, it should
+continue with one small quality, smoke, or post-checkpoint readiness slice at a
+time. If the current checks and smoke evidence do not justify a small change, a
+verified no-op is the expected outcome rather than a failure.
+Packaged app release remains separate: automation should not create packaged
+artifacts, change GitHub settings, mutate public issues, or decide
+packaged-release readiness by itself.
 
 No user-facing packaged release should be cut until the remaining release
 quality gates below are resolved or explicitly deferred by a human.
@@ -947,7 +943,7 @@ Good next automated candidates:
 
 - fix any failing `swift test`, `swift build --disable-sandbox`, localization
   lint, or `git diff --check` result before picking a polish slice
-- after v1.5, run smoke and fix one concrete rough edge at a time while keeping
+- after v1.7, run smoke and fix one concrete rough edge at a time while keeping
   conversation history, prompt libraries, RAG/tools, benchmark rankings, and
   runtime optimization out of scope
 - when smoke or inspection finds no concrete quality issue, report the evidence

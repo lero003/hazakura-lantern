@@ -4,6 +4,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+## v1.7.0 - 2026-05-28
+
 ### Added
 
 - Added a bounded GGUF Acquisition page that searches public Hugging Face GGUF
@@ -14,6 +16,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ### Changed
 
+- Released a source-only v1.7 checkpoint for personal/local use, with no
+  packaged `.app`, zip, dmg, signing, notarization, checksum, or binary
+  distribution artifact.
 - Hardened GGUF Acquisition repository-id handling so unsupported Hugging Face
   search-result ids are filtered before selection, and unsafe ids are rejected
   before listing repository files.

@@ -12,11 +12,11 @@ apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v1.5.1` is a public source-only checkpoint for
-personal/local use. It adds explicit MIT license and contribution metadata on
-top of the `v1.5.0` Smoke Console / Setup Guide checkpoint, keeps the existing
-`llama-server` control boundary, and does not include a packaged `.app`, zip,
-dmg, signing, notarization, checksum, or binary distribution artifact.
+Current checkpoint: `v1.7.0` is a public source-only checkpoint for
+personal/local use. It keeps the existing `llama-server` control boundary,
+adds the bounded GGUF Acquisition lane, and does not include a packaged
+`.app`, zip, dmg, signing, notarization, checksum, or binary distribution
+artifact.
 
 ## Current Source Scope
 
