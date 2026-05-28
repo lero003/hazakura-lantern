@@ -169,6 +169,9 @@ Implemented scope:
 - GGUF Acquisition downloads now reject mismatched `Content-Range` resume
   responses before appending bytes, keeping the existing `.part` file available
   for an explicit retry instead of completing a corrupted `.gguf`.
+- GGUF Acquisition downloads now reject resumed `Content-Range` totals that
+  disagree with known expected file metadata before appending bytes, keeping
+  the existing `.part` retry file intact.
 - GGUF Acquisition downloads now reject unexpected `206 Content-Range`
   responses that start after byte `0` when no resume file exists, avoiding a
   misleading partial suffix that could corrupt the next explicit retry.
@@ -702,12 +705,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF byte-metadata hardening pass):
+Current source-verification status (2026-05-28 GGUF resume-total hardening pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (296 XCTest tests, 0 failures), and
+`swift test` (297 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
-downloads so non-positive expected byte counts and `Content-Length` values are
-treated as unknown metadata instead of poisoning progress or completion checks.
+downloads so resumed `Content-Range` totals that disagree with known expected
+file metadata fail before bytes are appended.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

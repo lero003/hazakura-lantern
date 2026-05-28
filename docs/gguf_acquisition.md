@@ -89,8 +89,10 @@ failure display, and a best-effort `.part` resume when the local partial file
 and server `Range` behavior line up. When the expected file size is known,
 Lantern keeps an incomplete response as `.part` instead of promoting it to a
 final `.gguf`; non-positive public API size values are treated as unknown
-metadata. Resumed downloads also use a valid `Content-Range` total as a
-completion check when repository tree metadata did not include a file size.
+metadata. Resumed downloads reject server `Content-Range` totals that disagree
+with known expected file metadata before appending bytes. Resumed downloads
+also use a valid `Content-Range` total as a completion check when repository
+tree metadata did not include a file size.
 Fresh successful downloads also treat a positive `Content-Length` as a
 completion check, keeping short responses resumable instead of promoting a
 misleading completed `.gguf`.

@@ -84,6 +84,14 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
                     actualStart: resumeStart
                 )
             }
+            if let expectedBytes,
+               let rangeTotalBytes = contentRange?.totalBytes,
+               rangeTotalBytes != expectedBytes {
+                throw GGUFAcquisitionError.incompleteDownload(
+                    expectedBytes: expectedBytes,
+                    actualBytes: rangeTotalBytes
+                )
+            }
             if !fileManager.fileExists(atPath: partialURL.path) {
                 _ = fileManager.createFile(atPath: partialURL.path, contents: Data())
             }

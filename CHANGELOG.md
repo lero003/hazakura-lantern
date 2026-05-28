@@ -60,6 +60,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition downloads so mismatched `Content-Range` resume
   responses fail before appending bytes, keeping the existing `.part` file
   available for an explicit retry.
+- Hardened GGUF Acquisition downloads so resumed `Content-Range` totals must
+  agree with known expected file metadata before resume bytes are appended.
 - Hardened GGUF Acquisition downloads so resumed `Content-Range` responses
   must provide the byte count declared by the response range before a `.part`
   file can be promoted.
