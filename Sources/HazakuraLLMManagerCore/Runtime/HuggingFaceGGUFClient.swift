@@ -306,7 +306,11 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             from container: KeyedDecodingContainer<CodingKeys>,
             forKey key: CodingKeys
         ) -> [String]? {
-            try? container.decodeIfPresent([String].self, forKey: key)
+            if let strings = try? container.decodeIfPresent([String].self, forKey: key) {
+                return strings
+            }
+
+            return (try? container.decodeIfPresent(LossyStringArray.self, forKey: key))?.elements
         }
 
         private static func decodeOptionalInt(
@@ -330,6 +334,25 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             }
 
             return value
+        }
+
+        private struct LossyStringArray: Decodable {
+            var elements: [String]
+
+            init(from decoder: Decoder) throws {
+                var container = try decoder.unkeyedContainer()
+                var elements: [String] = []
+
+                while !container.isAtEnd {
+                    if let value = try? container.decode(String.self) {
+                        elements.append(value)
+                    } else {
+                        _ = try container.decode(DiscardedJSONValue.self)
+                    }
+                }
+
+                self.elements = elements
+            }
         }
     }
 

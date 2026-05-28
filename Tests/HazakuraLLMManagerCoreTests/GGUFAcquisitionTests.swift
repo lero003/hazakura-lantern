@@ -339,6 +339,32 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(results[1].tags, ["gguf", "qwen"])
     }
 
+    func testClientSearchKeepsReadableTagsFromMixedTagArrays() async throws {
+        let session = makeSession { _ in
+            (
+                200,
+                Data("""
+                [
+                  {
+                    "id": "owner/mixed-tags-GGUF",
+                    "tags": ["gguf", 42, {"name": "ignored"}, "qwen"]
+                  }
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "qwen", limit: 10)
+
+        XCTAssertEqual(results.map(\.id), ["owner/mixed-tags-GGUF"])
+        XCTAssertEqual(results[0].tags, ["gguf", "qwen"])
+    }
+
     func testClientSearchSkipsMalformedIdentityFieldsWithoutDroppingCompatibleResults() async throws {
         let session = makeSession { _ in
             (
