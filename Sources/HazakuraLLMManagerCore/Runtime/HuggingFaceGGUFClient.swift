@@ -168,6 +168,7 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             && value != ".."
             && !value.contains("/")
             && !value.contains("\\")
+            && value.rangeOfCharacter(from: .controlCharacters) == nil
     }
 
     private func downloadURL(repoID: String, filePath: String) -> URL {

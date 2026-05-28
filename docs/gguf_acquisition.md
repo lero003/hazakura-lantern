@@ -73,8 +73,8 @@ rejected as download directories before Lantern attempts to create the
 
 Repository tree parsing accepts ordinary nested `.gguf` paths but ignores unsafe
 file paths with empty, current-directory, parent-directory, absolute, or
-backslash-style components, or components with leading/trailing whitespace,
-before a download candidate is shown.
+backslash-style components, or components with leading/trailing whitespace or
+control characters, before a download candidate is shown.
 
 Public repository search parsing accepts ordinary Boolean `gated` metadata and
 compatible string forms such as `auto`, `manual`, or `false` without starting a

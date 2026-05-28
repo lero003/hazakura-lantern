@@ -203,5 +203,6 @@ public enum GGUFDownloadDestination {
             && value != ".."
             && !value.contains("/")
             && !value.contains("\\")
+            && value.rangeOfCharacter(from: .controlCharacters) == nil
     }
 }

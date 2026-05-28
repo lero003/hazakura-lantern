@@ -167,6 +167,9 @@ Implemented scope:
 - GGUF Acquisition repository and file-path safety now rejects leading or
   trailing whitespace in Hugging Face path components instead of silently
   normalizing those values into local destinations.
+- GGUF Acquisition repository and file-path safety now also rejects control
+  characters in Hugging Face path components before they can become selectable
+  repository files or local destination paths.
 - GGUF Acquisition destination construction now revalidates repository and
   file-path components before creating the local `<owner>/<repo>/<file.gguf>`
   path, so unsafe paths are rejected even if they bypass the tree parser.

@@ -140,6 +140,9 @@ Previous source-verification result (2026-05-28 GGUF accessibility polish pass):
 - GGUF Acquisition repository and file-path safety now rejects leading or
   trailing whitespace in Hugging Face path components instead of silently
   normalizing those values into local destinations.
+- GGUF Acquisition repository and file-path safety now rejects control
+  characters in Hugging Face path components before they can become selectable
+  repository files or local destination paths.
 - GGUF Acquisition search parsing now falls back to a supported `modelId` when
   a public Hugging Face search result also includes an unsupported `id`, keeping
   compatible fake API results selectable without starting a download.

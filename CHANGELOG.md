@@ -43,6 +43,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition repository and file-path safety so leading or
   trailing whitespace in Hugging Face path components is rejected instead of
   being silently normalized into a local destination.
+- Hardened GGUF Acquisition repository and file-path safety so control
+  characters in Hugging Face path components are rejected before selection or
+  destination construction.
 - Hardened GGUF Acquisition download-directory handling so typed relative
   paths are rejected instead of being interpreted from Lantern's current
   working directory, while `~` paths still expand to the user's home directory.

@@ -22,7 +22,8 @@ final class GGUFAcquisitionTests: XCTestCase {
             "owner",
             " owner/model-GGUF",
             "owner/model-GGUF ",
-            "owner /model-GGUF"
+            "owner /model-GGUF",
+            "owner/model\nGGUF"
         ]
 
         for repoID in invalidRepoIDs {
@@ -69,6 +70,7 @@ final class GGUFAcquisitionTests: XCTestCase {
             "nested/../parent.gguf",
             " nested/model.gguf",
             "nested/model.gguf ",
+            "nested/model\nname.gguf",
             "nested\\slash.gguf",
             "not-a-gguf.txt"
         ]
@@ -582,6 +584,7 @@ final class GGUFAcquisitionTests: XCTestCase {
                   {"type": "file", "path": "nested/../parent.gguf", "size": 14},
                   {"type": "file", "path": " nested/model.gguf", "size": 15},
                   {"type": "file", "path": "nested/model.gguf ", "size": 16},
+                  {"type": "file", "path": "nested/model\\nname.gguf", "size": 17},
                   {"type": "file", "path": "nested\\\\slash.gguf", "size": 15},
                   {"type": "file", "path": "nested/model-Q4.gguf", "size": 1234}
                 ]
@@ -819,6 +822,7 @@ final class GGUFAcquisitionTests: XCTestCase {
             " owner/model-GGUF",
             "owner/model-GGUF ",
             "owner /model-GGUF",
+            "owner/model\nGGUF",
             "owner\\name/model-GGUF"
         ]
 
