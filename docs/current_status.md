@@ -154,6 +154,10 @@ Implemented scope:
 - GGUF Acquisition no-download public API shape coverage now proves search
   queries are trimmed, search limits are clamped, and blank queries are rejected
   before any Hugging Face request is made.
+- GGUF Acquisition no-download public API smoke has confirmed that the current
+  Hugging Face search endpoint can still return public GGUF repositories and
+  that the repository tree endpoint can still return selectable `.gguf` files,
+  without starting a model download.
 - GGUF Acquisition repository tree parsing now normalizes compatible file-entry
   type values such as `" FILE "` before accepting `.gguf` files, while still
   ignoring non-file entries.
@@ -726,13 +730,24 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF accessibility polish pass):
+Current source-verification status (2026-05-28 no-download GGUF public API
+smoke pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (303 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. The pass added localized accessibility
-hints for GGUF Acquisition search, directory choice, file selection, download,
-cancel, and "Use as Model" controls. App-bundle, real runtime smoke, and live
-public Hugging Face API smoke were not rerun for this UI/accessibility slice.
+`swift build --disable-sandbox` passed. A no-download live Hugging Face API
+shape smoke searched public GGUF repositories for
+`Qwen2.5-0.5B-Instruct-GGUF`, observed selectable results including
+`Qwen/Qwen2.5-0.5B-Instruct-GGUF`, then listed that repository tree and
+observed multiple `.gguf` files including
+`qwen2.5-0.5b-instruct-q4_k_m.gguf`. No model file was downloaded, app-bundle
+smoke was not rerun, and real local runtime smoke was not rerun for this
+API-shape evidence slice.
+
+Previous 2026-05-28 GGUF accessibility polish passed `git diff --check`,
+English/Japanese `Localizable.strings` lint, `swift test` (303 XCTest tests, 0
+failures), and `swift build --disable-sandbox`. That pass added localized
+accessibility hints for GGUF Acquisition search, directory choice, file
+selection, download, cancel, and "Use as Model" controls.
 
 Previous 2026-05-28 GGUF download-directory hardening passed
 `git diff --check`, English/Japanese `Localizable.strings` lint,

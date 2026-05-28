@@ -99,6 +99,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Added no-download GGUF Acquisition public API shape coverage for trimmed
   search queries, clamped search limits, and blank-query rejection before any
   Hugging Face request is made.
+- Recorded no-download GGUF Acquisition public API smoke evidence showing that
+  Hugging Face search and repository tree endpoints still return selectable
+  public GGUF repository and file entries without starting a model download.
 - Localized app-owned endpoint health status titles and healthy/checking/
   unchecked details in Dashboard, Endpoint, and Setup Guide surfaces, keeping
   Japanese desktop smoke evidence readable without changing runtime-owned

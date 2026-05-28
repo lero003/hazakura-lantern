@@ -60,6 +60,11 @@ file, choose a download directory, and save the file as
 `<download-directory>/<owner>/<repo>/<file.gguf>`.
 Search requests trim user-entered query text, clamp the public API result
 limit, and reject blank queries before making a Hugging Face request.
+A 2026-05-28 no-download public API smoke confirmed the current Hugging Face
+search endpoint can still return public GGUF repository ids for
+`Qwen2.5-0.5B-Instruct-GGUF`, and the repository tree endpoint can still return
+selectable `.gguf` file entries for `Qwen/Qwen2.5-0.5B-Instruct-GGUF` without
+starting a model download.
 Typed download-directory paths must resolve to an absolute local path; `~` is
 expanded, while relative paths are rejected instead of being interpreted from
 Lantern's current working directory. Existing regular file paths are also
