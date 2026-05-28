@@ -74,23 +74,24 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
         ]
 
         let response: LossyDecodableArray<TreeEntryResponse> = try await decode(components)
-        let files = response.elements.compactMap { entry -> HuggingFaceGGUFFile? in
+        var files: [HuggingFaceGGUFFile] = []
+        for entry in response.elements {
             guard Self.isFileTreeEntry(entry.type),
                   let path = entry.path,
                   path.lowercased().hasSuffix(".gguf"),
                   Self.isSafeTreeFilePath(path)
             else {
-                return nil
+                continue
             }
 
-            return HuggingFaceGGUFFile(
+            files.append(HuggingFaceGGUFFile(
                 repoID: normalizedRepoID,
                 path: path,
                 sizeBytes: Self.normalizedFileSize(entry.size),
-                downloadURL: downloadURL(repoID: normalizedRepoID, filePath: path)
-            )
+                downloadURL: try downloadURL(repoID: normalizedRepoID, filePath: path)
+            ))
         }
-        .sorted { lhs, rhs in
+        files.sort { lhs, rhs in
             lhs.path.localizedStandardCompare(rhs.path) == .orderedAscending
         }
 
@@ -171,11 +172,18 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             && value.rangeOfCharacter(from: .controlCharacters) == nil
     }
 
-    private func downloadURL(repoID: String, filePath: String) -> URL {
-        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
+    private func downloadURL(repoID: String, filePath: String) throws -> URL {
+        guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
+            throw GGUFAcquisitionError.invalidBaseURL
+        }
+
         components.path = "/" + (repoID.split(separator: "/").map(String.init) + ["resolve", "main"] + filePath.split(separator: "/").map(String.init))
             .joined(separator: "/")
-        return components.url!
+        guard let url = components.url else {
+            throw GGUFAcquisitionError.invalidBaseURL
+        }
+
+        return url
     }
 
     private struct LossyDecodableArray<Element: Decodable>: Decodable {
