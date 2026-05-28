@@ -205,6 +205,9 @@ Implemented scope:
   responses when Hugging Face tree metadata did not provide a file size, so a
   short public file response remains a resumable `.part` instead of becoming a
   misleading completed `.gguf`.
+- GGUF Acquisition downloads now also treat non-positive expected byte counts
+  and `Content-Length` values as unknown metadata, keeping malformed size
+  values out of progress and completion checks.
 - GGUF Acquisition downloader cancellation now has focused coverage proving the
   partially written `.part` file remains available for an explicit retry,
   without moving an incomplete file into the final `.gguf` destination.
@@ -699,13 +702,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF localized progress copy pass):
+Current source-verification status (2026-05-28 GGUF byte-metadata hardening pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (294 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. The pass localized GGUF Acquisition
-status/progress copy so static status rows and known-size progress wording
-follow the selected app UI language, and Japanese cancellation copy no longer
-shows "partial file" in English.
+`swift test` (296 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
+downloads so non-positive expected byte counts and `Content-Length` values are
+treated as unknown metadata instead of poisoning progress or completion checks.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 

@@ -1435,6 +1435,75 @@ final class GGUFAcquisitionTests: XCTestCase {
         XCTAssertEqual(progressValues.last, GGUFDownloadProgress(bytesWritten: 5, totalBytes: 5))
     }
 
+    func testDownloaderTreatsNonPositiveExpectedBytesAsUnknownMetadata() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+
+        let session = makeSession { request in
+            XCTAssertNil(request.value(forHTTPHeaderField: "Range"))
+            return (
+                200,
+                Data("fresh".utf8),
+                [:]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+        var progressValues: [GGUFDownloadProgress] = []
+
+        let downloadedURL = try await downloader.download(
+            GGUFDownloadRequest(
+                remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                destinationURL: destination,
+                expectedBytes: -1
+            )
+        ) { progress in
+            progressValues.append(progress)
+        }
+
+        XCTAssertEqual(downloadedURL, destination)
+        XCTAssertEqual(try String(contentsOf: destination, encoding: .utf8), "fresh")
+        XCTAssertEqual(progressValues.first, GGUFDownloadProgress(bytesWritten: 0))
+        XCTAssertEqual(progressValues.last, GGUFDownloadProgress(bytesWritten: 5, totalBytes: 5))
+    }
+
+    func testDownloaderIgnoresNonPositiveContentLengthForProgressMetadata() async throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-download-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let destination = workspace.appendingPathComponent("model.gguf")
+
+        let session = makeSession { request in
+            XCTAssertNil(request.value(forHTTPHeaderField: "Range"))
+            return (
+                200,
+                Data("fresh".utf8),
+                [
+                    "Content-Length": "-1"
+                ]
+            )
+        }
+        let downloader = GGUFFileDownloader(session: session)
+        var progressValues: [GGUFDownloadProgress] = []
+
+        let downloadedURL = try await downloader.download(
+            GGUFDownloadRequest(
+                remoteURL: URL(string: "https://huggingface.test/model.gguf")!,
+                destinationURL: destination
+            )
+        ) { progress in
+            progressValues.append(progress)
+        }
+
+        XCTAssertEqual(downloadedURL, destination)
+        XCTAssertEqual(try String(contentsOf: destination, encoding: .utf8), "fresh")
+        XCTAssertEqual(progressValues.first, GGUFDownloadProgress(bytesWritten: 0))
+        XCTAssertEqual(progressValues.last, GGUFDownloadProgress(bytesWritten: 5, totalBytes: 5))
+    }
+
     private func makeSession(
         handler: @escaping @Sendable (URLRequest) throws -> (Int, Data, [String: String])
     ) -> URLSession {

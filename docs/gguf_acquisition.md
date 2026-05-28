@@ -94,6 +94,9 @@ completion check when repository tree metadata did not include a file size.
 Fresh successful downloads also treat a positive `Content-Length` as a
 completion check, keeping short responses resumable instead of promoting a
 misleading completed `.gguf`.
+Non-positive expected byte counts and `Content-Length` values are treated as
+unknown metadata for progress and completion checks, matching the repository
+tree behavior for malformed or impossible size values.
 If the final `.gguf` destination path or its `.part` resume path already exists
 as a directory, Lantern fails before starting the network request and does not
 delete that directory.

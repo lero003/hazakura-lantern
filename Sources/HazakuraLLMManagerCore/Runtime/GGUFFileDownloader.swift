@@ -24,6 +24,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         _ request: GGUFDownloadRequest,
         progress: @escaping (GGUFDownloadProgress) -> Void
     ) async throws -> URL {
+        let expectedBytes = Self.positiveByteCount(request.expectedBytes)
         let destinationDirectory = request.destinationURL.deletingLastPathComponent()
         try fileManager.createDirectory(
             at: destinationDirectory,
@@ -33,7 +34,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         let partialURL = GGUFDownloadDestination.partialURL(for: request.destinationURL)
         try rejectDirectory(at: request.destinationURL)
         try rejectDirectory(at: partialURL)
-        if let expectedBytes = request.expectedBytes,
+        if let expectedBytes,
            existingFileSize(at: request.destinationURL) == expectedBytes {
             try? fileManager.removeItem(at: partialURL)
             progress(GGUFDownloadProgress(bytesWritten: expectedBytes, totalBytes: expectedBytes))
@@ -41,7 +42,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         }
 
         var partialBytes = existingFileSize(at: partialURL) ?? 0
-        if let expectedBytes = request.expectedBytes,
+        if let expectedBytes,
            partialBytes == expectedBytes,
            partialBytes > 0 {
             if fileManager.fileExists(atPath: request.destinationURL.path) {
@@ -51,7 +52,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
             progress(GGUFDownloadProgress(bytesWritten: expectedBytes, totalBytes: expectedBytes))
             return request.destinationURL
         }
-        if let expectedBytes = request.expectedBytes,
+        if let expectedBytes,
            partialBytes > expectedBytes {
             try fileManager.removeItem(at: partialURL)
             partialBytes = 0
@@ -89,7 +90,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         case 416:
             if partialBytes > 0,
                Self.unsatisfiedRangeTotal(from: httpResponse.value(forHTTPHeaderField: "Content-Range")) == partialBytes {
-                if let expectedBytes = request.expectedBytes,
+                if let expectedBytes,
                    expectedBytes != partialBytes {
                     throw GGUFAcquisitionError.incompleteDownload(
                         expectedBytes: expectedBytes,
@@ -115,7 +116,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         let totalBytes = totalBytes(
             httpResponse: httpResponse,
             partialBytes: partialBytes,
-            expectedBytes: request.expectedBytes
+            expectedBytes: expectedBytes
         )
         var writtenBytes = partialBytes
         progress(GGUFDownloadProgress(bytesWritten: writtenBytes, totalBytes: totalBytes))
@@ -161,7 +162,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
 
             if let expectedBytes = completionExpectedBytes(
                 httpResponse: httpResponse,
-                fallbackExpectedBytes: request.expectedBytes
+                fallbackExpectedBytes: expectedBytes
             ),
                writtenBytes != expectedBytes {
                 throw GGUFAcquisitionError.incompleteDownload(
@@ -226,7 +227,7 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         }
 
         if let contentLength = httpResponse.value(forHTTPHeaderField: "Content-Length"),
-           let length = Int64(contentLength) {
+           let length = Self.positiveByteCount(Int64(contentLength)) {
             return partialBytes + length
         }
 
@@ -250,11 +251,18 @@ public struct GGUFFileDownloader: GGUFFileDownloading, @unchecked Sendable {
         return contentRange.totalBytes
     }
 
+    private static func positiveByteCount(_ value: Int64?) -> Int64? {
+        guard let value, value > 0 else {
+            return nil
+        }
+
+        return value
+    }
+
     private static func contentLength(from httpResponse: HTTPURLResponse) -> Int64? {
         guard httpResponse.statusCode == 200,
               let contentLength = httpResponse.value(forHTTPHeaderField: "Content-Length"),
-              let length = Int64(contentLength),
-              length > 0
+              let length = positiveByteCount(Int64(contentLength))
         else {
             return nil
         }

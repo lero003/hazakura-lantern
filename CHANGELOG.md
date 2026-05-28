@@ -48,6 +48,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   are skipped while valid `.gguf` files remain selectable.
 - Hardened GGUF Acquisition tree parsing so non-positive Hugging Face file
   sizes are treated as unknown metadata instead of expected download lengths.
+- Hardened GGUF Acquisition downloads so non-positive expected byte counts and
+  `Content-Length` values are treated as unknown metadata instead of poisoning
+  progress or completion checks.
 - Hardened GGUF Acquisition downloads so a completed destination file clears a
   stale `.part` resume file without making another network request.
 - Hardened GGUF Acquisition downloads so a complete `.part` resume file is
