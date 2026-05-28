@@ -37,7 +37,11 @@ selector.
 Current human direction: continue automated development and manual verification
 after the `v1.5.1` source-only checkpoint and the first GGUF Acquisition slice,
 fixing one quality or smoke-observed rough edge at a time before any later
-source checkpoint.
+source checkpoint. It is acceptable to spend runs on smoke verification and fix
+the first concrete rough edge found, as long as the fix stays small and
+verifiable. It is also acceptable to make no code change when checks and smoke
+evidence do not point to a justified slice; report that verified no-op plainly
+instead of inventing work.
 Packaged app release work remains a separate future handoff. Automation should
 keep progressing small verified slices without creating packaged artifacts,
 mutating runtime installs, changing GitHub settings, or deciding
@@ -57,6 +61,8 @@ currently useful unfinished gates are:
 - after v1.5 and the first GGUF Acquisition slice: use smoke runs, fake-client
   tests, and manual evidence to fix one concrete rough edge at a time before
   considering another source checkpoint
+- when a smoke or inspection run finds no concrete release-quality rough edge,
+  end as a verified no-op rather than broadening into speculative cleanup
 - harden GGUF Acquisition only as acquisition quality: public API parsing,
   `.gguf` file listing, destination-path safety, partial resume/cancel/failure
   behavior, localized UI copy, and completion-to-model-path handoff
@@ -256,6 +262,9 @@ Saved Codex automation:
 - Keep runs quiet, but progress-biased. A verified no-op is valid when no
   failing quality check, smoke-lane slice, concrete rough edge, or
   post-checkpoint readiness prep is safely actionable in this run.
+- Smoke-first runs are allowed: run a bounded manual or scripted smoke path,
+  fix one concrete issue if it appears, and otherwise close with the smoke
+  evidence and no code change.
 
 Preferred order:
 

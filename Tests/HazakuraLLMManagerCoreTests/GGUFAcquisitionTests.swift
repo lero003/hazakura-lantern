@@ -176,6 +176,49 @@ final class GGUFAcquisitionTests: XCTestCase {
         )
     }
 
+    func testClientSearchTrimsQueryAndClampsLimit() async throws {
+        let session = makeSession { request in
+            let components = URLComponents(url: try XCTUnwrap(request.url), resolvingAgainstBaseURL: false)
+            XCTAssertEqual(components?.queryItems?.first { $0.name == "search" }?.value, "qwen")
+            XCTAssertEqual(components?.queryItems?.first { $0.name == "limit" }?.value, "50")
+            return (
+                200,
+                Data("""
+                [
+                  {"id": "owner/model-GGUF"}
+                ]
+                """.utf8),
+                [:]
+            )
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        let results = try await client.searchRepositories(query: "  qwen\n", limit: 500)
+
+        XCTAssertEqual(results.map(\.id), ["owner/model-GGUF"])
+    }
+
+    func testClientRejectsBlankSearchQueryBeforeRequest() async throws {
+        let session = makeSession { _ in
+            XCTFail("Blank GGUF search queries should not reach the public API request.")
+            return (200, Data("[]".utf8), [:])
+        }
+        let client = HuggingFaceGGUFClient(
+            baseURL: URL(string: "https://huggingface.test")!,
+            session: session
+        )
+
+        do {
+            _ = try await client.searchRepositories(query: " \n ", limit: 10)
+            XCTFail("Expected blank GGUF search queries to fail before request construction.")
+        } catch let error as GGUFAcquisitionError {
+            XCTAssertEqual(error, .emptySearchQuery)
+        }
+    }
+
     func testClientSearchFiltersUnsupportedRepositoryIDs() async throws {
         let session = makeSession { _ in
             (

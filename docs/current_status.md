@@ -151,6 +151,9 @@ Implemented scope:
 - GGUF Acquisition search parsing now trims or drops blank advisory display
   metadata such as `author` and public API date strings, avoiding empty
   repository summary chips when Hugging Face metadata drifts.
+- GGUF Acquisition no-download public API shape coverage now proves search
+  queries are trimmed, search limits are clamped, and blank queries are rejected
+  before any Hugging Face request is made.
 - GGUF Acquisition repository tree parsing now normalizes compatible file-entry
   type values such as `" FILE "` before accepting `.gguf` files, while still
   ignoring non-file entries.
@@ -717,15 +720,26 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF advisory metadata hardening pass):
+Current source-verification status (2026-05-28 GGUF API-shape coverage pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (300 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
-search parsing so blank or padded advisory display metadata such as `author`
-and public API date strings are trimmed or ignored before repository summary
-chips are rendered.
-App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
-rerun for this fake-API parser slice.
+`swift test` (302 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed. The pass added no-download GGUF
+Acquisition public API shape coverage for trimmed search queries, clamped
+search limits, and blank-query rejection before any Hugging Face request is
+made. App-bundle, real runtime smoke, and live public Hugging Face API smoke
+were not rerun for this fake-API coverage slice.
+
+Previous 2026-05-28 GGUF advisory metadata hardening passed `git diff --check`,
+English/Japanese `Localizable.strings` lint, `swift test` (300 XCTest tests, 0
+failures), and `swift build --disable-sandbox`. That pass hardened GGUF
+Acquisition search parsing so blank or padded advisory display metadata such as
+`author` and public API date strings are trimmed or ignored before repository
+summary chips are rendered.
+
+A later 2026-05-28 docs-only automation-posture sync passed
+`git diff --check`, `swift test` (300 XCTest tests, 0 failures), and
+`swift build --disable-sandbox`; app-bundle and real runtime smoke were not
+rerun for that documentation slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with
@@ -824,7 +838,10 @@ release-quality daily use while preserving the current `llama-server` boundary.
 Current human direction: continue automated development and manual desktop
 verification after the `v1.5.1` source-only checkpoint and the first GGUF
 Acquisition slice, then fix one quality or smoke-observed rough edge at a time
-before any later source checkpoint.
+before any later source checkpoint. A run may focus on smoke verification first,
+then fix the first concrete issue it exposes. If the current checks and smoke
+evidence do not justify a small change, a verified no-op is the expected
+outcome rather than a failure.
 Packaged app release remains separate: automation should
 continue code-quality checks, narrow verified improvements, and
 packaged-release readiness evidence, but should not create packaged artifacts,
@@ -896,6 +913,8 @@ Good next automated candidates:
 - after v1.5, run smoke and fix one concrete rough edge at a time while keeping
   conversation history, prompt libraries, RAG/tools, benchmark rankings, and
   runtime optimization out of scope
+- when smoke or inspection finds no concrete quality issue, report the evidence
+  and close as a verified no-op instead of making speculative cleanup
 - harden GGUF Acquisition in one bounded slice: fake Hugging Face responses,
   `.gguf` tree parsing, destination-path safety, partial resume/cancel/failure
   states, localized UI copy, completion-to-model-path handoff, or a no-download

@@ -44,6 +44,10 @@ review_after:
   is now an implemented bounded lane that automation may harden only through
   tests, no-download API shape checks, UI copy/accessibility, and focused
   download-state fixes.
+- Recorded the 2026-05-28 human direction that smoke-first quality runs are
+  acceptable: run a bounded smoke or inspection path, fix one concrete issue if
+  it appears, and otherwise close as a verified no-op instead of inventing
+  speculative cleanup.
 
 ## Reason
 
@@ -80,6 +84,9 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
   history, ranking/recommendation surface, deletion manager, background
   downloader, token store, gated-model account flow, or LM Studio metadata
   integration.
+- Future runs may start from smoke or inspection evidence, then either fix one
+  concrete release-quality rough edge or report a verified no-op when no small
+  justified change appears.
 
 ## Review After
 
@@ -92,6 +99,8 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
 - Automation reports one concrete Smoke Console, Smoke Metrics, GGUF
   Acquisition, or release-quality slice with verification, or a clear no-op
   when no safe quality slice exists.
+- Smoke-first runs report the smoke path and either one verified fix or a
+  clear no-op when the evidence stays quiet.
 - Source verification remains boring: `git diff --check`, localization lint, `swift test`, and `swift build --disable-sandbox` pass even when Launch Services helper smoke is blocked.
 
 ## Failure Signals

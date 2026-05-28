@@ -94,6 +94,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition generated status/progress text so completion,
   cancellation, and progress strings resolve through the selected app language
   and SwiftPM resource bundle.
+- Added no-download GGUF Acquisition public API shape coverage for trimmed
+  search queries, clamped search limits, and blank-query rejection before any
+  Hugging Face request is made.
 - Localized app-owned endpoint health status titles and healthy/checking/
   unchecked details in Dashboard, Endpoint, and Setup Guide surfaces, keeping
   Japanese desktop smoke evidence readable without changing runtime-owned

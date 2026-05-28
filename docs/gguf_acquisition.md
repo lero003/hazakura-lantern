@@ -58,6 +58,8 @@ The first implementation adds a separate sidebar page for public Hugging Face
 GGUF acquisition. A user can search public GGUF repositories, pick a repository
 file, choose a download directory, and save the file as
 `<download-directory>/<owner>/<repo>/<file.gguf>`.
+Search requests trim user-entered query text, clamp the public API result
+limit, and reject blank queries before making a Hugging Face request.
 Typed download-directory paths must resolve to an absolute local path; `~` is
 expanded, while relative paths are rejected instead of being interpreted from
 Lantern's current working directory.

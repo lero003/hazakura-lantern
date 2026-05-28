@@ -60,6 +60,9 @@ Latest source-verification result (2026-05-28 GGUF advisory metadata hardening p
 - GGUF Acquisition search parsing now trims or drops blank advisory display
   metadata such as `author` and public API date strings before rendering
   repository summary chips.
+- GGUF Acquisition no-download public API shape coverage now proves search
+  queries are trimmed, search limits are clamped, and blank queries are rejected
+  before any Hugging Face request is made.
 - GGUF Acquisition downloads now reject resumed `Content-Range` totals that
   disagree with known expected file metadata before appending bytes, keeping
   the existing `.part` retry file intact.
