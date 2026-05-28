@@ -2,8 +2,8 @@ import XCTest
 @testable import HazakuraLLMManagerCore
 
 final class SourceCheckpointInfoTests: XCTestCase {
-    func testCurrentCheckpointStaysSourceOnly() {
-        XCTAssertEqual(SourceCheckpointInfo.current.identifier, "v1.7.0")
-        XCTAssertFalse(SourceCheckpointInfo.current.includesPackagedAppArtifact)
+    func testCurrentCheckpointIncludesWarningExpectedPreviewArtifact() {
+        XCTAssertEqual(SourceCheckpointInfo.current.identifier, "v1.7.1")
+        XCTAssertTrue(SourceCheckpointInfo.current.includesPackagedAppArtifact)
     }
 }

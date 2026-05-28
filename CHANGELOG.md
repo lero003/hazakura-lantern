@@ -4,8 +4,18 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+## v1.7.1 - 2026-05-29
+
+### Added
+
+- Added a generated Hazakura Lantern app icon to the macOS app bundle.
+- Added a GitHub-ready dashboard screenshot with the local launch-command path
+  redacted for release-page use.
+
 ### Changed
 
+- Updated the warning-expected DMG preview lane for a `v1.7.1` app bundle and
+  release artifact.
 - Added connection preflight badges plus copyable OpenCode, Hazakura Note, and
   generic local endpoint JSON snippets so other local clients can point at the
   selected Lantern endpoint without turning Lantern into an agent or proxy.

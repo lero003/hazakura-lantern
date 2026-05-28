@@ -7,16 +7,44 @@ Last reviewed: 2026-05-29
 Hazakura Lantern is an early macOS SwiftUI app for supervising a local
 `llama-server` process from `llama.cpp`.
 
-Current release checkpoint: `v1.7.0` is a public source-only checkpoint for
-personal/local use. It keeps the existing `llama-server` control boundary,
-includes the bounded GGUF Acquisition lane, and is not a packaged app release.
-The previous public source-only checkpoint was `v1.5.1`.
+Current release checkpoint: `v1.7.1` is a public warning-expected DMG preview
+for personal/local use and cross-machine handoff. It keeps the existing
+`llama-server` control boundary, includes the bounded GGUF Acquisition lane,
+and carries an ad-hoc signed, not-notarized macOS preview DMG. Gatekeeper
+warnings or rejection are expected. The previous public source-only checkpoint
+was `v1.7.0`.
 
-GitHub Release visibility: `warning-expected-dmg-preview-2026-05-28` is a
-prerelease warning-expected DMG preview. It points at the `v1.7.0` source
+GitHub Release visibility: `v1.7.1` is the current prerelease
+warning-expected DMG preview. It adds the app icon, attaches a sanitized
+dashboard screenshot, and keeps the preview boundary explicit: do not treat it
+as a signed, notarized, trusted, installer-grade, stable, or production-ready
+distribution.
+
+Warning-expected DMG preview local check on 2026-05-29:
+
+- Lane: `v1.7.1` binary DMG preview for personal/local use and cross-machine
+  handoff.
+- The release screenshot is
+  `docs/releases/assets/hazakura-lantern-v1.7.1-dashboard-sanitized.png`; the
+  local launch-command path from the source capture is redacted.
+- `script/build_and_run.sh --verify` launched the freshly built local app
+  bundle and confirmed a `HazakuraLLMManager` process id before cleanup.
+- `script/build-warning-dmg-preview.sh` generated
+  `dist/dmg/hazakura-lantern_1.7.1_aarch64-warning-expected.dmg` from the
+  freshly built app bundle.
+- DMG SHA-256:
+  `0fde9737dbb52624a4e1528520a203b6c247791992488000fa6a41b1aa814ad5`.
+- The app bundle version is `1.7.1`, build `1`, bundle id
+  `dev.hazakura.llmmanager`, and `CFBundleIconFile` is `AppIcon.icns`.
+- `hdiutil verify`, same-directory `shasum -c`, mounted-app identity checks,
+  and `codesign --verify --deep --strict --verbose=2` passed.
+- Actual release body template:
+  `docs/releases/1.7.1-warning-expected-dmg-preview.release.md`.
+
+Previous GitHub Release visibility: `warning-expected-dmg-preview-2026-05-28`
+is a prerelease warning-expected DMG preview. It points at the `v1.7.0` source
 checkpoint commit, while the attached DMG was built from the follow-up packaging
-lane on `main` (`caeaf1d`). Do not treat it as a signed, notarized, trusted,
-installer-grade, stable, or production-ready distribution.
+lane on `main` (`caeaf1d`).
 
 Warning-expected DMG preview local check on 2026-05-28:
 

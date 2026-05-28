@@ -12,11 +12,11 @@ apps can use a stable local endpoint.
 
 The first supported runtime is `llama-server` from `llama.cpp`.
 
-Current checkpoint: `v1.7.0` is a public source-only checkpoint for
-personal/local use. It keeps the existing `llama-server` control boundary,
-adds the bounded GGUF Acquisition lane, and does not include a packaged
-`.app`, zip, dmg, signing, notarization, checksum, or binary distribution
-artifact.
+Current checkpoint: `v1.7.1` is a public warning-expected DMG preview for
+personal/local use and cross-machine handoff. It keeps the existing
+`llama-server` control boundary, adds the bounded GGUF Acquisition lane, and
+ships an ad-hoc signed, not-notarized macOS preview DMG. Gatekeeper warnings or
+rejection are expected for that preview artifact.
 
 ## Current Source Scope
 

@@ -6,6 +6,7 @@ APP_EXECUTABLE="HazakuraLLMManager"
 APP_DISPLAY_NAME="Hazakura Lantern"
 APP_BUNDLE_NAME="$APP_DISPLAY_NAME.app"
 BUNDLE_ID="dev.hazakura.llmmanager"
+APP_ICON_FILE="AppIcon.icns"
 MIN_SYSTEM_VERSION="14.0"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOURCE_CHECKPOINT="$(grep -Eo 'v[0-9]+[.][0-9]+[.][0-9]+' "$ROOT_DIR/Sources/HazakuraLLMManagerCore/Models/SourceCheckpointInfo.swift" | head -n 1)"
@@ -111,6 +112,10 @@ mkdir -p "$APP_RESOURCES"
 cp "$BUILD_BINARY" "$APP_BINARY"
 chmod +x "$APP_BINARY"
 
+if [[ -f "$ROOT_DIR/Sources/HazakuraLLMManager/Resources/$APP_ICON_FILE" ]]; then
+  cp "$ROOT_DIR/Sources/HazakuraLLMManager/Resources/$APP_ICON_FILE" "$APP_RESOURCES/$APP_ICON_FILE"
+fi
+
 find "$BUILD_BIN_DIR" -maxdepth 1 \
   \( -name "*$APP_EXECUTABLE*.resources" -o -name "*$APP_EXECUTABLE*.bundle" \) \
   -exec cp -R {} "$APP_RESOURCES/" \;
@@ -132,6 +137,8 @@ cat >"$INFO_PLIST" <<PLIST
   <string>$APP_DISPLAY_NAME</string>
   <key>CFBundleDisplayName</key>
   <string>$APP_DISPLAY_NAME</string>
+  <key>CFBundleIconFile</key>
+  <string>$APP_ICON_FILE</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>LSMinimumSystemVersion</key>
