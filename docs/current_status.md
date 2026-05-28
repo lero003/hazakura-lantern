@@ -13,27 +13,28 @@ includes the bounded GGUF Acquisition lane, and is not a packaged app release.
 The previous public source-only checkpoint was `v1.5.1`.
 
 GitHub Release visibility: `warning-expected-dmg-preview-2026-05-28` is a
-prerelease expectation-setting checkpoint for future DMG/package messaging. It
-points at the `v1.7.0` source checkpoint commit and has no attached assets. Do
-not treat it as a distributed `.app`, dmg, zip, signing, notarization,
-checksum, or binary release.
+prerelease warning-expected DMG preview. It points at the `v1.7.0` source
+checkpoint commit, while the attached DMG was built from the follow-up packaging
+lane on `main` (`caeaf1d`). Do not treat it as a signed, notarized, trusted,
+installer-grade, stable, or production-ready distribution.
 
 Warning-expected DMG preview local check on 2026-05-28:
 
 - Lane: binary DMG preview only; this does not change the source-only
   checkpoint boundary.
-- This was a local preview artifact check only. No tag, push, GitHub Release
-  publication, or DMG attachment was performed for the generated artifact.
+- The checked DMG and checksum were attached to the
+  `warning-expected-dmg-preview-2026-05-28` GitHub prerelease.
 - `script/build_and_run.sh --verify` launched the freshly built local app
   bundle and confirmed a `HazakuraLLMManager` process id before cleanup.
 - `script/build-warning-dmg-preview.sh` generated
   `dist/dmg/hazakura-lantern_1.7.0_aarch64-warning-expected.dmg` from the
   freshly built app bundle.
 - DMG SHA-256:
-  `0951a3b8c9f544d2e8e06c503e51301b91c6d4bccb09aabe9811721db48afb96`.
+  `63a7994bd12ebf9447ee6d7c916d0065442d268ad74a166d09094e2126b8529e`.
 - Checksum file:
   `dist/dmg/hazakura-lantern_1.7.0_aarch64-warning-expected.dmg.sha256`;
-  `shasum -c` passed from the repository root.
+  `(cd dist/dmg && shasum -c hazakura-lantern_1.7.0_aarch64-warning-expected.dmg.sha256)`
+  passed.
 - `hdiutil verify` passed.
 - The DMG mounted read-only and contained `Hazakura Lantern.app`; mounted app
   identity matched the source app with bundle id `dev.hazakura.llmmanager`,

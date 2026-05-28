@@ -133,8 +133,11 @@ hdiutil detach "$mount_dir" >/dev/null
 rm -rf "$mount_dir"
 mount_dir=""
 
-shasum -a 256 "$dmg_path" > "$checksum_path"
-shasum -c "$checksum_path"
+(
+  cd "$dmg_dir"
+  shasum -a 256 "$(basename "$dmg_path")" > "$(basename "$checksum_path")"
+  shasum -c "$(basename "$checksum_path")"
+)
 
 dmg_sha="$(awk '{print $1}' "$checksum_path")"
 temp_report="$(mktemp "$evidence_dir/dmg-info.XXXXXX")"

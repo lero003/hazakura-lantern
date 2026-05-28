@@ -61,7 +61,7 @@ swift test
 swift build --disable-sandbox
 script/build_and_run.sh --verify
 script/build-warning-dmg-preview.sh
-shasum -c dist/dmg/hazakura-lantern_1.7.0_aarch64-warning-expected.dmg.sha256
+(cd dist/dmg && shasum -c hazakura-lantern_1.7.0_aarch64-warning-expected.dmg.sha256)
 ```
 
 `script/build-warning-dmg-preview.sh` deliberately uses `hdiutil create` with a
