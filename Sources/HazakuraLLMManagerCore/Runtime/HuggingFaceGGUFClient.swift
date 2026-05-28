@@ -270,7 +270,8 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             author = Self.decodeOptionalString(from: container, forKey: .author)
             lastModified = Self.decodeOptionalString(from: container, forKey: .lastModified)
             createdAt = Self.decodeOptionalString(from: container, forKey: .createdAt)
-            tags = Self.decodeOptionalStringArray(from: container, forKey: .tags)
+            tags = Self.decodeOptionalStringArray(from: container, forKey: .tags)?
+                .compactMap(Self.normalizedTag)
             gated = Self.decodeGatedValue(from: container)
             downloads = Self.decodeOptionalInt(from: container, forKey: .downloads)
             likes = Self.decodeOptionalInt(from: container, forKey: .likes)
@@ -311,6 +312,11 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             }
 
             return (try? container.decodeIfPresent(LossyStringArray.self, forKey: key))?.elements
+        }
+
+        private static func normalizedTag(_ value: String) -> String? {
+            let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            return trimmed.isEmpty ? nil : trimmed
         }
 
         private static func decodeOptionalInt(

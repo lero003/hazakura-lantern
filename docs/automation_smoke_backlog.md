@@ -43,15 +43,16 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF mixed-tags hardening pass):
+Latest source-verification result (2026-05-28 GGUF tag-normalization hardening pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 298 XCTest tests, 0 failures.
+- `swift test` passed: 299 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
-- GGUF Acquisition search parsing now keeps readable string tags from mixed
-  Hugging Face `tags` arrays while ignoring malformed tag entries, preserving
-  useful fake API display metadata without starting a live download.
+- GGUF Acquisition search parsing now trims readable string tags from Hugging
+  Face `tags` arrays, drops blank tag entries, and continues ignoring malformed
+  tag entries, preserving useful fake API display metadata without starting a
+  live download.
 - GGUF Acquisition downloads now reject resumed `Content-Range` totals that
   disagree with known expected file metadata before appending bytes, keeping
   the existing `.part` retry file intact.
@@ -72,9 +73,6 @@ Latest source-verification result (2026-05-28 GGUF mixed-tags hardening pass):
   fields and repository tree entry type/path fields per entry, so compatible
   repositories and `.gguf` files in the same fake API response remain
   selectable without starting a live download.
-- GGUF Acquisition search parsing now keeps readable string tags from mixed
-  Hugging Face `tags` arrays while ignoring malformed tag entries, preserving
-  useful fake API display metadata without starting a live download.
 - GGUF Acquisition search parsing now treats malformed advisory repository
   metadata such as `author`, dates, and `tags` as optional, keeping compatible
   safe repository ids selectable without starting a live download.

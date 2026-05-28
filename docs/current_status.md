@@ -145,6 +145,9 @@ Implemented scope:
 - GGUF Acquisition search parsing now keeps readable string tags from mixed
   Hugging Face `tags` arrays while ignoring malformed tag entries, so display
   metadata drift does not erase otherwise useful tags.
+- GGUF Acquisition search parsing now trims readable Hugging Face `tags` values
+  and drops blank tag entries, keeping fake API display metadata tidy without
+  making tags part of model selection logic.
 - GGUF Acquisition repository tree parsing now normalizes compatible file-entry
   type values such as `" FILE "` before accepting `.gguf` files, while still
   ignoring non-file entries.
@@ -708,12 +711,12 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF mixed-tags hardening pass):
+Current source-verification status (2026-05-28 GGUF tag-normalization hardening pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (298 XCTest tests, 0 failures), and
+`swift test` (299 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
-search parsing so mixed Hugging Face `tags` arrays keep readable string tags
-while ignoring malformed tag entries.
+search parsing so Hugging Face `tags` metadata trims readable string entries,
+drops blank entries, and continues ignoring malformed tag entries.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
 rerun for this source/core slice.
 
