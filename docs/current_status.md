@@ -223,6 +223,9 @@ Implemented scope:
 - GGUF Acquisition download status and progress copy now stays localized for
   app-owned Japanese UI, including known-size progress wording and partial-file
   cancellation text.
+- GGUF Acquisition generated status text now resolves through the selected app
+  UI language and SwiftPM resource bundle, keeping progress, completion, and
+  cancellation messages aligned with the in-app language toggle.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
@@ -711,14 +714,15 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF tag-normalization hardening pass):
+Current source-verification status (2026-05-28 GGUF locale-resolution hardening pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (299 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
-search parsing so Hugging Face `tags` metadata trims readable string entries,
-drops blank entries, and continues ignoring malformed tag entries.
+generated status/progress text so dynamic completion, cancellation, and
+progress strings resolve through the selected app UI language and SwiftPM
+resource bundle.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
-rerun for this source/core slice.
+rerun for this source/UI-localization slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with

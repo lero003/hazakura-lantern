@@ -91,6 +91,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   final `.gguf` destination.
 - Localized GGUF Acquisition status/progress copy so Japanese UI no longer
   shows English-only download progress wording or "partial file" text.
+- Hardened GGUF Acquisition generated status/progress text so completion,
+  cancellation, and progress strings resolve through the selected app language
+  and SwiftPM resource bundle.
 - Localized app-owned endpoint health status titles and healthy/checking/
   unchecked details in Dashboard, Endpoint, and Setup Guide surfaces, keeping
   Japanese desktop smoke evidence readable without changing runtime-owned

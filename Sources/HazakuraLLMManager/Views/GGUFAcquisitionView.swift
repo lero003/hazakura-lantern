@@ -3,6 +3,7 @@ import HazakuraLLMManagerCore
 
 struct GGUFAcquisitionView: View {
     @ObservedObject var serverController: ServerController
+    @Environment(\.locale) private var locale
     @StateObject private var acquisition = GGUFAcquisitionController()
 
     private let fileColumns = [
@@ -382,10 +383,19 @@ struct GGUFAcquisitionView: View {
     }
 
     private func localized(_ key: String) -> String {
-        NSLocalizedString(key, comment: "")
+        String(
+            localized: String.LocalizationValue(key),
+            bundle: .module,
+            locale: locale
+        )
     }
 
     private func localized(_ format: String, _ arguments: CVarArg...) -> String {
-        String(format: NSLocalizedString(format, comment: ""), arguments: arguments)
+        let format = String(
+            localized: String.LocalizationValue(format),
+            bundle: .module,
+            locale: locale
+        )
+        return String(format: format, locale: locale, arguments: arguments)
     }
 }

@@ -220,10 +220,25 @@ final class GGUFAcquisitionController: ObservableObject {
     }
 
     private func localized(_ key: String) -> String {
-        NSLocalizedString(key, comment: "")
+        String(
+            localized: String.LocalizationValue(key),
+            bundle: .module,
+            locale: selectedAppLocale
+        )
     }
 
     private func localized(_ format: String, _ arguments: CVarArg...) -> String {
-        String(format: NSLocalizedString(format, comment: ""), arguments: arguments)
+        let format = String(
+            localized: String.LocalizationValue(format),
+            bundle: .module,
+            locale: selectedAppLocale
+        )
+        return String(format: format, locale: selectedAppLocale, arguments: arguments)
+    }
+
+    private var selectedAppLocale: Locale {
+        let rawValue = UserDefaults.standard.string(forKey: AppLanguage.storageKey)
+            ?? AppLanguage.system.rawValue
+        return (AppLanguage(rawValue: rawValue) ?? .system).locale
     }
 }
