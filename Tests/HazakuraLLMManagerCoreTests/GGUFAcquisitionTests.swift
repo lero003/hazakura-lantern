@@ -116,6 +116,21 @@ final class GGUFAcquisitionTests: XCTestCase {
         }
     }
 
+    func testDownloadDirectoryURLRejectsExistingFilePath() throws {
+        let workspace = FileManager.default.temporaryDirectory
+            .appendingPathComponent("hazakura-gguf-directory-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: workspace) }
+        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        let fileURL = workspace.appendingPathComponent("not-a-directory")
+        try Data("not a directory".utf8).write(to: fileURL)
+
+        XCTAssertThrowsError(
+            try GGUFDownloadDestination.downloadDirectoryURL(fromPath: fileURL.path)
+        ) { error in
+            XCTAssertEqual(error as? GGUFAcquisitionError, .invalidDownloadDirectory(fileURL.path))
+        }
+    }
+
     func testConfigurationStorePersistsGGUFDownloadDirectory() {
         let suiteName = "HazakuraLLMManagerTests-\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!

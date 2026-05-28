@@ -43,12 +43,15 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF advisory metadata hardening pass):
+Latest source-verification result (2026-05-28 GGUF download-directory hardening pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 300 XCTest tests, 0 failures.
+- `swift test` passed: 303 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
+- GGUF Acquisition download-directory validation now rejects an existing
+  regular file path before Lantern tries to create `<owner>/<repo>` model
+  folders under it.
 - GGUF Acquisition generated status/progress text now resolves through the
   selected app UI language and SwiftPM resource bundle, keeping dynamic
   completion, cancellation, and progress strings aligned with the in-app

@@ -169,6 +169,9 @@ Implemented scope:
 - GGUF Acquisition download-directory handling now rejects typed relative paths
   instead of interpreting them from Lantern's current working directory, while
   still allowing `~` to expand to the user's home directory.
+- GGUF Acquisition download-directory handling now also rejects an existing
+  regular file path before Lantern tries to create `<owner>/<repo>` model
+  folders under it.
 - GGUF Acquisition downloads now remove a stale `.part` resume file when the
   completed destination already matches the expected file size, avoiding an
   unnecessary network request while keeping the completed `.gguf` file intact.
@@ -720,14 +723,21 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF API-shape coverage pass):
+Current source-verification status (2026-05-28 GGUF download-directory hardening pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (302 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. The pass added no-download GGUF
-Acquisition public API shape coverage for trimmed search queries, clamped
+`swift test` (303 XCTest tests, 0 failures), and
+`swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
+download-directory validation so an existing regular file path is rejected
+before Lantern tries to create model folders under it. App-bundle, real runtime
+smoke, and live public Hugging Face API smoke were not rerun for this
+file-safety slice.
+
+Previous 2026-05-28 GGUF API-shape coverage passed `git diff --check`,
+English/Japanese `Localizable.strings` lint, `swift test` (302 XCTest tests, 0
+failures), and `swift build --disable-sandbox`. That pass added no-download
+GGUF Acquisition public API shape coverage for trimmed search queries, clamped
 search limits, and blank-query rejection before any Hugging Face request is
-made. App-bundle, real runtime smoke, and live public Hugging Face API smoke
-were not rerun for this fake-API coverage slice.
+made.
 
 Previous 2026-05-28 GGUF advisory metadata hardening passed `git diff --check`,
 English/Japanese `Localizable.strings` lint, `swift test` (300 XCTest tests, 0

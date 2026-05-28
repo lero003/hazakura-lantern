@@ -46,6 +46,8 @@ All notable changes to Hazakura Lantern will be documented in this file.
 - Hardened GGUF Acquisition download-directory handling so typed relative
   paths are rejected instead of being interpreted from Lantern's current
   working directory, while `~` paths still expand to the user's home directory.
+- Hardened GGUF Acquisition download-directory handling so an existing regular
+  file path is rejected before Lantern tries to create model folders under it.
 - Hardened GGUF Acquisition tree parsing so incomplete Hugging Face file entries
   are skipped while valid `.gguf` files remain selectable.
 - Hardened GGUF Acquisition tree parsing so non-positive Hugging Face file

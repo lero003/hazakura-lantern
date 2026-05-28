@@ -125,12 +125,21 @@ public enum GGUFAcquisitionError: LocalizedError, Equatable {
 }
 
 public enum GGUFDownloadDestination {
-    public static func downloadDirectoryURL(fromPath path: String) throws -> URL {
+    public static func downloadDirectoryURL(
+        fromPath path: String,
+        fileManager: FileManager = .default
+    ) throws -> URL {
         let trimmedPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
         let expandedPath = (trimmedPath as NSString).expandingTildeInPath
         guard !expandedPath.isEmpty,
               expandedPath.hasPrefix("/")
         else {
+            throw GGUFAcquisitionError.invalidDownloadDirectory(path)
+        }
+
+        var isDirectory = ObjCBool(false)
+        if fileManager.fileExists(atPath: expandedPath, isDirectory: &isDirectory),
+           !isDirectory.boolValue {
             throw GGUFAcquisitionError.invalidDownloadDirectory(path)
         }
 

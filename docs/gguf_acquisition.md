@@ -62,7 +62,9 @@ Search requests trim user-entered query text, clamp the public API result
 limit, and reject blank queries before making a Hugging Face request.
 Typed download-directory paths must resolve to an absolute local path; `~` is
 expanded, while relative paths are rejected instead of being interpreted from
-Lantern's current working directory.
+Lantern's current working directory. Existing regular file paths are also
+rejected as download directories before Lantern attempts to create the
+`<owner>/<repo>` model folders.
 
 Repository tree parsing accepts ordinary nested `.gguf` paths but ignores unsafe
 file paths with empty, current-directory, parent-directory, absolute, or
