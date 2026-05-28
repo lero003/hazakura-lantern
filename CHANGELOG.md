@@ -11,6 +11,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
   selected Lantern endpoint without turning Lantern into an agent or proxy.
 - Resumed the saved Codex automation as a 2-hour stability-only quality loop
   focused on local reliability, smoke evidence, and verified no-op outcomes.
+- Clarified that Lantern automation may verify downstream connection snippets
+  for Codex, OpenCode, and Hazakura Note, but must not launch or operate those
+  agent apps as Lantern smoke targets.
 - Published the `warning-expected-dmg-preview-2026-05-28` prerelease with
   warning-expected DMG and `.sha256` assets.
 - Added a repo-local warning-expected DMG preview lane with a plain

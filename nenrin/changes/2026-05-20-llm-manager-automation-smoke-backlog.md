@@ -56,6 +56,10 @@ review_after:
   `kLSNoExecutableErr` for both Lantern's helper bundle and Calculator in the
   same host session, so future runs should classify that condition as a host
   smoke blocker before treating it as a Lantern bundle regression.
+- Recorded the 2026-05-29 human direction that Codex, OpenCode, Hazakura Note,
+  and similar apps are downstream clients, not automation smoke targets;
+  Lantern automation may verify snippets and endpoint contracts but should not
+  launch or operate those agent apps.
 
 ## Reason
 
@@ -103,6 +107,10 @@ Recurring automation needs a durable, bounded source for smoke-driven polish ins
   when `./script/build_and_run.sh --verify` fails with `kLSNoExecutableErr`;
   if the control app also fails, use SwiftPM verification as the source signal
   and report helper smoke as environment-blocked.
+- Future runs should not launch, script, or depend on Codex, OpenCode,
+  Hazakura Note, or other agent/client apps to judge Lantern stability. Verify
+  their connection artifacts as Lantern-owned snippets or endpoint contracts
+  instead.
 
 ## Review After
 

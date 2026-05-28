@@ -268,6 +268,11 @@ Saved Codex automation:
 - Do not add product features merely because the automation woke up. The loop
   acts as a local stability inspector for launch, stop, endpoint, copy, smoke,
   localization, path-validation, and docs correctness.
+- Treat Codex, OpenCode, Hazakura Note, and other agent/client apps as
+  downstream users of Lantern's endpoint, not as automation smoke targets.
+  Automation may verify copied snippets, JSON shape, and local endpoint
+  contracts, but must not launch, drive, script, or depend on those agent apps
+  to prove Lantern quality.
 
 Preferred order:
 
@@ -317,8 +322,9 @@ history, model ranking, Hugging Face token storage, gated-model workflow,
 background download queue, LM Studio internal metadata integration,
 conversation history, prompt library, RAG/tools, attachment support, automatic
 benchmark/optimization, benchmark leaderboard, multiple-profile management,
-launch-at-login, automatic restart policy, or update checks for runtimes beyond
-the current `llama.cpp` target.
+launch-at-login, automatic restart policy, automation-driven Codex/OpenCode or
+other agent-app operation, or update checks for runtimes beyond the current
+`llama.cpp` target.
 
 ## Verification
 

@@ -994,11 +994,18 @@ assets, repository packages, public issue state, a new
 adapter, custom command implementation, profile schema version, dependencies,
 runtime installation/update, model library management, download history, hidden
 auto-optimization, Hugging Face token storage, gated-model workflow, background
-download queue, or LM Studio internal metadata integration without an explicit
-human handoff. Bounded GGUF Acquisition is now implemented as a foreground
-search/download lane, so ordinary automation may harden that lane only through
-tests, no-download public API smoke, UI copy/accessibility, and focused
-download-state fixes inside `docs/gguf_acquisition.md`.
+download queue, LM Studio internal metadata integration, or automation-driven
+operation of Codex, OpenCode, Hazakura Note, or other agent/client apps without
+an explicit human handoff. Bounded GGUF Acquisition is now implemented as a
+foreground search/download lane, so ordinary automation may harden that lane
+only through tests, no-download public API smoke, UI copy/accessibility, and
+focused download-state fixes inside `docs/gguf_acquisition.md`.
+
+Codex, OpenCode, Hazakura Note, and similar apps are downstream clients of
+Lantern's local endpoint. Lantern may expose endpoint snippets and JSON for
+them, but the stability automation should verify those connection artifacts
+statically or through Lantern-owned endpoint smoke only. It should not launch,
+drive, script, or rely on agent apps as part of Lantern quality checks.
 
 ## Next Best Slice
 

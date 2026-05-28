@@ -43,6 +43,12 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
+Do not use Codex, OpenCode, Hazakura Note, or other downstream agent/client
+apps as automation smoke targets for Lantern. Automation may check Lantern's
+copied snippets, generated JSON, local endpoint contracts, and Lantern-owned
+Smoke Console behavior, but it should not launch, script, or depend on those
+agent apps when judging Lantern stability.
+
 Latest source-verification result (2026-05-29 stability automation pass):
 
 - `git diff --check` passed.
