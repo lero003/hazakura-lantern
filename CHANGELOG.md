@@ -8,6 +8,9 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 - Recorded the `warning-expected-dmg-preview-2026-05-28` prerelease as a
   DMG/package expectation preview with no attached packaged app assets.
+- Added a repo-local warning-expected DMG preview lane with a plain
+  app-plus-Applications-link DMG script, checksum generation, mounted-app
+  identity verification, checklist, and draft release notes.
 
 ## v1.7.0 - 2026-05-28
 

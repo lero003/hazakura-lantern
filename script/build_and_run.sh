@@ -7,8 +7,11 @@ APP_DISPLAY_NAME="Hazakura Lantern"
 APP_BUNDLE_NAME="$APP_DISPLAY_NAME.app"
 BUNDLE_ID="dev.hazakura.llmmanager"
 MIN_SYSTEM_VERSION="14.0"
-
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SOURCE_CHECKPOINT="$(grep -Eo 'v[0-9]+[.][0-9]+[.][0-9]+' "$ROOT_DIR/Sources/HazakuraLLMManagerCore/Models/SourceCheckpointInfo.swift" | head -n 1)"
+APP_VERSION="${SOURCE_CHECKPOINT#v}"
+BUNDLE_BUILD="${BUNDLE_BUILD:-1}"
+
 DIST_DIR="$ROOT_DIR/dist"
 APP_BUNDLE_RELATIVE="dist/$APP_BUNDLE_NAME"
 APP_BUNDLE="$ROOT_DIR/$APP_BUNDLE_RELATIVE"
@@ -133,6 +136,10 @@ cat >"$INFO_PLIST" <<PLIST
   <string>APPL</string>
   <key>LSMinimumSystemVersion</key>
   <string>$MIN_SYSTEM_VERSION</string>
+  <key>CFBundleShortVersionString</key>
+  <string>$APP_VERSION</string>
+  <key>CFBundleVersion</key>
+  <string>$BUNDLE_BUILD</string>
   <key>NSPrincipalClass</key>
   <string>NSApplication</string>
 </dict>
@@ -166,6 +173,9 @@ wait_for_app_launch() {
 }
 
 case "$MODE" in
+  --bundle-only|bundle)
+    echo "$APP_DISPLAY_NAME bundle built at $APP_BUNDLE_RELATIVE."
+    ;;
   run)
     open_app
     ;;
@@ -189,7 +199,7 @@ case "$MODE" in
     echo "$APP_DISPLAY_NAME launch verified with pid $APP_PID."
     ;;
   *)
-    echo "usage: $0 [run|--debug|--logs|--telemetry|--verify|--stop]" >&2
+    echo "usage: $0 [run|bundle|--debug|--logs|--telemetry|--verify|--stop]" >&2
     exit 2
     ;;
 esac

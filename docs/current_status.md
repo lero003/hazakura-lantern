@@ -18,6 +18,38 @@ points at the `v1.7.0` source checkpoint commit and has no attached assets. Do
 not treat it as a distributed `.app`, dmg, zip, signing, notarization,
 checksum, or binary release.
 
+Warning-expected DMG preview local check on 2026-05-28:
+
+- Lane: binary DMG preview only; this does not change the source-only
+  checkpoint boundary.
+- This was a local preview artifact check only. No tag, push, GitHub Release
+  publication, or DMG attachment was performed for the generated artifact.
+- `script/build_and_run.sh --verify` launched the freshly built local app
+  bundle and confirmed a `HazakuraLLMManager` process id before cleanup.
+- `script/build-warning-dmg-preview.sh` generated
+  `dist/dmg/hazakura-lantern_1.7.0_aarch64-warning-expected.dmg` from the
+  freshly built app bundle.
+- DMG SHA-256:
+  `0951a3b8c9f544d2e8e06c503e51301b91c6d4bccb09aabe9811721db48afb96`.
+- Checksum file:
+  `dist/dmg/hazakura-lantern_1.7.0_aarch64-warning-expected.dmg.sha256`;
+  `shasum -c` passed from the repository root.
+- `hdiutil verify` passed.
+- The DMG mounted read-only and contained `Hazakura Lantern.app`; mounted app
+  identity matched the source app with bundle id `dev.hazakura.llmmanager`,
+  version `1.7.0`, build `1`, and CDHash
+  `70c60f0db26c52129cef2d0a7fa6ce744cd8ce29`.
+- `codesign --verify --deep --strict --verbose=2` passed for both source and
+  mounted apps.
+- `codesign -dv --verbose=4` reported `Signature=adhoc`,
+  `TeamIdentifier=not set`, and hardened runtime flags; `spctl --assess --type
+  execute -vv` rejected the app, which matches the warning-expected,
+  not-notarized preview boundary.
+- Release note proposal:
+  `docs/releases/1.7.0-warning-expected-dmg-preview.md`.
+- Actual release body template:
+  `docs/releases/1.7.0-warning-expected-dmg-preview.release.md`.
+
 Repository licensing is explicit: Hazakura Lantern source code is MIT-licensed
 through the top-level `LICENSE` file and README license section. External
 runtimes and local model files are not bundled and remain under their own

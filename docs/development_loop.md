@@ -20,6 +20,8 @@ Start each substantial run with:
 9. `docs/public_opening_preflight.md` only when a run touches pre-open
    checklist history, release, GitHub visibility, GitHub settings, tags, or
    release assets
+10. `docs/dmg-preview-checklist.md` only when a run touches warning-expected
+    DMG preview preparation or binary artifact publication
 
 Run Hazakura Habitat before choosing commands for code, dependencies, Git,
 release, or automation work. Read its `agent_context.md` first, and consult
