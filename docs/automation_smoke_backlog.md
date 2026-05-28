@@ -43,12 +43,15 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF download-directory hardening pass):
+Latest source-verification result (2026-05-28 GGUF accessibility polish pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
 - `swift test` passed: 303 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
+- GGUF Acquisition visible controls now expose localized accessibility hints
+  for search, directory choice, file selection, download, cancel, and the
+  completion-to-model-path action without adding model management behavior.
 - GGUF Acquisition download-directory validation now rejects an existing
   regular file path before Lantern tries to create `<owner>/<repo>` model
   folders under it.

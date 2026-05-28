@@ -51,6 +51,7 @@ struct GGUFAcquisitionView: View {
                 acquisition.search()
             }
             .accessibilityLabel(Text("Hugging Face GGUF Search"))
+            .accessibilityHint(Text("Enter a public Hugging Face search query for GGUF repositories."))
     }
 
     private var searchButton: some View {
@@ -61,6 +62,7 @@ struct GGUFAcquisitionView: View {
         }
         .buttonStyle(PrimaryButtonStyle())
         .disabled(!acquisition.canSearch)
+        .accessibilityHint(Text("Search Hugging Face for public GGUF repositories."))
     }
 
     private var directorySection: some View {
@@ -94,6 +96,7 @@ struct GGUFAcquisitionView: View {
                 acquisition.chooseDownloadDirectory(acquisition.downloadDirectoryPath)
             }
             .accessibilityLabel(Text("GGUF Download Directory"))
+            .accessibilityHint(Text("Enter an absolute local directory where downloaded GGUF files will be saved."))
     }
 
     private var chooseDirectoryButton: some View {
@@ -105,6 +108,7 @@ struct GGUFAcquisitionView: View {
             Label("Choose", systemImage: "folder")
         }
         .buttonStyle(SecondaryButtonStyle())
+        .accessibilityHint(Text("Choose a local directory for downloaded GGUF files."))
     }
 
     @ViewBuilder
@@ -223,6 +227,9 @@ struct GGUFAcquisitionView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityValue(file == acquisition.selectedFile ? Text("Selected") : Text("Not Selected"))
+        .accessibilityHint(Text("Select this GGUF file for download."))
     }
 
     private var downloadSection: some View {
@@ -267,6 +274,7 @@ struct GGUFAcquisitionView: View {
         }
         .buttonStyle(PrimaryButtonStyle())
         .disabled(!acquisition.canDownload)
+        .accessibilityHint(Text("Download the selected public GGUF file into the chosen local directory."))
     }
 
     private var cancelButton: some View {
@@ -277,6 +285,7 @@ struct GGUFAcquisitionView: View {
         }
         .buttonStyle(SecondaryButtonStyle())
         .disabled(!acquisition.isDownloading)
+        .accessibilityHint(Text("Cancel the active GGUF download and keep the partial file for retry."))
     }
 
     private var useModelButton: some View {
@@ -289,6 +298,7 @@ struct GGUFAcquisitionView: View {
         }
         .buttonStyle(SecondaryButtonStyle())
         .disabled(acquisition.completedURL == nil)
+        .accessibilityHint(Text("Set the completed GGUF download as the active Lantern model path."))
     }
 
     @ViewBuilder

@@ -235,6 +235,9 @@ Implemented scope:
 - GGUF Acquisition generated status text now resolves through the selected app
   UI language and SwiftPM resource bundle, keeping progress, completion, and
   cancellation messages aligned with the in-app language toggle.
+- GGUF Acquisition visible controls now expose localized accessibility hints
+  for search, directory choice, file selection, download, cancel, and the
+  completion-to-model-path action without adding model management behavior.
 - Smoke Console now explains why Run is unavailable when the server is running
   but the smoke prompt is blank or the endpoint configuration cannot be built.
 - Smoke Console HTTP error snippets now collapse multiline runtime error bodies
@@ -723,14 +726,20 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF download-directory hardening pass):
+Current source-verification status (2026-05-28 GGUF accessibility polish pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
 `swift test` (303 XCTest tests, 0 failures), and
-`swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
+`swift build --disable-sandbox` passed. The pass added localized accessibility
+hints for GGUF Acquisition search, directory choice, file selection, download,
+cancel, and "Use as Model" controls. App-bundle, real runtime smoke, and live
+public Hugging Face API smoke were not rerun for this UI/accessibility slice.
+
+Previous 2026-05-28 GGUF download-directory hardening passed
+`git diff --check`, English/Japanese `Localizable.strings` lint,
+`swift test` (303 XCTest tests, 0 failures), and
+`swift build --disable-sandbox`. That pass hardened GGUF Acquisition
 download-directory validation so an existing regular file path is rejected
-before Lantern tries to create model folders under it. App-bundle, real runtime
-smoke, and live public Hugging Face API smoke were not rerun for this
-file-safety slice.
+before Lantern tries to create model folders under it.
 
 Previous 2026-05-28 GGUF API-shape coverage passed `git diff --check`,
 English/Japanese `Localizable.strings` lint, `swift test` (302 XCTest tests, 0

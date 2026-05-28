@@ -116,6 +116,9 @@ file metadata disagrees with that byte count.
 If a `416` resume response does not include a usable server byte count, Lantern
 fails the explicit download attempt while keeping the existing `.part` file
 available for a later retry.
+Search, directory choice, file selection, download, cancel, and "Use as Model"
+controls expose localized accessibility hints while keeping runtime logs,
+copied command text, and downloaded file paths outside the localization scope.
 Completion offers a follow-up action to set the downloaded file as Lantern's
 active model path.
 
