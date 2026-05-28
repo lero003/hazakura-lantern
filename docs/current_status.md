@@ -148,6 +148,9 @@ Implemented scope:
 - GGUF Acquisition search parsing now trims readable Hugging Face `tags` values
   and drops blank tag entries, keeping fake API display metadata tidy without
   making tags part of model selection logic.
+- GGUF Acquisition search parsing now trims or drops blank advisory display
+  metadata such as `author` and public API date strings, avoiding empty
+  repository summary chips when Hugging Face metadata drifts.
 - GGUF Acquisition repository tree parsing now normalizes compatible file-entry
   type values such as `" FILE "` before accepting `.gguf` files, while still
   ignoring non-file entries.
@@ -714,15 +717,15 @@ needed. It builds an app bundle under `dist/`, which is a local artifact, and
 it closes the app before the script exits. If a manual smoke leaves the app
 open, use `./script/build_and_run.sh --stop`.
 
-Current source-verification status (2026-05-28 GGUF locale-resolution hardening pass):
+Current source-verification status (2026-05-28 GGUF advisory metadata hardening pass):
 `git diff --check`, English/Japanese `Localizable.strings` lint,
-`swift test` (299 XCTest tests, 0 failures), and
+`swift test` (300 XCTest tests, 0 failures), and
 `swift build --disable-sandbox` passed. The pass hardened GGUF Acquisition
-generated status/progress text so dynamic completion, cancellation, and
-progress strings resolve through the selected app UI language and SwiftPM
-resource bundle.
+search parsing so blank or padded advisory display metadata such as `author`
+and public API date strings are trimmed or ignored before repository summary
+chips are rendered.
 App-bundle, real runtime smoke, and live public Hugging Face API smoke were not
-rerun for this source/UI-localization slice.
+rerun for this fake-API parser slice.
 
 The previous 2026-05-24 v1.5 release-prep pass included a real local endpoint
 smoke against the selected lightweight `gemma-4-E2B-it-UD-Q3_K_XL` model with

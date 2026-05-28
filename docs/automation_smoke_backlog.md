@@ -43,11 +43,11 @@ Use `./script/build_and_run.sh --verify` only as a smoke check. It must not
 become packaged-release proof by itself. For user-facing packaged release, a
 normal macOS desktop pass is still required.
 
-Latest source-verification result (2026-05-28 GGUF locale-resolution hardening pass):
+Latest source-verification result (2026-05-28 GGUF advisory metadata hardening pass):
 
 - `git diff --check` passed.
 - `plutil -lint` passed for English and Japanese `Localizable.strings`.
-- `swift test` passed: 299 XCTest tests, 0 failures.
+- `swift test` passed: 300 XCTest tests, 0 failures.
 - `swift build --disable-sandbox` passed.
 - GGUF Acquisition generated status/progress text now resolves through the
   selected app UI language and SwiftPM resource bundle, keeping dynamic
@@ -57,6 +57,9 @@ Latest source-verification result (2026-05-28 GGUF locale-resolution hardening p
   Face `tags` arrays, drops blank tag entries, and continues ignoring malformed
   tag entries, preserving useful fake API display metadata without starting a
   live download.
+- GGUF Acquisition search parsing now trims or drops blank advisory display
+  metadata such as `author` and public API date strings before rendering
+  repository summary chips.
 - GGUF Acquisition downloads now reject resumed `Content-Range` totals that
   disagree with known expected file metadata before appending bytes, keeping
   the existing `.part` retry file intact.

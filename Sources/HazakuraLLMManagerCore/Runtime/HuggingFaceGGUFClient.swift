@@ -267,9 +267,9 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = Self.decodeOptionalString(from: container, forKey: .id)
             modelId = Self.decodeOptionalString(from: container, forKey: .modelId)
-            author = Self.decodeOptionalString(from: container, forKey: .author)
-            lastModified = Self.decodeOptionalString(from: container, forKey: .lastModified)
-            createdAt = Self.decodeOptionalString(from: container, forKey: .createdAt)
+            author = Self.decodeOptionalDisplayString(from: container, forKey: .author)
+            lastModified = Self.decodeOptionalDisplayString(from: container, forKey: .lastModified)
+            createdAt = Self.decodeOptionalDisplayString(from: container, forKey: .createdAt)
             tags = Self.decodeOptionalStringArray(from: container, forKey: .tags)?
                 .compactMap(Self.normalizedTag)
             gated = Self.decodeGatedValue(from: container)
@@ -301,6 +301,18 @@ public struct HuggingFaceGGUFClient: HuggingFaceGGUFSearching {
             forKey key: CodingKeys
         ) -> String? {
             try? container.decodeIfPresent(String.self, forKey: key)
+        }
+
+        private static func decodeOptionalDisplayString(
+            from container: KeyedDecodingContainer<CodingKeys>,
+            forKey key: CodingKeys
+        ) -> String? {
+            guard let value = decodeOptionalString(from: container, forKey: key) else {
+                return nil
+            }
+
+            let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            return trimmed.isEmpty ? nil : trimmed
         }
 
         private static func decodeOptionalStringArray(
