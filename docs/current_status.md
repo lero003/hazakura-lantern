@@ -12,6 +12,12 @@ personal/local use. It keeps the existing `llama-server` control boundary,
 includes the bounded GGUF Acquisition lane, and is not a packaged app release.
 The previous public source-only checkpoint was `v1.5.1`.
 
+GitHub Release visibility: `warning-expected-dmg-preview-2026-05-28` is a
+prerelease expectation-setting checkpoint for future DMG/package messaging. It
+points at the `v1.7.0` source checkpoint commit and has no attached assets. Do
+not treat it as a distributed `.app`, dmg, zip, signing, notarization,
+checksum, or binary release.
+
 Repository licensing is explicit: Hazakura Lantern source code is MIT-licensed
 through the top-level `LICENSE` file and README license section. External
 runtimes and local model files are not bundled and remain under their own

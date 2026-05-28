@@ -4,6 +4,11 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+### Changed
+
+- Recorded the `warning-expected-dmg-preview-2026-05-28` prerelease as a
+  DMG/package expectation preview with no attached packaged app assets.
+
 ## v1.7.0 - 2026-05-28
 
 ### Added
