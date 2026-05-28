@@ -18,19 +18,21 @@ review_after:
   days: 30
 ---
 
-# Change: llm-manager-v1-5-source-checkpoint
+# Change: llm-manager-source-checkpoint-posture
 
 ## Changed
 
-- Marked v1.5.0 as the current source-only checkpoint across app metadata, README, changelog, status, roadmap, external review, development loop, post-public operations, and smoke backlog docs.
+- Marked v1.7.0 as the current source-only checkpoint across app metadata, README, changelog, status, roadmap, external review, development loop, post-public operations, issue template, and smoke backlog docs.
+- Recorded that the automated development loop is paused while release and packaged-artifact expectations are reviewed manually.
 
 ## Reason
 
-Future agents should treat v1.2/v1.3 as history and continue post-v1.5 smoke polish without creating packaged app artifacts or release assets.
+Future agents should treat v1.5 and earlier checkpoints as history, preserve the v1.7 source-only boundary, and avoid turning the DMG warning preview into a packaged-release claim.
 
 ## Expected Behavior
 
-- Automation chooses one verifiable post-v1.5 smoke, cleanup, localization, setup-guide, or release-evidence slice and keeps packaged-release work behind explicit human handoff.
+- While automation is paused, no recurring development slice is expected.
+- If automation resumes, it chooses one verifiable post-v1.7 smoke, cleanup, localization, setup-guide, GGUF Acquisition, or release-evidence slice and keeps packaged-release work behind explicit human handoff.
 
 ## Review After
 
