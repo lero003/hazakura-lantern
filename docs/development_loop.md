@@ -29,11 +29,12 @@ release, or automation work. Read its `agent_context.md` first, and consult
 
 ## Current Automation Focus
 
-The project has a public source-only `v1.7.0` checkpoint for personal/local
-use. It keeps the existing `llama-server` control boundary, includes the
-bounded GGUF Acquisition lane, and does not include packaged `.app`, zip, dmg,
-signing, notarization, checksum, or binary distribution artifacts. Treat exact
-version numbers as release history, not as the next work selector.
+The project has a public `v1.7.1` warning-expected DMG preview for
+personal/local use and cross-machine handoff. It keeps the existing
+`llama-server` control boundary, includes the bounded GGUF Acquisition lane,
+and remains ad-hoc signed and not notarized; Gatekeeper warnings or rejection
+are expected. The previous public source-only checkpoint was `v1.7.0`. Treat
+exact version numbers as release history, not as the next work selector.
 
 Current human direction: the automated development loop is resumed as a
 stability-only quality loop after the `v1.7.0` source-only checkpoint and the

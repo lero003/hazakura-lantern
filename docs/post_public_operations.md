@@ -1,8 +1,9 @@
 # Post-Public Operations
 
-This document is the operating guide for the public source-only checkpoint after
-the repository is visible. It is not permission to publish packaged app
-artifacts, change GitHub settings, or widen runtime scope.
+This document is the operating guide for the public checkpoint and
+warning-expected preview lane after the repository is visible. It is not
+permission to publish trusted packaged app artifacts, change GitHub settings, or
+widen runtime scope.
 
 Use `docs/public_opening_preflight.md` for historical pre-open checks and
 future visibility or release handoffs. Use this document for ongoing public
@@ -12,11 +13,12 @@ outside release-readiness or future-direction review.
 
 ## Operating Posture
 
-Hazakura Lantern is currently public as a source-only `v1.7.0` checkpoint for
-personal/local use. The previous source-only checkpoint was `v1.5.1`.
-Automated work should keep the project understandable, narrow, and easy to
-review while the near-term source lane improves the existing `llama-server`
-path through post-checkpoint smoke polish.
+Hazakura Lantern is currently public as a `v1.7.1` warning-expected DMG preview
+for personal/local use and cross-machine handoff. It is ad-hoc signed and not
+notarized, so Gatekeeper warnings or rejection are expected. The previous public
+source-only checkpoint was `v1.7.0`. Automated work should keep the project
+understandable, narrow, and easy to review while the near-term source lane
+improves the existing `llama-server` path through post-checkpoint smoke polish.
 
 Post-public stewardship is a guardrail now and the formal v0.5 lane later.
 Automation may start v0.5 docs and triage improvements when v0.4 has no
