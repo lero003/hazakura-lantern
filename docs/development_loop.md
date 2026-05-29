@@ -36,14 +36,14 @@ and remains ad-hoc signed and not notarized; Gatekeeper warnings or rejection
 are expected. The previous public source-only checkpoint was `v1.7.0`. Treat
 exact version numbers as release history, not as the next work selector.
 
-Current human direction: the automated development loop is resumed as a
-stability-only quality loop after the `v1.7.0` source-only checkpoint and the
-warning-expected DMG preview. It should fix one quality or smoke-observed rough
-edge at a time. It is acceptable to spend runs on smoke verification and fix
-the first concrete rough edge found, as long as the fix stays small and
-verifiable. It is also acceptable to make no code change when checks and smoke
-evidence do not point to a justified slice; report that verified no-op plainly
-instead of inventing work.
+Current human direction: the automated development loop remains active, but
+its cadence is reduced to daily after the `v1.7.1` warning-expected DMG
+preview because recent useful outcomes skew toward verified no-op. It should
+fix one quality or smoke-observed rough edge at a time. It is acceptable to
+spend runs on smoke verification and fix the first concrete rough edge found,
+as long as the fix stays small and verifiable. It is also acceptable to make no
+code change when checks and smoke evidence do not point to a justified slice;
+report that verified no-op plainly instead of inventing work.
 Packaged app release work remains a separate future handoff. Automation should
 not create packaged artifacts, mutate runtime installs, change GitHub settings,
 or decide packaged-release readiness by itself.
@@ -249,10 +249,10 @@ Saved Codex automation:
 
 - name: Hazakura Lantern stability loop
 - id: `hazakura-llm-manager`
-- cadence: every 2 hours in the user's local timezone
+- cadence: daily at 09:00 in the user's local timezone
 - environment: local execution in this project directory
 
-2-hour stability posture:
+Daily stability posture:
 
 - Start with `git status --short --branch`, then read the documents in the
   order above.

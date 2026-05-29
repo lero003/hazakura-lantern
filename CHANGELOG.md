@@ -4,6 +4,12 @@ All notable changes to Hazakura Lantern will be documented in this file.
 
 ## Unreleased
 
+### Changed
+
+- Reduced the saved `hazakura-llm-manager` Codex automation from a 2-hour
+  stability loop to a daily 09:00 local-time loop because recent useful
+  outcomes skew toward verified no-op.
+
 ## v1.7.1 - 2026-05-29
 
 ### Added

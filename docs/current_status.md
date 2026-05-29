@@ -962,12 +962,12 @@ The automation should treat version checkpoints as history, not as the work
 queue. The useful question is whether the next slice moves Lantern closer to
 release-quality daily use while preserving the current `llama-server` boundary.
 
-Current human direction: the automated development loop is active again as a
-2-hour stability-only quality loop after the `v1.7.0` source-only checkpoint
-and warning-expected DMG preview. It should continue with one small quality,
-smoke, or post-checkpoint readiness slice at a time. If the current checks and
-smoke evidence do not justify a small change, a verified no-op is the expected
-outcome rather than a failure.
+Current human direction: the automated development loop remains active, but
+its cadence is reduced to daily after the `v1.7.1` warning-expected DMG
+preview because recent useful outcomes skew toward verified no-op. It should
+continue with one small quality, smoke, or post-checkpoint readiness slice at a
+time. If the current checks and smoke evidence do not justify a small change, a
+verified no-op is the expected outcome rather than a failure.
 Packaged app release remains separate: automation should not create packaged
 artifacts, change GitHub settings, mutate public issues, or decide
 packaged-release readiness by itself.
