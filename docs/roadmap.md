@@ -147,17 +147,19 @@ Use `docs/external_review_flow.md` when asking outside reviewers whether this
 multimedia direction should stay separate, become a sibling project, or later
 share a local-runtime control contract with Lantern.
 
-## Current Source Lane: v1.7 Source-Only Checkpoint
+## Current Stability Lane: v1.7.1 Warning-Expected Preview
 
-The project has reached a public source-only `v1.7.0` checkpoint for
-personal/local use. It keeps the existing `llama-server` control boundary,
-includes the bounded GGUF Acquisition lane, and does not include packaged
-`.app`, zip, dmg, signing, notarization, checksum, or binary distribution
-artifacts. The previous public source-only checkpoint was `v1.5.1`. The
-2026-05-24 helper smoke, 2026-05-25 normal desktop smoke, and GGUF Acquisition
-hardening checks provide source confidence. This remains source-only evidence;
-a packaged-release pass still needs the actual distributed artifact path and
-full release review.
+The current public checkpoint is `v1.7.1`, a warning-expected DMG preview for
+personal/local use and cross-machine handoff. It keeps the existing
+`llama-server` control boundary, includes the bounded GGUF Acquisition lane,
+and ships as an ad-hoc signed, not-notarized preview artifact, so Gatekeeper
+warnings or rejection are expected. The previous public source-only checkpoint
+was `v1.7.0`, and `v1.5.1` was the earlier source-only checkpoint. The
+2026-05-24 helper smoke, 2026-05-25 normal desktop smoke, GGUF Acquisition
+hardening checks, and the 2026-05-29 warning-expected DMG verification provide
+confidence for this preview boundary. This is still not a trusted,
+installer-grade packaged release; that pass needs a fresh explicit handoff,
+distributed-artifact review, and final release decision.
 
 Packaged release work remains separate from source milestones. Automation
 should keep code quality boring, close small verified `llama-server` daily-use
